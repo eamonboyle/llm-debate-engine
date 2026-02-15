@@ -51,24 +51,23 @@ export class SolverAgent {
         } as const;
 
         try {
-            const raw = await llm.completeStructured<unknown>(req);
-
-            const data = await runStructuredWithGuard<AgentResponse>(
-                llm,
-                req,
-                validateAgentResponse,
-                (bad, error): ChatMessage[] => [
-                    {
-                        role: "system",
-                        content:
-                            "You are a JSON repair function. Output ONLY valid JSON matching the schema exactly. No extra keys.",
-                    },
-                    {
-                        role: "user",
-                        content: `The previous output did not validate: ${error}\n\nInvalid object:\n${JSON.stringify(bad, null, 2)}\n\nReturn corrected JSON only.`,
-                    },
-                ],
-            );
+            const { data, attempts } =
+                await runStructuredWithGuard<AgentResponse>(
+                    llm,
+                    req,
+                    validateAgentResponse,
+                    (bad, error): ChatMessage[] => [
+                        {
+                            role: "system",
+                            content:
+                                "You are a JSON repair function. Output ONLY valid JSON matching the schema exactly. No extra keys.",
+                        },
+                        {
+                            role: "user",
+                            content: `The previous output did not validate: ${error}\n\nInvalid object:\n${JSON.stringify(bad, null, 2)}\n\nReturn corrected JSON only.`,
+                        },
+                    ],
+                );
 
             return {
                 id: runId("step"),
@@ -76,7 +75,7 @@ export class SolverAgent {
                 role: "solver",
                 createdAt,
                 request: req,
-                raw,
+                rawAttempts: attempts,
                 output: { kind: "proposal", data },
                 completedAt: nowIso(),
             };
@@ -87,7 +86,7 @@ export class SolverAgent {
                 role: "solver",
                 createdAt,
                 request: req,
-                raw: null,
+                rawAttempts: [],
                 error: e?.message ?? String(e),
                 completedAt: nowIso(),
             };

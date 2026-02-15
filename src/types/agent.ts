@@ -30,7 +30,7 @@ export type AgentRun = {
         StructuredCompletionRequest,
         "model" | "temperature" | "messages" | "schemaName" | "schema"
     >;
-    raw: unknown;
+    rawAttempts: unknown[];
     output?: AgentOutput;
     error?: string;
     createdAt: string;

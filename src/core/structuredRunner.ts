@@ -11,14 +11,16 @@ export async function runStructuredWithGuard<T>(
         v: unknown,
     ) => { ok: true; data: T } | { ok: false; error: string },
     buildRepairMessages: (bad: unknown, error: string) => ChatMessage[],
-): Promise<T> {
+): Promise<{ data: T; attempts: unknown[] }> {
     // attempt 1
     const first = await llm.completeStructured<T>(req);
 
     const v1 = validate(first);
     if (v1.ok) {
-        return v1.data;
+        return { data: v1.data, attempts: [first] };
     }
+
+    const attempts: unknown[] = [first];
 
     // attempt 2 (repair)
     const v1Error = v1.ok === false ? v1.error : "unknown";
@@ -29,6 +31,8 @@ export async function runStructuredWithGuard<T>(
     };
 
     const repaired = await llm.completeStructured<T>(repairReq);
+    attempts.push(repaired);
+
     const v2 = validate(repaired);
 
     if (!v2.ok) {
@@ -39,5 +43,5 @@ export async function runStructuredWithGuard<T>(
         );
     }
 
-    return v2.data;
+    return { data: v2.data, attempts };
 }
