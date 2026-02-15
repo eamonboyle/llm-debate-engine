@@ -9,6 +9,7 @@ import {
     type CritiqueIssue,
 } from "./types/agent";
 import { SolverRevisionAgent } from "./agents/SolverRevisionAgent";
+import { SynthesizerAgent } from "./agents/SynthesizerAgent";
 
 const BASE_URL = process.env.OPENAI_BASE_URL ?? "https://api.openai.com/v1";
 const MODEL = process.env.OPENAI_MODEL ?? "gpt-5.2";
@@ -33,6 +34,7 @@ function printSummary(
     proposal: AgentResponse,
     critique: Critique,
     revisedProposal?: AgentResponse,
+    synthesizedProposal?: AgentResponse,
 ): void {
     console.log("\n--- Summary ---\n");
     console.log("Question:", question);
@@ -46,6 +48,15 @@ function printSummary(
     }
     if (revisedProposal) {
         console.log("\nRevised answer:\n", revisedProposal.answer);
+    }
+    if (synthesizedProposal) {
+        console.log("\nSynthesized answer:\n", synthesizedProposal.answer);
+        console.log("\nSynthesized key claims:");
+        for (const c of synthesizedProposal.keyClaims) console.log("  -", c);
+        console.log(
+            "\nSynthesized confidence:",
+            synthesizedProposal.confidence,
+        );
     }
 }
 const API_KEY = process.env.OPENAI_API_KEY;
@@ -136,6 +147,38 @@ async function main() {
     const solverRevisionProposal = solverRevisionStep.output
         ?.data as AgentResponse;
 
+    if (!solverRevisionProposal) {
+        console.error(
+            "Solver revision agent did not produce a revised proposal",
+        );
+        process.exit(1);
+    }
+
+    // Synthesizer agent
+    console.log("\nSynthesizer agent is now synthesizing the proposal...");
+
+    const synthesizer = new SynthesizerAgent();
+    const synthesizerStep = await synthesizer.run({ question }, llm, {
+        model: MODEL,
+        proposal: proposal,
+        critique: skepticStep.output.data as Critique,
+        revision: solverRevisionProposal,
+    });
+
+    if (verbose) {
+        console.log("Synthesizer step:");
+        console.log(JSON.stringify(synthesizerStep, null, 2));
+    }
+
+    const synthesizedProposal = synthesizerStep.output?.data as AgentResponse;
+
+    if (!synthesizedProposal) {
+        console.error(
+            "Synthesizer agent did not produce a synthesized proposal",
+        );
+        process.exit(1);
+    }
+
     if (!verbose) {
         if (
             skepticStep.output?.kind === "critique" &&
@@ -146,6 +189,7 @@ async function main() {
                 proposal,
                 skepticStep.output.data,
                 solverRevisionProposal,
+                synthesizedProposal,
             );
         } else {
             console.log("\n--- Answer ---\n", proposal.answer);
@@ -153,6 +197,12 @@ async function main() {
                 console.log(
                     "\n--- Revised Answer ---\n",
                     solverRevisionProposal.answer,
+                );
+            }
+            if (synthesizedProposal) {
+                console.log(
+                    "\n--- Synthesized Answer ---\n",
+                    synthesizedProposal.answer,
                 );
             }
         }
