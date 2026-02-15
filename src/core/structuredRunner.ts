@@ -14,13 +14,12 @@ export async function runStructuredWithGuard<T>(
 ): Promise<{ data: T; attempts: unknown[] }> {
     // attempt 1
     const first = await llm.completeStructured<T>(req);
+    const attempts: unknown[] = [first];
 
     const v1 = validate(first);
     if (v1.ok) {
-        return { data: v1.data, attempts: [first] };
+        return { data: v1.data, attempts };
     }
-
-    const attempts: unknown[] = [first];
 
     // attempt 2 (repair)
     const v1Error = v1.ok === false ? v1.error : "unknown";
