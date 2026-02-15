@@ -25,28 +25,22 @@ function printSummary(
     revisedProposal?: AgentResponse,
     synthesizedProposal?: AgentResponse,
 ): void {
+    const final = synthesizedProposal ?? revisedProposal ?? proposal;
+    const issueCount = (critique.issues as CritiqueIssue[]).length;
+
     console.log("\n--- Summary ---\n");
     console.log("Question:", question);
-    console.log("\nAnswer:\n", proposal.answer);
+    console.log("\nAnswer:\n", final.answer);
     console.log("\nKey claims:");
-    for (const c of proposal.keyClaims) console.log("  -", c);
-    console.log("\nConfidence:", proposal.confidence);
-    console.log("\nSkeptic issues:");
-    for (const i of critique.issues as CritiqueIssue[]) {
-        console.log(`  [${i.severity}] ${i.type}: ${i.note}`);
-    }
-    if (revisedProposal) {
-        console.log("\nRevised answer:\n", revisedProposal.answer);
-    }
-    if (synthesizedProposal) {
-        console.log("\nSynthesized answer:\n", synthesizedProposal.answer);
-        console.log("\nSynthesized key claims:");
-        for (const c of synthesizedProposal.keyClaims) console.log("  -", c);
+    for (const c of final.keyClaims) console.log("  -", c);
+    console.log("\nConfidence:", final.confidence);
+    if (issueCount > 0) {
         console.log(
-            "\nSynthesized confidence:",
-            synthesizedProposal.confidence,
+            "\nCritique:",
+            `${issueCount} issue${issueCount === 1 ? "" : "s"} raised and addressed in revision`,
         );
     }
+    console.log("\n(Full run details saved in the JSON file.)");
 }
 
 const API_KEY = process.env.OPENAI_API_KEY;
