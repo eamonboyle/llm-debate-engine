@@ -1,0 +1,13 @@
+{
+  "answer": "Rust is generally considered safer than C++ for memory safety because it enforces ownership and borrowing rules at compile time.",
+  "keyClaims": [
+    "Rust enforces memory safety through compile-time ownership rules.",
+    "C++ allows manual memory management which can introduce memory errors.",
+    "Modern C++ can mitigate some safety risks but does not enforce ownership like Rust."
+  ],
+  "assumptions": [
+    "The comparison focuses on memory safety rather than performance or ecosystem.",
+    "We are comparing typical usage patterns rather than expert-level defensive C++ coding."
+  ],
+  "confidence": 0.72
+}
