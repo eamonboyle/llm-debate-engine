@@ -8,6 +8,7 @@ import {
     type Critique,
     type CritiqueIssue,
 } from "./types/agent";
+import { SolverRevisionAgent } from "./agents/SolverRevisionAgent";
 
 const BASE_URL = process.env.OPENAI_BASE_URL ?? "https://api.openai.com/v1";
 const MODEL = process.env.OPENAI_MODEL ?? "gpt-5.2";
@@ -16,7 +17,11 @@ function warnIfOutputMismatch(step: AgentRun): void {
     if (step.output?.kind !== "proposal" || !step.rawAttempts.length) return;
     const data = step.output.data as AgentResponse;
     const first = step.rawAttempts[0] as AgentResponse | undefined;
-    if (first && typeof first.answer === "string" && data.answer !== first.answer) {
+    if (
+        first &&
+        typeof first.answer === "string" &&
+        data.answer !== first.answer
+    ) {
         console.warn(
             "[cli] Output data.answer differs from rawAttempts[0].answer — possible parsing/repair corruption",
         );
@@ -27,6 +32,7 @@ function printSummary(
     question: string,
     proposal: AgentResponse,
     critique: Critique,
+    revisedProposal?: AgentResponse,
 ): void {
     console.log("\n--- Summary ---\n");
     console.log("Question:", question);
@@ -37,6 +43,9 @@ function printSummary(
     console.log("\nSkeptic issues:");
     for (const i of critique.issues as CritiqueIssue[]) {
         console.log(`  [${i.severity}] ${i.type}: ${i.note}`);
+    }
+    if (revisedProposal) {
+        console.log("\nRevised answer:\n", revisedProposal.answer);
     }
 }
 const API_KEY = process.env.OPENAI_API_KEY;
@@ -108,14 +117,45 @@ async function main() {
     }
 
     const proposal = step.output.data as AgentResponse;
-    if (
-        skepticStep.output?.kind === "critique" &&
-        skepticStep.output.data &&
-        !verbose
-    ) {
-        printSummary(question, proposal, skepticStep.output.data);
-    } else if (!verbose) {
-        console.log("\n--- Answer ---\n", proposal.answer);
+
+    // Solver revision agent
+    console.log("\nSolver revision agent is now revising the proposal...");
+
+    const solverRevision = new SolverRevisionAgent();
+    const solverRevisionStep = await solverRevision.run({ question }, llm, {
+        model: MODEL,
+        proposal: proposal,
+        critique: skepticStep.output.data as Critique,
+    });
+
+    if (verbose) {
+        console.log("Solver revision step:");
+        console.log(JSON.stringify(solverRevisionStep, null, 2));
+    }
+
+    const solverRevisionProposal = solverRevisionStep.output
+        ?.data as AgentResponse;
+
+    if (!verbose) {
+        if (
+            skepticStep.output?.kind === "critique" &&
+            skepticStep.output.data
+        ) {
+            printSummary(
+                question,
+                proposal,
+                skepticStep.output.data,
+                solverRevisionProposal,
+            );
+        } else {
+            console.log("\n--- Answer ---\n", proposal.answer);
+            if (solverRevisionProposal) {
+                console.log(
+                    "\n--- Revised Answer ---\n",
+                    solverRevisionProposal.answer,
+                );
+            }
+        }
     }
 }
 
