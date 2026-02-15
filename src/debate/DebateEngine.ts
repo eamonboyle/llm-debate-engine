@@ -1,0 +1,135 @@
+import type { LLMClient } from "../types/llm";
+import type {
+    AgentResponse,
+    AgentRun,
+    Critique,
+    DebateContext,
+    DebateRun,
+} from "../types/agent";
+import type { SolverAgent } from "../agents/SolverAgent";
+import type { SkepticAgent } from "../agents/SkepticAgent";
+import type { SolverRevisionAgent } from "../agents/SolverRevisionAgent";
+import type { SynthesizerAgent } from "../agents/SynthesizerAgent";
+
+export type DebateAgents = {
+    solver: SolverAgent;
+    skeptic: SkepticAgent;
+    solverRevision: SolverRevisionAgent;
+    synthesizer: SynthesizerAgent;
+};
+
+export class DebateEngine {
+    readonly name = "DebateEngine";
+
+    constructor(
+        private readonly agents: DebateAgents,
+        private readonly llm: LLMClient,
+    ) {}
+
+    async run(
+        ctx: DebateContext,
+        opts: { model: string; verbose?: boolean },
+    ): Promise<DebateRun> {
+        const verbose = opts.verbose ?? false;
+        const steps: AgentRun[] = [];
+
+        // Step 1: Solver
+        console.log("Solver agent is now solving the question...");
+        const solverStep = await this.agents.solver.run(ctx, this.llm, {
+            model: opts.model,
+        });
+        steps.push(solverStep);
+
+        if (verbose) {
+            console.log("Solver step:");
+            console.log(JSON.stringify(solverStep, null, 2));
+        }
+
+        const proposal = solverStep.output?.kind === "proposal"
+            ? (solverStep.output.data as AgentResponse)
+            : undefined;
+
+        if (!proposal) {
+            const fallback =
+                (solverStep.rawAttempts[0] as AgentResponse)?.answer ??
+                solverStep.error ??
+                "Solver failed to produce a proposal.";
+            return { steps, finalAnswer: String(fallback) };
+        }
+
+        // Step 2: Skeptic
+        console.log("\nSkeptic agent is now critiquing the proposal...");
+        const skepticStep = await this.agents.skeptic.run(ctx, this.llm, {
+            model: opts.model,
+            targetAgentName: this.agents.solver.name,
+            proposal,
+        });
+        steps.push(skepticStep);
+
+        if (verbose) {
+            console.log("Skeptic step:");
+            console.log(JSON.stringify(skepticStep, null, 2));
+        }
+
+        const critique = skepticStep.output?.kind === "critique"
+            ? (skepticStep.output.data as Critique)
+            : undefined;
+
+        if (!critique) {
+            return { steps, finalAnswer: proposal.answer };
+        }
+
+        // Step 3: Solver revision
+        console.log("\nSolver revision agent is now revising the proposal...");
+        const revisionStep = await this.agents.solverRevision.run(
+            ctx,
+            this.llm,
+            {
+                model: opts.model,
+                proposal,
+                critique,
+            },
+        );
+        steps.push(revisionStep);
+
+        if (verbose) {
+            console.log("Solver revision step:");
+            console.log(JSON.stringify(revisionStep, null, 2));
+        }
+
+        const revision = revisionStep.output?.kind === "proposal"
+            ? (revisionStep.output.data as AgentResponse)
+            : undefined;
+
+        if (!revision) {
+            return { steps, finalAnswer: proposal.answer };
+        }
+
+        // Step 4: Synthesizer
+        console.log("\nSynthesizer agent is now synthesizing the proposal...");
+        const synthesizerStep = await this.agents.synthesizer.run(
+            ctx,
+            this.llm,
+            {
+                model: opts.model,
+                proposal,
+                critique,
+                revision,
+            },
+        );
+        steps.push(synthesizerStep);
+
+        if (verbose) {
+            console.log("Synthesizer step:");
+            console.log(JSON.stringify(synthesizerStep, null, 2));
+        }
+
+        const synthesized = synthesizerStep.output?.kind === "proposal"
+            ? (synthesizerStep.output.data as AgentResponse)
+            : undefined;
+
+        const finalAnswer = synthesized?.answer ?? revision.answer;
+
+        return { steps, finalAnswer };
+    }
+}

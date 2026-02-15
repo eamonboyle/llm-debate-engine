@@ -40,3 +40,8 @@ export type AgentRun = {
 export type DebateContext = {
     question: string;
 };
+
+export type DebateRun = {
+    steps: AgentRun[];
+    finalAnswer: string;
+};

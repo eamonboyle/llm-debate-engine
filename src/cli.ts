@@ -1,33 +1,22 @@
 import "dotenv/config";
+import { mkdir, writeFile } from "fs/promises";
+import { join } from "path";
 import { OpenAICompatibleClient } from "./llm/OpenAiCompatibleClient";
 import { SolverAgent } from "./agents/SolverAgent";
 import { SkepticAgent } from "./agents/SkepticAgent";
-import {
-    AgentResponse,
-    type AgentRun,
-    type Critique,
-    type CritiqueIssue,
-} from "./types/agent";
 import { SolverRevisionAgent } from "./agents/SolverRevisionAgent";
 import { SynthesizerAgent } from "./agents/SynthesizerAgent";
+import { DebateEngine } from "./debate/DebateEngine";
+import { makeId } from "./core/id";
+import type {
+    AgentResponse,
+    Critique,
+    CritiqueIssue,
+} from "./types/agent";
 
 const BASE_URL = process.env.OPENAI_BASE_URL ?? "https://api.openai.com/v1";
 const MODEL = process.env.OPENAI_MODEL ?? "gpt-5.2";
-
-function warnIfOutputMismatch(step: AgentRun): void {
-    if (step.output?.kind !== "proposal" || !step.rawAttempts.length) return;
-    const data = step.output.data as AgentResponse;
-    const first = step.rawAttempts[0] as AgentResponse | undefined;
-    if (
-        first &&
-        typeof first.answer === "string" &&
-        data.answer !== first.answer
-    ) {
-        console.warn(
-            "[cli] Output data.answer differs from rawAttempts[0].answer — possible parsing/repair corruption",
-        );
-    }
-}
+const RUNS_DIR = "runs";
 
 function printSummary(
     question: string,
@@ -59,6 +48,7 @@ function printSummary(
         );
     }
 }
+
 const API_KEY = process.env.OPENAI_API_KEY;
 
 if (!API_KEY) {
@@ -89,122 +79,64 @@ async function main() {
         process.exit(1);
     }
 
+    const runId = makeId("run");
+
     const llm = new OpenAICompatibleClient({
         baseURL: BASE_URL,
         apiKey: API_KEY,
     });
 
-    console.log("Solver agent is now solving the question...");
+    const engine = new DebateEngine(
+        {
+            solver: new SolverAgent(),
+            skeptic: new SkepticAgent(),
+            solverRevision: new SolverRevisionAgent(),
+            synthesizer: new SynthesizerAgent(),
+        },
+        llm,
+    );
 
-    // Solver agent
-    const solver = new SolverAgent();
-    const step = await solver.run({ question }, llm, { model: MODEL });
+    const result = await engine.run(
+        { question },
+        { model: MODEL, verbose },
+    );
 
-    if (!step.output?.data) {
-        console.error("Solver agent did not produce a proposal");
-        process.exit(1);
-    }
+    const runJson = {
+        id: runId,
+        question,
+        steps: result.steps,
+        finalAnswer: result.finalAnswer,
+    };
 
-    warnIfOutputMismatch(step);
-
-    if (verbose) {
-        console.log("Solver step:");
-        console.log(JSON.stringify(step, null, 2));
-    }
-
-    // Skeptic agent
-    console.log("\nSkeptic agent is now critiquing the proposal...");
-
-    const skeptic = new SkepticAgent();
-    const skepticStep = await skeptic.run({ question }, llm, {
-        model: MODEL,
-        targetAgentName: solver.name,
-        proposal: step.output.data as AgentResponse,
-    });
-
-    if (verbose) {
-        console.log("Skeptic step:");
-        console.log(JSON.stringify(skepticStep, null, 2));
-    }
-
-    const proposal = step.output.data as AgentResponse;
-
-    // Solver revision agent
-    console.log("\nSolver revision agent is now revising the proposal...");
-
-    const solverRevision = new SolverRevisionAgent();
-    const solverRevisionStep = await solverRevision.run({ question }, llm, {
-        model: MODEL,
-        proposal: proposal,
-        critique: skepticStep.output.data as Critique,
-    });
-
-    if (verbose) {
-        console.log("Solver revision step:");
-        console.log(JSON.stringify(solverRevisionStep, null, 2));
-    }
-
-    const solverRevisionProposal = solverRevisionStep.output
-        ?.data as AgentResponse;
-
-    if (!solverRevisionProposal) {
-        console.error(
-            "Solver revision agent did not produce a revised proposal",
-        );
-        process.exit(1);
-    }
-
-    // Synthesizer agent
-    console.log("\nSynthesizer agent is now synthesizing the proposal...");
-
-    const synthesizer = new SynthesizerAgent();
-    const synthesizerStep = await synthesizer.run({ question }, llm, {
-        model: MODEL,
-        proposal: proposal,
-        critique: skepticStep.output.data as Critique,
-        revision: solverRevisionProposal,
-    });
-
-    if (verbose) {
-        console.log("Synthesizer step:");
-        console.log(JSON.stringify(synthesizerStep, null, 2));
-    }
-
-    const synthesizedProposal = synthesizerStep.output?.data as AgentResponse;
-
-    if (!synthesizedProposal) {
-        console.error(
-            "Synthesizer agent did not produce a synthesized proposal",
-        );
-        process.exit(1);
-    }
+    await mkdir(RUNS_DIR, { recursive: true });
+    const outputPath = join(RUNS_DIR, `${runId}.json`);
+    await writeFile(outputPath, JSON.stringify(runJson, null, 2), "utf-8");
+    console.log(`\nRun saved to ${outputPath}`);
 
     if (!verbose) {
-        if (
-            skepticStep.output?.kind === "critique" &&
-            skepticStep.output.data
-        ) {
+        const proposal = result.steps[0]?.output?.kind === "proposal"
+            ? (result.steps[0].output.data as AgentResponse)
+            : undefined;
+        const critique = result.steps[1]?.output?.kind === "critique"
+            ? (result.steps[1].output.data as Critique)
+            : undefined;
+        const revisedProposal = result.steps[2]?.output?.kind === "proposal"
+            ? (result.steps[2].output.data as AgentResponse)
+            : undefined;
+        const synthesizedProposal = result.steps[3]?.output?.kind === "proposal"
+            ? (result.steps[3].output.data as AgentResponse)
+            : undefined;
+
+        if (proposal && critique) {
             printSummary(
                 question,
                 proposal,
-                skepticStep.output.data,
-                solverRevisionProposal,
+                critique,
+                revisedProposal,
                 synthesizedProposal,
             );
         } else {
-            console.log("\n--- Answer ---\n", proposal.answer);
-            if (solverRevisionProposal) {
-                console.log(
-                    "\n--- Revised Answer ---\n",
-                    solverRevisionProposal.answer,
-                );
-            }
-            if (synthesizedProposal) {
-                console.log(
-                    "\n--- Synthesized Answer ---\n",
-                    synthesizedProposal.answer,
-                );
-            }
+            console.log("\n--- Answer ---\n", result.finalAnswer);
         }
     }
 }
