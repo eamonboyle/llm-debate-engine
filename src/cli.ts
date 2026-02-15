@@ -1,6 +1,5 @@
 import "dotenv/config";
 import { OpenAICompatibleClient } from "./llm/OpenAiCompatibleClient";
-import { validateAgentResponse } from "./validator";
 import { SolverAgent } from "./agents/SolverAgent";
 
 const BASE_URL = process.env.OPENAI_BASE_URL ?? "https://api.openai.com/v1";
