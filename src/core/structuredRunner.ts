@@ -22,6 +22,9 @@ export async function runStructuredWithGuard<T>(
     }
 
     // attempt 2 (repair)
+    console.warn(
+        `[structuredRunner] First attempt failed validation: ${v1.ok === false ? v1.error : "unknown"}. Attempting repair...`,
+    );
     const v1Error = v1.ok === false ? v1.error : "unknown";
     const repairReq: StructuredCompletionRequest = {
         ...req,

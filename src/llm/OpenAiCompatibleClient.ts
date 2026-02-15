@@ -5,6 +5,26 @@ import type {
     StructuredCompletionRequest,
 } from "../types/llm";
 
+/**
+ * Parses API content (string or array of blocks) into a typed object.
+ * Handles OpenAI-compatible providers that may return different formats.
+ */
+export function parseStructuredContent<T>(raw: unknown): T {
+    if (typeof raw === "string") {
+        return JSON.parse(raw || "{}") as T;
+    }
+    if (Array.isArray(raw) && raw.length > 0) {
+        const block = raw[0] as Record<string, unknown>;
+        if (block.output_json != null) {
+            return block.output_json as T;
+        }
+        if (typeof block.text === "string") {
+            return JSON.parse(block.text || "{}") as T;
+        }
+    }
+    return {} as T;
+}
+
 export class OpenAICompatibleClient implements LLMClient {
     private client: OpenAI;
 
@@ -40,7 +60,7 @@ export class OpenAICompatibleClient implements LLMClient {
             } as any,
         });
 
-        const text = res.choices[0].message.content ?? "";
-        return JSON.parse(text) as T;
+        const raw = res.choices[0].message.content;
+        return parseStructuredContent<T>(raw);
     }
 }
