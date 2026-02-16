@@ -1,4 +1,5 @@
 import { OpenAI } from "openai";
+import type { ChatCompletion } from "openai/resources/chat/completions";
 import type {
     CompletionRequest,
     LLMClient,
@@ -35,21 +36,38 @@ export class OpenAICompatibleClient implements LLMClient {
         });
     }
 
+    /**
+     * Resolves temperature for the API call.
+     * OPENAI_TEMPERATURE in .env overrides per-agent values (use 1 for models that only support default).
+     */
+    private resolveTemperature(reqTemp?: number): number | undefined {
+        const envTemp = process.env.OPENAI_TEMPERATURE;
+        if (envTemp !== undefined && envTemp !== "") {
+            const n = parseFloat(envTemp);
+            if (!Number.isNaN(n)) return n;
+        }
+        return reqTemp;
+    }
+
     async complete(req: CompletionRequest): Promise<string> {
-        const res = await this.client.chat.completions.create({
+        const temp = this.resolveTemperature(req.temperature);
+        const body: Parameters<typeof this.client.chat.completions.create>[0] = {
             model: req.model,
             messages: req.messages,
-            temperature: req.temperature,
-        });
+            stream: false,
+        };
+        if (temp !== undefined) body.temperature = temp;
 
+        const res = (await this.client.chat.completions.create(body)) as ChatCompletion;
         return res.choices[0].message.content ?? "";
     }
 
     async completeStructured<T>(req: StructuredCompletionRequest): Promise<T> {
-        const res = await this.client.chat.completions.create({
+        const temp = this.resolveTemperature(req.temperature);
+        const body: Parameters<typeof this.client.chat.completions.create>[0] = {
             model: req.model,
             messages: req.messages,
-            temperature: req.temperature,
+            stream: false,
             response_format: {
                 type: "json_schema",
                 json_schema: {
@@ -58,8 +76,10 @@ export class OpenAICompatibleClient implements LLMClient {
                     schema: req.schema as any,
                 },
             } as any,
-        });
+        };
+        if (temp !== undefined) body.temperature = temp;
 
+        const res = (await this.client.chat.completions.create(body)) as ChatCompletion;
         const raw = res.choices[0].message.content;
         return parseStructuredContent<T>(raw);
     }
