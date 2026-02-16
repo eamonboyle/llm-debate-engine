@@ -105,7 +105,19 @@ async function runBenchmark(
         "(avg pairwise similarity of final answers)",
     );
     console.log("threshold:            ", result.threshold ?? "(default)");
-    console.log("modeCount:            ", modeCount);
+    console.log("modeCount (full-answer):     ", modeCount);
+    console.log("modeCountClaimCentroid:      ", result.modeCountClaimCentroid ?? "-");
+    if (
+        result.modeCountClaimCentroid != null &&
+        modeCount > result.modeCountClaimCentroid
+    ) {
+        console.log(
+            "  (claim-centroid lower -> supports style/calibration hypothesis)",
+        );
+    }
+    if (result.modeCountClaimCentroid == null && fast) {
+        console.log("  (claim-centroid skipped: fast mode has no synthesizer)");
+    }
     console.log("modeCountAt0.8:       ", result.modeCountAt0_8 ?? "-");
     console.log("modeCountAt0.9:       ", result.modeCountAt0_9 ?? "-");
     console.log("modeCountAt0.95:      ", result.modeCountAt0_95 ?? "-");
@@ -127,6 +139,13 @@ async function runBenchmark(
         modeCountAt0_9: result.modeCountAt0_9,
         modeCountAt0_95: result.modeCountAt0_95,
         modes: result.modes,
+        modeCountClaimCentroid: result.modeCountClaimCentroid,
+        modeSizesClaimCentroid: result.modeSizesClaimCentroid,
+        divergenceEntropyClaimCentroid: result.divergenceEntropyClaimCentroid,
+        modeCountClaimCentroidAt0_8: result.modeCountClaimCentroidAt0_8,
+        modeCountClaimCentroidAt0_9: result.modeCountClaimCentroidAt0_9,
+        modeCountClaimCentroidAt0_95: result.modeCountClaimCentroidAt0_95,
+        stabilityClaimCentroid: result.stabilityClaimCentroid,
         summary: result,
     };
 

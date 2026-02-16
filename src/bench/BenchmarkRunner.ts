@@ -1,7 +1,8 @@
 import type { DebateEngine } from "../debate/DebateEngine";
 import type { DebateRun } from "../types/agent";
 import type { EmbeddingClient } from "../types/embedding";
-import { cosineSimilarity } from "../core/math";
+import { cosineSimilarity, vectorMean } from "../core/math";
+import { getProposal } from "../core/extraction";
 
 export type BenchmarkResult = {
     question: string;
@@ -35,6 +36,20 @@ export type BenchmarkResult = {
         minPairwiseSimilarity: number;
         maxPairwiseSimilarity: number;
         pairs: Array<{ i: number; j: number; similarity: number }>;
+    };
+
+    /** Claim-centroid mode detection (synthesizer keyClaims only; undefined when fast or no keyClaims). */
+    modeCountClaimCentroid?: number;
+    modeSizesClaimCentroid?: number[];
+    divergenceEntropyClaimCentroid?: number;
+    modeCountClaimCentroidAt0_8?: number;
+    modeCountClaimCentroidAt0_9?: number;
+    modeCountClaimCentroidAt0_95?: number;
+    stabilityClaimCentroid?: {
+        pairwiseMean: number;
+        pairwiseStddev: number;
+        minPairwiseSimilarity: number;
+        maxPairwiseSimilarity: number;
     };
 };
 
@@ -84,6 +99,18 @@ export class BenchmarkRunner {
             modeSizes[mIdx] = (modeSizes[mIdx] ?? 0) + 1;
         });
         return modeSizes.length;
+    }
+
+    /** Extract keyClaims from synthesizer step. Returns [] if no synthesizer or empty keyClaims. */
+    private getSynthesizerKeyClaims(run: DebateRun): string[] {
+        const synthStep = run.steps.find((s) => s.role === "synthesizer");
+        const proposal = synthStep ? getProposal(synthStep) : null;
+        const claims = proposal?.keyClaims;
+        if (!Array.isArray(claims) || claims.length === 0) return [];
+        return claims.filter(
+            (c): c is string =>
+                typeof c === "string" && c.trim().length > 0,
+        );
     }
 
     /* --------------------------------------------------- */
@@ -265,6 +292,91 @@ export class BenchmarkRunner {
         }
 
         /* --------------------------------------------------- */
+        /** Claim-centroid mode detection (synthesizer keyClaims only) */
+        const claimCentroidWithIndices: {
+            centroid: number[];
+            rawIndex: number;
+        }[] = [];
+        for (let i = 0; i < raw.length; i++) {
+            const claims = this.getSynthesizerKeyClaims(raw[i]);
+            if (claims.length === 0) continue;
+            const claimVecs = await this.deps.embedding.embedBatch(claims);
+            const centroid = vectorMean(claimVecs);
+            claimCentroidWithIndices.push({ centroid, rawIndex: i });
+        }
+
+        const claimCentroidVectors = claimCentroidWithIndices.map(
+            (c) => c.centroid,
+        );
+
+        let modeCountClaimCentroid: number | undefined;
+        let modeSizesClaimCentroid: number[] | undefined;
+        let divergenceEntropyClaimCentroid: number | undefined;
+        let modeCountClaimCentroidAt0_8: number | undefined;
+        let modeCountClaimCentroidAt0_9: number | undefined;
+        let modeCountClaimCentroidAt0_95: number | undefined;
+        let stabilityClaimCentroid:
+            | {
+                  pairwiseMean: number;
+                  pairwiseStddev: number;
+                  minPairwiseSimilarity: number;
+                  maxPairwiseSimilarity: number;
+              }
+            | undefined;
+
+        if (claimCentroidVectors.length > 0) {
+            const ccAssignments = this.clusterEmbeddings(
+                claimCentroidVectors,
+                threshold,
+            );
+            modeSizesClaimCentroid = [];
+            ccAssignments.forEach((mIdx) => {
+                modeSizesClaimCentroid![mIdx] =
+                    (modeSizesClaimCentroid![mIdx] ?? 0) + 1;
+            });
+            modeCountClaimCentroid = modeSizesClaimCentroid.length;
+
+            modeCountClaimCentroidAt0_8 = this.getModeCount(
+                claimCentroidVectors,
+                0.8,
+            );
+            modeCountClaimCentroidAt0_9 = this.getModeCount(
+                claimCentroidVectors,
+                0.9,
+            );
+            modeCountClaimCentroidAt0_95 = this.getModeCount(
+                claimCentroidVectors,
+                0.95,
+            );
+
+            divergenceEntropyClaimCentroid =
+                modeCountClaimCentroid === 0
+                    ? 0
+                    : -modeSizesClaimCentroid.reduce((sum, sz) => {
+                          const p = sz / claimCentroidVectors.length;
+                          return sum + p * Math.log2(p);
+                      }, 0);
+
+            const ccPairs: number[] = [];
+            for (let i = 0; i < claimCentroidVectors.length; i++) {
+                for (let j = i + 1; j < claimCentroidVectors.length; j++) {
+                    ccPairs.push(
+                        cosineSimilarity(
+                            claimCentroidVectors[i],
+                            claimCentroidVectors[j],
+                        ),
+                    );
+                }
+            }
+            stabilityClaimCentroid = {
+                pairwiseMean: round3(mean(ccPairs)),
+                pairwiseStddev: round3(stddev(ccPairs)),
+                minPairwiseSimilarity: round3(Math.min(...ccPairs)),
+                maxPairwiseSimilarity: round3(Math.max(...ccPairs)),
+            };
+        }
+
+        /* --------------------------------------------------- */
         /** Assemble results */
         const sims = pairs.map((p) => p.similarity);
         const roundedPairs = pairs.map((p) => ({
@@ -303,6 +415,14 @@ export class BenchmarkRunner {
                 maxPairwiseSimilarity: round3(Math.max(...sims)),
                 pairs: roundedPairs,
             },
+
+            modeCountClaimCentroid,
+            modeSizesClaimCentroid,
+            divergenceEntropyClaimCentroid,
+            modeCountClaimCentroidAt0_8,
+            modeCountClaimCentroidAt0_9,
+            modeCountClaimCentroidAt0_95,
+            stabilityClaimCentroid,
         };
 
         return { result, raw };

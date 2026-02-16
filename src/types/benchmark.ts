@@ -19,5 +19,18 @@ export type BenchmarkArtifact = {
         exemplarIndex: number;
         exemplarPreview: string;
     }>;
+    /** Claim-centroid mode detection (undefined when fast or no keyClaims). */
+    modeCountClaimCentroid?: number;
+    modeSizesClaimCentroid?: number[];
+    divergenceEntropyClaimCentroid?: number;
+    modeCountClaimCentroidAt0_8?: number;
+    modeCountClaimCentroidAt0_9?: number;
+    modeCountClaimCentroidAt0_95?: number;
+    stabilityClaimCentroid?: {
+        pairwiseMean: number;
+        pairwiseStddev: number;
+        minPairwiseSimilarity: number;
+        maxPairwiseSimilarity: number;
+    };
     summary: BenchmarkResult;
 };
