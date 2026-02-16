@@ -8,11 +8,7 @@ import { SolverRevisionAgent } from "./agents/SolverRevisionAgent";
 import { SynthesizerAgent } from "./agents/SynthesizerAgent";
 import { DebateEngine } from "./debate/DebateEngine";
 import { makeId } from "./core/id";
-import type {
-    AgentResponse,
-    Critique,
-    CritiqueIssue,
-} from "./types/agent";
+import type { AgentResponse, Critique, CritiqueIssue } from "./types/agent";
 
 const BASE_URL = process.env.OPENAI_BASE_URL ?? "https://api.openai.com/v1";
 const MODEL = process.env.OPENAI_MODEL ?? "gpt-5.2";
@@ -90,16 +86,14 @@ async function main() {
         llm,
     );
 
-    const result = await engine.run(
-        { question },
-        { model: MODEL, verbose },
-    );
+    const result = await engine.run({ question }, { model: MODEL, verbose });
 
     const runJson = {
         id: runId,
         question,
         steps: result.steps,
         finalAnswer: result.finalAnswer,
+        metrics: result.metrics,
     };
 
     await mkdir(RUNS_DIR, { recursive: true });
@@ -108,18 +102,22 @@ async function main() {
     console.log(`\nRun saved to ${outputPath}`);
 
     if (!verbose) {
-        const proposal = result.steps[0]?.output?.kind === "proposal"
-            ? (result.steps[0].output.data as AgentResponse)
-            : undefined;
-        const critique = result.steps[1]?.output?.kind === "critique"
-            ? (result.steps[1].output.data as Critique)
-            : undefined;
-        const revisedProposal = result.steps[2]?.output?.kind === "proposal"
-            ? (result.steps[2].output.data as AgentResponse)
-            : undefined;
-        const synthesizedProposal = result.steps[3]?.output?.kind === "proposal"
-            ? (result.steps[3].output.data as AgentResponse)
-            : undefined;
+        const proposal =
+            result.steps[0]?.output?.kind === "proposal"
+                ? (result.steps[0].output.data as AgentResponse)
+                : undefined;
+        const critique =
+            result.steps[1]?.output?.kind === "critique"
+                ? (result.steps[1].output.data as Critique)
+                : undefined;
+        const revisedProposal =
+            result.steps[2]?.output?.kind === "proposal"
+                ? (result.steps[2].output.data as AgentResponse)
+                : undefined;
+        const synthesizedProposal =
+            result.steps[3]?.output?.kind === "proposal"
+                ? (result.steps[3].output.data as AgentResponse)
+                : undefined;
 
         if (proposal && critique) {
             printSummary(

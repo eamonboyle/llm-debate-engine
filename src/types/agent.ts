@@ -44,4 +44,18 @@ export type DebateContext = {
 export type DebateRun = {
     steps: AgentRun[];
     finalAnswer: string;
+    metrics: {
+        confidence: {
+            solver?: number;
+            revision?: number;
+            synthesizer?: number;
+            solverToRevisionDelta?: number;
+            revisionToSynthesizerDelta?: number;
+        };
+        critique: {
+            maxSeverity?: number;
+            avgSeverity?: number;
+            byType?: Record<string, number>;
+        };
+    };
 };

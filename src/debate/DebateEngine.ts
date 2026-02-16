@@ -45,16 +45,21 @@ export class DebateEngine {
             console.log(JSON.stringify(solverStep, null, 2));
         }
 
-        const proposal = solverStep.output?.kind === "proposal"
-            ? (solverStep.output.data as AgentResponse)
-            : undefined;
+        const proposal =
+            solverStep.output?.kind === "proposal"
+                ? (solverStep.output.data as AgentResponse)
+                : undefined;
 
         if (!proposal) {
             const fallback =
                 (solverStep.rawAttempts[0] as AgentResponse)?.answer ??
                 solverStep.error ??
                 "Solver failed to produce a proposal.";
-            return { steps, finalAnswer: String(fallback) };
+            return {
+                steps,
+                finalAnswer: String(fallback),
+                metrics: { confidence: {}, critique: {} },
+            };
         }
 
         // Step 2: Skeptic
@@ -71,12 +76,17 @@ export class DebateEngine {
             console.log(JSON.stringify(skepticStep, null, 2));
         }
 
-        const critique = skepticStep.output?.kind === "critique"
-            ? (skepticStep.output.data as Critique)
-            : undefined;
+        const critique =
+            skepticStep.output?.kind === "critique"
+                ? (skepticStep.output.data as Critique)
+                : undefined;
 
         if (!critique) {
-            return { steps, finalAnswer: proposal.answer };
+            return {
+                steps,
+                finalAnswer: proposal.answer,
+                metrics: { confidence: {}, critique: {} },
+            };
         }
 
         // Step 3: Solver revision
@@ -97,12 +107,17 @@ export class DebateEngine {
             console.log(JSON.stringify(revisionStep, null, 2));
         }
 
-        const revision = revisionStep.output?.kind === "proposal"
-            ? (revisionStep.output.data as AgentResponse)
-            : undefined;
+        const revision =
+            revisionStep.output?.kind === "proposal"
+                ? (revisionStep.output.data as AgentResponse)
+                : undefined;
 
         if (!revision) {
-            return { steps, finalAnswer: proposal.answer };
+            return {
+                steps,
+                finalAnswer: proposal.answer,
+                metrics: { confidence: {}, critique: {} },
+            };
         }
 
         // Step 4: Synthesizer
@@ -124,12 +139,80 @@ export class DebateEngine {
             console.log(JSON.stringify(synthesizerStep, null, 2));
         }
 
-        const synthesized = synthesizerStep.output?.kind === "proposal"
-            ? (synthesizerStep.output.data as AgentResponse)
-            : undefined;
+        const synthesized =
+            synthesizerStep.output?.kind === "proposal"
+                ? (synthesizerStep.output.data as AgentResponse)
+                : undefined;
 
         const finalAnswer = synthesized?.answer ?? revision.answer;
 
-        return { steps, finalAnswer };
+        const round2 = (n: number) => Math.round(n * 100) / 100;
+
+        return {
+            steps,
+            finalAnswer,
+            metrics: {
+                confidence: (() => {
+                    const solver =
+                        solverStep.output?.kind === "proposal"
+                            ? (solverStep.output.data as AgentResponse)
+                                  .confidence
+                            : undefined;
+                    const revision =
+                        revisionStep.output?.kind === "proposal"
+                            ? (revisionStep.output.data as AgentResponse)
+                                  .confidence
+                            : undefined;
+                    const synthesizer =
+                        synthesizerStep.output?.kind === "proposal"
+                            ? (synthesizerStep.output.data as AgentResponse)
+                                  .confidence
+                            : undefined;
+                    return {
+                        solver: solver !== undefined ? round2(solver) : undefined,
+                        revision:
+                            revision !== undefined ? round2(revision) : undefined,
+                        synthesizer:
+                            synthesizer !== undefined
+                                ? round2(synthesizer)
+                                : undefined,
+                        solverToRevisionDelta:
+                            solver !== undefined && revision !== undefined
+                                ? round2(revision - solver)
+                                : undefined,
+                        revisionToSynthesizerDelta:
+                            revision !== undefined && synthesizer !== undefined
+                                ? round2(synthesizer - revision)
+                                : undefined,
+                    };
+                })(),
+                critique: {
+                    maxSeverity:
+                        critique.issues.length > 0
+                            ? Math.max(
+                                  ...critique.issues.map((i) => i.severity),
+                              )
+                            : undefined,
+                    avgSeverity:
+                        critique.issues.length > 0
+                            ? round2(
+                                  critique.issues.reduce(
+                                      (sum, i) => sum + i.severity,
+                                      0,
+                                  ) / critique.issues.length,
+                              )
+                            : undefined,
+                    byType:
+                        critique.issues.length > 0
+                            ? Object.fromEntries(
+                                  critique.issues.map((i) => [
+                                      i.type,
+                                      i.severity,
+                                  ]),
+                              )
+                            : undefined,
+                },
+            },
+        };
     }
 }
