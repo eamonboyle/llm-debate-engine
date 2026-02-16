@@ -1,3 +1,25 @@
+/**
+ * Element-wise mean of vectors. All vectors must have the same length.
+ */
+export function vectorMean(vectors: number[][]): number[] {
+    if (!vectors.length) return [];
+    const dim = vectors[0].length;
+    for (const v of vectors) {
+        if (v.length !== dim) {
+            throw new Error(
+                `vectorMean: length mismatch ${v.length} vs ${dim}`,
+            );
+        }
+    }
+    const result: number[] = [];
+    for (let i = 0; i < dim; i++) {
+        let sum = 0;
+        for (const v of vectors) sum += v[i];
+        result.push(sum / vectors.length);
+    }
+    return result;
+}
+
 export function cosineSimilarity(a: number[], b: number[]): number {
     if (a.length !== b.length) {
         throw new Error(

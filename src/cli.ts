@@ -4,6 +4,7 @@ import { join } from "path";
 import { OpenAICompatibleClient } from "./llm/OpenAiCompatibleClient";
 import { OpenAiEmbeddingClient } from "./embedding/OpenAiEmbeddingClient";
 import { DebateEngine } from "./debate/DebateEngine";
+import { BenchmarkRunner } from "./bench/BenchmarkRunner";
 import { makeId } from "./core/id";
 import type { AgentResponse, Critique, CritiqueIssue } from "./types/agent";
 
@@ -45,24 +46,121 @@ if (!API_KEY) {
     process.exit(1);
 }
 
+async function runBenchmark(
+    question: string,
+    runs: number,
+    verbose: boolean,
+): Promise<void> {
+    const llm = new OpenAICompatibleClient({
+        baseURL: BASE_URL,
+        apiKey: API_KEY,
+    });
+
+    const embedding = new OpenAiEmbeddingClient({
+        baseURL: BASE_URL,
+        apiKey: API_KEY,
+    });
+
+    const engine = new DebateEngine({ llm, embedding });
+    const runner = new BenchmarkRunner({ engine, embedding });
+
+    const { result, raw } = await runner.run(question, runs, {
+        model: MODEL,
+        verbose,
+        quiet: !verbose,
+        onProgress: !verbose
+            ? (i, total) => console.log(`Run ${i}/${total}... done`)
+            : undefined,
+    });
+
+    const cs = result.consensus;
+    const cm = result.critiqueMaxSeverity;
+    const stab = result.stability;
+
+    console.log("\n--- Benchmark (" + runs + " runs) ---");
+    console.log("Question:", question);
+    console.log("");
+    console.log("consensus.strength:    mean", cs.mean, " stddev", cs.stddev);
+    console.log("critique.maxSeverity: mean", cm.mean, " stddev", cm.stddev);
+    console.log(
+        "stability:            ",
+        stab.pairwiseMean,
+        "(avg pairwise similarity of final answers)",
+    );
+
+    const benchmarkId = makeId("benchmark");
+    const benchmarkJson = {
+        id: benchmarkId,
+        question,
+        runs,
+        summary: {
+            consensusStrength: { mean: cs.mean, stddev: cs.stddev },
+            critiqueMaxSeverity: { mean: cm.mean, stddev: cm.stddev },
+            stability: stab.pairwiseMean,
+        },
+        result,
+        results: raw,
+    };
+
+    await mkdir(RUNS_DIR, { recursive: true });
+    const outputPath = join(RUNS_DIR, `${benchmarkId}.json`);
+    await writeFile(
+        outputPath,
+        JSON.stringify(benchmarkJson, null, 2),
+        "utf-8",
+    );
+    console.log("\n(Run details saved to " + outputPath + ")");
+}
+
 async function main() {
     const args = process.argv.slice(2);
     const verbose = args.includes("--verbose") || args.includes("-v");
     const rest = args.filter((a) => a !== "--verbose" && a !== "-v");
     const cmd = rest[0];
-    const question = rest.slice(1).join(" ").trim();
 
-    const usage = 'Usage: pnpm tsx src/cli.ts ask "<question>" [--verbose]';
+    const usageAsk = 'Usage: pnpm tsx src/cli.ts ask "<question>" [--verbose]';
+    const usageBenchmark =
+        'Usage: pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--verbose]';
+
+    if (cmd === "benchmark") {
+        let runs = 5;
+        const runsIdx = rest.indexOf("--runs");
+        if (runsIdx >= 0 && rest[runsIdx + 1]) {
+            const parsed = parseInt(rest[runsIdx + 1], 10);
+            if (!Number.isNaN(parsed) && parsed > 0) runs = parsed;
+        }
+        const questionParts = rest
+            .filter((_, i) => i !== runsIdx && i !== runsIdx + 1)
+            .slice(1);
+        const question = questionParts.join(" ").trim();
+
+        if (!question) {
+            console.error("Missing question.");
+            console.error(usageBenchmark);
+            process.exit(1);
+        }
+        if (runs === 1) {
+            console.warn(
+                "Warning: K=1 yields trivial stddev (0) and stability (1.0).",
+            );
+        }
+
+        await runBenchmark(question, runs, verbose);
+        return;
+    }
 
     if (cmd !== "ask") {
         console.error(`Unknown command: ${cmd ?? "(none)"}`);
-        console.error(usage);
+        console.error(usageAsk);
+        console.error(usageBenchmark);
         process.exit(1);
     }
 
+    const question = rest.slice(1).join(" ").trim();
+
     if (!question) {
         console.error("Missing question.");
-        console.error(usage);
+        console.error(usageAsk);
         process.exit(1);
     }
 

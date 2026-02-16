@@ -58,13 +58,14 @@ export class DebateEngine {
 
     async run(
         ctx: DebateContext,
-        opts: { model: string; verbose?: boolean },
+        opts: { model: string; verbose?: boolean; quiet?: boolean },
     ): Promise<DebateRun> {
         const verbose = opts.verbose ?? false;
+        const quiet = opts.quiet ?? false;
         const steps: AgentRun[] = [];
 
         // Step 1: Solver
-        console.log("Solver agent is now solving the question...");
+        if (!quiet) console.log("Solver agent is now solving the question...");
         const solverStep = await this.agents.solver.run(ctx, this.llm, {
             model: opts.model,
         });
@@ -95,7 +96,7 @@ export class DebateEngine {
         }
 
         // Step 2: Skeptic
-        console.log("\nSkeptic agent is now critiquing the proposal...");
+        if (!quiet) console.log("\nSkeptic agent is now critiquing the proposal...");
         const skepticStep = await this.agents.skeptic.run(ctx, this.llm, {
             model: opts.model,
             targetAgentName: this.agents.solver.name,
@@ -124,7 +125,7 @@ export class DebateEngine {
         }
 
         // Step 3: Solver revision
-        console.log("\nSolver revision agent is now revising the proposal...");
+        if (!quiet) console.log("\nSolver revision agent is now revising the proposal...");
         const revisionStep = await this.agents.solverRevision.run(
             ctx,
             this.llm,
@@ -157,7 +158,7 @@ export class DebateEngine {
         }
 
         // Step 4: Synthesizer
-        console.log("\nSynthesizer agent is now synthesizing the proposal...");
+        if (!quiet) console.log("\nSynthesizer agent is now synthesizing the proposal...");
         const synthesizerStep = await this.agents.synthesizer.run(
             ctx,
             this.llm,

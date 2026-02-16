@@ -2,7 +2,7 @@
 
 import type { EmbeddingClient } from "../types/embedding";
 import { DebateRun } from "../types/agent";
-import { cosineSimilarity } from "./math";
+import { cosineSimilarity, vectorMean } from "./math";
 
 export function computeBasicMetrics(run: DebateRun) {
     const solverStep = run.steps.find(
@@ -121,6 +121,25 @@ export async function computeConsensusIfPossible(
         pairs,
         strength: round3(avg(pairs.map((p) => p.similarity))),
     };
+}
+
+/**
+ * Computes stability score across K runs: average cosine similarity of each
+ * final answer to the centroid of all embedded answers. Higher = more stable.
+ */
+export async function computeStabilityScore(
+    runs: DebateRun[],
+    embedding: EmbeddingClient,
+): Promise<number> {
+    if (!runs.length) return 0;
+    const texts = runs.map((r) => r.finalAnswer).filter((t) => t?.trim());
+    if (!texts.length) return 0;
+    if (texts.length === 1) return 1;
+
+    const vectors = await Promise.all(texts.map((t) => embedding.embed(t)));
+    const centroid = vectorMean(vectors);
+    const similarities = vectors.map((v) => cosineSimilarity(v, centroid));
+    return round3(avg(similarities));
 }
 
 /* ------------------------- tiny math utils ---------------------------- */
