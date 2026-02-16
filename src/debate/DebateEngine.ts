@@ -1,30 +1,60 @@
 import type { LLMClient } from "../types/llm";
+import type { EmbeddingClient } from "../types/embedding";
 import type {
     AgentResponse,
     AgentRun,
-    Critique,
     DebateContext,
     DebateRun,
 } from "../types/agent";
-import type { SolverAgent } from "../agents/SolverAgent";
-import type { SkepticAgent } from "../agents/SkepticAgent";
-import type { SolverRevisionAgent } from "../agents/SolverRevisionAgent";
-import type { SynthesizerAgent } from "../agents/SynthesizerAgent";
+import { SolverAgent } from "../agents/SolverAgent";
+import { SkepticAgent } from "../agents/SkepticAgent";
+import { SolverRevisionAgent } from "../agents/SolverRevisionAgent";
+import { SynthesizerAgent } from "../agents/SynthesizerAgent";
+import { getProposal, getCritique } from "../core/extraction";
+import {
+    computeBasicMetrics,
+    computeConsensusIfPossible,
+} from "../core/metrics";
+import { makeId } from "../core/id";
 
-export type DebateAgents = {
-    solver: SolverAgent;
-    skeptic: SkepticAgent;
-    solverRevision: SolverRevisionAgent;
-    synthesizer: SynthesizerAgent;
+function nowIso() {
+    return new Date().toISOString();
+}
+
+export type DebateEngineDeps = {
+    llm: LLMClient;
+    /** Optional. If not provided, consensus metric is skipped. */
+    embedding?: EmbeddingClient;
+    agents?: {
+        solver?: SolverAgent;
+        skeptic?: SkepticAgent;
+        revision?: SolverRevisionAgent;
+        synthesizer?: SynthesizerAgent;
+    };
 };
 
 export class DebateEngine {
     readonly name = "DebateEngine";
 
-    constructor(
-        private readonly agents: DebateAgents,
-        private readonly llm: LLMClient,
-    ) {}
+    private readonly llm: LLMClient;
+    private readonly embedding: EmbeddingClient | undefined;
+    private readonly agents: {
+        solver: SolverAgent;
+        skeptic: SkepticAgent;
+        solverRevision: SolverRevisionAgent;
+        synthesizer: SynthesizerAgent;
+    };
+
+    constructor(deps: DebateEngineDeps) {
+        this.llm = deps.llm;
+        this.embedding = deps.embedding;
+        this.agents = {
+            solver: deps.agents?.solver ?? new SolverAgent(),
+            skeptic: deps.agents?.skeptic ?? new SkepticAgent(),
+            solverRevision: deps.agents?.revision ?? new SolverRevisionAgent(),
+            synthesizer: deps.agents?.synthesizer ?? new SynthesizerAgent(),
+        };
+    }
 
     async run(
         ctx: DebateContext,
@@ -45,21 +75,23 @@ export class DebateEngine {
             console.log(JSON.stringify(solverStep, null, 2));
         }
 
-        const proposal =
-            solverStep.output?.kind === "proposal"
-                ? (solverStep.output.data as AgentResponse)
-                : undefined;
+        const proposal = getProposal(solverStep) ?? undefined;
 
         if (!proposal) {
             const fallback =
                 (solverStep.rawAttempts[0] as AgentResponse)?.answer ??
                 solverStep.error ??
                 "Solver failed to produce a proposal.";
-            return {
+            const run: DebateRun = {
+                id: makeId("run"),
+                createdAt: nowIso(),
+                question: ctx.question,
                 steps,
                 finalAnswer: String(fallback),
                 metrics: { confidence: {}, critique: {} },
             };
+            computeBasicMetrics(run);
+            return run;
         }
 
         // Step 2: Skeptic
@@ -76,17 +108,19 @@ export class DebateEngine {
             console.log(JSON.stringify(skepticStep, null, 2));
         }
 
-        const critique =
-            skepticStep.output?.kind === "critique"
-                ? (skepticStep.output.data as Critique)
-                : undefined;
+        const critique = getCritique(skepticStep) ?? undefined;
 
         if (!critique) {
-            return {
+            const run: DebateRun = {
+                id: makeId("run"),
+                createdAt: nowIso(),
+                question: ctx.question,
                 steps,
                 finalAnswer: proposal.answer,
                 metrics: { confidence: {}, critique: {} },
             };
+            computeBasicMetrics(run);
+            return run;
         }
 
         // Step 3: Solver revision
@@ -107,17 +141,19 @@ export class DebateEngine {
             console.log(JSON.stringify(revisionStep, null, 2));
         }
 
-        const revision =
-            revisionStep.output?.kind === "proposal"
-                ? (revisionStep.output.data as AgentResponse)
-                : undefined;
+        const revision = getProposal(revisionStep) ?? undefined;
 
         if (!revision) {
-            return {
+            const run: DebateRun = {
+                id: makeId("run"),
+                createdAt: nowIso(),
+                question: ctx.question,
                 steps,
                 finalAnswer: proposal.answer,
                 metrics: { confidence: {}, critique: {} },
             };
+            computeBasicMetrics(run);
+            return run;
         }
 
         // Step 4: Synthesizer
@@ -139,80 +175,22 @@ export class DebateEngine {
             console.log(JSON.stringify(synthesizerStep, null, 2));
         }
 
-        const synthesized =
-            synthesizerStep.output?.kind === "proposal"
-                ? (synthesizerStep.output.data as AgentResponse)
-                : undefined;
+        const synthesized = getProposal(synthesizerStep) ?? undefined;
 
         const finalAnswer = synthesized?.answer ?? revision.answer;
 
-        const round2 = (n: number) => Math.round(n * 100) / 100;
-
-        return {
+        const run: DebateRun = {
+            id: makeId("run"),
+            createdAt: nowIso(),
+            question: ctx.question,
             steps,
             finalAnswer,
-            metrics: {
-                confidence: (() => {
-                    const solver =
-                        solverStep.output?.kind === "proposal"
-                            ? (solverStep.output.data as AgentResponse)
-                                  .confidence
-                            : undefined;
-                    const revision =
-                        revisionStep.output?.kind === "proposal"
-                            ? (revisionStep.output.data as AgentResponse)
-                                  .confidence
-                            : undefined;
-                    const synthesizer =
-                        synthesizerStep.output?.kind === "proposal"
-                            ? (synthesizerStep.output.data as AgentResponse)
-                                  .confidence
-                            : undefined;
-                    return {
-                        solver: solver !== undefined ? round2(solver) : undefined,
-                        revision:
-                            revision !== undefined ? round2(revision) : undefined,
-                        synthesizer:
-                            synthesizer !== undefined
-                                ? round2(synthesizer)
-                                : undefined,
-                        solverToRevisionDelta:
-                            solver !== undefined && revision !== undefined
-                                ? round2(revision - solver)
-                                : undefined,
-                        revisionToSynthesizerDelta:
-                            revision !== undefined && synthesizer !== undefined
-                                ? round2(synthesizer - revision)
-                                : undefined,
-                    };
-                })(),
-                critique: {
-                    maxSeverity:
-                        critique.issues.length > 0
-                            ? Math.max(
-                                  ...critique.issues.map((i) => i.severity),
-                              )
-                            : undefined,
-                    avgSeverity:
-                        critique.issues.length > 0
-                            ? round2(
-                                  critique.issues.reduce(
-                                      (sum, i) => sum + i.severity,
-                                      0,
-                                  ) / critique.issues.length,
-                              )
-                            : undefined,
-                    byType:
-                        critique.issues.length > 0
-                            ? Object.fromEntries(
-                                  critique.issues.map((i) => [
-                                      i.type,
-                                      i.severity,
-                                  ]),
-                              )
-                            : undefined,
-                },
-            },
+            metrics: { confidence: {}, critique: {} },
         };
+
+        computeBasicMetrics(run);
+        await computeConsensusIfPossible(run, this.embedding);
+
+        return run;
     }
 }

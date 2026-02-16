@@ -42,8 +42,12 @@ export type DebateContext = {
 };
 
 export type DebateRun = {
+    id: string;
+    createdAt: string;
+    question: string;
     steps: AgentRun[];
     finalAnswer: string;
+
     metrics: {
         confidence: {
             solver?: number;
@@ -56,6 +60,14 @@ export type DebateRun = {
             maxSeverity?: number;
             avgSeverity?: number;
             byType?: Record<string, number>;
+        };
+        consensus?: {
+            // average pairwise cosine similarity across available answers
+            strength?: number;
+            // which answers were included
+            included?: Array<"solver" | "revision" | "synthesizer">;
+            // pairwise sims for debugging
+            pairs?: Array<{ a: string; b: string; similarity: number }>;
         };
     };
 };

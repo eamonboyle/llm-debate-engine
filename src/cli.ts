@@ -2,10 +2,7 @@ import "dotenv/config";
 import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
 import { OpenAICompatibleClient } from "./llm/OpenAiCompatibleClient";
-import { SolverAgent } from "./agents/SolverAgent";
-import { SkepticAgent } from "./agents/SkepticAgent";
-import { SolverRevisionAgent } from "./agents/SolverRevisionAgent";
-import { SynthesizerAgent } from "./agents/SynthesizerAgent";
+import { OpenAiEmbeddingClient } from "./embedding/OpenAiEmbeddingClient";
 import { DebateEngine } from "./debate/DebateEngine";
 import { makeId } from "./core/id";
 import type { AgentResponse, Critique, CritiqueIssue } from "./types/agent";
@@ -76,15 +73,15 @@ async function main() {
         apiKey: API_KEY,
     });
 
-    const engine = new DebateEngine(
-        {
-            solver: new SolverAgent(),
-            skeptic: new SkepticAgent(),
-            solverRevision: new SolverRevisionAgent(),
-            synthesizer: new SynthesizerAgent(),
-        },
+    const embedding = new OpenAiEmbeddingClient({
+        baseURL: BASE_URL,
+        apiKey: API_KEY,
+    });
+
+    const engine = new DebateEngine({
         llm,
-    );
+        embedding,
+    });
 
     const result = await engine.run({ question }, { model: MODEL, verbose });
 
