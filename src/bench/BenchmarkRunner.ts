@@ -13,6 +13,8 @@ export type BenchmarkResult = {
         // Average pairwise similarity of final answers across runs.
         pairwiseMean: number;
         pairwiseStddev: number;
+        minPairwiseSimilarity: number;
+        maxPairwiseSimilarity: number;
         pairs: Array<{ i: number; j: number; similarity: number }>;
     };
 };
@@ -44,13 +46,13 @@ export class BenchmarkRunner {
         const onProgress = opts?.onProgress;
 
         for (let i = 0; i < runs; i++) {
+            if (!verbose && onProgress) onProgress(i + 1, runs);
             raw.push(
                 await this.deps.engine.run(
                     { question },
                     { model, verbose, quiet },
                 ),
             );
-            if (!verbose && onProgress) onProgress(i + 1, runs);
         }
 
         const runIds = raw.map((r) => r.id);
@@ -98,14 +100,24 @@ export class BenchmarkRunner {
                 mean: round3(mean(critiqueMaxValues)),
                 stddev: round3(stddev(critiqueMaxValues)),
             },
-            stability: {
-                pairwiseMean: round3(mean(pairs.map((p) => p.similarity))),
-                pairwiseStddev: round3(stddev(pairs.map((p) => p.similarity))),
-                pairs: pairs.map((p) => ({
+            stability: (() => {
+                const sims = pairs.map((p) => p.similarity);
+                const rounded = pairs.map((p) => ({
                     ...p,
                     similarity: round3(p.similarity),
-                })),
-            },
+                }));
+                return {
+                    pairwiseMean: round3(mean(sims)),
+                    pairwiseStddev: round3(stddev(sims)),
+                    minPairwiseSimilarity: round3(
+                        sims.length ? Math.min(...sims) : 0,
+                    ),
+                    maxPairwiseSimilarity: round3(
+                        sims.length ? Math.max(...sims) : 0,
+                    ),
+                    pairs: rounded,
+                };
+            })(),
         };
 
         return { result, raw };

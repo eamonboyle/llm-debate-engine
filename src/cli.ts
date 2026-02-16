@@ -7,6 +7,7 @@ import { DebateEngine } from "./debate/DebateEngine";
 import { BenchmarkRunner } from "./bench/BenchmarkRunner";
 import { makeId } from "./core/id";
 import type { AgentResponse, Critique, CritiqueIssue } from "./types/agent";
+import type { BenchmarkArtifact } from "./types/benchmark";
 
 const BASE_URL = process.env.OPENAI_BASE_URL ?? "https://api.openai.com/v1";
 const MODEL = process.env.OPENAI_MODEL ?? "gpt-5.2";
@@ -64,12 +65,13 @@ async function runBenchmark(
     const engine = new DebateEngine({ llm, embedding });
     const runner = new BenchmarkRunner({ engine, embedding });
 
+    console.log(`Starting benchmark (${runs} runs)...`);
     const { result, raw } = await runner.run(question, runs, {
         model: MODEL,
         verbose,
         quiet: !verbose,
         onProgress: !verbose
-            ? (i, total) => console.log(`Run ${i}/${total}... done`)
+            ? (i, total) => console.log(`Run ${i}/${total}...`)
             : undefined,
     });
 
@@ -89,17 +91,13 @@ async function runBenchmark(
     );
 
     const benchmarkId = makeId("benchmark");
-    const benchmarkJson = {
+    const benchmarkJson: BenchmarkArtifact = {
         id: benchmarkId,
+        createdAt: new Date().toISOString(),
         question,
         runs,
-        summary: {
-            consensusStrength: { mean: cs.mean, stddev: cs.stddev },
-            critiqueMaxSeverity: { mean: cm.mean, stddev: cm.stddev },
-            stability: stab.pairwiseMean,
-        },
-        result,
-        results: raw,
+        runIds: result.runIds,
+        summary: result,
     };
 
     await mkdir(RUNS_DIR, { recursive: true });
