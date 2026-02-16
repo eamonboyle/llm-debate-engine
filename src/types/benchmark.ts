@@ -6,5 +6,8 @@ export type BenchmarkArtifact = {
     question: string;
     runs: number;
     runIds: string[];
+    modeCount: number;
+    modeSizes: number[];
+    divergenceEntropy: number;
     summary: BenchmarkResult;
 };

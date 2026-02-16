@@ -73,11 +73,15 @@ async function runBenchmark(
         onProgress: !verbose
             ? (i, total) => console.log(`Run ${i}/${total}...`)
             : undefined,
+        clusteringThreshold: 0.9,
     });
 
     const cs = result.consensus;
     const cm = result.critiqueMaxSeverity;
     const stab = result.stability;
+    const modeCount = result.modeCount;
+    const modeSizes = result.modeSizes;
+    const divergenceEntropy = result.divergenceEntropy;
 
     console.log("\n--- Benchmark (" + runs + " runs) ---");
     console.log("Question:", question);
@@ -89,6 +93,9 @@ async function runBenchmark(
         stab.pairwiseMean,
         "(avg pairwise similarity of final answers)",
     );
+    console.log("modeCount:            ", modeCount);
+    console.log("modeSizes:            ", modeSizes);
+    console.log("divergenceEntropy:    ", divergenceEntropy);
 
     const benchmarkId = makeId("benchmark");
     const benchmarkJson: BenchmarkArtifact = {
@@ -97,6 +104,9 @@ async function runBenchmark(
         question,
         runs,
         runIds: result.runIds,
+        modeCount,
+        modeSizes,
+        divergenceEntropy,
         summary: result,
     };
 

@@ -7,8 +7,14 @@ export type BenchmarkResult = {
     question: string;
     runs: number;
     runIds: string[];
+
     consensus: { mean: number; stddev: number };
     critiqueMaxSeverity: { mean: number; stddev: number };
+
+    modeCount: number;
+    modeSizes: number[];
+    divergenceEntropy: number;
+
     stability: {
         // Average pairwise similarity of final answers across runs.
         pairwiseMean: number;
@@ -29,6 +35,35 @@ export class BenchmarkRunner {
         },
     ) {}
 
+    /* --------------------------------------------------- */
+    /** Helper - greedy clustering by cosine similarity threshold */
+    private clusterEmbeddings(vectors: number[][], threshold = 0.8): number[] {
+        const centroids: number[][] = [];
+        const assignments: number[] = new Array(vectors.length).fill(-1);
+
+        vectors.forEach((vec, idx) => {
+            // try to fit into an existing centroid
+            let placed = false;
+            for (let c = 0; c < centroids.length; c++) {
+                if (cosineSimilarity(vec, centroids[c]) >= threshold) {
+                    assignments[idx] = c;
+                    placed = true;
+                    break;
+                }
+            }
+
+            // new cluster if no centroid matched
+            if (!placed) {
+                centroids.push(vec);
+                assignments[idx] = centroids.length - 1;
+            }
+        });
+
+        return assignments; // index of the mode each vector belongs to
+    }
+
+    /* --------------------------------------------------- */
+    /** Run a benchmark */
     async run(
         question: string,
         runs: number,
@@ -37,6 +72,8 @@ export class BenchmarkRunner {
             verbose?: boolean;
             quiet?: boolean;
             onProgress?: (i: number, total: number) => void;
+            // allow caller to tweak the clustering threshold
+            clusteringThreshold?: number;
         },
     ): Promise<{ result: BenchmarkResult; raw: DebateRun[] }> {
         const raw: DebateRun[] = [];
@@ -55,6 +92,8 @@ export class BenchmarkRunner {
             );
         }
 
+        /* --------------------------------------------------- */
+        /** Compute metrics */
         const runIds = raw.map((r) => r.id);
 
         const consensusValues = raw
@@ -65,7 +104,8 @@ export class BenchmarkRunner {
             .map((r) => r.metrics.critique.maxSeverity)
             .filter((v): v is number => typeof v === "number");
 
-        // Embedding stability on final answers
+        /* --------------------------------------------------- */
+        /** Embedding stability on final answers */
         const finals = raw
             .map((r) => r.finalAnswer)
             .filter(
@@ -77,6 +117,30 @@ export class BenchmarkRunner {
             finals.map((t) => this.deps.embedding.embed(t)),
         );
 
+        /* --------------------------------------------------- */
+        /** Mode detection */
+        const assignments = this.clusterEmbeddings(
+            vectors,
+            opts?.clusteringThreshold ?? 0.8,
+        );
+        const modeSizes: number[] = [];
+        assignments.forEach((mIdx) => {
+            modeSizes[mIdx] = (modeSizes[mIdx] ?? 0) + 1;
+        });
+        const modeCount = modeSizes.length;
+
+        /* --------------------------------------------------- */
+        /** Divergence entropy */
+        const divergenceEntropy =
+            modeCount === 0
+                ? 0
+                : -modeSizes.reduce((sum, sz) => {
+                      const p = sz / vectors.length;
+                      return sum + p * Math.log2(p);
+                  }, 0);
+
+        /* --------------------------------------------------- */
+        /** Pairwise similarity */
         const pairs: Array<{ i: number; j: number; similarity: number }> = [];
         for (let i = 0; i < vectors.length; i++) {
             for (let j = i + 1; j < vectors.length; j++) {
@@ -88,10 +152,19 @@ export class BenchmarkRunner {
             }
         }
 
+        /* --------------------------------------------------- */
+        /** Assemble results */
+        const sims = pairs.map((p) => p.similarity);
+        const roundedPairs = pairs.map((p) => ({
+            ...p,
+            similarity: round3(p.similarity),
+        }));
+
         const result: BenchmarkResult = {
             question,
             runs,
             runIds,
+
             consensus: {
                 mean: round3(mean(consensusValues)),
                 stddev: round3(stddev(consensusValues)),
@@ -100,24 +173,18 @@ export class BenchmarkRunner {
                 mean: round3(mean(critiqueMaxValues)),
                 stddev: round3(stddev(critiqueMaxValues)),
             },
-            stability: (() => {
-                const sims = pairs.map((p) => p.similarity);
-                const rounded = pairs.map((p) => ({
-                    ...p,
-                    similarity: round3(p.similarity),
-                }));
-                return {
-                    pairwiseMean: round3(mean(sims)),
-                    pairwiseStddev: round3(stddev(sims)),
-                    minPairwiseSimilarity: round3(
-                        sims.length ? Math.min(...sims) : 0,
-                    ),
-                    maxPairwiseSimilarity: round3(
-                        sims.length ? Math.max(...sims) : 0,
-                    ),
-                    pairs: rounded,
-                };
-            })(),
+
+            modeCount,
+            modeSizes,
+            divergenceEntropy,
+
+            stability: {
+                pairwiseMean: round3(mean(sims)),
+                pairwiseStddev: round3(stddev(sims)),
+                minPairwiseSimilarity: round3(Math.min(...sims)),
+                maxPairwiseSimilarity: round3(Math.max(...sims)),
+                pairs: roundedPairs,
+            },
         };
 
         return { result, raw };
@@ -125,7 +192,6 @@ export class BenchmarkRunner {
 }
 
 /* ---- tiny stats ---- */
-
 function mean(xs: number[]) {
     if (!xs.length) return 0;
     return xs.reduce((a, b) => a + b, 0) / xs.length;
