@@ -51,7 +51,9 @@ async function runBenchmark(
     question: string,
     runs: number,
     verbose: boolean,
+    opts?: { concurrency?: number; model?: string; fast?: boolean },
 ): Promise<void> {
+    const { concurrency, model, fast } = opts ?? {};
     const llm = new OpenAICompatibleClient({
         baseURL: BASE_URL,
         apiKey: API_KEY,
@@ -65,14 +67,18 @@ async function runBenchmark(
     const engine = new DebateEngine({ llm, embedding });
     const runner = new BenchmarkRunner({ engine, embedding });
 
-    console.log(`Starting benchmark (${runs} runs)...`);
+    console.log(
+        `Starting benchmark (${runs} runs, concurrency ${concurrency ?? 3})...`,
+    );
     const { result, raw } = await runner.run(question, runs, {
-        model: MODEL,
+        model: model ?? MODEL,
         verbose,
         quiet: !verbose,
         onProgress: !verbose
             ? (i, total) => console.log(`Run ${i}/${total}...`)
             : undefined,
+        concurrency,
+        fast,
         clusteringThreshold: 0.9,
     });
 
@@ -126,19 +132,45 @@ async function main() {
     const rest = args.filter((a) => a !== "--verbose" && a !== "-v");
     const cmd = rest[0];
 
-    const usageAsk = 'Usage: pnpm tsx src/cli.ts ask "<question>" [--verbose]';
+    const usageAsk =
+        'Usage: pnpm tsx src/cli.ts ask "<question>" [--model M] [--fast] [--verbose]';
     const usageBenchmark =
-        'Usage: pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--verbose]';
+        'Usage: pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model M] [--fast] [--verbose]';
+
+    const parseOpt = (flag: string): string | undefined => {
+        const idx = rest.indexOf(flag);
+        return idx >= 0 && rest[idx + 1] ? rest[idx + 1] : undefined;
+    };
+    const parseNumOpt = (flag: string): number | undefined => {
+        const v = parseOpt(flag);
+        if (!v) return undefined;
+        const n = parseInt(v, 10);
+        return !Number.isNaN(n) && n > 0 ? n : undefined;
+    };
+    const excludeOptIndices = (indices: number[]): number[] => {
+        const set = new Set<number>();
+        for (const i of indices) {
+            set.add(i);
+            set.add(i + 1);
+        }
+        return Array.from(set);
+    };
 
     if (cmd === "benchmark") {
         let runs = 5;
-        const runsIdx = rest.indexOf("--runs");
-        if (runsIdx >= 0 && rest[runsIdx + 1]) {
-            const parsed = parseInt(rest[runsIdx + 1], 10);
-            if (!Number.isNaN(parsed) && parsed > 0) runs = parsed;
-        }
+        const runsVal = parseNumOpt("--runs");
+        if (runsVal) runs = runsVal;
+        const concurrency = parseNumOpt("--concurrency");
+        const model = parseOpt("--model");
+        const fast = rest.includes("--fast");
+        const excludeIdx = excludeOptIndices([
+            rest.indexOf("--runs"),
+            rest.indexOf("--concurrency"),
+            rest.indexOf("--model"),
+            ...(fast ? [rest.indexOf("--fast")] : []),
+        ].filter((i) => i >= 0));
         const questionParts = rest
-            .filter((_, i) => i !== runsIdx && i !== runsIdx + 1)
+            .filter((_, i) => !excludeIdx.includes(i))
             .slice(1);
         const question = questionParts.join(" ").trim();
 
@@ -153,7 +185,11 @@ async function main() {
             );
         }
 
-        await runBenchmark(question, runs, verbose);
+        await runBenchmark(question, runs, verbose, {
+            concurrency,
+            model,
+            fast,
+        });
         return;
     }
 
@@ -164,7 +200,16 @@ async function main() {
         process.exit(1);
     }
 
-    const question = rest.slice(1).join(" ").trim();
+    const askModel = parseOpt("--model");
+    const askFast = rest.includes("--fast");
+    const askExcludeIdx = excludeOptIndices([
+        rest.indexOf("--model"),
+        ...(askFast ? [rest.indexOf("--fast")] : []),
+    ].filter((i) => i >= 0));
+    const askQuestionParts = rest
+        .filter((_, i) => !askExcludeIdx.includes(i))
+        .slice(1);
+    const question = askQuestionParts.join(" ").trim();
 
     if (!question) {
         console.error("Missing question.");
@@ -189,7 +234,10 @@ async function main() {
         embedding,
     });
 
-    const result = await engine.run({ question }, { model: MODEL, verbose });
+    const result = await engine.run(
+        { question },
+        { model: askModel ?? MODEL, verbose, fast: askFast },
+    );
 
     const runJson = {
         id: runId,

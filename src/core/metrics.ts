@@ -100,9 +100,7 @@ export async function computeConsensusIfPossible(
 
     if (items.length < 2) return;
 
-    const vectors = await Promise.all(
-        items.map((i) => embedding.embed(i.text)),
-    );
+    const vectors = await embedding.embedBatch(items.map((i) => i.text));
 
     const pairs: Array<{ a: string; b: string; similarity: number }> = [];
     for (let i = 0; i < items.length; i++) {
@@ -136,7 +134,7 @@ export async function computeStabilityScore(
     if (!texts.length) return 0;
     if (texts.length === 1) return 1;
 
-    const vectors = await Promise.all(texts.map((t) => embedding.embed(t)));
+    const vectors = await embedding.embedBatch(texts);
     const centroid = vectorMean(vectors);
     const similarities = vectors.map((v) => cosineSimilarity(v, centroid));
     return round3(avg(similarities));

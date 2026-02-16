@@ -7,6 +7,8 @@ export type CompletionRequest = {
     model: string;
     messages: ChatMessage[];
     temperature?: number;
+    /** When set, stream tokens to this callback and use stream: true. Improves perceived responsiveness. */
+    onStream?: (chunk: string) => void;
 };
 
 export type StructuredCompletionRequest<TSchema = unknown> =

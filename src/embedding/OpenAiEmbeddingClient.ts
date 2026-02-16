@@ -30,4 +30,29 @@ export class OpenAiEmbeddingClient implements EmbeddingClient {
 
         return vec;
     }
+
+    async embedBatch(texts: string[]): Promise<number[][]> {
+        const inputs = texts.map((t) => t.trim());
+        if (inputs.some((t) => !t))
+            throw new Error("embedBatch() requires all non-empty strings");
+        if (inputs.length === 0) return [];
+
+        const res = await this.client.embeddings.create({
+            model: this.model,
+            input: inputs,
+        });
+
+        const data = res.data ?? [];
+        const vectors = data
+            .sort((a, b) => (a.index ?? 0) - (b.index ?? 0))
+            .map((d) => d.embedding)
+            .filter((v): v is number[] => Array.isArray(v));
+
+        if (vectors.length !== inputs.length)
+            throw new Error(
+                `Unexpected embedding response: expected ${inputs.length} vectors, got ${vectors.length}`,
+            );
+
+        return vectors;
+    }
 }

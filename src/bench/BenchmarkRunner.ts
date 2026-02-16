@@ -63,6 +63,34 @@ export class BenchmarkRunner {
     }
 
     /* --------------------------------------------------- */
+    /** Run tasks with concurrency limit, preserving result order */
+    private async runWithConcurrency<T>(
+        concurrency: number,
+        count: number,
+        fn: (i: number) => Promise<T>,
+        onItemComplete?: (result: T, i: number) => void,
+    ): Promise<T[]> {
+        const results: (T | undefined)[] = new Array(count);
+        let nextIndex = 0;
+
+        async function worker(): Promise<void> {
+            while (true) {
+                const i = nextIndex++;
+                if (i >= count) break;
+                const result = await fn(i);
+                results[i] = result;
+                onItemComplete?.(result, i);
+            }
+        }
+
+        const workers = Array(Math.min(concurrency, count))
+            .fill(null)
+            .map(() => worker());
+        await Promise.all(workers);
+        return results as T[];
+    }
+
+    /* --------------------------------------------------- */
     /** Run a benchmark */
     async run(
         question: string,
@@ -72,25 +100,32 @@ export class BenchmarkRunner {
             verbose?: boolean;
             quiet?: boolean;
             onProgress?: (i: number, total: number) => void;
+            /** Max concurrent debate runs. Default 3 to avoid rate limits. */
+            concurrency?: number;
+            /** Skip revision and synthesizer steps (~50% fewer LLM calls). */
+            fast?: boolean;
             // allow caller to tweak the clustering threshold
             clusteringThreshold?: number;
         },
     ): Promise<{ result: BenchmarkResult; raw: DebateRun[] }> {
-        const raw: DebateRun[] = [];
         const model = opts?.model ?? MODEL;
         const verbose = opts?.verbose ?? false;
         const quiet = opts?.quiet ?? false;
         const onProgress = opts?.onProgress;
+        const concurrency = opts?.concurrency ?? 3;
 
-        for (let i = 0; i < runs; i++) {
-            if (!verbose && onProgress) onProgress(i + 1, runs);
-            raw.push(
-                await this.deps.engine.run(
+        const raw = await this.runWithConcurrency(
+            concurrency,
+            runs,
+            (i) =>
+                this.deps.engine.run(
                     { question },
-                    { model, verbose, quiet },
+                    { model, verbose, quiet, fast: opts?.fast },
                 ),
-            );
-        }
+            !verbose && onProgress
+                ? (_, i) => onProgress(i + 1, runs)
+                : undefined,
+        );
 
         /* --------------------------------------------------- */
         /** Compute metrics */
@@ -113,9 +148,10 @@ export class BenchmarkRunner {
                     typeof t === "string" && t.trim().length > 0,
             );
 
-        const vectors = await Promise.all(
-            finals.map((t) => this.deps.embedding.embed(t)),
-        );
+        const vectors =
+            finals.length > 0
+                ? await this.deps.embedding.embedBatch(finals)
+                : [];
 
         /* --------------------------------------------------- */
         /** Mode detection */

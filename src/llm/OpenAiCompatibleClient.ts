@@ -51,12 +51,29 @@ export class OpenAICompatibleClient implements LLMClient {
 
     async complete(req: CompletionRequest): Promise<string> {
         const temp = this.resolveTemperature(req.temperature);
+        const stream = !!req.onStream;
         const body: Parameters<typeof this.client.chat.completions.create>[0] = {
             model: req.model,
             messages: req.messages,
-            stream: false,
+            stream,
         };
         if (temp !== undefined) body.temperature = temp;
+
+        if (stream) {
+            const streamRes = await this.client.chat.completions.create({
+                ...body,
+                stream: true,
+            });
+            let content = "";
+            for await (const chunk of streamRes) {
+                const delta = chunk.choices[0]?.delta?.content ?? "";
+                if (delta) {
+                    content += delta;
+                    req.onStream?.(delta);
+                }
+            }
+            return content;
+        }
 
         const res = (await this.client.chat.completions.create(body)) as ChatCompletion;
         return res.choices[0].message.content ?? "";
@@ -64,10 +81,11 @@ export class OpenAICompatibleClient implements LLMClient {
 
     async completeStructured<T>(req: StructuredCompletionRequest): Promise<T> {
         const temp = this.resolveTemperature(req.temperature);
+        const stream = !!req.onStream;
         const body: Parameters<typeof this.client.chat.completions.create>[0] = {
             model: req.model,
             messages: req.messages,
-            stream: false,
+            stream,
             response_format: {
                 type: "json_schema",
                 json_schema: {
@@ -78,6 +96,22 @@ export class OpenAICompatibleClient implements LLMClient {
             } as any,
         };
         if (temp !== undefined) body.temperature = temp;
+
+        if (stream) {
+            const streamRes = await this.client.chat.completions.create({
+                ...body,
+                stream: true,
+            });
+            let content = "";
+            for await (const chunk of streamRes) {
+                const delta = chunk.choices[0]?.delta?.content ?? "";
+                if (delta) {
+                    content += delta;
+                    req.onStream?.(delta);
+                }
+            }
+            return parseStructuredContent<T>(content);
+        }
 
         const res = (await this.client.chat.completions.create(body)) as ChatCompletion;
         const raw = res.choices[0].message.content;

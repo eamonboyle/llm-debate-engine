@@ -60,6 +60,7 @@ export class SkepticAgent {
         llm: LLMClient,
         opts: {
             model: string;
+            verbose?: boolean;
             targetAgentName: string;
             proposal: AgentResponse;
         },
@@ -88,6 +89,9 @@ export class SkepticAgent {
             messages,
             schemaName: "Critique",
             schema: critiqueSchema,
+            ...(opts.verbose && {
+                onStream: (chunk: string) => process.stdout.write(chunk),
+            }),
         };
 
         try {

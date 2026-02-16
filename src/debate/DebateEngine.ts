@@ -58,16 +58,24 @@ export class DebateEngine {
 
     async run(
         ctx: DebateContext,
-        opts: { model: string; verbose?: boolean; quiet?: boolean },
+        opts: {
+            model: string;
+            verbose?: boolean;
+            quiet?: boolean;
+            /** When true, skip revision and synthesizer (Solver → Skeptic → done). ~50% fewer LLM calls. */
+            fast?: boolean;
+        },
     ): Promise<DebateRun> {
         const verbose = opts.verbose ?? false;
         const quiet = opts.quiet ?? false;
+        const fast = opts.fast ?? false;
         const steps: AgentRun[] = [];
 
         // Step 1: Solver
         if (!quiet) console.log("Solver agent is now solving the question...");
         const solverStep = await this.agents.solver.run(ctx, this.llm, {
             model: opts.model,
+            verbose,
         });
         steps.push(solverStep);
 
@@ -99,6 +107,7 @@ export class DebateEngine {
         if (!quiet) console.log("\nSkeptic agent is now critiquing the proposal...");
         const skepticStep = await this.agents.skeptic.run(ctx, this.llm, {
             model: opts.model,
+            verbose,
             targetAgentName: this.agents.solver.name,
             proposal,
         });
@@ -124,6 +133,20 @@ export class DebateEngine {
             return run;
         }
 
+        if (fast) {
+            const run: DebateRun = {
+                id: makeId("run"),
+                createdAt: nowIso(),
+                question: ctx.question,
+                steps,
+                finalAnswer: proposal.answer,
+                metrics: { confidence: {}, critique: {} },
+            };
+            computeBasicMetrics(run);
+            await computeConsensusIfPossible(run, this.embedding);
+            return run;
+        }
+
         // Step 3: Solver revision
         if (!quiet) console.log("\nSolver revision agent is now revising the proposal...");
         const revisionStep = await this.agents.solverRevision.run(
@@ -131,6 +154,7 @@ export class DebateEngine {
             this.llm,
             {
                 model: opts.model,
+                verbose,
                 proposal,
                 critique,
             },
@@ -164,6 +188,7 @@ export class DebateEngine {
             this.llm,
             {
                 model: opts.model,
+                verbose,
                 proposal,
                 critique,
                 revision,

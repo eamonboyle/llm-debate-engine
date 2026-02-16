@@ -49,7 +49,12 @@ export class SolverRevisionAgent {
     async run(
         ctx: DebateContext,
         llm: LLMClient,
-        opts: { model: string; proposal: AgentResponse; critique: Critique },
+        opts: {
+            model: string;
+            verbose?: boolean;
+            proposal: AgentResponse;
+            critique: Critique;
+        },
     ): Promise<AgentRun> {
         const createdAt = nowIso();
 
@@ -70,7 +75,10 @@ export class SolverRevisionAgent {
             messages,
             schemaName: "AgentResponse",
             schema: agentResponseSchema,
-        } as const;
+            ...(opts.verbose && {
+                onStream: (chunk: string) => process.stdout.write(chunk),
+            }),
+        };
 
         try {
             const { data, attempts } =

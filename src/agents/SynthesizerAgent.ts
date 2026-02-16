@@ -48,6 +48,7 @@ export class SynthesizerAgent {
         llm: LLMClient,
         opts: {
             model: string;
+            verbose?: boolean;
             proposal: AgentResponse;
             critique: Critique;
             revision: AgentResponse;
@@ -73,7 +74,10 @@ export class SynthesizerAgent {
             messages,
             schemaName: "AgentResponse",
             schema: agentResponseSchema,
-        } as const;
+            ...(opts.verbose && {
+                onStream: (chunk: string) => process.stdout.write(chunk),
+            }),
+        };
 
         try {
             const { data, attempts } =
