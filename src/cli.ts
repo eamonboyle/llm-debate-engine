@@ -51,9 +51,14 @@ async function runBenchmark(
     question: string,
     runs: number,
     verbose: boolean,
-    opts?: { concurrency?: number; model?: string; fast?: boolean },
+    opts?: {
+        concurrency?: number;
+        model?: string;
+        fast?: boolean;
+        threshold?: number;
+    },
 ): Promise<void> {
-    const { concurrency, model, fast } = opts ?? {};
+    const { concurrency, model, fast, threshold } = opts ?? {};
     const llm = new OpenAICompatibleClient({
         baseURL: BASE_URL,
         apiKey: API_KEY,
@@ -79,7 +84,7 @@ async function runBenchmark(
             : undefined,
         concurrency,
         fast,
-        clusteringThreshold: 0.9,
+        clusteringThreshold: threshold ?? 0.9,
     });
 
     const cs = result.consensus;
@@ -99,7 +104,11 @@ async function runBenchmark(
         stab.pairwiseMean,
         "(avg pairwise similarity of final answers)",
     );
+    console.log("threshold:            ", result.threshold ?? "(default)");
     console.log("modeCount:            ", modeCount);
+    console.log("modeCountAt0.8:       ", result.modeCountAt0_8 ?? "-");
+    console.log("modeCountAt0.9:       ", result.modeCountAt0_9 ?? "-");
+    console.log("modeCountAt0.95:      ", result.modeCountAt0_95 ?? "-");
     console.log("modeSizes:            ", modeSizes);
     console.log("divergenceEntropy:    ", divergenceEntropy);
 
@@ -113,6 +122,11 @@ async function runBenchmark(
         modeCount,
         modeSizes,
         divergenceEntropy,
+        threshold: result.threshold,
+        modeCountAt0_8: result.modeCountAt0_8,
+        modeCountAt0_9: result.modeCountAt0_9,
+        modeCountAt0_95: result.modeCountAt0_95,
+        modes: result.modes,
         summary: result,
     };
 
@@ -135,7 +149,7 @@ async function main() {
     const usageAsk =
         'Usage: pnpm tsx src/cli.ts ask "<question>" [--model M] [--fast] [--verbose]';
     const usageBenchmark =
-        'Usage: pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model M] [--fast] [--verbose]';
+        'Usage: pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model M] [--threshold T] [--fast] [--verbose]';
 
     const parseOpt = (flag: string): string | undefined => {
         const idx = rest.indexOf(flag);
@@ -146,6 +160,12 @@ async function main() {
         if (!v) return undefined;
         const n = parseInt(v, 10);
         return !Number.isNaN(n) && n > 0 ? n : undefined;
+    };
+    const parseFloatOpt = (flag: string): number | undefined => {
+        const v = parseOpt(flag);
+        if (!v) return undefined;
+        const n = parseFloat(v);
+        return !Number.isNaN(n) && n > 0 && n <= 1 ? n : undefined;
     };
     const excludeOptIndices = (indices: number[]): number[] => {
         const set = new Set<number>();
@@ -162,11 +182,13 @@ async function main() {
         if (runsVal) runs = runsVal;
         const concurrency = parseNumOpt("--concurrency");
         const model = parseOpt("--model");
+        const thresholdVal = parseFloatOpt("--threshold");
         const fast = rest.includes("--fast");
         const excludeIdx = excludeOptIndices([
             rest.indexOf("--runs"),
             rest.indexOf("--concurrency"),
             rest.indexOf("--model"),
+            rest.indexOf("--threshold"),
             ...(fast ? [rest.indexOf("--fast")] : []),
         ].filter((i) => i >= 0));
         const questionParts = rest
@@ -189,6 +211,7 @@ async function main() {
             concurrency,
             model,
             fast,
+            threshold: thresholdVal,
         });
         return;
     }

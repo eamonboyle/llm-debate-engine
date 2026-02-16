@@ -9,5 +9,15 @@ export type BenchmarkArtifact = {
     modeCount: number;
     modeSizes: number[];
     divergenceEntropy: number;
+    threshold?: number;
+    modeCountAt0_8?: number;
+    modeCountAt0_9?: number;
+    modeCountAt0_95?: number;
+    modes?: Array<{
+        size: number;
+        members: number[];
+        exemplarIndex: number;
+        exemplarPreview: string;
+    }>;
     summary: BenchmarkResult;
 };

@@ -15,6 +15,19 @@ export type BenchmarkResult = {
     modeSizes: number[];
     divergenceEntropy: number;
 
+    /** Primary clustering threshold used for modeCount/modeSizes. */
+    threshold?: number;
+    modeCountAt0_8?: number;
+    modeCountAt0_9?: number;
+    modeCountAt0_95?: number;
+    /** Per-cluster exemplars for inspecting mode differences. */
+    modes?: Array<{
+        size: number;
+        members: number[];
+        exemplarIndex: number;
+        exemplarPreview: string;
+    }>;
+
     stability: {
         // Average pairwise similarity of final answers across runs.
         pairwiseMean: number;
@@ -60,6 +73,17 @@ export class BenchmarkRunner {
         });
 
         return assignments; // index of the mode each vector belongs to
+    }
+
+    /** Returns mode count for a given threshold (for sensitivity reporting). */
+    private getModeCount(vectors: number[][], threshold: number): number {
+        if (vectors.length === 0) return 0;
+        const assignments = this.clusterEmbeddings(vectors, threshold);
+        const modeSizes: number[] = [];
+        assignments.forEach((mIdx) => {
+            modeSizes[mIdx] = (modeSizes[mIdx] ?? 0) + 1;
+        });
+        return modeSizes.length;
     }
 
     /* --------------------------------------------------- */
@@ -141,12 +165,17 @@ export class BenchmarkRunner {
 
         /* --------------------------------------------------- */
         /** Embedding stability on final answers */
-        const finals = raw
-            .map((r) => r.finalAnswer)
-            .filter(
-                (t): t is string =>
-                    typeof t === "string" && t.trim().length > 0,
-            );
+        const finalsWithIndices: { text: string; rawIndex: number }[] = [];
+        raw.forEach((r, i) => {
+            if (
+                typeof r.finalAnswer === "string" &&
+                r.finalAnswer.trim().length > 0
+            ) {
+                finalsWithIndices.push({ text: r.finalAnswer, rawIndex: i });
+            }
+        });
+        const finals = finalsWithIndices.map((f) => f.text);
+        const rawIndexByVectorIndex = finalsWithIndices.map((f) => f.rawIndex);
 
         const vectors =
             finals.length > 0
@@ -155,15 +184,62 @@ export class BenchmarkRunner {
 
         /* --------------------------------------------------- */
         /** Mode detection */
-        const assignments = this.clusterEmbeddings(
-            vectors,
-            opts?.clusteringThreshold ?? 0.8,
-        );
+        const threshold = opts?.clusteringThreshold ?? 0.8;
+        const assignments = this.clusterEmbeddings(vectors, threshold);
         const modeSizes: number[] = [];
         assignments.forEach((mIdx) => {
             modeSizes[mIdx] = (modeSizes[mIdx] ?? 0) + 1;
         });
         const modeCount = modeSizes.length;
+
+        /* Multi-threshold mode counts for sensitivity reporting */
+        const modeCountAt0_8 = this.getModeCount(vectors, 0.8);
+        const modeCountAt0_9 = this.getModeCount(vectors, 0.9);
+        const modeCountAt0_95 = this.getModeCount(vectors, 0.95);
+
+        /* Per-cluster exemplars (central run = highest avg similarity to others) */
+        const clusterIndices = Array.from(new Set(assignments)).sort(
+            (a, b) => a - b,
+        );
+        const modes =
+            vectors.length > 0
+                ? clusterIndices.map((clusterIdx) => {
+                      const memberVectorIndices = assignments
+                          .map((c, i) => (c === clusterIdx ? i : -1))
+                          .filter((i) => i >= 0);
+                      const members = memberVectorIndices.map(
+                          (vi) => rawIndexByVectorIndex[vi],
+                      );
+
+                      let bestVi = memberVectorIndices[0];
+                      let bestAvgSim = -1;
+                      for (const vi of memberVectorIndices) {
+                          let sum = 0;
+                          let count = 0;
+                          for (const vj of memberVectorIndices) {
+                              if (vi === vj) continue;
+                              sum += cosineSimilarity(vectors[vi], vectors[vj]);
+                              count++;
+                          }
+                          const avgSim = count > 0 ? sum / count : 1;
+                          if (avgSim > bestAvgSim) {
+                              bestAvgSim = avgSim;
+                              bestVi = vi;
+                          }
+                      }
+
+                      const exemplarIndex = rawIndexByVectorIndex[bestVi];
+                      const exemplarPreview =
+                          (raw[exemplarIndex].finalAnswer ?? "").slice(0, 200);
+
+                      return {
+                          size: memberVectorIndices.length,
+                          members,
+                          exemplarIndex,
+                          exemplarPreview,
+                      };
+                  })
+                : undefined;
 
         /* --------------------------------------------------- */
         /** Divergence entropy */
@@ -213,6 +289,12 @@ export class BenchmarkRunner {
             modeCount,
             modeSizes,
             divergenceEntropy,
+
+            threshold,
+            modeCountAt0_8,
+            modeCountAt0_9,
+            modeCountAt0_95,
+            modes,
 
             stability: {
                 pairwiseMean: round3(mean(sims)),
