@@ -11,8 +11,5 @@ Brief description of the changes.
 
 ## Checklist
 
-- [ ] `pnpm typecheck` passes
-- [ ] `pnpm test` passes
-- [ ] `pnpm web:typecheck` passes
-- [ ] `pnpm web:build` succeeds (if touching `apps/web`)
+- [ ] CI passes (typecheck, test, web build, formatting)
 - [ ] Code follows project style (Prettier)
