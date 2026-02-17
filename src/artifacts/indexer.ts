@@ -65,6 +65,71 @@ function toCsv(rows: Array<Record<string, unknown>>, headers: string[]): string 
     return `${lines.join("\n")}\n`;
 }
 
+function toMarkdownReport(index: AnalysisIndex): string {
+    const topIssueTypes = Object.entries(index.aggregates.issueTypeCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+    const topOutliers = index.aggregates.outlierRuns.slice(0, 5);
+    const topBenchmarks = index.benchmarks
+        .slice()
+        .sort((a, b) => b.divergenceEntropy - a.divergenceEntropy)
+        .slice(0, 5);
+
+    const lines: string[] = [
+        "# Analysis Report",
+        "",
+        `Generated: ${index.generatedAt}`,
+        "",
+        "## Totals",
+        "",
+        `- Runs: ${index.totals.runs}`,
+        `- Benchmarks: ${index.totals.benchmarks}`,
+        `- Skipped files: ${index.totals.skippedFiles}`,
+        "",
+        "## Confidence drift",
+        "",
+        `- Solver -> Revision mean delta: ${index.aggregates.confidenceDrift.solverToRevisionMean}`,
+        `- Revision -> Synthesizer mean delta: ${index.aggregates.confidenceDrift.revisionToSynthesizerMean}`,
+        `- Calibrated - Synthesizer mean delta: ${index.aggregates.confidenceDrift.calibratedMinusSynthMean}`,
+        "",
+        "## Top issue types",
+        "",
+    ];
+
+    if (topIssueTypes.length === 0) {
+        lines.push("- No critique issues recorded.");
+    } else {
+        for (const [type, count] of topIssueTypes) {
+            lines.push(`- ${type}: ${count}`);
+        }
+    }
+
+    lines.push("", "## Most divergent benchmarks (by entropy)", "");
+    if (topBenchmarks.length === 0) {
+        lines.push("- No benchmark artifacts available.");
+    } else {
+        for (const benchmark of topBenchmarks) {
+            lines.push(
+                `- ${benchmark.id}: entropy=${benchmark.divergenceEntropy}, modes=${benchmark.modeCount}, runs=${benchmark.runs}`,
+            );
+        }
+    }
+
+    lines.push("", "## Outlier runs (lowest average similarity)", "");
+    if (topOutliers.length === 0) {
+        lines.push("- No outlier run data available.");
+    } else {
+        for (const outlier of topOutliers) {
+            lines.push(
+                `- ${outlier.runId} (benchmark ${outlier.benchmarkId}): avgSimilarity=${outlier.avgSimilarity}, zScore=${outlier.zScore}`,
+            );
+        }
+    }
+
+    lines.push("");
+    return lines.join("\n");
+}
+
 export async function buildAnalysisIndex(
     runsDir = "runs",
 ): Promise<AnalysisIndex> {
@@ -276,14 +341,19 @@ export async function buildAndWriteAnalysisIndex(opts?: {
     runsDir?: string;
     outputFileName?: string;
     writeCsv?: boolean;
+    writeMarkdown?: boolean;
+    markdownFileName?: string;
 }): Promise<{
     path: string;
     index: AnalysisIndex;
     csvPaths?: { runs: string; benchmarks: string };
+    markdownPath?: string;
 }> {
     const runsDir = opts?.runsDir ?? "runs";
     const outputFileName = opts?.outputFileName ?? "analysis-index.json";
     const writeCsv = opts?.writeCsv ?? false;
+    const writeMarkdown = opts?.writeMarkdown ?? false;
+    const markdownFileName = opts?.markdownFileName ?? "analysis-report.md";
     const index = await buildAnalysisIndex(runsDir);
 
     await mkdir(runsDir, { recursive: true });
@@ -369,9 +439,17 @@ export async function buildAndWriteAnalysisIndex(opts?: {
         csvPaths = { runs: runCsvPath, benchmarks: benchmarkCsvPath };
     }
 
+    let markdownPath: string | undefined;
+    if (writeMarkdown) {
+        markdownPath = join(runsDir, markdownFileName);
+        const markdown = toMarkdownReport(index);
+        await writeFile(markdownPath, markdown, "utf-8");
+    }
+
     return {
         path: outputPath,
         index,
         csvPaths,
+        markdownPath,
     };
 }

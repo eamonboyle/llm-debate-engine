@@ -103,6 +103,16 @@ Includes:
 - confidence drift statistics
 - outlier run detection (`aggregates.outlierRuns`)
 
+Optional exports:
+
+```bash
+pnpm analyze -- --csv --markdown
+```
+
+- `analysis-runs.csv`
+- `analysis-benchmarks.csv`
+- `analysis-report.md`
+
 ## Compatibility notes
 
 - Loader ignores `analysis-index.json` when parsing run artifacts.

@@ -64,6 +64,16 @@ Writes:
 - `runs/analysis-runs.csv`
 - `runs/analysis-benchmarks.csv`
 
+Optional markdown report:
+
+```bash
+pnpm analyze -- --markdown
+```
+
+Writes:
+
+- `runs/analysis-report.md`
+
 ### Open research UI
 
 ```bash
@@ -93,7 +103,7 @@ pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model
 ### `analyze-runs`
 
 ```bash
-pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--csv]
+pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--csv] [--markdown] [--markdown-file filename]
 ```
 
 ## Artifact model

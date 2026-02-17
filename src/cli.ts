@@ -212,7 +212,7 @@ async function main() {
     const usageBenchmark =
         'Usage: pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model M] [--preset standard|research_deep|fast_research] [--threshold T] [--fast] [--verbose]';
     const usageAnalyze =
-        'Usage: pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--csv]';
+        'Usage: pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--csv] [--markdown] [--markdown-file filename]';
 
     const parseOpt = (flag: string): string | undefined => {
         const idx = rest.indexOf(flag);
@@ -254,16 +254,25 @@ async function main() {
         const runsDir = parseOpt("--runs-dir") ?? RUNS_DIR;
         const output = parseOpt("--output") ?? "analysis-index.json";
         const writeCsv = rest.includes("--csv");
-        const { path, index, csvPaths } = await buildAndWriteAnalysisIndex({
-            runsDir,
-            outputFileName: output,
-            writeCsv,
-        });
+        const writeMarkdown = rest.includes("--markdown");
+        const markdownFileName = parseOpt("--markdown-file") ?? "analysis-report.md";
+        const { path, index, csvPaths, markdownPath } = await buildAndWriteAnalysisIndex(
+            {
+                runsDir,
+                outputFileName: output,
+                writeCsv,
+                writeMarkdown,
+                markdownFileName,
+            },
+        );
         console.log(
             `Analysis index saved to ${path} (${index.totals.runs} runs, ${index.totals.benchmarks} benchmarks)`,
         );
         if (csvPaths) {
             console.log(`CSV exports: ${csvPaths.runs}, ${csvPaths.benchmarks}`);
+        }
+        if (markdownPath) {
+            console.log(`Markdown report: ${markdownPath}`);
         }
         if (index.skipped.length > 0) {
             console.log(`Skipped ${index.skipped.length} file(s):`);

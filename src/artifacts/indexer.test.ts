@@ -239,7 +239,7 @@ describe("buildAnalysisIndex", () => {
         expect(index.aggregates.outlierRuns[0].avgSimilarity).toBeCloseTo(0.225, 3);
     });
 
-    it("writes optional CSV summary exports", async () => {
+    it("writes optional CSV and markdown summary exports", async () => {
         const dir = await createTempRunsDir();
 
         const run = {
@@ -314,13 +314,19 @@ describe("buildAnalysisIndex", () => {
             runsDir: dir,
             outputFileName: "analysis-index.json",
             writeCsv: true,
+            writeMarkdown: true,
+            markdownFileName: "analysis-report.md",
         });
 
         expect(result.csvPaths).toBeDefined();
+        expect(result.markdownPath).toBeDefined();
         const runsCsv = await readFile(result.csvPaths!.runs, "utf-8");
         const benchmarksCsv = await readFile(result.csvPaths!.benchmarks, "utf-8");
+        const markdown = await readFile(result.markdownPath!, "utf-8");
         expect(runsCsv).toContain("id,question,createdAt,model");
         expect(runsCsv).toContain("run_csv");
         expect(benchmarksCsv).toContain("benchmark_csv");
+        expect(markdown).toContain("# Analysis Report");
+        expect(markdown).toContain("## Totals");
     });
 });
