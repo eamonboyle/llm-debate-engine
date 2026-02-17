@@ -112,6 +112,7 @@ pnpm analyze -- --csv --markdown
 - `analysis-runs.csv`
 - `analysis-benchmarks.csv`
 - `analysis-report.md`
+- `analysis-bundle.json` (index + parsed artifacts for sharing)
 
 ## Compatibility notes
 

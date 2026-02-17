@@ -343,17 +343,22 @@ export async function buildAndWriteAnalysisIndex(opts?: {
     writeCsv?: boolean;
     writeMarkdown?: boolean;
     markdownFileName?: string;
+    writeBundle?: boolean;
+    bundleFileName?: string;
 }): Promise<{
     path: string;
     index: AnalysisIndex;
     csvPaths?: { runs: string; benchmarks: string };
     markdownPath?: string;
+    bundlePath?: string;
 }> {
     const runsDir = opts?.runsDir ?? "runs";
     const outputFileName = opts?.outputFileName ?? "analysis-index.json";
     const writeCsv = opts?.writeCsv ?? false;
     const writeMarkdown = opts?.writeMarkdown ?? false;
     const markdownFileName = opts?.markdownFileName ?? "analysis-report.md";
+    const writeBundle = opts?.writeBundle ?? false;
+    const bundleFileName = opts?.bundleFileName ?? "analysis-bundle.json";
     const index = await buildAnalysisIndex(runsDir);
 
     await mkdir(runsDir, { recursive: true });
@@ -446,10 +451,25 @@ export async function buildAndWriteAnalysisIndex(opts?: {
         await writeFile(markdownPath, markdown, "utf-8");
     }
 
+    let bundlePath: string | undefined;
+    if (writeBundle) {
+        const artifacts = await loadRunArtifacts(runsDir);
+        bundlePath = join(runsDir, bundleFileName);
+        const bundle = {
+            generatedAt: new Date().toISOString(),
+            index,
+            runs: artifacts.runs,
+            benchmarks: artifacts.benchmarks,
+            skipped: artifacts.skipped,
+        };
+        await writeFile(bundlePath, JSON.stringify(bundle, null, 2), "utf-8");
+    }
+
     return {
         path: outputPath,
         index,
         csvPaths,
         markdownPath,
+        bundlePath,
     };
 }

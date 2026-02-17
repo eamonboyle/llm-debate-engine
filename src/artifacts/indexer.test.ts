@@ -239,7 +239,7 @@ describe("buildAnalysisIndex", () => {
         expect(index.aggregates.outlierRuns[0].avgSimilarity).toBeCloseTo(0.225, 3);
     });
 
-    it("writes optional CSV and markdown summary exports", async () => {
+    it("writes optional CSV, markdown, and bundle exports", async () => {
         const dir = await createTempRunsDir();
 
         const run = {
@@ -316,17 +316,26 @@ describe("buildAnalysisIndex", () => {
             writeCsv: true,
             writeMarkdown: true,
             markdownFileName: "analysis-report.md",
+            writeBundle: true,
+            bundleFileName: "analysis-bundle.json",
         });
 
         expect(result.csvPaths).toBeDefined();
         expect(result.markdownPath).toBeDefined();
+        expect(result.bundlePath).toBeDefined();
         const runsCsv = await readFile(result.csvPaths!.runs, "utf-8");
         const benchmarksCsv = await readFile(result.csvPaths!.benchmarks, "utf-8");
         const markdown = await readFile(result.markdownPath!, "utf-8");
+        const bundle = JSON.parse(
+            await readFile(result.bundlePath!, "utf-8"),
+        ) as { runs: unknown[]; benchmarks: unknown[]; index: { totals: { runs: number } } };
         expect(runsCsv).toContain("id,question,createdAt,model");
         expect(runsCsv).toContain("run_csv");
         expect(benchmarksCsv).toContain("benchmark_csv");
         expect(markdown).toContain("# Analysis Report");
         expect(markdown).toContain("## Totals");
+        expect(bundle.runs).toHaveLength(1);
+        expect(bundle.benchmarks).toHaveLength(1);
+        expect(bundle.index.totals.runs).toBe(1);
     });
 });

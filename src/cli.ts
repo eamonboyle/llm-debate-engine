@@ -212,7 +212,7 @@ async function main() {
     const usageBenchmark =
         'Usage: pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model M] [--preset standard|research_deep|fast_research] [--threshold T] [--fast] [--verbose]';
     const usageAnalyze =
-        'Usage: pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--csv] [--markdown] [--markdown-file filename]';
+        'Usage: pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename]';
 
     const parseOpt = (flag: string): string | undefined => {
         const idx = rest.indexOf(flag);
@@ -256,15 +256,18 @@ async function main() {
         const writeCsv = rest.includes("--csv");
         const writeMarkdown = rest.includes("--markdown");
         const markdownFileName = parseOpt("--markdown-file") ?? "analysis-report.md";
-        const { path, index, csvPaths, markdownPath } = await buildAndWriteAnalysisIndex(
-            {
+        const writeBundle = rest.includes("--bundle");
+        const bundleFileName = parseOpt("--bundle-file") ?? "analysis-bundle.json";
+        const { path, index, csvPaths, markdownPath, bundlePath } =
+            await buildAndWriteAnalysisIndex({
                 runsDir,
                 outputFileName: output,
                 writeCsv,
                 writeMarkdown,
                 markdownFileName,
-            },
-        );
+                writeBundle,
+                bundleFileName,
+            });
         console.log(
             `Analysis index saved to ${path} (${index.totals.runs} runs, ${index.totals.benchmarks} benchmarks)`,
         );
@@ -273,6 +276,9 @@ async function main() {
         }
         if (markdownPath) {
             console.log(`Markdown report: ${markdownPath}`);
+        }
+        if (bundlePath) {
+            console.log(`Share bundle: ${bundlePath}`);
         }
         if (index.skipped.length > 0) {
             console.log(`Skipped ${index.skipped.length} file(s):`);

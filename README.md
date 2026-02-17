@@ -74,6 +74,16 @@ Writes:
 
 - `runs/analysis-report.md`
 
+Optional share bundle:
+
+```bash
+pnpm analyze -- --bundle
+```
+
+Writes:
+
+- `runs/analysis-bundle.json` (index + parsed run/benchmark artifacts)
+
 ### Open research UI
 
 ```bash
@@ -103,7 +113,7 @@ pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model
 ### `analyze-runs`
 
 ```bash
-pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--csv] [--markdown] [--markdown-file filename]
+pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename]
 ```
 
 ## Artifact model
