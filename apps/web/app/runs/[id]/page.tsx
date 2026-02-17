@@ -95,6 +95,14 @@ export default async function RunTracePage({
                 <p className="subtitle">
                     {run.id} · {new Date(run.metadata.createdAt).toLocaleString()}
                 </p>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    <a href={`/runs/compare?left=${run.id}`} className="button secondary">
+                        Compare as left
+                    </a>
+                    <a href={`/runs/compare?right=${run.id}`} className="button secondary">
+                        Compare as right
+                    </a>
+                </div>
             </div>
 
             <div className="grid-4">

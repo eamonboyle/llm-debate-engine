@@ -106,6 +106,7 @@ export default async function RunsPage({
                                 <th>Fast</th>
                                 <th>Final answer</th>
                                 <th>Open</th>
+                                <th>Compare</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -122,6 +123,22 @@ export default async function RunsPage({
                                     <td className="muted">{run.run.finalAnswer}</td>
                                     <td>
                                         <a href={`/runs/${run.id}`}>Trace</a>
+                                    </td>
+                                    <td>
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                gap: 8,
+                                                flexWrap: "wrap",
+                                            }}
+                                        >
+                                            <a href={`/runs/compare?left=${run.id}`}>
+                                                Set left
+                                            </a>
+                                            <a href={`/runs/compare?right=${run.id}`}>
+                                                Set right
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
