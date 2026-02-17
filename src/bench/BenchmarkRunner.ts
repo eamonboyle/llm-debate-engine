@@ -1,57 +1,9 @@
 import type { DebateEngine } from "../debate/DebateEngine";
 import type { DebateRun } from "../types/agent";
 import type { EmbeddingClient } from "../types/embedding";
+import type { BenchmarkResult } from "../types/benchmark";
 import { cosineSimilarity, vectorMean } from "../core/math";
 import { getProposal } from "../core/extraction";
-
-export type BenchmarkResult = {
-    question: string;
-    runs: number;
-    runIds: string[];
-
-    consensus: { mean: number; stddev: number };
-    critiqueMaxSeverity: { mean: number; stddev: number };
-
-    modeCount: number;
-    modeSizes: number[];
-    divergenceEntropy: number;
-
-    /** Primary clustering threshold used for modeCount/modeSizes. */
-    threshold?: number;
-    modeCountAt0_8?: number;
-    modeCountAt0_9?: number;
-    modeCountAt0_95?: number;
-    /** Per-cluster exemplars for inspecting mode differences. */
-    modes?: Array<{
-        size: number;
-        members: number[];
-        exemplarIndex: number;
-        exemplarPreview: string;
-    }>;
-
-    stability: {
-        // Average pairwise similarity of final answers across runs.
-        pairwiseMean: number;
-        pairwiseStddev: number;
-        minPairwiseSimilarity: number;
-        maxPairwiseSimilarity: number;
-        pairs: Array<{ i: number; j: number; similarity: number }>;
-    };
-
-    /** Claim-centroid mode detection (synthesizer keyClaims only; undefined when fast or no keyClaims). */
-    modeCountClaimCentroid?: number;
-    modeSizesClaimCentroid?: number[];
-    divergenceEntropyClaimCentroid?: number;
-    modeCountClaimCentroidAt0_8?: number;
-    modeCountClaimCentroidAt0_9?: number;
-    modeCountClaimCentroidAt0_95?: number;
-    stabilityClaimCentroid?: {
-        pairwiseMean: number;
-        pairwiseStddev: number;
-        minPairwiseSimilarity: number;
-        maxPairwiseSimilarity: number;
-    };
-};
 
 const MODEL = process.env.OPENAI_MODEL ?? "gpt-5.2";
 

@@ -7,11 +7,19 @@ import { DebateEngine } from "./debate/DebateEngine";
 import { BenchmarkRunner } from "./bench/BenchmarkRunner";
 import { makeId } from "./core/id";
 import type { AgentResponse, Critique, CritiqueIssue } from "./types/agent";
-import type { BenchmarkArtifact } from "./types/benchmark";
+import type { BenchmarkArtifactPayload } from "./types/benchmark";
+import {
+    ARTIFACT_SCHEMA_VERSION,
+    PIPELINE_VERSION,
+    type BenchmarkArtifactV1,
+    type PipelinePreset,
+    type RunArtifactV1,
+} from "./types/artifact";
 
 const BASE_URL = process.env.OPENAI_BASE_URL ?? "https://api.openai.com/v1";
 const MODEL = process.env.OPENAI_MODEL ?? "gpt-5.2";
 const RUNS_DIR = "runs";
+const DEFAULT_PRESET: PipelinePreset = "standard";
 
 function printSummary(
     question: string,
@@ -47,6 +55,23 @@ if (!API_KEY) {
     process.exit(1);
 }
 
+function buildMetadata(opts: {
+    createdAt: string;
+    model: string;
+    fastMode: boolean;
+    pipelinePreset?: PipelinePreset;
+}) {
+    return {
+        schemaVersion: ARTIFACT_SCHEMA_VERSION,
+        createdAt: opts.createdAt,
+        model: opts.model,
+        fastMode: opts.fastMode,
+        pipelinePreset: opts.pipelinePreset ?? DEFAULT_PRESET,
+        pipelineVersion: PIPELINE_VERSION,
+        source: "cli" as const,
+    };
+}
+
 async function runBenchmark(
     question: string,
     runs: number,
@@ -56,9 +81,10 @@ async function runBenchmark(
         model?: string;
         fast?: boolean;
         threshold?: number;
+        pipelinePreset?: PipelinePreset;
     },
 ): Promise<void> {
-    const { concurrency, model, fast, threshold } = opts ?? {};
+    const { concurrency, model, fast, threshold, pipelinePreset } = opts ?? {};
     const llm = new OpenAICompatibleClient({
         baseURL: BASE_URL,
         apiKey: API_KEY,
@@ -125,10 +151,8 @@ async function runBenchmark(
     console.log("divergenceEntropy:    ", divergenceEntropy);
 
     const benchmarkId = makeId("benchmark");
-    const benchmarkJson: BenchmarkArtifact = {
-        id: benchmarkId,
-        createdAt: new Date().toISOString(),
-        question,
+    const createdAt = new Date().toISOString();
+    const payload: BenchmarkArtifactPayload = {
         runs,
         runIds: result.runIds,
         modeCount,
@@ -147,6 +171,19 @@ async function runBenchmark(
         modeCountClaimCentroidAt0_95: result.modeCountClaimCentroidAt0_95,
         stabilityClaimCentroid: result.stabilityClaimCentroid,
         summary: result,
+    };
+
+    const benchmarkJson: BenchmarkArtifactV1 = {
+        kind: "benchmark",
+        id: benchmarkId,
+        question,
+        metadata: buildMetadata({
+            createdAt,
+            model: model ?? MODEL,
+            fastMode: !!fast,
+            pipelinePreset,
+        }),
+        payload,
     };
 
     await mkdir(RUNS_DIR, { recursive: true });
@@ -259,8 +296,6 @@ async function main() {
         process.exit(1);
     }
 
-    const runId = makeId("run");
-
     const llm = new OpenAICompatibleClient({
         baseURL: BASE_URL,
         apiKey: API_KEY,
@@ -280,13 +315,25 @@ async function main() {
         { question },
         { model: askModel ?? MODEL, verbose, fast: askFast },
     );
+    const runId = result.id;
 
-    const runJson = {
+    const runJson: RunArtifactV1 = {
+        kind: "run",
         id: runId,
         question,
-        steps: result.steps,
-        finalAnswer: result.finalAnswer,
-        metrics: result.metrics,
+        run: {
+            id: result.id,
+            createdAt: result.createdAt,
+            question,
+            steps: result.steps,
+            finalAnswer: result.finalAnswer,
+            metrics: result.metrics,
+        },
+        metadata: buildMetadata({
+            createdAt: result.createdAt,
+            model: askModel ?? MODEL,
+            fastMode: askFast,
+        }),
     };
 
     await mkdir(RUNS_DIR, { recursive: true });
