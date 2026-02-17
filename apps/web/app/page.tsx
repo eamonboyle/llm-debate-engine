@@ -1,5 +1,6 @@
 import { MetricCard } from "../components/MetricCard";
 import { OverviewCharts } from "../components/charts/OverviewCharts";
+import { MetricGlossary } from "../components/MetricGlossary";
 import { loadAnalysisIndex } from "../lib/data";
 
 export default async function OverviewPage() {
@@ -85,6 +86,8 @@ export default async function OverviewPage() {
                 issueTypeCounts={index.aggregates.issueTypeCounts}
                 critiqueVsConfidence={index.aggregates.critiqueVsConfidence}
             />
+
+            <MetricGlossary />
 
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>Recent runs</h2>
