@@ -168,6 +168,7 @@ Legacy artifacts are still supported by the compatibility loader (`src/artifacts
 - severity statistics by issue type
 - confidence drift (solver->revision, revision->synth, calibrated->synth delta)
 - evidence-planning risk aggregates (mean + distribution)
+- counterfactual failure mode frequency aggregates
 - severity-confidence Pearson correlations for stage deltas
 - critique severity vs confidence movement records
 - benchmark mode labels inferred from exemplar previews
@@ -186,6 +187,7 @@ This derived index powers the web dashboard.
 - `/` includes preset distribution + benchmark entropy/stability trend charts
 - `/` includes evidence planner risk distribution chart
 - `/` includes evidence risk trend chart across runs
+- `/` includes top counterfactual failure mode table
 - `/` shows analysis filter context when index is built with CLI filters
 - `/runs` Run artifact table
 - `/runs/[id]` Run trace viewer (step-by-step structured summaries + raw JSON)

@@ -35,6 +35,11 @@ const METRIC_ITEMS = [
             "Mean risk score (1-5) output by EvidencePlanner across included runs.",
     },
     {
+        key: "counterfactualFailureModeCounts",
+        description:
+            "Frequency map of CounterfactualAgent failure modes across included runs.",
+    },
+    {
         key: "outlierRuns.avgSimilarity",
         description:
             "Per-benchmark run with lowest mean similarity to peers (potential anomalous mode).",

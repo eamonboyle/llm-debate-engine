@@ -30,6 +30,13 @@ export default async function OverviewPage() {
         riskLevelMean: 0,
         riskLevelDistribution: {},
     };
+    const counterfactualFailureModeCounts =
+        index.aggregates.counterfactualFailureModeCounts ?? {};
+    const topCounterfactualFailureModes = Object.entries(
+        counterfactualFailureModeCounts,
+    )
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 8);
     const filterEntries = Object.entries(index.filterContext ?? {}).filter(
         ([, value]) => value !== undefined && value !== null && value !== "",
     );
@@ -72,6 +79,10 @@ export default async function OverviewPage() {
                 <MetricCard
                     label="Avg evidence-plan risk"
                     value={evidencePlanning.riskLevelMean}
+                />
+                <MetricCard
+                    label="Unique counterfactual modes"
+                    value={Object.keys(counterfactualFailureModeCounts).length}
                 />
             </div>
 
@@ -130,6 +141,36 @@ export default async function OverviewPage() {
                                         </td>
                                     </tr>
                                 ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+            </div>
+
+            <div className="card">
+                <h2 style={{ marginTop: 0 }}>Top counterfactual failure modes</h2>
+                {topCounterfactualFailureModes.length === 0 ? (
+                    <p className="muted">
+                        No counterfactual failure modes recorded yet.
+                    </p>
+                ) : (
+                    <div className="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Failure mode</th>
+                                    <th>Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {topCounterfactualFailureModes.map(
+                                    ([failureMode, count]) => (
+                                        <tr key={failureMode}>
+                                            <td>{failureMode}</td>
+                                            <td>{count}</td>
+                                        </tr>
+                                    ),
+                                )}
                             </tbody>
                         </table>
                     </div>

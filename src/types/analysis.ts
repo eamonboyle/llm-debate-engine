@@ -31,6 +31,8 @@ export type AnalysisRunSummary = {
     };
     research?: {
         evidenceRiskLevel?: number;
+        counterfactualFailureModeCount?: number;
+        topCounterfactualFailureMode?: string;
     };
 };
 
@@ -105,6 +107,7 @@ export type AnalysisIndex = {
             riskLevelMean: number;
             riskLevelDistribution: Record<string, number>;
         };
+        counterfactualFailureModeCounts: Record<string, number>;
         presets: Record<PipelinePreset, number>;
     };
     skipped: Array<{ file: string; error: string }>;

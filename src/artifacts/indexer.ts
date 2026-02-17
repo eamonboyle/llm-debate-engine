@@ -74,6 +74,11 @@ function toMarkdownReport(index: AnalysisIndex): string {
         .sort((a, b) => b[1] - a[1])
         .slice(0, 5);
     const topOutliers = index.aggregates.outlierRuns.slice(0, 5);
+    const topCounterfactualFailureModes = Object.entries(
+        index.aggregates.counterfactualFailureModeCounts,
+    )
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
     const topBenchmarks = index.benchmarks
         .slice()
         .sort((a, b) => b.divergenceEntropy - a.divergenceEntropy)
@@ -143,6 +148,15 @@ function toMarkdownReport(index: AnalysisIndex): string {
             lines.push(
                 `- ${outlier.runId} (benchmark ${outlier.benchmarkId}): avgSimilarity=${outlier.avgSimilarity}, zScore=${outlier.zScore}`,
             );
+        }
+    }
+
+    lines.push("", "## Top counterfactual failure modes", "");
+    if (topCounterfactualFailureModes.length === 0) {
+        lines.push("- No counterfactual failure modes recorded.");
+    } else {
+        for (const [failureMode, count] of topCounterfactualFailureModes) {
+            lines.push(`- ${failureMode}: ${count}`);
         }
     }
 
@@ -266,6 +280,7 @@ export async function buildAnalysisIndex(
     const calibratedMinusSynth: number[] = [];
     const evidenceRiskLevels: number[] = [];
     const evidenceRiskLevelDistribution: Record<string, number> = {};
+    const counterfactualFailureModeCounts: Record<string, number> = {};
     const critiqueVsConfidence: AnalysisIndex["aggregates"]["critiqueVsConfidence"] = [];
     const presets: Record<PipelinePreset, number> = {
         standard: 0,
@@ -279,6 +294,17 @@ export async function buildAnalysisIndex(
         const critique = run.metrics.critique ?? {};
         const quality = run.metrics.quality;
         const research = run.metrics.research;
+        const counterfactualFailureModes = run.steps
+            .filter((step) => step.output?.kind === "counterfactual")
+            .flatMap((step) =>
+                step.output?.kind === "counterfactual"
+                    ? step.output.data.failureModes
+                    : [],
+            )
+            .filter(
+                (mode): mode is string =>
+                    typeof mode === "string" && mode.trim().length > 0,
+            );
 
         presets[artifact.metadata.pipelinePreset] += 1;
 
@@ -301,6 +327,10 @@ export async function buildAnalysisIndex(
             const bucket = String(research.evidenceRiskLevel);
             evidenceRiskLevelDistribution[bucket] =
                 (evidenceRiskLevelDistribution[bucket] ?? 0) + 1;
+        }
+        for (const failureMode of counterfactualFailureModes) {
+            counterfactualFailureModeCounts[failureMode] =
+                (counterfactualFailureModeCounts[failureMode] ?? 0) + 1;
         }
 
         const issues = run.steps
@@ -359,9 +389,17 @@ export async function buildAnalysisIndex(
                       uncertaintyHandling: quality.uncertaintyHandling,
                   }
                 : undefined,
-            research: research
-                ? { evidenceRiskLevel: research.evidenceRiskLevel }
-                : undefined,
+            research:
+                typeof research?.evidenceRiskLevel === "number" ||
+                counterfactualFailureModes.length > 0
+                    ? {
+                          evidenceRiskLevel: research?.evidenceRiskLevel,
+                          counterfactualFailureModeCount:
+                              counterfactualFailureModes.length,
+                          topCounterfactualFailureMode:
+                              counterfactualFailureModes[0],
+                      }
+                    : undefined,
         };
     });
 
@@ -508,6 +546,7 @@ export async function buildAnalysisIndex(
                 riskLevelMean: round3(mean(evidenceRiskLevels)),
                 riskLevelDistribution: evidenceRiskLevelDistribution,
             },
+            counterfactualFailureModeCounts,
             outlierRuns,
             critiqueVsConfidence,
             presets,

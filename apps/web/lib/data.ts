@@ -36,6 +36,8 @@ export type AnalysisIndex = {
         };
         research?: {
             evidenceRiskLevel?: number;
+            counterfactualFailureModeCount?: number;
+            topCounterfactualFailureMode?: string;
         };
     }>;
     benchmarks: Array<{
@@ -72,6 +74,7 @@ export type AnalysisIndex = {
             riskLevelMean: number;
             riskLevelDistribution: Record<string, number>;
         };
+        counterfactualFailureModeCounts?: Record<string, number>;
         outlierRuns?: Array<{
             benchmarkId: string;
             runId: string;

@@ -61,6 +61,22 @@ describe("buildAnalysisIndex", () => {
                             },
                         },
                     },
+                    {
+                        id: "s2",
+                        agentName: "CounterfactualAgent",
+                        role: "research",
+                        request: {},
+                        rawAttempts: [],
+                        createdAt: new Date().toISOString(),
+                        output: {
+                            kind: "counterfactual",
+                            data: {
+                                failureModes: ["Domain shift invalidates assumptions"],
+                                triggerConditions: ["New policy constraints"],
+                                mitigations: ["Re-run with updated sources"],
+                            },
+                        },
+                    },
                 ],
                 finalAnswer: "AI poses manageable but real risks.",
                 metrics: {
@@ -155,8 +171,17 @@ describe("buildAnalysisIndex", () => {
         ).toBe(0);
         expect(index.aggregates.outlierRuns).toHaveLength(0);
         expect(index.runs[0].research?.evidenceRiskLevel).toBe(4);
+        expect(index.runs[0].research?.counterfactualFailureModeCount).toBe(1);
+        expect(index.runs[0].research?.topCounterfactualFailureMode).toContain(
+            "Domain shift",
+        );
         expect(index.aggregates.evidencePlanning?.riskLevelMean).toBe(4);
         expect(index.aggregates.evidencePlanning?.riskLevelDistribution["4"]).toBe(1);
+        expect(
+            index.aggregates.counterfactualFailureModeCounts[
+                "Domain shift invalidates assumptions"
+            ],
+        ).toBe(1);
         expect(index.benchmarks[0].modeLabels[0].label).toContain("technical");
     });
 

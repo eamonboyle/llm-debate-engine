@@ -67,6 +67,12 @@ Derived from benchmark pairwise similarity matrices.
 
 More negative z-score means stronger outlier behavior.
 
+## 5) Top counterfactual failure modes
+
+- Aggregates the most frequent failure modes emitted by CounterfactualAgent.
+- High counts for a specific mode suggest a recurring fragility pattern that should
+  be prioritized for mitigation experiments.
+
 ## Benchmark detail page
 
 ## 1) Mode size distribution
