@@ -36,7 +36,9 @@ export function BenchmarkDetailCharts({
     runs,
 }: BenchmarkDetailChartsProps) {
     const [pairs, setPairs] = useState(similarityPairs);
-    const [pairsSource, setPairsSource] = useState<"artifact" | "chunk">("artifact");
+    const [pairsSource, setPairsSource] = useState<"artifact" | "chunk">(
+        similarityPairs.length > 0 ? "artifact" : "artifact",
+    );
 
     useEffect(() => {
         let cancelled = false;
@@ -47,11 +49,12 @@ export function BenchmarkDetailCharts({
                 });
                 if (!response.ok) return;
                 const json = (await response.json()) as {
+                    source?: "chunk" | "artifact";
                     pairs?: Array<{ i: number; j: number; similarity: number }>;
                 };
                 if (!cancelled && Array.isArray(json.pairs)) {
                     setPairs(json.pairs);
-                    setPairsSource("chunk");
+                    setPairsSource(json.source === "chunk" ? "chunk" : "artifact");
                 }
             } catch {
                 // keep initial pairs

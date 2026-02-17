@@ -348,6 +348,7 @@ export async function loadRunById(id: string) {
 
 export async function loadBenchmarkPairsById(id: string): Promise<{
     benchmarkId: string;
+    source: "chunk" | "artifact";
     runIds: string[];
     pairs: Array<{ i: number; j: number; similarity: number }>;
 }> {
@@ -364,6 +365,7 @@ export async function loadBenchmarkPairsById(id: string): Promise<{
     if (fromChunk) {
         return {
             benchmarkId: id,
+            source: "chunk",
             runIds: fromChunk.runIds ?? [],
             pairs: fromChunk.pairs ?? [],
         };
@@ -372,6 +374,7 @@ export async function loadBenchmarkPairsById(id: string): Promise<{
     const benchmark = await loadBenchmarkById(id);
     return {
         benchmarkId: id,
+        source: "artifact",
         runIds: benchmark?.payload.runIds ?? [],
         pairs: benchmark?.payload.summary?.stability?.pairs ?? [],
     };

@@ -229,6 +229,7 @@ describe("web data loader", () => {
         );
 
         const fromChunk = await loadBenchmarkPairsById("bench_chunk");
+        expect(fromChunk.source).toBe("chunk");
         expect(fromChunk.runIds).toEqual(["r1", "r2"]);
         expect(fromChunk.pairs).toHaveLength(1);
 
@@ -261,6 +262,7 @@ describe("web data loader", () => {
         );
 
         const fallback = await loadBenchmarkPairsById("bench_fallback");
+        expect(fallback.source).toBe("artifact");
         expect(fallback.pairs).toHaveLength(1);
         expect(fallback.pairs[0].similarity).toBe(0.95);
     });

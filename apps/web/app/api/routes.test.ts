@@ -154,10 +154,12 @@ describe("web api routes", () => {
         expect(response.status).toBe(200);
         const json = (await response.json()) as {
             benchmarkId: string;
+            source: string;
             runIds: string[];
             pairs: Array<{ similarity: number }>;
         };
         expect(json.benchmarkId).toBe("benchmark_2");
+        expect(json.source).toBe("chunk");
         expect(json.runIds).toEqual(["r1", "r2"]);
         expect(json.pairs[0].similarity).toBe(0.88);
     });
