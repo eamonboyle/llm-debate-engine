@@ -24,11 +24,13 @@ function makeRunArtifact(params: {
         run: {
             id: params.id,
             finalAnswer: `Final answer ${params.id}`,
-            steps: Array.from({ length: params.stepCount ?? 1 }).map((_, idx) => ({
-                id: `step_${idx}`,
-                agentName: "Solver",
-                role: "solver",
-            })),
+            steps: Array.from({ length: params.stepCount ?? 1 }).map(
+                (_, idx) => ({
+                    id: `step_${idx}`,
+                    agentName: "Solver",
+                    role: "solver",
+                }),
+            ),
             metrics: {
                 confidence: params.confidence,
                 critique: {
@@ -62,8 +64,12 @@ describe("run compare helpers", () => {
         expect(summary.metrics.critique.maxSeverity).toBe(4);
         expect(summary.metrics.quality.completeness).toBe(0.8);
         expect(summary.metrics.research.evidenceRiskLevel).toBe(4);
-        expect(summary.metrics.research.counterfactualFailureModeCount).toBeNull();
-        expect(summary.metrics.research.topCounterfactualFailureMode).toBeNull();
+        expect(
+            summary.metrics.research.counterfactualFailureModeCount,
+        ).toBeNull();
+        expect(
+            summary.metrics.research.topCounterfactualFailureMode,
+        ).toBeNull();
     });
 
     it("computes deltas and preserves nulls for missing metrics", () => {
@@ -100,11 +106,11 @@ describe("run compare helpers", () => {
         expect(compared.delta.quality.factualRisk).toBeNull();
         expect(compared.delta.research.evidenceRiskLevel).toBe(3);
         expect(compared.delta.research.counterfactualFailureModeCount).toBe(2);
-        expect(compared.left.metrics.research.topCounterfactualFailureMode).toBe(
-            "Mode A",
-        );
-        expect(compared.right.metrics.research.topCounterfactualFailureMode).toBe(
-            "Mode B",
-        );
+        expect(
+            compared.left.metrics.research.topCounterfactualFailureMode,
+        ).toBe("Mode A");
+        expect(
+            compared.right.metrics.research.topCounterfactualFailureMode,
+        ).toBe("Mode B");
     });
 });

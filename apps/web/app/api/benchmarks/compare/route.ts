@@ -14,7 +14,9 @@ export async function GET(request: Request) {
 
     const benchmarks = await loadBenchmarksByIds([left, right]);
     const leftBenchmark = benchmarks.find((benchmark) => benchmark.id === left);
-    const rightBenchmark = benchmarks.find((benchmark) => benchmark.id === right);
+    const rightBenchmark = benchmarks.find(
+        (benchmark) => benchmark.id === right,
+    );
     if (!leftBenchmark || !rightBenchmark) {
         return Response.json(
             { error: "one or both benchmark ids not found" },
@@ -22,5 +24,7 @@ export async function GET(request: Request) {
         );
     }
 
-    return Response.json(buildBenchmarkComparePayload(leftBenchmark, rightBenchmark));
+    return Response.json(
+        buildBenchmarkComparePayload(leftBenchmark, rightBenchmark),
+    );
 }

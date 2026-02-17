@@ -69,22 +69,23 @@ export class CalibrationAgent {
         };
 
         try {
-            const { data, attempts } = await runStructuredWithGuard<Calibration>(
-                llm,
-                req,
-                validateCalibration,
-                (bad, error): ChatMessage[] => [
-                    {
-                        role: "system",
-                        content:
-                            "You are a JSON repair function. Return only JSON matching the schema exactly.",
-                    },
-                    {
-                        role: "user",
-                        content: `Validation failed: ${error}\n\nBad object:\n${JSON.stringify(bad, null, 2)}`,
-                    },
-                ],
-            );
+            const { data, attempts } =
+                await runStructuredWithGuard<Calibration>(
+                    llm,
+                    req,
+                    validateCalibration,
+                    (bad, error): ChatMessage[] => [
+                        {
+                            role: "system",
+                            content:
+                                "You are a JSON repair function. Return only JSON matching the schema exactly.",
+                        },
+                        {
+                            role: "user",
+                            content: `Validation failed: ${error}\n\nBad object:\n${JSON.stringify(bad, null, 2)}`,
+                        },
+                    ],
+                );
 
             return {
                 id: runId("step"),

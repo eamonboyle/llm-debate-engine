@@ -18,8 +18,7 @@ export function InfoTooltip({
     content,
     "aria-label": ariaLabel = "More information",
 }: InfoTooltipProps) {
-    const text =
-        content ?? (helpKey ? getGlossaryEntry(helpKey) : undefined);
+    const text = content ?? (helpKey ? getGlossaryEntry(helpKey) : undefined);
     if (!text) return null;
 
     const triggerProps = {

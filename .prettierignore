@@ -1,0 +1,9 @@
+# Lockfile
+pnpm-lock.yaml
+
+# Generated artifacts
+runs/
+.next/
+
+# Cursor/IDE
+.cursor/

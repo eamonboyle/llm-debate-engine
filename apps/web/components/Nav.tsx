@@ -17,8 +17,13 @@ function isActive(pathname: string, href: string): boolean {
     if (pathname === href) return true;
     if (pathname.startsWith(href + "/")) {
         // /runs/compare should not activate "Runs", only "Compare runs"
-        if (href === "/runs" && pathname.startsWith("/runs/compare")) return false;
-        if (href === "/benchmarks" && pathname.startsWith("/benchmarks/compare")) return false;
+        if (href === "/runs" && pathname.startsWith("/runs/compare"))
+            return false;
+        if (
+            href === "/benchmarks" &&
+            pathname.startsWith("/benchmarks/compare")
+        )
+            return false;
         return true;
     }
     return false;

@@ -80,7 +80,8 @@ export class DebateEngine {
             skeptic: deps.agents?.skeptic ?? new SkepticAgent(),
             solverRevision: deps.agents?.revision ?? new SolverRevisionAgent(),
             synthesizer: deps.agents?.synthesizer ?? new SynthesizerAgent(),
-            decomposer: deps.agents?.decomposer ?? new QuestionDecomposerAgent(),
+            decomposer:
+                deps.agents?.decomposer ?? new QuestionDecomposerAgent(),
             evidencePlanner:
                 deps.agents?.evidencePlanner ?? new EvidencePlannerAgent(),
             counterfactual:
@@ -131,7 +132,9 @@ export class DebateEngine {
             pushAndLog("Question decomposer", decomposerStep);
 
             if (!quiet)
-                console.log("Evidence planner agent is mapping evidence checks...");
+                console.log(
+                    "Evidence planner agent is mapping evidence checks...",
+                );
             const evidencePlannerStep = await this.agents.evidencePlanner.run(
                 ctx,
                 this.llm,
@@ -171,7 +174,8 @@ export class DebateEngine {
         }
 
         // Step 2: Skeptic
-        if (!quiet) console.log("\nSkeptic agent is now critiquing the proposal...");
+        if (!quiet)
+            console.log("\nSkeptic agent is now critiquing the proposal...");
         const skepticStep = await this.agents.skeptic.run(ctx, this.llm, {
             model: opts.model,
             verbose,
@@ -272,7 +276,10 @@ export class DebateEngine {
         }
 
         // Step 3: Solver revision
-        if (!quiet) console.log("\nSolver revision agent is now revising the proposal...");
+        if (!quiet)
+            console.log(
+                "\nSolver revision agent is now revising the proposal...",
+            );
         const revisionStep = await this.agents.solverRevision.run(
             ctx,
             this.llm,
@@ -303,7 +310,10 @@ export class DebateEngine {
         revision = revisedProposal;
 
         // Step 4: Synthesizer
-        if (!quiet) console.log("\nSynthesizer agent is now synthesizing the proposal...");
+        if (!quiet)
+            console.log(
+                "\nSynthesizer agent is now synthesizing the proposal...",
+            );
         const synthesizerStep = await this.agents.synthesizer.run(
             ctx,
             this.llm,
@@ -348,12 +358,17 @@ export class DebateEngine {
             }
 
             if (!quiet)
-                console.log("\nCalibration agent is calibrating final answer...");
-            const calibrationStep = await this.agents.calibration.run(this.llm, {
-                model: opts.model,
-                verbose,
-                proposal: finalProposal,
-            });
+                console.log(
+                    "\nCalibration agent is calibrating final answer...",
+                );
+            const calibrationStep = await this.agents.calibration.run(
+                this.llm,
+                {
+                    model: opts.model,
+                    verbose,
+                    proposal: finalProposal,
+                },
+            );
             pushAndLog("Calibration", calibrationStep);
             const calibration = getCalibration(calibrationStep);
 

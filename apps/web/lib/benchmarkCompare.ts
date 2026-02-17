@@ -28,7 +28,10 @@ function toNumberOrNull(value: unknown): number | null {
     return typeof value === "number" ? value : null;
 }
 
-function subtractOrNull(right: number | null, left: number | null): number | null {
+function subtractOrNull(
+    right: number | null,
+    left: number | null,
+): number | null {
     if (typeof right !== "number" || typeof left !== "number") return null;
     return right - left;
 }

@@ -23,7 +23,9 @@ async function makeTempDir() {
 afterEach(async () => {
     process.env.RUNS_DIR = originalRunsDir;
     await Promise.all(
-        tempDirs.splice(0).map((dir) => rm(dir, { recursive: true, force: true })),
+        tempDirs
+            .splice(0)
+            .map((dir) => rm(dir, { recursive: true, force: true })),
     );
 });
 
@@ -127,7 +129,9 @@ describe("web api routes", () => {
             },
         );
         expect(benchmarkResponse.status).toBe(200);
-        const benchmarkJson = (await benchmarkResponse.json()) as { id: string };
+        const benchmarkJson = (await benchmarkResponse.json()) as {
+            id: string;
+        };
         expect(benchmarkJson.id).toBe("benchmark_1");
     });
 
@@ -149,9 +153,12 @@ describe("web api routes", () => {
             "utf-8",
         );
 
-        const response = await getBenchmarkPairsById(new Request("http://localhost"), {
-            params: Promise.resolve({ id: "benchmark_2" }),
-        });
+        const response = await getBenchmarkPairsById(
+            new Request("http://localhost"),
+            {
+                params: Promise.resolve({ id: "benchmark_2" }),
+            },
+        );
         expect(response.status).toBe(200);
         const json = (await response.json()) as {
             benchmarkId: string;
@@ -249,12 +256,17 @@ describe("web api routes", () => {
             new Request("http://localhost/api/runs?model=beta&fast=true"),
         );
         expect(runResponse.status).toBe(200);
-        const runJson = (await runResponse.json()) as { filtered: number; items: Array<{ id: string }> };
+        const runJson = (await runResponse.json()) as {
+            filtered: number;
+            items: Array<{ id: string }>;
+        };
         expect(runJson.filtered).toBe(1);
         expect(runJson.items[0].id).toBe("run_b");
 
         const benchmarkResponse = await getBenchmarks(
-            new Request("http://localhost/api/benchmarks?q=alpha&preset=standard"),
+            new Request(
+                "http://localhost/api/benchmarks?q=alpha&preset=standard",
+            ),
         );
         expect(benchmarkResponse.status).toBe(200);
         const benchmarkJson = (await benchmarkResponse.json()) as {
@@ -346,7 +358,9 @@ describe("web api routes", () => {
         );
 
         const runsResponse = await getRuns(
-            new Request("http://localhost/api/runs?sort=oldest&offset=0&limit=1"),
+            new Request(
+                "http://localhost/api/runs?sort=oldest&offset=0&limit=1",
+            ),
         );
         expect(runsResponse.status).toBe(200);
         const runsJson = (await runsResponse.json()) as {
@@ -432,7 +446,9 @@ describe("web api routes", () => {
             "utf-8",
         );
 
-        const runsResponse = await getRuns(new Request("http://localhost/api/runs"));
+        const runsResponse = await getRuns(
+            new Request("http://localhost/api/runs"),
+        );
         const runsJson = (await runsResponse.json()) as {
             page: number;
             totalPages: number;
@@ -566,14 +582,24 @@ describe("web api routes", () => {
         const newest = await getRuns(
             new Request("http://localhost/api/runs?sort=newest&limit=2"),
         );
-        const newestJson = (await newest.json()) as { items: Array<{ id: string }> };
-        expect(newestJson.items.map((item) => item.id)).toEqual(["run_a", "run_b"]);
+        const newestJson = (await newest.json()) as {
+            items: Array<{ id: string }>;
+        };
+        expect(newestJson.items.map((item) => item.id)).toEqual([
+            "run_a",
+            "run_b",
+        ]);
 
         const oldest = await getRuns(
             new Request("http://localhost/api/runs?sort=oldest&limit=2"),
         );
-        const oldestJson = (await oldest.json()) as { items: Array<{ id: string }> };
-        expect(oldestJson.items.map((item) => item.id)).toEqual(["run_a", "run_b"]);
+        const oldestJson = (await oldest.json()) as {
+            items: Array<{ id: string }>;
+        };
+        expect(oldestJson.items.map((item) => item.id)).toEqual([
+            "run_a",
+            "run_b",
+        ]);
     });
 
     it("returns benchmark compare deltas", async () => {
@@ -653,7 +679,9 @@ describe("web api routes", () => {
         expect(missingParams.status).toBe(400);
 
         const notFound = await getBenchmarksCompare(
-            new Request("http://localhost/api/benchmarks/compare?left=a&right=b"),
+            new Request(
+                "http://localhost/api/benchmarks/compare?left=a&right=b",
+            ),
         );
         expect(notFound.status).toBe(404);
     });
@@ -757,7 +785,9 @@ describe("web api routes", () => {
         );
 
         const response = await getRunsCompare(
-            new Request("http://localhost/api/runs/compare?left=run_left&right=run_right"),
+            new Request(
+                "http://localhost/api/runs/compare?left=run_left&right=run_right",
+            ),
         );
         expect(response.status).toBe(200);
         const json = (await response.json()) as {

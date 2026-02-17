@@ -2,7 +2,12 @@ import { describe, it, expect } from "vitest";
 import { parseStructuredContent } from "./OpenAiCompatibleClient";
 
 describe("parseStructuredContent", () => {
-    const sample = { answer: "Yes", keyClaims: ["A"], assumptions: [], confidence: 0.9 };
+    const sample = {
+        answer: "Yes",
+        keyClaims: ["A"],
+        assumptions: [],
+        confidence: 0.9,
+    };
 
     it("parses string content", () => {
         const raw = JSON.stringify(sample);
@@ -28,7 +33,11 @@ describe("parseStructuredContent", () => {
     });
 
     it("returns empty object for null/undefined", () => {
-        expect(parseStructuredContent<Record<string, unknown>>(null)).toEqual({});
-        expect(parseStructuredContent<Record<string, unknown>>(undefined)).toEqual({});
+        expect(parseStructuredContent<Record<string, unknown>>(null)).toEqual(
+            {},
+        );
+        expect(
+            parseStructuredContent<Record<string, unknown>>(undefined),
+        ).toEqual({});
     });
 });

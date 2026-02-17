@@ -52,7 +52,9 @@ function StructuredSummary({ output }: { output: unknown }) {
             <div className="trace-summary">
                 <p className="trace-summary-main">{answer}</p>
                 {confidence != null && (
-                    <p className="trace-summary-meta">confidence: {confidence}</p>
+                    <p className="trace-summary-meta">
+                        confidence: {confidence}
+                    </p>
                 )}
                 {keyClaims.length > 0 && (
                     <ul className="trace-summary-list">
@@ -67,11 +69,15 @@ function StructuredSummary({ output }: { output: unknown }) {
 
     if (kind === "critique") {
         const issues = Array.isArray(data.issues)
-            ? data.issues.filter((v): v is Record<string, unknown> => isRecord(v))
+            ? data.issues.filter((v): v is Record<string, unknown> =>
+                  isRecord(v),
+              )
             : [];
         return (
             <div className="trace-summary">
-                <p className="trace-summary-meta">Issue count: {issues.length}</p>
+                <p className="trace-summary-meta">
+                    Issue count: {issues.length}
+                </p>
                 {issues.length > 0 && (
                     <ul className="trace-summary-list trace-issues">
                         {issues.slice(0, 6).map((issue, idx) => (
@@ -127,7 +133,9 @@ function StructuredSummary({ output }: { output: unknown }) {
         return (
             <div className="trace-summary">
                 {riskLevel != null && (
-                    <p className="trace-summary-meta">Risk level: {riskLevel}</p>
+                    <p className="trace-summary-meta">
+                        Risk level: {riskLevel}
+                    </p>
                 )}
                 {evidenceRequirements.length > 0 && (
                     <div className="trace-summary-block">
@@ -246,7 +254,10 @@ export function TraceStep({
             className={`trace-step ${isLast ? "trace-step-last" : ""}`}
             style={{ animationDelay: `${index * 0.04}s` }}
         >
-            <div className="trace-step-marker" style={{ "--kind-color": kindColor } as React.CSSProperties}>
+            <div
+                className="trace-step-marker"
+                style={{ "--kind-color": kindColor } as React.CSSProperties}
+            >
                 <span className="trace-step-num">{index + 1}</span>
             </div>
             <div className="trace-step-body">
@@ -303,7 +314,9 @@ export function TraceStep({
                             </span>
                         )}
                         {step.error && (
-                            <span className="trace-step-error">{step.error}</span>
+                            <span className="trace-step-error">
+                                {step.error}
+                            </span>
                         )}
                     </div>
                 </header>

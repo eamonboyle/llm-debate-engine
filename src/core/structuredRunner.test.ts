@@ -58,7 +58,9 @@ describe("runStructuredWithGuard", () => {
                 .mockResolvedValueOnce({ answer: "" })
                 .mockResolvedValueOnce(repaired),
         };
-        const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+        const consoleSpy = vi
+            .spyOn(console, "warn")
+            .mockImplementation(() => {});
 
         const { data, attempts } = await runStructuredWithGuard(
             llm,

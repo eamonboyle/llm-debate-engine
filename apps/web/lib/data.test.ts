@@ -74,7 +74,9 @@ beforeEach(() => {
 afterEach(async () => {
     process.env.RUNS_DIR = originalRunsDir;
     await Promise.all(
-        tempDirs.splice(0).map((dir) => rm(dir, { recursive: true, force: true })),
+        tempDirs
+            .splice(0)
+            .map((dir) => rm(dir, { recursive: true, force: true })),
     );
 });
 
@@ -166,17 +168,26 @@ describe("web data loader", () => {
         process.env.RUNS_DIR = dir;
         await writeFile(
             join(dir, "run_old.json"),
-            JSON.stringify(makeRunArtifact("run_old", "2025-01-01T00:00:00.000Z")),
+            JSON.stringify(
+                makeRunArtifact("run_old", "2025-01-01T00:00:00.000Z"),
+            ),
             "utf-8",
         );
         await writeFile(
             join(dir, "run_new.json"),
-            JSON.stringify(makeRunArtifact("run_new", "2025-01-02T00:00:00.000Z")),
+            JSON.stringify(
+                makeRunArtifact("run_new", "2025-01-02T00:00:00.000Z"),
+            ),
             "utf-8",
         );
         await writeFile(
             join(dir, "benchmark.json"),
-            JSON.stringify(makeBenchmarkArtifact("benchmark_1", "2025-01-03T00:00:00.000Z")),
+            JSON.stringify(
+                makeBenchmarkArtifact(
+                    "benchmark_1",
+                    "2025-01-03T00:00:00.000Z",
+                ),
+            ),
             "utf-8",
         );
 
@@ -210,7 +221,9 @@ describe("web data loader", () => {
         );
         await writeFile(
             join(dir, "run_real.json"),
-            JSON.stringify(makeRunArtifact("run_real", "2025-01-03T00:00:00.000Z")),
+            JSON.stringify(
+                makeRunArtifact("run_real", "2025-01-03T00:00:00.000Z"),
+            ),
             "utf-8",
         );
         await writeFile(
@@ -224,7 +237,9 @@ describe("web data loader", () => {
         const runs = await loadRunArtifacts();
         const benchmarks = await loadBenchmarkArtifacts();
         expect(runs.map((run) => run.id)).toEqual(["run_real"]);
-        expect(benchmarks.map((benchmark) => benchmark.id)).toEqual(["bench_real"]);
+        expect(benchmarks.map((benchmark) => benchmark.id)).toEqual([
+            "bench_real",
+        ]);
     });
 
     it("loads benchmarks and id filters", async () => {

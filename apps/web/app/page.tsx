@@ -53,8 +53,8 @@ export default async function OverviewPage() {
             <div>
                 <h1 className="title">LLM Research Dashboard</h1>
                 <p className="subtitle">
-                    Generated at {new Date(index.generatedAt).toLocaleString()} from
-                    local run artifacts.
+                    Generated at {new Date(index.generatedAt).toLocaleString()}{" "}
+                    from local run artifacts.
                 </p>
             </div>
 
@@ -76,7 +76,9 @@ export default async function OverviewPage() {
                 />
                 <MetricCard
                     label="Avg solver->revision Δ"
-                    value={index.aggregates.confidenceDrift.solverToRevisionMean}
+                    value={
+                        index.aggregates.confidenceDrift.solverToRevisionMean
+                    }
                     helpKey="solverToRevisionDelta"
                 />
             </div>
@@ -84,12 +86,16 @@ export default async function OverviewPage() {
             <div className="grid-4">
                 <MetricCard
                     label="corr(severity, solver->revision Δ)"
-                    value={confidenceCorrelation.severityVsSolverToRevisionDelta}
+                    value={
+                        confidenceCorrelation.severityVsSolverToRevisionDelta
+                    }
                     helpKey="severityVsSolverToRevisionDelta"
                 />
                 <MetricCard
                     label="corr(severity, revision->synth Δ)"
-                    value={confidenceCorrelation.severityVsRevisionToSynthesizerDelta}
+                    value={
+                        confidenceCorrelation.severityVsRevisionToSynthesizerDelta
+                    }
                     helpKey="severityVsRevisionToSynthesizerDelta"
                 />
                 <MetricCard
@@ -108,7 +114,8 @@ export default async function OverviewPage() {
                 <div className="card">
                     <h2 style={{ marginTop: 0 }}>Analysis filter context</h2>
                     <p className="small muted">
-                        This index was generated from a filtered artifact subset.
+                        This index was generated from a filtered artifact
+                        subset.
                     </p>
                     <ResponsiveTable
                         columns={[
@@ -125,7 +132,9 @@ export default async function OverviewPage() {
             ) : null}
 
             <div className="card">
-                <h2 style={{ marginTop: 0 }}>Outlier runs (lowest avg similarity)</h2>
+                <h2 style={{ marginTop: 0 }}>
+                    Outlier runs (lowest avg similarity)
+                </h2>
                 {outliers.length === 0 ? (
                     <p className="muted">No outlier data available yet.</p>
                 ) : (
@@ -138,13 +147,19 @@ export default async function OverviewPage() {
                                 label: "Avg similarity",
                                 helpKey: "avgSimilarity",
                             },
-                            { key: "zScore", label: "Z-score", helpKey: "zScore" },
+                            {
+                                key: "zScore",
+                                label: "Z-score",
+                                helpKey: "zScore",
+                            },
                             {
                                 key: "open",
                                 label: "Open",
                                 hideOnMobile: true,
                                 render: (row) => (
-                                    <a href={`/runs/${(row as { runId: string }).runId}`}>
+                                    <a
+                                        href={`/runs/${(row as { runId: string }).runId}`}
+                                    >
                                         Trace
                                     </a>
                                 ),
@@ -155,7 +170,10 @@ export default async function OverviewPage() {
                             `${(row as { benchmarkId: string }).benchmarkId}-${(row as { runId: string }).runId}`
                         }
                         renderCardActions={(row) => (
-                            <a href={`/runs/${(row as { runId: string }).runId}`} className="button">
+                            <a
+                                href={`/runs/${(row as { runId: string }).runId}`}
+                                className="button"
+                            >
                                 View trace
                             </a>
                         )}
@@ -164,7 +182,9 @@ export default async function OverviewPage() {
             </div>
 
             <div className="card">
-                <h2 style={{ marginTop: 0 }}>Top counterfactual failure modes</h2>
+                <h2 style={{ marginTop: 0 }}>
+                    Top counterfactual failure modes
+                </h2>
                 {topCounterfactualFailureModes.length === 0 ? (
                     <p className="muted">
                         No counterfactual failure modes recorded yet.
@@ -179,11 +199,15 @@ export default async function OverviewPage() {
                             },
                             { key: "count", label: "Count" },
                         ]}
-                        data={topCounterfactualFailureModes.map(([failureMode, count]) => ({
-                            failureMode,
-                            count,
-                        }))}
-                        getRowId={(row) => (row as { failureMode: string }).failureMode}
+                        data={topCounterfactualFailureModes.map(
+                            ([failureMode, count]) => ({
+                                failureMode,
+                                count,
+                            }),
+                        )}
+                        getRowId={(row) =>
+                            (row as { failureMode: string }).failureMode
+                        }
                     />
                 )}
             </div>
@@ -236,7 +260,10 @@ export default async function OverviewPage() {
                             hideOnMobile: true,
                             render: (row) => (
                                 <span className="muted">
-                                    {(row as { finalAnswerPreview: string }).finalAnswerPreview}
+                                    {
+                                        (row as { finalAnswerPreview: string })
+                                            .finalAnswerPreview
+                                    }
                                 </span>
                             ),
                         },
@@ -244,14 +271,21 @@ export default async function OverviewPage() {
                             key: "trace",
                             label: "Open",
                             render: (row) => (
-                                <a href={`/runs/${(row as { id: string }).id}`}>Trace</a>
+                                <a href={`/runs/${(row as { id: string }).id}`}>
+                                    Trace
+                                </a>
                             ),
                         },
                         {
                             key: "compare",
                             label: "Compare",
                             render: (row) => (
-                                <a href={(row as { compareHref: string }).compareHref}>
+                                <a
+                                    href={
+                                        (row as { compareHref: string })
+                                            .compareHref
+                                    }
+                                >
                                     Compare
                                 </a>
                             ),
@@ -276,7 +310,9 @@ export default async function OverviewPage() {
                                 Trace
                             </a>
                             <a
-                                href={(row as { compareHref: string }).compareHref}
+                                href={
+                                    (row as { compareHref: string }).compareHref
+                                }
                                 className="button secondary"
                             >
                                 Compare
@@ -307,7 +343,9 @@ export default async function OverviewPage() {
                             key: "details",
                             label: "Open",
                             render: (row) => (
-                                <a href={`/benchmarks/${(row as { id: string }).id}`}>
+                                <a
+                                    href={`/benchmarks/${(row as { id: string }).id}`}
+                                >
                                     Details
                                 </a>
                             ),
@@ -316,7 +354,12 @@ export default async function OverviewPage() {
                             key: "compare",
                             label: "Compare",
                             render: (row) => (
-                                <a href={(row as { compareHref: string }).compareHref}>
+                                <a
+                                    href={
+                                        (row as { compareHref: string })
+                                            .compareHref
+                                    }
+                                >
                                     Compare
                                 </a>
                             ),
@@ -340,7 +383,9 @@ export default async function OverviewPage() {
                                 Details
                             </a>
                             <a
-                                href={(row as { compareHref: string }).compareHref}
+                                href={
+                                    (row as { compareHref: string }).compareHref
+                                }
                                 className="button secondary"
                             >
                                 Compare

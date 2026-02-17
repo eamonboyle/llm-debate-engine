@@ -73,26 +73,27 @@ export class EvidencePlannerAgent {
         };
 
         try {
-            const { data, attempts } = await runStructuredWithGuard<EvidencePlan>(
-                llm,
-                req,
-                validateEvidencePlan,
-                (bad, error): ChatMessage[] => [
-                    {
-                        role: "system",
-                        content:
-                            "You are a JSON repair function. Return only JSON matching the schema.",
-                    },
-                    {
-                        role: "user",
-                        content: `Validation failed: ${error}\n\nBad object:\n${JSON.stringify(
-                            bad,
-                            null,
-                            2,
-                        )}`,
-                    },
-                ],
-            );
+            const { data, attempts } =
+                await runStructuredWithGuard<EvidencePlan>(
+                    llm,
+                    req,
+                    validateEvidencePlan,
+                    (bad, error): ChatMessage[] => [
+                        {
+                            role: "system",
+                            content:
+                                "You are a JSON repair function. Return only JSON matching the schema.",
+                        },
+                        {
+                            role: "user",
+                            content: `Validation failed: ${error}\n\nBad object:\n${JSON.stringify(
+                                bad,
+                                null,
+                                2,
+                            )}`,
+                        },
+                    ],
+                );
 
             return {
                 id: runId("step"),

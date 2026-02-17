@@ -68,9 +68,19 @@ export function OverviewCharts({
                 </h3>
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={issueRows}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                        <XAxis dataKey="type" stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
-                        <YAxis stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                        <CartesianGrid
+                            strokeDasharray="3 3"
+                            stroke="rgba(255,255,255,0.06)"
+                        />
+                        <XAxis
+                            dataKey="type"
+                            stroke="var(--color-text-muted)"
+                            tick={{ fill: "var(--color-text-secondary)" }}
+                        />
+                        <YAxis
+                            stroke="var(--color-text-muted)"
+                            tick={{ fill: "var(--color-text-secondary)" }}
+                        />
                         <Tooltip
                             contentStyle={{
                                 background: "var(--color-bg-card)",
@@ -80,7 +90,11 @@ export function OverviewCharts({
                             labelStyle={{ color: "var(--color-text-primary)" }}
                         />
                         <Legend />
-                        <Bar dataKey="count" fill="var(--color-data-cyan)" radius={[4, 4, 0, 0]} />
+                        <Bar
+                            dataKey="count"
+                            fill="var(--color-data-cyan)"
+                            radius={[4, 4, 0, 0]}
+                        />
                     </BarChart>
                 </ResponsiveContainer>
             </div>
@@ -91,7 +105,10 @@ export function OverviewCharts({
                 </h3>
                 <ResponsiveContainer width="100%" height="100%">
                     <ScatterChart>
-                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                        <CartesianGrid
+                            strokeDasharray="3 3"
+                            stroke="rgba(255,255,255,0.06)"
+                        />
                         <XAxis
                             type="number"
                             dataKey="severity"
@@ -107,14 +124,20 @@ export function OverviewCharts({
                             tick={{ fill: "var(--color-text-secondary)" }}
                         />
                         <Tooltip
-                            cursor={{ strokeDasharray: "3 3", stroke: "var(--color-border-default)" }}
+                            cursor={{
+                                strokeDasharray: "3 3",
+                                stroke: "var(--color-border-default)",
+                            }}
                             contentStyle={{
                                 background: "var(--color-bg-card)",
                                 border: "1px solid var(--color-border-default)",
                                 borderRadius: "var(--radius-md)",
                             }}
                         />
-                        <Scatter data={scatterRows} fill="var(--color-data-violet)" />
+                        <Scatter
+                            data={scatterRows}
+                            fill="var(--color-data-violet)"
+                        />
                     </ScatterChart>
                 </ResponsiveContainer>
             </div>

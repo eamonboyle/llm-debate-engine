@@ -7,9 +7,9 @@ This project stores run outputs in `runs/*.json` as schema-versioned artifacts.
 - Current schema version: `1`
 - Field: `metadata.schemaVersion`
 - Type definitions:
-  - `src/types/artifact.ts`
-  - `src/types/benchmark.ts`
-  - `src/types/analysis.ts`
+    - `src/types/artifact.ts`
+    - `src/types/benchmark.ts`
+    - `src/types/analysis.ts`
 
 Legacy (pre-v1) artifacts are still supported through `src/artifacts/loader.ts`.
 
@@ -17,26 +17,26 @@ Legacy (pre-v1) artifacts are still supported through `src/artifacts/loader.ts`.
 
 ```json
 {
-  "kind": "run",
-  "id": "run_...",
-  "question": "...",
-  "metadata": {
-    "schemaVersion": 1,
-    "createdAt": "ISO timestamp",
-    "model": "gpt-...",
-    "fastMode": false,
-    "pipelinePreset": "standard | research_deep | fast_research",
-    "pipelineVersion": "1.0.0",
-    "source": "cli"
-  },
-  "run": {
+    "kind": "run",
     "id": "run_...",
-    "createdAt": "ISO timestamp",
     "question": "...",
-    "steps": [],
-    "finalAnswer": "...",
-    "metrics": {}
-  }
+    "metadata": {
+        "schemaVersion": 1,
+        "createdAt": "ISO timestamp",
+        "model": "gpt-...",
+        "fastMode": false,
+        "pipelinePreset": "standard | research_deep | fast_research",
+        "pipelineVersion": "1.0.0",
+        "source": "cli"
+    },
+    "run": {
+        "id": "run_...",
+        "createdAt": "ISO timestamp",
+        "question": "...",
+        "steps": [],
+        "finalAnswer": "...",
+        "metrics": {}
+    }
 }
 ```
 
@@ -61,18 +61,18 @@ Legacy (pre-v1) artifacts are still supported through `src/artifacts/loader.ts`.
 
 ```json
 {
-  "kind": "benchmark",
-  "id": "benchmark_...",
-  "question": "...",
-  "metadata": { "...": "same metadata model as run" },
-  "payload": {
-    "runs": 7,
-    "runIds": ["run_a", "run_b"],
-    "modeCount": 2,
-    "modeSizes": [6, 1],
-    "divergenceEntropy": 0.59,
-    "summary": {}
-  }
+    "kind": "benchmark",
+    "id": "benchmark_...",
+    "question": "...",
+    "metadata": { "...": "same metadata model as run" },
+    "payload": {
+        "runs": 7,
+        "runIds": ["run_a", "run_b"],
+        "modeCount": 2,
+        "modeSizes": [6, 1],
+        "divergenceEntropy": 0.59,
+        "summary": {}
+    }
 }
 ```
 

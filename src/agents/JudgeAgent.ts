@@ -1,5 +1,10 @@
 import type { ChatMessage, LLMClient } from "../types/llm";
-import type { AgentResponse, AgentRun, Critique, Judgement } from "../types/agent";
+import type {
+    AgentResponse,
+    AgentRun,
+    Critique,
+    Judgement,
+} from "../types/agent";
 import { runStructuredWithGuard } from "../core/structuredRunner";
 import { validateJudgement } from "../validator";
 

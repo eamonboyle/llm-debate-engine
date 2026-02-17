@@ -6,27 +6,27 @@ Thanks for your interest in contributing! This document covers how to get set up
 
 1. **Clone and install**
 
-   ```bash
-   git clone https://github.com/eamonboyle/llm-debate-engine.git
-   cd llm-debate-engine
-   pnpm install
-   ```
+    ```bash
+    git clone https://github.com/eamonboyle/llm-debate-engine.git
+    cd llm-debate-engine
+    pnpm install
+    ```
 
 2. **Environment**
 
-   ```bash
-   cp .env.example .env
-   # Set OPENAI_API_KEY in .env (required for ask/benchmark commands)
-   ```
+    ```bash
+    cp .env.example .env
+    # Set OPENAI_API_KEY in .env (required for ask/benchmark commands)
+    ```
 
 3. **Verify setup**
 
-   ```bash
-   pnpm typecheck
-   pnpm test
-   pnpm web:typecheck
-   pnpm web:build
-   ```
+    ```bash
+    pnpm typecheck
+    pnpm test
+    pnpm web:typecheck
+    pnpm web:build
+    ```
 
 ## Code style
 
@@ -39,12 +39,12 @@ Thanks for your interest in contributing! This document covers how to get set up
 2. **Make your changes** with clear, focused commits.
 3. **Run checks** before opening a PR:
 
-   ```bash
-   pnpm typecheck
-   pnpm test
-   pnpm web:typecheck
-   pnpm web:build
-   ```
+    ```bash
+    pnpm typecheck
+    pnpm test
+    pnpm web:typecheck
+    pnpm web:build
+    ```
 
 4. **Open a pull request** against `main`. Use the PR template and describe your changes clearly.
 5. **Address review feedback** if requested.

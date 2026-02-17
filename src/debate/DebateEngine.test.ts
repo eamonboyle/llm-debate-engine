@@ -50,7 +50,10 @@ describe("DebateEngine presets", () => {
                         step("e1", "EvidencePlannerAgent", "research", {
                             kind: "evidence_plan",
                             data: {
-                                evidenceRequirements: ["Evidence A", "Evidence B"],
+                                evidenceRequirements: [
+                                    "Evidence A",
+                                    "Evidence B",
+                                ],
                                 verificationChecks: ["Check 1", "Check 2"],
                                 majorUnknowns: ["Unknown A"],
                                 riskLevel: 3,
@@ -80,7 +83,11 @@ describe("DebateEngine presets", () => {
                             data: {
                                 targetAgent: "SolverAgent",
                                 issues: [
-                                    { severity: 3, type: "missing", note: "Missing edge cases" },
+                                    {
+                                        severity: 3,
+                                        type: "missing",
+                                        note: "Missing edge cases",
+                                    },
                                 ],
                             },
                         }),
@@ -94,7 +101,11 @@ describe("DebateEngine presets", () => {
                             data: {
                                 targetAgent: "SolverAgent",
                                 issues: [
-                                    { severity: 4, type: "logic", note: "Adversarial gap" },
+                                    {
+                                        severity: 4,
+                                        type: "logic",
+                                        note: "Adversarial gap",
+                                    },
                                 ],
                             },
                         }),
@@ -149,7 +160,9 @@ describe("DebateEngine presets", () => {
                             data: {
                                 adjustedConfidence: 0.65,
                                 rationale: "High uncertainty",
-                                claimConfidences: [{ claim: "C final", confidence: 0.65 }],
+                                claimConfidences: [
+                                    { claim: "C final", confidence: 0.65 },
+                                ],
                             },
                         }),
                     ),
@@ -234,7 +247,10 @@ describe("DebateEngine presets", () => {
                         step("e1", "EvidencePlannerAgent", "research", {
                             kind: "evidence_plan",
                             data: {
-                                evidenceRequirements: ["Evidence A", "Evidence B"],
+                                evidenceRequirements: [
+                                    "Evidence A",
+                                    "Evidence B",
+                                ],
                                 verificationChecks: ["Check 1", "Check 2"],
                                 majorUnknowns: ["Unknown A"],
                                 riskLevel: 4,

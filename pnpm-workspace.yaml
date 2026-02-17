@@ -1,7 +1,7 @@
 packages:
-  - .
-  - apps/*
+    - .
+    - apps/*
 
 ignoredBuiltDependencies:
-  - esbuild
-  - sharp
+    - esbuild
+    - sharp

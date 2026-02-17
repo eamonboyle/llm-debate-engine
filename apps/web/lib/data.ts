@@ -231,10 +231,18 @@ export function filterRunArtifacts(
             return false;
         }
         const createdAt = new Date(run.metadata.createdAt);
-        if (fromDate && !Number.isNaN(createdAt.getTime()) && createdAt < fromDate) {
+        if (
+            fromDate &&
+            !Number.isNaN(createdAt.getTime()) &&
+            createdAt < fromDate
+        ) {
             return false;
         }
-        if (toDate && !Number.isNaN(createdAt.getTime()) && createdAt > toDate) {
+        if (
+            toDate &&
+            !Number.isNaN(createdAt.getTime()) &&
+            createdAt > toDate
+        ) {
             return false;
         }
         return true;
@@ -254,23 +262,35 @@ export function filterBenchmarkArtifacts(
 
     return benchmarks.filter((benchmark) => {
         if (q) {
-            const haystack = `${benchmark.id} ${benchmark.question}`.toLowerCase();
+            const haystack =
+                `${benchmark.id} ${benchmark.question}`.toLowerCase();
             if (!haystack.includes(q)) return false;
         }
         if (model && !benchmark.metadata.model.toLowerCase().includes(model)) {
             return false;
         }
-        if (preset && benchmark.metadata.pipelinePreset.toLowerCase() !== preset) {
+        if (
+            preset &&
+            benchmark.metadata.pipelinePreset.toLowerCase() !== preset
+        ) {
             return false;
         }
         if (typeof fast === "boolean" && benchmark.metadata.fastMode !== fast) {
             return false;
         }
         const createdAt = new Date(benchmark.metadata.createdAt);
-        if (fromDate && !Number.isNaN(createdAt.getTime()) && createdAt < fromDate) {
+        if (
+            fromDate &&
+            !Number.isNaN(createdAt.getTime()) &&
+            createdAt < fromDate
+        ) {
             return false;
         }
-        if (toDate && !Number.isNaN(createdAt.getTime()) && createdAt > toDate) {
+        if (
+            toDate &&
+            !Number.isNaN(createdAt.getTime()) &&
+            createdAt > toDate
+        ) {
             return false;
         }
         return true;
@@ -312,7 +332,8 @@ export async function loadRunArtifacts(): Promise<RunArtifact[]> {
 
     const runArtifacts: RunArtifact[] = [];
     for (const file of files) {
-        if (!file.endsWith(".json") || EXCLUDED_ARTIFACT_FILES.has(file)) continue;
+        if (!file.endsWith(".json") || EXCLUDED_ARTIFACT_FILES.has(file))
+            continue;
         const parsed = await readJsonIfExists<unknown>(join(runsDir, file));
         if (
             parsed &&
@@ -339,7 +360,8 @@ export async function loadBenchmarkArtifacts(): Promise<BenchmarkArtifact[]> {
 
     const artifacts: BenchmarkArtifact[] = [];
     for (const file of files) {
-        if (!file.endsWith(".json") || EXCLUDED_ARTIFACT_FILES.has(file)) continue;
+        if (!file.endsWith(".json") || EXCLUDED_ARTIFACT_FILES.has(file))
+            continue;
         const parsed = await readJsonIfExists<unknown>(join(runsDir, file));
         if (
             parsed &&
@@ -402,7 +424,9 @@ export async function loadBenchmarkPairsById(id: string): Promise<{
             pairs?: Array<{ i: number; j: number; similarity: number }>;
         }>;
     }>(pairwisePath);
-    const fromChunk = chunk?.pairwise?.find((entry) => entry.benchmarkId === id);
+    const fromChunk = chunk?.pairwise?.find(
+        (entry) => entry.benchmarkId === id,
+    );
     if (fromChunk) {
         return {
             benchmarkId: id,

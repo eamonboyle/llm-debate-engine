@@ -61,8 +61,7 @@ export class BenchmarkRunner {
         const claims = proposal?.keyClaims;
         if (!Array.isArray(claims) || claims.length === 0) return [];
         return claims.filter(
-            (c): c is string =>
-                typeof c === "string" && c.trim().length > 0,
+            (c): c is string => typeof c === "string" && c.trim().length > 0,
         );
     }
 
@@ -217,8 +216,9 @@ export class BenchmarkRunner {
                       }
 
                       const exemplarIndex = rawIndexByVectorIndex[bestVi];
-                      const exemplarPreview =
-                          (raw[exemplarIndex].finalAnswer ?? "").slice(0, 200);
+                      const exemplarPreview = (
+                          raw[exemplarIndex].finalAnswer ?? ""
+                      ).slice(0, 200);
 
                       return {
                           size: memberVectorIndices.length,

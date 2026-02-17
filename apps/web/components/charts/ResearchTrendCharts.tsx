@@ -61,7 +61,10 @@ export function ResearchTrendCharts({
             numericRisk: Number(riskLevel),
         }))
         .sort((a, b) => {
-            if (Number.isFinite(a.numericRisk) && Number.isFinite(b.numericRisk)) {
+            if (
+                Number.isFinite(a.numericRisk) &&
+                Number.isFinite(b.numericRisk)
+            ) {
                 return a.numericRisk - b.numericRisk;
             }
             return a.riskLevel.localeCompare(b.riskLevel);
@@ -78,8 +81,14 @@ export function ResearchTrendCharts({
     const runRiskTrendRows = runs
         .slice()
         .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
-        .filter((run): run is { id: string; createdAt: string; evidenceRiskLevel: number } =>
-            typeof run.evidenceRiskLevel === "number",
+        .filter(
+            (
+                run,
+            ): run is {
+                id: string;
+                createdAt: string;
+                evidenceRiskLevel: number;
+            } => typeof run.evidenceRiskLevel === "number",
         )
         .map((run, idx) => ({
             label: shortLabel(run.id, run.createdAt, idx),
@@ -106,9 +115,19 @@ export function ResearchTrendCharts({
                 </h3>
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={presetRows}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                        <XAxis dataKey="preset" stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
-                        <YAxis stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                        <CartesianGrid
+                            strokeDasharray="3 3"
+                            stroke="rgba(255,255,255,0.06)"
+                        />
+                        <XAxis
+                            dataKey="preset"
+                            stroke="var(--color-text-muted)"
+                            tick={{ fill: "var(--color-text-secondary)" }}
+                        />
+                        <YAxis
+                            stroke="var(--color-text-muted)"
+                            tick={{ fill: "var(--color-text-secondary)" }}
+                        />
                         <Tooltip
                             contentStyle={{
                                 background: "var(--color-bg-card)",
@@ -117,7 +136,11 @@ export function ResearchTrendCharts({
                             }}
                         />
                         <Legend />
-                        <Bar dataKey="count" fill="var(--color-data-cyan)" radius={[4, 4, 0, 0]} />
+                        <Bar
+                            dataKey="count"
+                            fill="var(--color-data-cyan)"
+                            radius={[4, 4, 0, 0]}
+                        />
                     </BarChart>
                 </ResponsiveContainer>
             </div>
@@ -128,9 +151,19 @@ export function ResearchTrendCharts({
                 </h3>
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={benchmarkTrendRows}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                        <XAxis dataKey="label" stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
-                        <YAxis stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                        <CartesianGrid
+                            strokeDasharray="3 3"
+                            stroke="rgba(255,255,255,0.06)"
+                        />
+                        <XAxis
+                            dataKey="label"
+                            stroke="var(--color-text-muted)"
+                            tick={{ fill: "var(--color-text-secondary)" }}
+                        />
+                        <YAxis
+                            stroke="var(--color-text-muted)"
+                            tick={{ fill: "var(--color-text-secondary)" }}
+                        />
                         <Tooltip
                             contentStyle={{
                                 background: "var(--color-bg-card)",
@@ -170,9 +203,19 @@ export function ResearchTrendCharts({
                 ) : null}
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={evidenceRiskRows}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                        <XAxis dataKey="riskLevel" stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
-                        <YAxis stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                        <CartesianGrid
+                            strokeDasharray="3 3"
+                            stroke="rgba(255,255,255,0.06)"
+                        />
+                        <XAxis
+                            dataKey="riskLevel"
+                            stroke="var(--color-text-muted)"
+                            tick={{ fill: "var(--color-text-secondary)" }}
+                        />
+                        <YAxis
+                            stroke="var(--color-text-muted)"
+                            tick={{ fill: "var(--color-text-secondary)" }}
+                        />
                         <Tooltip
                             contentStyle={{
                                 background: "var(--color-bg-card)",
@@ -181,7 +224,11 @@ export function ResearchTrendCharts({
                             }}
                         />
                         <Legend />
-                        <Bar dataKey="count" fill="var(--color-data-teal)" radius={[4, 4, 0, 0]} />
+                        <Bar
+                            dataKey="count"
+                            fill="var(--color-data-teal)"
+                            radius={[4, 4, 0, 0]}
+                        />
                     </BarChart>
                 </ResponsiveContainer>
             </div>
@@ -197,9 +244,20 @@ export function ResearchTrendCharts({
                 ) : null}
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={runRiskTrendRows}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                        <XAxis dataKey="label" stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
-                        <YAxis stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} domain={[1, 5]} />
+                        <CartesianGrid
+                            strokeDasharray="3 3"
+                            stroke="rgba(255,255,255,0.06)"
+                        />
+                        <XAxis
+                            dataKey="label"
+                            stroke="var(--color-text-muted)"
+                            tick={{ fill: "var(--color-text-secondary)" }}
+                        />
+                        <YAxis
+                            stroke="var(--color-text-muted)"
+                            tick={{ fill: "var(--color-text-secondary)" }}
+                            domain={[1, 5]}
+                        />
                         <Tooltip
                             contentStyle={{
                                 background: "var(--color-bg-card)",

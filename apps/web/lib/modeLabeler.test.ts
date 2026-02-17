@@ -4,25 +4,33 @@ import { inferModeLabel } from "./modeLabeler";
 describe("web mode labeler", () => {
     it("labels high-risk framing before other categories", () => {
         expect(
-            inferModeLabel("Catastrophic governance failure from misaligned systems"),
+            inferModeLabel(
+                "Catastrophic governance failure from misaligned systems",
+            ),
         ).toBe("high-risk framing");
     });
 
     it("labels policy-oriented content", () => {
         expect(
-            inferModeLabel("Policy reforms and international governance pathways"),
+            inferModeLabel(
+                "Policy reforms and international governance pathways",
+            ),
         ).toBe("policy-oriented");
     });
 
     it("labels technical framing content", () => {
         expect(
-            inferModeLabel("Technical alignment plans for frontier model control"),
+            inferModeLabel(
+                "Technical alignment plans for frontier model control",
+            ),
         ).toBe("technical framing");
     });
 
     it("labels economic framing content", () => {
         expect(
-            inferModeLabel("Economic and jobs impact from deployment acceleration"),
+            inferModeLabel(
+                "Economic and jobs impact from deployment acceleration",
+            ),
         ).toBe("economic framing");
     });
 

@@ -45,9 +45,12 @@ export function BenchmarkDetailCharts({
         let cancelled = false;
         async function loadPairs() {
             try {
-                const response = await fetch(`/api/benchmarks/${benchmarkId}/pairs`, {
-                    cache: "no-store",
-                });
+                const response = await fetch(
+                    `/api/benchmarks/${benchmarkId}/pairs`,
+                    {
+                        cache: "no-store",
+                    },
+                );
                 if (!response.ok) return;
                 const json = (await response.json()) as {
                     source?: "chunk" | "artifact";
@@ -55,7 +58,9 @@ export function BenchmarkDetailCharts({
                 };
                 if (!cancelled && Array.isArray(json.pairs)) {
                     setPairs(json.pairs);
-                    setPairsSource(json.source === "chunk" ? "chunk" : "artifact");
+                    setPairsSource(
+                        json.source === "chunk" ? "chunk" : "artifact",
+                    );
                 }
             } catch {
                 // keep initial pairs
@@ -100,9 +105,19 @@ export function BenchmarkDetailCharts({
                     </h3>
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={modeData}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                            <XAxis dataKey="mode" stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
-                            <YAxis stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                            <CartesianGrid
+                                strokeDasharray="3 3"
+                                stroke="rgba(255,255,255,0.06)"
+                            />
+                            <XAxis
+                                dataKey="mode"
+                                stroke="var(--color-text-muted)"
+                                tick={{ fill: "var(--color-text-secondary)" }}
+                            />
+                            <YAxis
+                                stroke="var(--color-text-muted)"
+                                tick={{ fill: "var(--color-text-secondary)" }}
+                            />
                             <Tooltip
                                 contentStyle={{
                                     background: "var(--color-bg-card)",
@@ -110,7 +125,11 @@ export function BenchmarkDetailCharts({
                                     borderRadius: "var(--radius-md)",
                                 }}
                             />
-                            <Bar dataKey="size" fill="var(--color-data-cyan)" radius={[4, 4, 0, 0]} />
+                            <Bar
+                                dataKey="size"
+                                fill="var(--color-data-cyan)"
+                                radius={[4, 4, 0, 0]}
+                            />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -121,9 +140,19 @@ export function BenchmarkDetailCharts({
                     </h3>
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={thresholdCounts}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                            <XAxis dataKey="threshold" stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
-                            <YAxis stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                            <CartesianGrid
+                                strokeDasharray="3 3"
+                                stroke="rgba(255,255,255,0.06)"
+                            />
+                            <XAxis
+                                dataKey="threshold"
+                                stroke="var(--color-text-muted)"
+                                tick={{ fill: "var(--color-text-secondary)" }}
+                            />
+                            <YAxis
+                                stroke="var(--color-text-muted)"
+                                tick={{ fill: "var(--color-text-secondary)" }}
+                            />
                             <Tooltip
                                 contentStyle={{
                                     background: "var(--color-bg-card)",
@@ -131,7 +160,11 @@ export function BenchmarkDetailCharts({
                                     borderRadius: "var(--radius-md)",
                                 }}
                             />
-                            <Bar dataKey="modeCount" fill="var(--color-data-violet)" radius={[4, 4, 0, 0]} />
+                            <Bar
+                                dataKey="modeCount"
+                                fill="var(--color-data-violet)"
+                                radius={[4, 4, 0, 0]}
+                            />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -167,7 +200,9 @@ export function BenchmarkDetailCharts({
                                                 background:
                                                     i === j
                                                         ? "var(--color-bg-elevated)"
-                                                        : similarityColor(value),
+                                                        : similarityColor(
+                                                              value,
+                                                          ),
                                                 color: "var(--color-text-primary)",
                                                 minWidth: 44,
                                             }}

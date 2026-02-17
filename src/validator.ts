@@ -152,7 +152,10 @@ export function validateQuestionDecomposition(
         (s) => typeof s === "string" && s.trim().length > 2,
     );
     if (!allStrings) {
-        return { ok: false, error: "subQuestions/hypotheses contain invalid item" };
+        return {
+            ok: false,
+            error: "subQuestions/hypotheses contain invalid item",
+        };
     }
 
     return { ok: true, data: v as QuestionDecomposition };
@@ -215,7 +218,8 @@ export function validateEvidencePlan(
             return { ok: false, error: `${field} missing/empty` };
         }
         const valid = v[field].every(
-            (item: unknown) => typeof item === "string" && item.trim().length >= 3,
+            (item: unknown) =>
+                typeof item === "string" && item.trim().length >= 3,
         );
         if (!valid) {
             return { ok: false, error: `${field} contains invalid item` };
@@ -236,13 +240,18 @@ export function validateCounterfactual(
         return { ok: false, error: "Not an object" };
     const v = value as any;
 
-    const fields = ["failureModes", "triggerConditions", "mitigations"] as const;
+    const fields = [
+        "failureModes",
+        "triggerConditions",
+        "mitigations",
+    ] as const;
     for (const field of fields) {
         if (!Array.isArray(v[field]) || v[field].length < 1) {
             return { ok: false, error: `${field} missing/empty` };
         }
         const validItems = v[field].every(
-            (item: unknown) => typeof item === "string" && item.trim().length >= 3,
+            (item: unknown) =>
+                typeof item === "string" && item.trim().length >= 3,
         );
         if (!validItems) {
             return { ok: false, error: `${field} contains invalid item` };
