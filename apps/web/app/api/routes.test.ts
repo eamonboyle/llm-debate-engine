@@ -4,6 +4,7 @@ import { join } from "path";
 import { afterEach, describe, expect, it } from "vitest";
 import { GET as getAnalysis } from "./analysis/route";
 import { GET as getBenchmarks } from "./benchmarks/route";
+import { GET as getBenchmarksCompare } from "./benchmarks/compare/route";
 import { GET as getRunById } from "./runs/[id]/route";
 import { GET as getRuns } from "./runs/route";
 import { GET as getBenchmarkById } from "./benchmarks/[id]/route";
@@ -237,5 +238,73 @@ describe("web api routes", () => {
         };
         expect(benchmarkJson.filtered).toBe(1);
         expect(benchmarkJson.items[0].id).toBe("benchmark_a");
+    });
+
+    it("returns benchmark compare deltas", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "benchmark_left.json"),
+            JSON.stringify({
+                kind: "benchmark",
+                id: "benchmark_left",
+                question: "Q left",
+                metadata: {
+                    createdAt: "2025-01-01T00:00:00.000Z",
+                    model: "gpt",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                payload: {
+                    runs: 2,
+                    modeCount: 1,
+                    modeSizes: [2],
+                    divergenceEntropy: 0.1,
+                    summary: { stability: { pairwiseMean: 0.9, pairs: [] } },
+                },
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "benchmark_right.json"),
+            JSON.stringify({
+                kind: "benchmark",
+                id: "benchmark_right",
+                question: "Q right",
+                metadata: {
+                    createdAt: "2025-01-01T00:00:00.000Z",
+                    model: "gpt",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                payload: {
+                    runs: 4,
+                    modeCount: 3,
+                    modeSizes: [2, 1, 1],
+                    divergenceEntropy: 0.8,
+                    summary: { stability: { pairwiseMean: 0.6, pairs: [] } },
+                },
+            }),
+            "utf-8",
+        );
+
+        const response = await getBenchmarksCompare(
+            new Request(
+                "http://localhost/api/benchmarks/compare?left=benchmark_left&right=benchmark_right",
+            ),
+        );
+        expect(response.status).toBe(200);
+        const json = (await response.json()) as {
+            delta: {
+                runs: number;
+                modeCount: number;
+                divergenceEntropy: number;
+                stabilityPairwiseMean: number | null;
+            };
+        };
+        expect(json.delta.runs).toBe(2);
+        expect(json.delta.modeCount).toBe(2);
+        expect(json.delta.divergenceEntropy).toBeCloseTo(0.7, 3);
+        expect(json.delta.stabilityPairwiseMean).toBeCloseTo(-0.3, 3);
     });
 });

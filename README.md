@@ -205,6 +205,7 @@ API endpoints are also available in the web app:
 - `GET /api/runs`
 - `GET /api/runs/:id`
 - `GET /api/benchmarks`
+- `GET /api/benchmarks/compare?left=:id&right=:id`
 - `GET /api/benchmarks/:id`
 - `GET /api/benchmarks/:id/pairs`
 
