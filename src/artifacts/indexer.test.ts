@@ -510,6 +510,7 @@ describe("buildAnalysisIndex", () => {
         const index = await buildAnalysisIndex(dir, {
             questionContains: "alpha",
         });
+        expect(index.filterContext?.questionContains).toBe("alpha");
         expect(index.totals.runs).toBe(1);
         expect(index.totals.benchmarks).toBe(1);
         expect(index.runs[0].id).toBe("run_alpha");

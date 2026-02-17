@@ -99,6 +99,7 @@ Output:
 Includes:
 
 - normalized run/benchmark summaries
+- filter context describing which CLI filters were applied when index was built
 - aggregate issue counts and severity
 - confidence drift statistics
 - confidence/severity correlations

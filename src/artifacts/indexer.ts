@@ -84,6 +84,19 @@ function toMarkdownReport(index: AnalysisIndex): string {
         "",
         `Generated: ${index.generatedAt}`,
         "",
+        "## Filter context",
+        "",
+        `- questionContains: ${index.filterContext?.questionContains ?? "(none)"}`,
+        `- modelContains: ${index.filterContext?.modelContains ?? "(none)"}`,
+        `- presetEquals: ${index.filterContext?.presetEquals ?? "(none)"}`,
+        `- fastMode: ${
+            typeof index.filterContext?.fastMode === "boolean"
+                ? String(index.filterContext.fastMode)
+                : "(none)"
+        }`,
+        `- createdAfter: ${index.filterContext?.createdAfter ?? "(none)"}`,
+        `- createdBefore: ${index.filterContext?.createdBefore ?? "(none)"}`,
+        "",
         "## Totals",
         "",
         `- Runs: ${index.totals.runs}`,
@@ -451,6 +464,14 @@ export async function buildAnalysisIndex(
 
     return {
         generatedAt: new Date().toISOString(),
+        filterContext: {
+            questionContains: opts?.questionContains,
+            modelContains: opts?.modelContains,
+            presetEquals: opts?.presetEquals,
+            fastMode: opts?.fastMode,
+            createdAfter: opts?.createdAfter,
+            createdBefore: opts?.createdBefore,
+        },
         totals: {
             runs: runSummaries.length,
             benchmarks: benchmarkSummaries.length,

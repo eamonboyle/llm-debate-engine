@@ -163,6 +163,7 @@ Legacy artifacts are still supported by the compatibility loader (`src/artifacts
 
 `analyze-runs` computes an index with:
 
+- filter context metadata for reproducibility
 - issue type counts
 - severity statistics by issue type
 - confidence drift (solver->revision, revision->synth, calibrated->synth delta)
