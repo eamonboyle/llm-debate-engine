@@ -156,7 +156,7 @@ This derived index powers the web dashboard.
 - `/` includes outlier run surfacing from pairwise similarity analysis
 - `/` includes preset distribution + benchmark entropy/stability trend charts
 - `/runs` Run artifact table
-- `/runs/[id]` Run trace viewer (step-by-step agent output JSON)
+- `/runs/[id]` Run trace viewer (step-by-step structured summaries + raw JSON)
 - `/benchmarks` Benchmark artifact table
 - `/benchmarks/[id]` Benchmark deep-dive
 - `/benchmarks/compare` Side-by-side benchmark comparison
