@@ -19,11 +19,17 @@ export async function GET(request: Request) {
     const { offset, limit, page } = parseListPagination(url.searchParams);
     const sorted = sort === "oldest" ? filtered.slice().reverse() : filtered;
     const items = sorted.slice(offset, offset + limit);
+    const totalPages = Math.max(1, Math.ceil(sorted.length / limit));
+    const prevPage = page > 1 ? page - 1 : null;
+    const nextPage = page < totalPages ? page + 1 : null;
 
     return Response.json({
         total: benchmarks.length,
         filtered: filtered.length,
         page,
+        totalPages,
+        prevPage,
+        nextPage,
         offset,
         limit,
         hasMore: offset + items.length < sorted.length,

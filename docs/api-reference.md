@@ -43,6 +43,13 @@ Example:
 curl "http://localhost:3000/api/runs?model=gpt-5&preset=research_deep&fast=false"
 ```
 
+Response envelope includes pagination metadata:
+
+- `page`, `totalPages`
+- `prevPage`, `nextPage`
+- `offset`, `limit`, `hasMore`
+- `total`, `filtered`, `items`
+
 ## `GET /api/runs/:id`
 
 Returns a single run artifact or 404.
@@ -79,6 +86,8 @@ Example:
 ```bash
 curl "http://localhost:3000/api/benchmarks?q=ai%20safety&from=2025-01-01T00:00:00.000Z"
 ```
+
+Response envelope matches `/api/runs` pagination fields.
 
 ## `GET /api/benchmarks/compare?left=:id&right=:id`
 

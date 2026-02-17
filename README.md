@@ -216,6 +216,8 @@ API endpoints are also available in the web app:
 
 List routes support query filters: `q`, `model`, `preset`, `fast`, `from`, `to`,
 plus pagination/sort params: `sort`, `offset`, `limit`, `page`, `pageSize`.
+List API responses include pagination metadata (`page`, `totalPages`, `prevPage`,
+`nextPage`, `offset`, `limit`, `hasMore`).
 
 The benchmark pairs endpoint prefers `analysis-benchmark-pairs.json` when available.
 

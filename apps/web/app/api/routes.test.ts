@@ -352,11 +352,17 @@ describe("web api routes", () => {
         const runsJson = (await runsResponse.json()) as {
             offset: number;
             limit: number;
+            totalPages: number;
+            prevPage: number | null;
+            nextPage: number | null;
             hasMore: boolean;
             items: Array<{ id: string }>;
         };
         expect(runsJson.offset).toBe(0);
         expect(runsJson.limit).toBe(1);
+        expect(runsJson.totalPages).toBe(2);
+        expect(runsJson.prevPage).toBeNull();
+        expect(runsJson.nextPage).toBe(2);
         expect(runsJson.hasMore).toBe(true);
         expect(runsJson.items[0].id).toBe("run_a");
 
@@ -369,11 +375,17 @@ describe("web api routes", () => {
         const benchmarksJson = (await benchmarksResponse.json()) as {
             offset: number;
             limit: number;
+            totalPages: number;
+            prevPage: number | null;
+            nextPage: number | null;
             hasMore: boolean;
             items: Array<{ id: string }>;
         };
         expect(benchmarksJson.offset).toBe(1);
         expect(benchmarksJson.limit).toBe(1);
+        expect(benchmarksJson.totalPages).toBe(2);
+        expect(benchmarksJson.prevPage).toBe(1);
+        expect(benchmarksJson.nextPage).toBeNull();
         expect(benchmarksJson.hasMore).toBe(false);
         expect(benchmarksJson.items[0].id).toBe("benchmark_b");
     });
@@ -423,10 +435,16 @@ describe("web api routes", () => {
         const runsResponse = await getRuns(new Request("http://localhost/api/runs"));
         const runsJson = (await runsResponse.json()) as {
             page: number;
+            totalPages: number;
+            prevPage: number | null;
+            nextPage: number | null;
             limit: number;
             offset: number;
         };
         expect(runsJson.page).toBe(1);
+        expect(runsJson.totalPages).toBe(1);
+        expect(runsJson.prevPage).toBeNull();
+        expect(runsJson.nextPage).toBeNull();
         expect(runsJson.offset).toBe(0);
         expect(runsJson.limit).toBe(100);
 
@@ -435,10 +453,16 @@ describe("web api routes", () => {
         );
         const benchmarksJson = (await benchmarksResponse.json()) as {
             page: number;
+            totalPages: number;
+            prevPage: number | null;
+            nextPage: number | null;
             limit: number;
             offset: number;
         };
         expect(benchmarksJson.page).toBe(1);
+        expect(benchmarksJson.totalPages).toBe(1);
+        expect(benchmarksJson.prevPage).toBeNull();
+        expect(benchmarksJson.nextPage).toBeNull();
         expect(benchmarksJson.offset).toBe(0);
         expect(benchmarksJson.limit).toBe(100);
     });
@@ -487,11 +511,17 @@ describe("web api routes", () => {
         expect(runsResponse.status).toBe(200);
         const runsJson = (await runsResponse.json()) as {
             page: number;
+            totalPages: number;
+            prevPage: number | null;
+            nextPage: number | null;
             offset: number;
             limit: number;
             items: Array<{ id: string }>;
         };
         expect(runsJson.page).toBe(2);
+        expect(runsJson.totalPages).toBe(2);
+        expect(runsJson.prevPage).toBe(1);
+        expect(runsJson.nextPage).toBeNull();
         expect(runsJson.offset).toBe(1);
         expect(runsJson.limit).toBe(1);
         expect(runsJson.items[0].id).toBe("run_b");
