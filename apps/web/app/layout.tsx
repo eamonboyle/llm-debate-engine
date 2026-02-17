@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Sora, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Nav } from "../components/Nav";
 
 const sora = Sora({
     subsets: ["latin"],
@@ -69,13 +70,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
             <body className={ibmPlexSans.className}>
                 <main className="page-shell">
-                    <nav className="nav">
-                        <a href="/">Overview</a>
-                        <a href="/runs">Runs</a>
-                        <a href="/runs/compare">Compare runs</a>
-                        <a href="/benchmarks">Benchmarks</a>
-                        <a href="/benchmarks/compare">Compare benchmarks</a>
-                    </nav>
+                    <Nav />
                     {children}
                 </main>
             </body>
