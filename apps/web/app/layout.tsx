@@ -10,6 +10,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                         <a href="/">Overview</a>
                         <a href="/runs">Runs</a>
                         <a href="/benchmarks">Benchmarks</a>
+                        <a href="/benchmarks/compare">Compare</a>
                     </nav>
                     {children}
                 </main>

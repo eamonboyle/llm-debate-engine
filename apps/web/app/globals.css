@@ -108,6 +108,36 @@ thead th {
     gap: 16px;
 }
 
+.input {
+    width: 100%;
+    border: 1px solid #334155;
+    background: #020617;
+    color: #e2e8f0;
+    border-radius: 8px;
+    padding: 9px 10px;
+    font-size: 14px;
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #0ea5e9;
+    background: #0369a1;
+    color: #e0f2fe;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.button.secondary {
+    border-color: #334155;
+    background: #0f172a;
+    color: #cbd5e1;
+}
+
 @media (max-width: 1000px) {
     .grid-4 {
         grid-template-columns: repeat(2, minmax(0, 1fr));

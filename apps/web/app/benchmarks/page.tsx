@@ -1,7 +1,47 @@
 import { loadBenchmarkArtifacts } from "../../lib/data";
 
-export default async function BenchmarksPage() {
+type BenchmarkSearchParams = {
+    q?: string;
+    model?: string;
+    preset?: string;
+    fast?: string;
+};
+
+function normalize(v: string | undefined) {
+    return (v ?? "").trim().toLowerCase();
+}
+
+export default async function BenchmarksPage({
+    searchParams,
+}: {
+    searchParams: Promise<BenchmarkSearchParams>;
+}) {
     const benchmarks = await loadBenchmarkArtifacts();
+    const params = await searchParams;
+    const q = normalize(params.q);
+    const model = normalize(params.model);
+    const preset = normalize(params.preset);
+    const fast = normalize(params.fast);
+
+    const filtered = benchmarks.filter((benchmark) => {
+        if (q) {
+            const haystack =
+                `${benchmark.id} ${benchmark.question}`.toLowerCase();
+            if (!haystack.includes(q)) return false;
+        }
+        if (model && !benchmark.metadata.model.toLowerCase().includes(model)) {
+            return false;
+        }
+        if (
+            preset &&
+            benchmark.metadata.pipelinePreset.toLowerCase() !== preset
+        ) {
+            return false;
+        }
+        if (fast === "true" && !benchmark.metadata.fastMode) return false;
+        if (fast === "false" && benchmark.metadata.fastMode) return false;
+        return true;
+    });
 
     return (
         <section className="stack">
@@ -11,6 +51,51 @@ export default async function BenchmarksPage() {
                     Inspect benchmark-level divergence, mode structure, and stability.
                 </p>
             </div>
+
+            <form className="card" method="get">
+                <div
+                    style={{
+                        display: "grid",
+                        gap: 10,
+                        gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+                    }}
+                >
+                    <input
+                        name="q"
+                        placeholder="Search benchmark question"
+                        defaultValue={params.q ?? ""}
+                        className="input"
+                    />
+                    <input
+                        name="model"
+                        placeholder="Model contains..."
+                        defaultValue={params.model ?? ""}
+                        className="input"
+                    />
+                    <input
+                        name="preset"
+                        placeholder="Preset (standard, research_deep...)"
+                        defaultValue={params.preset ?? ""}
+                        className="input"
+                    />
+                    <select name="fast" defaultValue={params.fast ?? ""} className="input">
+                        <option value="">Fast mode: any</option>
+                        <option value="true">Fast only</option>
+                        <option value="false">Non-fast only</option>
+                    </select>
+                </div>
+                <div style={{ marginTop: 10, display: "flex", gap: 10 }}>
+                    <button type="submit" className="button">
+                        Apply filters
+                    </button>
+                    <a href="/benchmarks" className="button secondary">
+                        Clear
+                    </a>
+                    <span className="small muted" style={{ alignSelf: "center" }}>
+                        Showing {filtered.length} of {benchmarks.length}
+                    </span>
+                </div>
+            </form>
 
             <div className="card">
                 <div className="table-wrap">
@@ -24,10 +109,11 @@ export default async function BenchmarksPage() {
                                 <th>Modes</th>
                                 <th>Entropy</th>
                                 <th>Open</th>
+                                <th>Compare</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {benchmarks.map((benchmark) => (
+                            {filtered.map((benchmark) => (
                                 <tr key={benchmark.id}>
                                     <td>{benchmark.id}</td>
                                     <td>
@@ -41,6 +127,13 @@ export default async function BenchmarksPage() {
                                     <td>{benchmark.payload.divergenceEntropy}</td>
                                     <td>
                                         <a href={`/benchmarks/${benchmark.id}`}>Details</a>
+                                    </td>
+                                    <td>
+                                        <a
+                                            href={`/benchmarks/compare?left=${benchmark.id}`}
+                                        >
+                                            Set left
+                                        </a>
                                     </td>
                                 </tr>
                             ))}

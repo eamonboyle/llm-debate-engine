@@ -1,5 +1,23 @@
 import { notFound } from "next/navigation";
 import { loadBenchmarkById } from "../../../lib/data";
+import { BenchmarkDetailCharts } from "../../../components/charts/BenchmarkDetailCharts";
+
+function inferModeLabel(preview: string) {
+    const text = preview.toLowerCase();
+    if (text.includes("policy") || text.includes("governance")) {
+        return "policy-oriented";
+    }
+    if (text.includes("technical") || text.includes("alignment")) {
+        return "technical framing";
+    }
+    if (text.includes("economic") || text.includes("jobs")) {
+        return "economic framing";
+    }
+    if (text.includes("existential") || text.includes("catastrophic")) {
+        return "high-risk framing";
+    }
+    return "general framing";
+}
 
 export default async function BenchmarkDetailPage({
     params,
@@ -15,6 +33,12 @@ export default async function BenchmarkDetailPage({
 
     const modeSizes = benchmark.payload.modeSizes.join(", ");
     const pairs = benchmark.payload.summary?.stability?.pairs ?? [];
+    const thresholdCounts = [
+        { threshold: "0.8", modeCount: benchmark.payload.modeCountAt0_8 ?? 0 },
+        { threshold: "0.9", modeCount: benchmark.payload.modeCountAt0_9 ?? 0 },
+        { threshold: "0.95", modeCount: benchmark.payload.modeCountAt0_95 ?? 0 },
+    ];
+    const modes = benchmark.payload.modes ?? [];
 
     return (
         <section className="stack">
@@ -49,32 +73,64 @@ export default async function BenchmarkDetailPage({
             </div>
 
             <div className="card">
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    <a
+                        className="button secondary"
+                        href={`/benchmarks/compare?left=${benchmark.id}`}
+                    >
+                        Compare as left
+                    </a>
+                    <a
+                        className="button secondary"
+                        href={`/benchmarks/compare?right=${benchmark.id}`}
+                    >
+                        Compare as right
+                    </a>
+                </div>
+            </div>
+
+            <div className="card">
                 <h2 style={{ marginTop: 0 }}>Mode structure</h2>
                 <p className="muted small">Mode sizes: [{modeSizes}]</p>
             </div>
 
+            <BenchmarkDetailCharts
+                modeSizes={benchmark.payload.modeSizes}
+                thresholdCounts={thresholdCounts}
+                similarityPairs={pairs}
+                runs={benchmark.payload.runs}
+            />
+
             <div className="card">
-                <h2 style={{ marginTop: 0 }}>Pairwise similarity sample</h2>
-                <div className="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Run i</th>
-                                <th>Run j</th>
-                                <th>Similarity</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {pairs.slice(0, 50).map((pair, idx) => (
-                                <tr key={`${pair.i}-${pair.j}-${idx}`}>
-                                    <td>{pair.i}</td>
-                                    <td>{pair.j}</td>
-                                    <td>{pair.similarity}</td>
+                <h2 style={{ marginTop: 0 }}>Mode explorer</h2>
+                {modes.length === 0 ? (
+                    <p className="muted">No mode exemplars available in artifact.</p>
+                ) : (
+                    <div className="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Mode</th>
+                                    <th>Label</th>
+                                    <th>Size</th>
+                                    <th>Members</th>
+                                    <th>Exemplar preview</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody>
+                                {modes.map((mode, idx) => (
+                                    <tr key={`mode-${idx}`}>
+                                        <td>{idx}</td>
+                                        <td>{inferModeLabel(mode.exemplarPreview)}</td>
+                                        <td>{mode.size}</td>
+                                        <td>{mode.members.join(", ")}</td>
+                                        <td className="muted">{mode.exemplarPreview}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </div>
         </section>
     );

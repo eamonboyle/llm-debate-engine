@@ -63,6 +63,7 @@ export default async function OverviewPage() {
                                 <th>Model</th>
                                 <th>Issues</th>
                                 <th>Preview</th>
+                                <th>Open</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,6 +75,9 @@ export default async function OverviewPage() {
                                     <td>{run.model}</td>
                                     <td>{run.critique.issueCount}</td>
                                     <td className="muted">{run.finalAnswerPreview}</td>
+                                    <td>
+                                        <a href={`/runs/${run.id}`}>Trace</a>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -93,10 +97,11 @@ export default async function OverviewPage() {
                                 <th>Mode count</th>
                                 <th>Entropy</th>
                                 <th>Open</th>
+                                <th>Compare</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {recentBenchmarks.map((bench) => (
+                            {recentBenchmarks.map((bench, idx) => (
                                 <tr key={bench.id}>
                                     <td>{bench.id}</td>
                                     <td>{bench.question}</td>
@@ -105,6 +110,13 @@ export default async function OverviewPage() {
                                     <td>{bench.divergenceEntropy}</td>
                                     <td>
                                         <a href={`/benchmarks/${bench.id}`}>Details</a>
+                                    </td>
+                                    <td>
+                                        <a
+                                            href={`/benchmarks/compare?left=${bench.id}${recentBenchmarks[idx + 1] ? `&right=${recentBenchmarks[idx + 1].id}` : ""}`}
+                                        >
+                                            Compare
+                                        </a>
                                     </td>
                                 </tr>
                             ))}
