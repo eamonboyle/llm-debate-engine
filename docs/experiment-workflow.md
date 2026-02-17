@@ -36,6 +36,12 @@ Extended outputs:
 pnpm analyze -- --csv --markdown --bundle
 ```
 
+Equivalent shortcut:
+
+```bash
+pnpm analyze:full
+```
+
 This writes:
 
 - `analysis-index.json`
