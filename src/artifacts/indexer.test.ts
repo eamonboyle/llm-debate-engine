@@ -146,6 +146,10 @@ describe("buildAnalysisIndex", () => {
         expect(index.totals.benchmarks).toBe(1);
         expect(index.aggregates.issueTypeCounts.factual).toBe(1);
         expect(index.aggregates.confidenceDrift.solverToRevisionMean).toBe(-0.1);
+        expect(
+            index.aggregates.confidenceCorrelation
+                .severityVsSolverToRevisionDelta,
+        ).toBe(0);
         expect(index.aggregates.outlierRuns).toHaveLength(0);
         expect(index.benchmarks[0].modeLabels[0].label).toContain("technical");
     });
@@ -337,5 +341,71 @@ describe("buildAnalysisIndex", () => {
         expect(bundle.runs).toHaveLength(1);
         expect(bundle.benchmarks).toHaveLength(1);
         expect(bundle.index.totals.runs).toBe(1);
+    });
+
+    it("computes severity-confidence correlation coefficients", async () => {
+        const dir = await createTempRunsDir();
+
+        const mkRun = (
+            id: string,
+            severity: number,
+            solverToRevisionDelta: number,
+            revisionToSynthesizerDelta: number,
+        ) => ({
+            kind: "run",
+            id,
+            question: "Correlation Q",
+            metadata: {
+                schemaVersion: 1,
+                createdAt: new Date().toISOString(),
+                model: "gpt-test",
+                fastMode: false,
+                pipelinePreset: "research_deep",
+                pipelineVersion: "1.0.0",
+                source: "cli",
+            },
+            run: {
+                id,
+                createdAt: new Date().toISOString(),
+                question: "Correlation Q",
+                steps: [],
+                finalAnswer: "A",
+                metrics: {
+                    confidence: {
+                        solverToRevisionDelta,
+                        revisionToSynthesizerDelta,
+                    },
+                    critique: {
+                        maxSeverity: severity,
+                    },
+                },
+            },
+        });
+
+        await writeFile(
+            join(dir, "corr_a.json"),
+            JSON.stringify(mkRun("corr_a", 1, -0.1, 0.1)),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "corr_b.json"),
+            JSON.stringify(mkRun("corr_b", 3, -0.3, 0.3)),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "corr_c.json"),
+            JSON.stringify(mkRun("corr_c", 5, -0.5, 0.5)),
+            "utf-8",
+        );
+
+        const index = await buildAnalysisIndex(dir);
+        expect(
+            index.aggregates.confidenceCorrelation
+                .severityVsSolverToRevisionDelta,
+        ).toBeCloseTo(-1, 3);
+        expect(
+            index.aggregates.confidenceCorrelation
+                .severityVsRevisionToSynthesizerDelta,
+        ).toBeCloseTo(1, 3);
     });
 });

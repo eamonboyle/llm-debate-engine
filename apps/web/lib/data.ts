@@ -53,6 +53,10 @@ type AnalysisIndex = {
             revisionToSynthesizerMean: number;
             calibratedMinusSynthMean: number;
         };
+        confidenceCorrelation?: {
+            severityVsSolverToRevisionDelta: number;
+            severityVsRevisionToSynthesizerDelta: number;
+        };
         outlierRuns?: Array<{
             benchmarkId: string;
             runId: string;

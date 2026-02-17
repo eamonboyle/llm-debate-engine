@@ -20,6 +20,16 @@ const METRIC_ITEMS = [
             "Confidence change after critique incorporation; often negative for recalibration.",
     },
     {
+        key: "corr(severity, solver->revision Δ)",
+        description:
+            "Pearson correlation between critique max severity and solver->revision confidence delta.",
+    },
+    {
+        key: "corr(severity, revision->synth Δ)",
+        description:
+            "Pearson correlation between critique max severity and revision->synth confidence delta.",
+    },
+    {
         key: "outlierRuns.avgSimilarity",
         description:
             "Per-benchmark run with lowest mean similarity to peers (potential anomalous mode).",

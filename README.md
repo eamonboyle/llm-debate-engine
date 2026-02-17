@@ -141,6 +141,7 @@ Legacy artifacts are still supported by the compatibility loader (`src/artifacts
 - issue type counts
 - severity statistics by issue type
 - confidence drift (solver->revision, revision->synth, calibrated->synth delta)
+- severity-confidence Pearson correlations for stage deltas
 - critique severity vs confidence movement records
 - benchmark mode labels inferred from exemplar previews
 

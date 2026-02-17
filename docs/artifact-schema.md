@@ -101,6 +101,7 @@ Includes:
 - normalized run/benchmark summaries
 - aggregate issue counts and severity
 - confidence drift statistics
+- confidence/severity correlations
 - outlier run detection (`aggregates.outlierRuns`)
 
 Optional exports:

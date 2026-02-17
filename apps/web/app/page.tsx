@@ -21,6 +21,10 @@ export default async function OverviewPage() {
     const recentRuns = index.runs.slice(0, 8);
     const recentBenchmarks = index.benchmarks.slice(0, 6);
     const outliers = index.aggregates.outlierRuns?.slice(0, 8) ?? [];
+    const confidenceCorrelation = index.aggregates.confidenceCorrelation ?? {
+        severityVsSolverToRevisionDelta: 0,
+        severityVsRevisionToSynthesizerDelta: 0,
+    };
 
     return (
         <section className="stack">
@@ -45,6 +49,17 @@ export default async function OverviewPage() {
                 <MetricCard
                     label="Avg solver->revision Δ"
                     value={index.aggregates.confidenceDrift.solverToRevisionMean}
+                />
+            </div>
+
+            <div className="grid-4">
+                <MetricCard
+                    label="corr(severity, solver->revision Δ)"
+                    value={confidenceCorrelation.severityVsSolverToRevisionDelta}
+                />
+                <MetricCard
+                    label="corr(severity, revision->synth Δ)"
+                    value={confidenceCorrelation.severityVsRevisionToSynthesizerDelta}
                 />
             </div>
 

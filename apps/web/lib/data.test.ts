@@ -95,6 +95,10 @@ describe("web data loader", () => {
                         revisionToSynthesizerMean: 0,
                         calibratedMinusSynthMean: 0,
                     },
+                    confidenceCorrelation: {
+                        severityVsSolverToRevisionDelta: 0,
+                        severityVsRevisionToSynthesizerDelta: 0,
+                    },
                     outlierRuns: [],
                     presets: {},
                     critiqueVsConfidence: [],

@@ -28,6 +28,26 @@ function stddev(values: number[]): number {
     return Math.sqrt(variance);
 }
 
+function pearsonCorrelation(xs: number[], ys: number[]): number {
+    if (xs.length !== ys.length || xs.length < 2) return 0;
+    const xMean = mean(xs);
+    const yMean = mean(ys);
+
+    let num = 0;
+    let xDen = 0;
+    let yDen = 0;
+    for (let i = 0; i < xs.length; i++) {
+        const x = xs[i] - xMean;
+        const y = ys[i] - yMean;
+        num += x * y;
+        xDen += x * x;
+        yDen += y * y;
+    }
+    const den = Math.sqrt(xDen * yDen);
+    if (den === 0) return 0;
+    return num / den;
+}
+
 function round3(value: number): number {
     return Math.round(value * 1000) / 1000;
 }
@@ -91,6 +111,8 @@ function toMarkdownReport(index: AnalysisIndex): string {
         `- Solver -> Revision mean delta: ${index.aggregates.confidenceDrift.solverToRevisionMean}`,
         `- Revision -> Synthesizer mean delta: ${index.aggregates.confidenceDrift.revisionToSynthesizerMean}`,
         `- Calibrated - Synthesizer mean delta: ${index.aggregates.confidenceDrift.calibratedMinusSynthMean}`,
+        `- Severity vs Solver -> Revision correlation: ${index.aggregates.confidenceCorrelation.severityVsSolverToRevisionDelta}`,
+        `- Severity vs Revision -> Synthesizer correlation: ${index.aggregates.confidenceCorrelation.severityVsRevisionToSynthesizerDelta}`,
         "",
         "## Top issue types",
         "",
@@ -312,6 +334,33 @@ export async function buildAnalysisIndex(
         }),
     );
 
+    const severityVsSolver = critiqueVsConfidence.filter(
+        (entry) =>
+            typeof entry.maxSeverity === "number" &&
+            typeof entry.solverToRevisionDelta === "number",
+    );
+    const severityVsRevision = critiqueVsConfidence.filter(
+        (entry) =>
+            typeof entry.maxSeverity === "number" &&
+            typeof entry.revisionToSynthesizerDelta === "number",
+    );
+    const severityVsSolverToRevisionDelta = round3(
+        pearsonCorrelation(
+            severityVsSolver.map((entry) => entry.maxSeverity as number),
+            severityVsSolver.map(
+                (entry) => entry.solverToRevisionDelta as number,
+            ),
+        ),
+    );
+    const severityVsRevisionToSynthesizerDelta = round3(
+        pearsonCorrelation(
+            severityVsRevision.map((entry) => entry.maxSeverity as number),
+            severityVsRevision.map(
+                (entry) => entry.revisionToSynthesizerDelta as number,
+            ),
+        ),
+    );
+
     return {
         generatedAt: new Date().toISOString(),
         totals: {
@@ -328,6 +377,10 @@ export async function buildAnalysisIndex(
                 solverToRevisionMean: round3(mean(confidenceSolverToRevision)),
                 revisionToSynthesizerMean: round3(mean(confidenceRevisionToSynth)),
                 calibratedMinusSynthMean: round3(mean(calibratedMinusSynth)),
+            },
+            confidenceCorrelation: {
+                severityVsSolverToRevisionDelta,
+                severityVsRevisionToSynthesizerDelta,
             },
             outlierRuns,
             critiqueVsConfidence,

@@ -20,7 +20,18 @@ Interpretation:
 - Lower points at high severity = model is calibrating downward.
 - Flat/non-negative slope may indicate weak self-correction behavior.
 
-## 3) Outlier runs table
+## 3) Severity-confidence correlation cards
+
+- `corr(severity, solver->revision Δ)`
+- `corr(severity, revision->synth Δ)`
+
+Interpretation:
+
+- Strong negative first correlation: harsher critique drives stronger confidence reductions.
+- Near-zero correlation: critique severity and confidence adjustments are weakly coupled.
+- Positive correlation can indicate overconfident or unstable calibration behavior (context-dependent).
+
+## 4) Outlier runs table
 
 Derived from benchmark pairwise similarity matrices.
 
