@@ -65,7 +65,7 @@ Returns left/right run snapshots and computed deltas:
 - `critique` deltas (`issueCount`, `maxSeverity`, `avgSeverity`)
 - `quality` deltas (`coherence`, `completeness`, `factualRisk`,
   `uncertaintyHandling`)
-- `research` deltas (`evidenceRiskLevel`)
+- `research` deltas (`evidenceRiskLevel`, `counterfactualFailureModeCount`)
 
 Example:
 

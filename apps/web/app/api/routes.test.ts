@@ -698,6 +698,8 @@ describe("web api routes", () => {
                         },
                         research: {
                             evidenceRiskLevel: 2,
+                            counterfactualFailureModeCount: 1,
+                            topCounterfactualFailureMode: "Mode A",
                         },
                     },
                 },
@@ -745,6 +747,8 @@ describe("web api routes", () => {
                         },
                         research: {
                             evidenceRiskLevel: 5,
+                            counterfactualFailureModeCount: 3,
+                            topCounterfactualFailureMode: "Mode B",
                         },
                     },
                 },
@@ -775,6 +779,7 @@ describe("web api routes", () => {
                 };
                 research: {
                     evidenceRiskLevel: number | null;
+                    counterfactualFailureModeCount: number | null;
                 };
             };
         };
@@ -788,6 +793,7 @@ describe("web api routes", () => {
         expect(json.delta.quality.completeness).toBeCloseTo(0.3, 3);
         expect(json.delta.quality.factualRisk).toBeCloseTo(-0.1, 3);
         expect(json.delta.research.evidenceRiskLevel).toBe(3);
+        expect(json.delta.research.counterfactualFailureModeCount).toBe(2);
     });
 
     it("returns 400/404 for invalid run compare requests", async () => {

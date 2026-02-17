@@ -31,6 +31,8 @@ export type RunCompareSummary = {
         };
         research: {
             evidenceRiskLevel: number | null;
+            counterfactualFailureModeCount: number | null;
+            topCounterfactualFailureMode: string | null;
         };
     };
 };
@@ -61,6 +63,7 @@ export type RunComparePayload = {
         };
         research: {
             evidenceRiskLevel: number | null;
+            counterfactualFailureModeCount: number | null;
         };
     };
 };
@@ -72,6 +75,10 @@ function toNumberOrNull(value: unknown): number | null {
 function toRecord(value: unknown): Record<string, unknown> {
     if (!value || typeof value !== "object") return {};
     return value as Record<string, unknown>;
+}
+
+function toStringOrNull(value: unknown): string | null {
+    return typeof value === "string" ? value : null;
 }
 
 function sumObjectNumberValues(value: unknown): number {
@@ -115,6 +122,12 @@ export function summarizeRun(run: RunArtifact): RunCompareSummary {
     const factualRisk = toNumberOrNull(quality.factualRisk);
     const uncertaintyHandling = toNumberOrNull(quality.uncertaintyHandling);
     const evidenceRiskLevel = toNumberOrNull(research.evidenceRiskLevel);
+    const counterfactualFailureModeCount = toNumberOrNull(
+        research.counterfactualFailureModeCount,
+    );
+    const topCounterfactualFailureMode = toStringOrNull(
+        research.topCounterfactualFailureMode,
+    );
 
     return {
         id: run.id,
@@ -147,6 +160,8 @@ export function summarizeRun(run: RunArtifact): RunCompareSummary {
             },
             research: {
                 evidenceRiskLevel,
+                counterfactualFailureModeCount,
+                topCounterfactualFailureMode,
             },
         },
     };
@@ -220,6 +235,10 @@ export function buildRunComparePayload(
                 evidenceRiskLevel: delta(
                     right.metrics.research.evidenceRiskLevel,
                     left.metrics.research.evidenceRiskLevel,
+                ),
+                counterfactualFailureModeCount: delta(
+                    right.metrics.research.counterfactualFailureModeCount,
+                    left.metrics.research.counterfactualFailureModeCount,
                 ),
             },
         },

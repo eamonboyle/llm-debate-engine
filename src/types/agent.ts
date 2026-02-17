@@ -125,6 +125,8 @@ export type DebateRun = {
         };
         research?: {
             evidenceRiskLevel?: number;
+            counterfactualFailureModeCount?: number;
+            topCounterfactualFailureMode?: string;
         };
     };
 };

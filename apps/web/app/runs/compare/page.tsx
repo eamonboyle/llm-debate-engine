@@ -51,6 +51,10 @@ export default async function RunsComparePage({
                       metric: "evidenceRisk",
                       delta: compare.delta.research.evidenceRiskLevel,
                   },
+                  {
+                      metric: "cfModeCount",
+                      delta: compare.delta.research.counterfactualFailureModeCount,
+                  },
               ]
             : [];
 
@@ -308,6 +312,39 @@ export default async function RunsComparePage({
                                                 .evidenceRiskLevel ?? null,
                                         )}
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td>Counterfactual mode count</td>
+                                    <td>
+                                        {formatMetric(
+                                            leftSnapshot.metrics.research
+                                                .counterfactualFailureModeCount,
+                                        )}
+                                    </td>
+                                    <td>
+                                        {formatMetric(
+                                            rightSnapshot.metrics.research
+                                                .counterfactualFailureModeCount,
+                                        )}
+                                    </td>
+                                    <td>
+                                        {formatMetric(
+                                            compare?.delta.research
+                                                .counterfactualFailureModeCount ?? null,
+                                        )}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Top counterfactual mode</td>
+                                    <td>
+                                        {leftSnapshot.metrics.research
+                                            .topCounterfactualFailureMode ?? "-"}
+                                    </td>
+                                    <td>
+                                        {rightSnapshot.metrics.research
+                                            .topCounterfactualFailureMode ?? "-"}
+                                    </td>
+                                    <td className="muted">n/a</td>
                                 </tr>
                             </tbody>
                         </table>

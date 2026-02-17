@@ -23,6 +23,9 @@ export function computeBasicMetrics(run: DebateRun) {
     const evidencePlanStep = run.steps.find(
         (s) => s.output?.kind === "evidence_plan",
     );
+    const counterfactualStep = run.steps.find(
+        (s) => s.output?.kind === "counterfactual",
+    );
     const judgeStep = run.steps.find((s) => s.output?.kind === "judgement");
 
     const solver =
@@ -82,9 +85,24 @@ export function computeBasicMetrics(run: DebateRun) {
         };
     }
 
-    if (evidencePlanStep?.output?.kind === "evidence_plan") {
+    const evidenceRiskLevel =
+        evidencePlanStep?.output?.kind === "evidence_plan"
+            ? evidencePlanStep.output.data.riskLevel
+            : undefined;
+    const counterfactualFailureModes =
+        counterfactualStep?.output?.kind === "counterfactual"
+            ? counterfactualStep.output.data.failureModes.filter(
+                  (mode) => mode.trim().length > 0,
+              )
+            : [];
+    if (
+        typeof evidenceRiskLevel === "number" ||
+        counterfactualFailureModes.length > 0
+    ) {
         run.metrics.research = {
-            evidenceRiskLevel: evidencePlanStep.output.data.riskLevel,
+            evidenceRiskLevel,
+            counterfactualFailureModeCount: counterfactualFailureModes.length,
+            topCounterfactualFailureMode: counterfactualFailureModes[0],
         };
     }
 }

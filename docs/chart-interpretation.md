@@ -116,6 +116,7 @@ Use `/runs/compare` when you want trace-level metric deltas between two specific
 - critique pressure deltas (issue count + severity)
 - quality rubric deltas (coherence/completeness/factual risk)
 - evidence risk deltas (EvidencePlanner risk level)
+- counterfactual mode-count deltas + top mode snapshots
 
 If a metric is absent in either run, the delta chart omits that metric rather than
 treating missing values as zero.

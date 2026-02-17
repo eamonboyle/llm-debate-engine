@@ -123,7 +123,7 @@ export type RunArtifact = {
             confidence?: Record<string, number | undefined>;
             critique?: Record<string, unknown>;
             quality?: Record<string, number | undefined>;
-            research?: Record<string, number | undefined>;
+            research?: Record<string, number | string | undefined>;
             consensus?: Record<string, unknown>;
         };
     };

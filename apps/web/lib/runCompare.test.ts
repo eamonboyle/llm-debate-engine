@@ -8,7 +8,7 @@ function makeRunArtifact(params: {
     critiqueByType?: Record<string, number>;
     critiqueMaxSeverity?: number;
     quality?: Record<string, number>;
-    research?: Record<string, number>;
+    research?: Record<string, number | string>;
     stepCount?: number;
 }): RunArtifact {
     return {
@@ -62,6 +62,8 @@ describe("run compare helpers", () => {
         expect(summary.metrics.critique.maxSeverity).toBe(4);
         expect(summary.metrics.quality.completeness).toBe(0.8);
         expect(summary.metrics.research.evidenceRiskLevel).toBe(4);
+        expect(summary.metrics.research.counterfactualFailureModeCount).toBeNull();
+        expect(summary.metrics.research.topCounterfactualFailureMode).toBeNull();
     });
 
     it("computes deltas and preserves nulls for missing metrics", () => {
@@ -70,7 +72,11 @@ describe("run compare helpers", () => {
             confidence: { solver: 0.3, synthesizer: 0.5 },
             critiqueByType: { missing: 1 },
             quality: { factualRisk: 0.4 },
-            research: { evidenceRiskLevel: 2 },
+            research: {
+                evidenceRiskLevel: 2,
+                counterfactualFailureModeCount: 1,
+                topCounterfactualFailureMode: "Mode A",
+            },
             stepCount: 1,
         });
         const right = makeRunArtifact({
@@ -78,7 +84,11 @@ describe("run compare helpers", () => {
             confidence: { solver: 0.8 },
             critiqueByType: { missing: 3, overconfidence: 1 },
             quality: {},
-            research: { evidenceRiskLevel: 5 },
+            research: {
+                evidenceRiskLevel: 5,
+                counterfactualFailureModeCount: 3,
+                topCounterfactualFailureMode: "Mode B",
+            },
             stepCount: 2,
         });
 
@@ -89,5 +99,12 @@ describe("run compare helpers", () => {
         expect(compared.delta.critique.issueCount).toBe(3);
         expect(compared.delta.quality.factualRisk).toBeNull();
         expect(compared.delta.research.evidenceRiskLevel).toBe(3);
+        expect(compared.delta.research.counterfactualFailureModeCount).toBe(2);
+        expect(compared.left.metrics.research.topCounterfactualFailureMode).toBe(
+            "Mode A",
+        );
+        expect(compared.right.metrics.research.topCounterfactualFailureMode).toBe(
+            "Mode B",
+        );
     });
 });
