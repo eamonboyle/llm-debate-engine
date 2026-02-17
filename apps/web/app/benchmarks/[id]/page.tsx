@@ -95,6 +95,7 @@ export default async function BenchmarkDetailPage({
             </div>
 
             <BenchmarkDetailCharts
+                benchmarkId={benchmark.id}
                 modeSizes={benchmark.payload.modeSizes}
                 thresholdCounts={thresholdCounts}
                 similarityPairs={pairs}

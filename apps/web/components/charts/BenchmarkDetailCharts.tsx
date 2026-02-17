@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import {
     Bar,
     BarChart,
@@ -11,9 +12,10 @@ import {
 } from "recharts";
 
 type BenchmarkDetailChartsProps = {
+    benchmarkId: string;
     modeSizes: number[];
     thresholdCounts: Array<{ threshold: string; modeCount: number }>;
-    similarityPairs: Array<{ i: number; j: number; similarity: number }>;
+    similarityPairs?: Array<{ i: number; j: number; similarity: number }>;
     runs: number;
 };
 
@@ -27,30 +29,62 @@ function similarityColor(value: number) {
 }
 
 export function BenchmarkDetailCharts({
+    benchmarkId,
     modeSizes,
     thresholdCounts,
-    similarityPairs,
+    similarityPairs = [],
     runs,
 }: BenchmarkDetailChartsProps) {
+    const [pairs, setPairs] = useState(similarityPairs);
+    const [pairsSource, setPairsSource] = useState<"artifact" | "chunk">("artifact");
+
+    useEffect(() => {
+        let cancelled = false;
+        async function loadPairs() {
+            try {
+                const response = await fetch(`/api/benchmarks/${benchmarkId}/pairs`, {
+                    cache: "no-store",
+                });
+                if (!response.ok) return;
+                const json = (await response.json()) as {
+                    pairs?: Array<{ i: number; j: number; similarity: number }>;
+                };
+                if (!cancelled && Array.isArray(json.pairs)) {
+                    setPairs(json.pairs);
+                    setPairsSource("chunk");
+                }
+            } catch {
+                // keep initial pairs
+            }
+        }
+        loadPairs();
+        return () => {
+            cancelled = true;
+        };
+    }, [benchmarkId]);
+
     const modeData = modeSizes.map((size, idx) => ({
         mode: `mode_${idx + 1}`,
         size,
     }));
 
-    const matrix: number[][] = Array.from({ length: runs }, (_, i) =>
-        Array.from({ length: runs }, (_, j) => (i === j ? 1 : 0)),
-    );
-    for (const pair of similarityPairs) {
-        if (
-            matrix[pair.i] &&
-            typeof matrix[pair.i][pair.j] === "number" &&
-            matrix[pair.j] &&
-            typeof matrix[pair.j][pair.i] === "number"
-        ) {
-            matrix[pair.i][pair.j] = pair.similarity;
-            matrix[pair.j][pair.i] = pair.similarity;
+    const matrix: number[][] = useMemo(() => {
+        const next: number[][] = Array.from({ length: runs }, (_, i) =>
+            Array.from({ length: runs }, (_, j) => (i === j ? 1 : 0)),
+        );
+        for (const pair of pairs) {
+            if (
+                next[pair.i] &&
+                typeof next[pair.i][pair.j] === "number" &&
+                next[pair.j] &&
+                typeof next[pair.j][pair.i] === "number"
+            ) {
+                next[pair.i][pair.j] = pair.similarity;
+                next[pair.j][pair.i] = pair.similarity;
+            }
         }
-    }
+        return next;
+    }, [pairs, runs]);
 
     return (
         <div className="stack">
@@ -83,6 +117,9 @@ export function BenchmarkDetailCharts({
 
             <div className="card">
                 <h3 style={{ marginTop: 0 }}>Pairwise similarity heatmap</h3>
+                <p className="small muted">
+                    source: {pairsSource} ({pairs.length} pairwise entries)
+                </p>
                 <div style={{ overflowX: "auto" }}>
                     <table>
                         <thead>

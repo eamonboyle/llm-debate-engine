@@ -203,6 +203,8 @@ API endpoints are also available in the web app:
 - `GET /api/benchmarks/:id`
 - `GET /api/benchmarks/:id/pairs`
 
+The benchmark pairs endpoint prefers `analysis-benchmark-pairs.json` when available.
+
 ## Testing
 
 ```bash

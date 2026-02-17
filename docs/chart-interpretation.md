@@ -66,6 +66,7 @@ More negative z-score means stronger outlier behavior.
 
 - Darker red cells indicate low similarity pairs.
 - Green blocks indicate internally consistent sub-clusters.
+- Heatmap source badge indicates whether pair data came from artifact payload or chunk API.
 
 ## 4) Mode explorer table
 
