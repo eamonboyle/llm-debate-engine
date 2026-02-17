@@ -1,8 +1,5 @@
 import { loadBenchmarksByIds } from "../../../../lib/data";
-
-function toNumberOrNull(value: unknown): number | null {
-    return typeof value === "number" ? value : null;
-}
+import { buildBenchmarkComparePayload } from "../../../../lib/benchmarkCompare";
 
 export async function GET(request: Request) {
     const url = new URL(request.url);
@@ -25,40 +22,5 @@ export async function GET(request: Request) {
         );
     }
 
-    const leftStability = toNumberOrNull(
-        leftBenchmark.payload.summary?.stability?.pairwiseMean,
-    );
-    const rightStability = toNumberOrNull(
-        rightBenchmark.payload.summary?.stability?.pairwiseMean,
-    );
-
-    return Response.json({
-        left: {
-            id: leftBenchmark.id,
-            runs: leftBenchmark.payload.runs,
-            modeCount: leftBenchmark.payload.modeCount,
-            divergenceEntropy: leftBenchmark.payload.divergenceEntropy,
-            stabilityPairwiseMean: leftStability,
-        },
-        right: {
-            id: rightBenchmark.id,
-            runs: rightBenchmark.payload.runs,
-            modeCount: rightBenchmark.payload.modeCount,
-            divergenceEntropy: rightBenchmark.payload.divergenceEntropy,
-            stabilityPairwiseMean: rightStability,
-        },
-        delta: {
-            runs: rightBenchmark.payload.runs - leftBenchmark.payload.runs,
-            modeCount:
-                rightBenchmark.payload.modeCount - leftBenchmark.payload.modeCount,
-            divergenceEntropy:
-                rightBenchmark.payload.divergenceEntropy -
-                leftBenchmark.payload.divergenceEntropy,
-            stabilityPairwiseMean:
-                typeof leftStability === "number" &&
-                typeof rightStability === "number"
-                    ? rightStability - leftStability
-                    : null,
-        },
-    });
+    return Response.json(buildBenchmarkComparePayload(leftBenchmark, rightBenchmark));
 }

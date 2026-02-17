@@ -1,5 +1,6 @@
 import { loadBenchmarkArtifacts, loadBenchmarksByIds } from "../../../lib/data";
 import { CompareDeltaChart } from "../../../components/charts/CompareDeltaChart";
+import { buildBenchmarkComparePayload } from "../../../lib/benchmarkCompare";
 
 type CompareSearchParams = {
     left?: string;
@@ -19,6 +20,7 @@ export default async function BenchmarkComparePage({
     const selected = await loadBenchmarksByIds(selectedIds);
     const left = selected.find((b) => b.id === params.left) ?? null;
     const right = selected.find((b) => b.id === params.right) ?? null;
+    const compare = left && right ? buildBenchmarkComparePayload(left, right) : null;
     const leftLabel = left ? `left:${left.id.slice(0, 6)}` : "left";
     const rightLabel = right ? `right:${right.id.slice(0, 6)}` : "right";
 
@@ -112,7 +114,7 @@ export default async function BenchmarkComparePage({
                             </li>
                             <li>
                                 <strong>Stability mean:</strong>{" "}
-                                {left.payload.summary?.stability?.pairwiseMean ?? "-"}
+                                {compare?.left.stabilityPairwiseMean ?? "-"}
                             </li>
                         </ul>
                     )}
@@ -141,7 +143,7 @@ export default async function BenchmarkComparePage({
                             </li>
                             <li>
                                 <strong>Stability mean:</strong>{" "}
-                                {right.payload.summary?.stability?.pairwiseMean ?? "-"}
+                                {compare?.right.stabilityPairwiseMean ?? "-"}
                             </li>
                         </ul>
                     )}
@@ -166,42 +168,32 @@ export default async function BenchmarkComparePage({
                                     <td>Runs</td>
                                     <td>{left.payload.runs}</td>
                                     <td>{right.payload.runs}</td>
-                                    <td>{right.payload.runs - left.payload.runs}</td>
+                                    <td>{compare?.delta.runs}</td>
                                 </tr>
                                 <tr>
                                     <td>Mode count</td>
                                     <td>{left.payload.modeCount}</td>
                                     <td>{right.payload.modeCount}</td>
-                                    <td>
-                                        {right.payload.modeCount - left.payload.modeCount}
-                                    </td>
+                                    <td>{compare?.delta.modeCount}</td>
                                 </tr>
                                 <tr>
                                     <td>Divergence entropy</td>
                                     <td>{left.payload.divergenceEntropy}</td>
                                     <td>{right.payload.divergenceEntropy}</td>
                                     <td>
-                                        {(
-                                            right.payload.divergenceEntropy -
-                                            left.payload.divergenceEntropy
-                                        ).toFixed(3)}
+                                        {compare
+                                            ? compare.delta.divergenceEntropy.toFixed(3)
+                                            : "-"}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Stability mean</td>
-                                    <td>{left.payload.summary?.stability?.pairwiseMean ?? "-"}</td>
-                                    <td>{right.payload.summary?.stability?.pairwiseMean ?? "-"}</td>
+                                    <td>{compare?.left.stabilityPairwiseMean ?? "-"}</td>
+                                    <td>{compare?.right.stabilityPairwiseMean ?? "-"}</td>
                                     <td>
-                                        {typeof right.payload.summary?.stability
-                                            ?.pairwiseMean === "number" &&
-                                        typeof left.payload.summary?.stability
-                                            ?.pairwiseMean === "number"
-                                            ? (
-                                                  right.payload.summary.stability
-                                                      .pairwiseMean -
-                                                  left.payload.summary.stability
-                                                      .pairwiseMean
-                                              ).toFixed(3)
+                                        {typeof compare?.delta.stabilityPairwiseMean ===
+                                        "number"
+                                            ? compare.delta.stabilityPairwiseMean.toFixed(3)
                                             : "-"}
                                     </td>
                                 </tr>
@@ -214,26 +206,18 @@ export default async function BenchmarkComparePage({
                         rows={[
                             {
                                 metric: "modeCount",
-                                left: left.payload.modeCount,
-                                right: right.payload.modeCount,
+                                left: compare?.left.modeCount ?? null,
+                                right: compare?.right.modeCount ?? null,
                             },
                             {
                                 metric: "entropy",
-                                left: left.payload.divergenceEntropy,
-                                right: right.payload.divergenceEntropy,
+                                left: compare?.left.divergenceEntropy ?? null,
+                                right: compare?.right.divergenceEntropy ?? null,
                             },
                             {
                                 metric: "stability",
-                                left:
-                                    typeof left.payload.summary?.stability
-                                        ?.pairwiseMean === "number"
-                                        ? left.payload.summary.stability.pairwiseMean
-                                        : null,
-                                right:
-                                    typeof right.payload.summary?.stability
-                                        ?.pairwiseMean === "number"
-                                        ? right.payload.summary.stability.pairwiseMean
-                                        : null,
+                                left: compare?.left.stabilityPairwiseMean ?? null,
+                                right: compare?.right.stabilityPairwiseMean ?? null,
                             },
                         ]}
                     />
