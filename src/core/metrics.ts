@@ -20,6 +20,9 @@ export function computeBasicMetrics(run: DebateRun) {
     const calibrationStep = run.steps.find(
         (s) => s.output?.kind === "calibration",
     );
+    const evidencePlanStep = run.steps.find(
+        (s) => s.output?.kind === "evidence_plan",
+    );
     const judgeStep = run.steps.find((s) => s.output?.kind === "judgement");
 
     const solver =
@@ -76,6 +79,12 @@ export function computeBasicMetrics(run: DebateRun) {
             completeness: scores.completeness,
             factualRisk: scores.factualRisk,
             uncertaintyHandling: scores.uncertaintyHandling,
+        };
+    }
+
+    if (evidencePlanStep?.output?.kind === "evidence_plan") {
+        run.metrics.research = {
+            evidenceRiskLevel: evidencePlanStep.output.data.riskLevel,
         };
     }
 }

@@ -30,6 +30,11 @@ const METRIC_ITEMS = [
             "Pearson correlation between critique max severity and revision->synth confidence delta.",
     },
     {
+        key: "evidencePlanning.riskLevelMean",
+        description:
+            "Mean risk score (1-5) output by EvidencePlanner across included runs.",
+    },
+    {
         key: "outlierRuns.avgSimilarity",
         description:
             "Per-benchmark run with lowest mean similarity to peers (potential anomalous mode).",

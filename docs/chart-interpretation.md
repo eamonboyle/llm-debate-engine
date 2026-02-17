@@ -45,6 +45,13 @@ Interpretation:
 - Near-zero correlation: critique severity and confidence adjustments are weakly coupled.
 - Positive correlation can indicate overconfident or unstable calibration behavior (context-dependent).
 
+## 3b) Evidence planner risk mean
+
+- `evidencePlanning.riskLevelMean` is the average EvidencePlanner risk score
+  (1=low risk, 5=high risk) across included runs.
+- Higher values suggest question sets or prompt setups are pushing the system
+  into higher-uncertainty / higher-stakes reasoning terrain.
+
 ## 4) Outlier runs table
 
 Derived from benchmark pairwise similarity matrices.

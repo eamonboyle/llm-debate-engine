@@ -34,6 +34,9 @@ export type AnalysisIndex = {
             issueCount: number;
             maxSeverity?: number;
         };
+        research?: {
+            evidenceRiskLevel?: number;
+        };
     }>;
     benchmarks: Array<{
         id: string;
@@ -64,6 +67,10 @@ export type AnalysisIndex = {
         confidenceCorrelation?: {
             severityVsSolverToRevisionDelta: number;
             severityVsRevisionToSynthesizerDelta: number;
+        };
+        evidencePlanning?: {
+            riskLevelMean: number;
+            riskLevelDistribution: Record<string, number>;
         };
         outlierRuns?: Array<{
             benchmarkId: string;

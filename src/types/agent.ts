@@ -116,5 +116,8 @@ export type DebateRun = {
             factualRisk?: number;
             uncertaintyHandling?: number;
         };
+        research?: {
+            evidenceRiskLevel?: number;
+        };
     };
 };

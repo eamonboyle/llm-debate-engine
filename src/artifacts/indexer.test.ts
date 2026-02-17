@@ -83,6 +83,9 @@ describe("buildAnalysisIndex", () => {
                         factualRisk: 2,
                         uncertaintyHandling: 4,
                     },
+                    research: {
+                        evidenceRiskLevel: 4,
+                    },
                 },
             },
         };
@@ -151,6 +154,9 @@ describe("buildAnalysisIndex", () => {
                 .severityVsSolverToRevisionDelta,
         ).toBe(0);
         expect(index.aggregates.outlierRuns).toHaveLength(0);
+        expect(index.runs[0].research?.evidenceRiskLevel).toBe(4);
+        expect(index.aggregates.evidencePlanning?.riskLevelMean).toBe(4);
+        expect(index.aggregates.evidencePlanning?.riskLevelDistribution["4"]).toBe(1);
         expect(index.benchmarks[0].modeLabels[0].label).toContain("technical");
     });
 

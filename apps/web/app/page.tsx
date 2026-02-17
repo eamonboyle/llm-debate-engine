@@ -26,6 +26,10 @@ export default async function OverviewPage() {
         severityVsSolverToRevisionDelta: 0,
         severityVsRevisionToSynthesizerDelta: 0,
     };
+    const evidencePlanning = index.aggregates.evidencePlanning ?? {
+        riskLevelMean: 0,
+        riskLevelDistribution: {},
+    };
     const filterEntries = Object.entries(index.filterContext ?? {}).filter(
         ([, value]) => value !== undefined && value !== null && value !== "",
     );
@@ -64,6 +68,10 @@ export default async function OverviewPage() {
                 <MetricCard
                     label="corr(severity, revision->synth Δ)"
                     value={confidenceCorrelation.severityVsRevisionToSynthesizerDelta}
+                />
+                <MetricCard
+                    label="Avg evidence-plan risk"
+                    value={evidencePlanning.riskLevelMean}
                 />
             </div>
 

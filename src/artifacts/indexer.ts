@@ -108,6 +108,7 @@ function toMarkdownReport(index: AnalysisIndex): string {
         `- Solver -> Revision mean delta: ${index.aggregates.confidenceDrift.solverToRevisionMean}`,
         `- Revision -> Synthesizer mean delta: ${index.aggregates.confidenceDrift.revisionToSynthesizerMean}`,
         `- Calibrated - Synthesizer mean delta: ${index.aggregates.confidenceDrift.calibratedMinusSynthMean}`,
+        `- Evidence planner risk mean: ${index.aggregates.evidencePlanning?.riskLevelMean ?? 0}`,
         `- Severity vs Solver -> Revision correlation: ${index.aggregates.confidenceCorrelation.severityVsSolverToRevisionDelta}`,
         `- Severity vs Revision -> Synthesizer correlation: ${index.aggregates.confidenceCorrelation.severityVsRevisionToSynthesizerDelta}`,
         "",
@@ -263,6 +264,8 @@ export async function buildAnalysisIndex(
     const confidenceSolverToRevision: number[] = [];
     const confidenceRevisionToSynth: number[] = [];
     const calibratedMinusSynth: number[] = [];
+    const evidenceRiskLevels: number[] = [];
+    const evidenceRiskLevelDistribution: Record<string, number> = {};
     const critiqueVsConfidence: AnalysisIndex["aggregates"]["critiqueVsConfidence"] = [];
     const presets: Record<PipelinePreset, number> = {
         standard: 0,
@@ -275,6 +278,7 @@ export async function buildAnalysisIndex(
         const confidence = run.metrics.confidence ?? {};
         const critique = run.metrics.critique ?? {};
         const quality = run.metrics.quality;
+        const research = run.metrics.research;
 
         presets[artifact.metadata.pipelinePreset] += 1;
 
@@ -291,6 +295,12 @@ export async function buildAnalysisIndex(
             calibratedMinusSynth.push(
                 confidence.calibratedAdjusted - confidence.synthesizer,
             );
+        }
+        if (typeof research?.evidenceRiskLevel === "number") {
+            evidenceRiskLevels.push(research.evidenceRiskLevel);
+            const bucket = String(research.evidenceRiskLevel);
+            evidenceRiskLevelDistribution[bucket] =
+                (evidenceRiskLevelDistribution[bucket] ?? 0) + 1;
         }
 
         const issues = run.steps
@@ -348,6 +358,9 @@ export async function buildAnalysisIndex(
                       factualRisk: quality.factualRisk,
                       uncertaintyHandling: quality.uncertaintyHandling,
                   }
+                : undefined,
+            research: research
+                ? { evidenceRiskLevel: research.evidenceRiskLevel }
                 : undefined,
         };
     });
@@ -491,6 +504,10 @@ export async function buildAnalysisIndex(
                 severityVsSolverToRevisionDelta,
                 severityVsRevisionToSynthesizerDelta,
             },
+            evidencePlanning: {
+                riskLevelMean: round3(mean(evidenceRiskLevels)),
+                riskLevelDistribution: evidenceRiskLevelDistribution,
+            },
             outlierRuns,
             critiqueVsConfidence,
             presets,
@@ -559,6 +576,7 @@ export async function buildAndWriteAnalysisIndex(opts?: {
             fastMode: run.fastMode,
             stepCount: run.stepCount,
             issueCount: run.critique.issueCount,
+            evidenceRiskLevel: run.research?.evidenceRiskLevel ?? "",
             maxSeverity: run.critique.maxSeverity ?? "",
             solverConfidence: run.confidence.solver ?? "",
             revisionConfidence: run.confidence.revision ?? "",
@@ -593,6 +611,7 @@ export async function buildAndWriteAnalysisIndex(opts?: {
             "fastMode",
             "stepCount",
             "issueCount",
+            "evidenceRiskLevel",
             "maxSeverity",
             "solverConfidence",
             "revisionConfidence",

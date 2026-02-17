@@ -29,6 +29,9 @@ export type AnalysisRunSummary = {
         factualRisk?: number;
         uncertaintyHandling?: number;
     };
+    research?: {
+        evidenceRiskLevel?: number;
+    };
 };
 
 export type AnalysisBenchmarkSummary = {
@@ -98,6 +101,10 @@ export type AnalysisIndex = {
             solverToRevisionDelta?: number;
             revisionToSynthesizerDelta?: number;
         }>;
+        evidencePlanning?: {
+            riskLevelMean: number;
+            riskLevelDistribution: Record<string, number>;
+        };
         presets: Record<PipelinePreset, number>;
     };
     skipped: Array<{ file: string; error: string }>;
