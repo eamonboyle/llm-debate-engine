@@ -20,6 +20,9 @@
     "author": "",
     "license": "ISC",
     "packageManager": "pnpm@10.29.3",
+  "engines": {
+    "node": "20.x"
+  },
     "devDependencies": {
         "@types/node": "^25.2.3",
         "prettier": "^3.8.1",
