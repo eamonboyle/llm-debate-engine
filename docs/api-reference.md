@@ -52,6 +52,21 @@ Example:
 curl "http://localhost:3000/api/benchmarks?q=ai%20safety&from=2025-01-01T00:00:00.000Z"
 ```
 
+## `GET /api/benchmarks/compare?left=:id&right=:id`
+
+Returns left/right benchmark snapshots and computed deltas:
+
+- runs
+- modeCount
+- divergenceEntropy
+- stabilityPairwiseMean (nullable if missing)
+
+Example:
+
+```bash
+curl "http://localhost:3000/api/benchmarks/compare?left=benchmark_a&right=benchmark_b"
+```
+
 ## `GET /api/benchmarks/:id`
 
 Returns a single benchmark artifact or 404.
