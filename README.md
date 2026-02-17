@@ -1,5 +1,7 @@
 # LLM Debate Research Platform
 
+**Live dashboard:** [llm-debate-research.vercel.app](https://llm-debate-research.vercel.app/)
+
 A multi-agent system for running structured LLM debates, analyzing outputs, and comparing results over time. The platform comprises:
 
 - **CLI debate engine** — Multi-agent pipelines for single runs and benchmarks
