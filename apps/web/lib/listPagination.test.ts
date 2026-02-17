@@ -12,12 +12,15 @@ describe("list pagination helpers", () => {
         expect(resolveSortOrder("something_else")).toBe("newest");
     });
 
-    it("paginates and sorts item arrays", () => {
-        const result = paginateItems(["a", "b", "c"], { sort: "oldest", page: "2", pageSize: "1" }, {
-            defaultPageSize: 25,
-            maxPageSize: 200,
-        });
-        expect(result.sort).toBe("oldest");
+    it("paginates item arrays", () => {
+        const result = paginateItems(
+            ["a", "b", "c"],
+            { sort: "oldest", page: "2", pageSize: "1" },
+            {
+                defaultPageSize: 25,
+                maxPageSize: 200,
+            },
+        );
         expect(result.page).toBe(2);
         expect(result.totalPages).toBe(3);
         expect(result.paged).toEqual(["b"]);

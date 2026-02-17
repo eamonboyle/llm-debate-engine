@@ -32,6 +32,7 @@ Query params:
 - `from` datetime lower bound (`datetime-local` or ISO-compatible)
 - `to` datetime upper bound
 - `sort` (`newest` default, `oldest`)
+- ties on `createdAt` are deterministically ordered by `id`
 - `offset` zero-based pagination offset (default `0`)
 - `limit` page size (default `100`, max `500`)
 - `page` one-based page index alias (used when `offset` is not provided)

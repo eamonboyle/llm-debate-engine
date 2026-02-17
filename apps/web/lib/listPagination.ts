@@ -19,7 +19,6 @@ export function paginateItems<T>(
     params: { sort?: string; page?: string; pageSize?: string },
     opts: { defaultPageSize: number; maxPageSize: number },
 ) {
-    const sort = resolveSortOrder(params.sort);
     const pageSize = parsePositiveInt(params.pageSize, {
         fallback: opts.defaultPageSize,
         max: opts.maxPageSize,
@@ -28,16 +27,14 @@ export function paginateItems<T>(
         fallback: 1,
         max: 100000,
     });
-    const sorted = sort === "oldest" ? items.slice().reverse() : items;
-    const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize));
+    const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
     const page = Math.min(requestedPage, totalPages);
     const start = (page - 1) * pageSize;
-    const paged = sorted.slice(start, start + pageSize);
+    const paged = items.slice(start, start + pageSize);
     const startDisplay = paged.length === 0 ? 0 : start + 1;
     const endDisplay = start + paged.length;
 
     return {
-        sort,
         pageSize,
         page,
         totalPages,

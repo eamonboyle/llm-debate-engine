@@ -527,6 +527,55 @@ describe("web api routes", () => {
         expect(runsJson.items[0].id).toBe("run_b");
     });
 
+    it("uses deterministic id tie-break for same createdAt sorting", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_b.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_b",
+                question: "B question",
+                metadata: {
+                    createdAt: "2025-01-01T00:00:00.000Z",
+                    model: "gpt",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: { id: "run_b", finalAnswer: "B", steps: [], metrics: {} },
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "run_a.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_a",
+                question: "A question",
+                metadata: {
+                    createdAt: "2025-01-01T00:00:00.000Z",
+                    model: "gpt",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: { id: "run_a", finalAnswer: "A", steps: [], metrics: {} },
+            }),
+            "utf-8",
+        );
+
+        const newest = await getRuns(
+            new Request("http://localhost/api/runs?sort=newest&limit=2"),
+        );
+        const newestJson = (await newest.json()) as { items: Array<{ id: string }> };
+        expect(newestJson.items.map((item) => item.id)).toEqual(["run_a", "run_b"]);
+
+        const oldest = await getRuns(
+            new Request("http://localhost/api/runs?sort=oldest&limit=2"),
+        );
+        const oldestJson = (await oldest.json()) as { items: Array<{ id: string }> };
+        expect(oldestJson.items.map((item) => item.id)).toEqual(["run_a", "run_b"]);
+    });
+
     it("returns benchmark compare deltas", async () => {
         const dir = await makeTempDir();
         process.env.RUNS_DIR = dir;

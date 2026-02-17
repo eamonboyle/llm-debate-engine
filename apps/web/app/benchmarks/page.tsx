@@ -2,7 +2,12 @@ import {
     filterBenchmarkArtifacts,
     loadBenchmarkArtifacts,
 } from "../../lib/data";
-import { buildQueryString, paginateItems } from "../../lib/listPagination";
+import { sortArtifactsByCreatedAt } from "../../lib/artifactSort";
+import {
+    buildQueryString,
+    paginateItems,
+    resolveSortOrder,
+} from "../../lib/listPagination";
 
 type BenchmarkSearchParams = {
     q?: string;
@@ -31,7 +36,9 @@ export default async function BenchmarksPage({
         from: params.from,
         to: params.to,
     });
-    const paging = paginateItems(filtered, params, {
+    const sort = resolveSortOrder(params.sort);
+    const sorted = sortArtifactsByCreatedAt(filtered, sort);
+    const paging = paginateItems(sorted, params, {
         defaultPageSize: 25,
         maxPageSize: 200,
     });
@@ -100,7 +107,7 @@ export default async function BenchmarksPage({
                         maxWidth: 360,
                     }}
                 >
-                    <select name="sort" defaultValue={paging.sort} className="input">
+                    <select name="sort" defaultValue={sort} className="input">
                         <option value="newest">Sort: newest first</option>
                         <option value="oldest">Sort: oldest first</option>
                     </select>
@@ -182,12 +189,12 @@ export default async function BenchmarksPage({
                     href={
                         paging.hasPrev
                             ? buildQueryString(params, {
-                                  sort: paging.sort,
+                                  sort,
                                   pageSize: String(paging.pageSize),
                                   page: String(paging.page - 1),
                               })
                             : buildQueryString(params, {
-                                  sort: paging.sort,
+                                  sort,
                                   pageSize: String(paging.pageSize),
                                   page: String(paging.page),
                               })
@@ -206,12 +213,12 @@ export default async function BenchmarksPage({
                     href={
                         paging.hasNext
                             ? buildQueryString(params, {
-                                  sort: paging.sort,
+                                  sort,
                                   pageSize: String(paging.pageSize),
                                   page: String(paging.page + 1),
                               })
                             : buildQueryString(params, {
-                                  sort: paging.sort,
+                                  sort,
                                   pageSize: String(paging.pageSize),
                                   page: String(paging.page),
                               })
