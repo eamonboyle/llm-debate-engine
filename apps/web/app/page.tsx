@@ -19,6 +19,7 @@ export default async function OverviewPage() {
 
     const recentRuns = index.runs.slice(0, 8);
     const recentBenchmarks = index.benchmarks.slice(0, 6);
+    const outliers = index.aggregates.outlierRuns?.slice(0, 8) ?? [];
 
     return (
         <section className="stack">
@@ -44,6 +45,40 @@ export default async function OverviewPage() {
                     label="Avg solver->revision Δ"
                     value={index.aggregates.confidenceDrift.solverToRevisionMean}
                 />
+            </div>
+
+            <div className="card">
+                <h2 style={{ marginTop: 0 }}>Outlier runs (lowest avg similarity)</h2>
+                {outliers.length === 0 ? (
+                    <p className="muted">No outlier data available yet.</p>
+                ) : (
+                    <div className="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Benchmark</th>
+                                    <th>Run ID</th>
+                                    <th>Avg similarity</th>
+                                    <th>Z-score</th>
+                                    <th>Open</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {outliers.map((row) => (
+                                    <tr key={`${row.benchmarkId}-${row.runId}`}>
+                                        <td>{row.benchmarkId}</td>
+                                        <td>{row.runId}</td>
+                                        <td>{row.avgSimilarity}</td>
+                                        <td>{row.zScore}</td>
+                                        <td>
+                                            <a href={`/runs/${row.runId}`}>Trace</a>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </div>
 
             <OverviewCharts

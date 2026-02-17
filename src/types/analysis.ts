@@ -74,6 +74,12 @@ export type AnalysisIndex = {
             revisionToSynthesizerMean: number;
             calibratedMinusSynthMean: number;
         };
+        outlierRuns: Array<{
+            benchmarkId: string;
+            runId: string;
+            avgSimilarity: number;
+            zScore: number;
+        }>;
         critiqueVsConfidence: Array<{
             runId: string;
             maxSeverity?: number;

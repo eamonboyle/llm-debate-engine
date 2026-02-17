@@ -221,7 +221,10 @@ export async function loadRunArtifacts(
         return parsed;
     }
 
-    const jsonFiles = files.filter((f) => f.endsWith(".json")).sort();
+    const excludedFiles = new Set(["analysis-index.json"]);
+    const jsonFiles = files
+        .filter((f) => f.endsWith(".json") && !excludedFiles.has(f))
+        .sort();
     for (const file of jsonFiles) {
         const filePath = join(runsDir, file);
         try {

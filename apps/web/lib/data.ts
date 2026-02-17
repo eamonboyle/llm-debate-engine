@@ -53,6 +53,12 @@ type AnalysisIndex = {
             revisionToSynthesizerMean: number;
             calibratedMinusSynthMean: number;
         };
+        outlierRuns?: Array<{
+            benchmarkId: string;
+            runId: string;
+            avgSimilarity: number;
+            zScore: number;
+        }>;
         presets: Record<string, number>;
         critiqueVsConfidence: Array<{
             runId: string;

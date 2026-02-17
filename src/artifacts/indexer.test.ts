@@ -146,6 +146,7 @@ describe("buildAnalysisIndex", () => {
         expect(index.totals.benchmarks).toBe(1);
         expect(index.aggregates.issueTypeCounts.factual).toBe(1);
         expect(index.aggregates.confidenceDrift.solverToRevisionMean).toBe(-0.1);
+        expect(index.aggregates.outlierRuns).toHaveLength(0);
         expect(index.benchmarks[0].modeLabels[0].label).toContain("technical");
     });
 });

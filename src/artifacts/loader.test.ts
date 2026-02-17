@@ -103,4 +103,18 @@ describe("loadRunArtifacts", () => {
         expect(loaded.benchmarks).toHaveLength(0);
         expect(loaded.skipped).toHaveLength(1);
     });
+
+    it("ignores analysis-index.json file", async () => {
+        const dir = await makeTempRunsDir();
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({ generatedAt: new Date().toISOString() }),
+            "utf-8",
+        );
+
+        const loaded = await loadRunArtifacts(dir);
+        expect(loaded.runs).toHaveLength(0);
+        expect(loaded.benchmarks).toHaveLength(0);
+        expect(loaded.skipped).toHaveLength(0);
+    });
 });
