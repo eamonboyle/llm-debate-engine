@@ -183,6 +183,7 @@ This derived index powers the web dashboard.
 - `/` includes metric glossary for interpretation context
 - `/` includes outlier run surfacing from pairwise similarity analysis
 - `/` includes preset distribution + benchmark entropy/stability trend charts
+- `/` shows analysis filter context when index is built with CLI filters
 - `/runs` Run artifact table
 - `/runs/[id]` Run trace viewer (step-by-step structured summaries + raw JSON)
 - `/runs/compare` Side-by-side run comparison + metric deltas

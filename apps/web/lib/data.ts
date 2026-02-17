@@ -3,6 +3,14 @@ import { join, resolve } from "path";
 
 export type AnalysisIndex = {
     generatedAt: string;
+    filterContext?: {
+        questionContains?: string;
+        modelContains?: string;
+        presetEquals?: string;
+        fastMode?: boolean;
+        createdAfter?: string;
+        createdBefore?: string;
+    };
     totals: {
         runs: number;
         benchmarks: number;

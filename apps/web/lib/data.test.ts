@@ -86,6 +86,10 @@ describe("web data loader", () => {
             join(dir, "analysis-index.json"),
             JSON.stringify({
                 generatedAt: new Date().toISOString(),
+                filterContext: {
+                    modelContains: "gpt-test",
+                    fastMode: false,
+                },
                 totals: { runs: 0, benchmarks: 0, skippedFiles: 0 },
                 runs: [],
                 benchmarks: [],
@@ -112,6 +116,8 @@ describe("web data loader", () => {
         const index = await loadAnalysisIndex();
         expect(index).not.toBeNull();
         expect(index?.totals.runs).toBe(0);
+        expect(index?.filterContext?.modelContains).toBe("gpt-test");
+        expect(index?.filterContext?.fastMode).toBe(false);
     });
 
     it("falls back to analysis-bundle index when analysis-index is missing", async () => {

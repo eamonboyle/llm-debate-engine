@@ -26,6 +26,9 @@ export default async function OverviewPage() {
         severityVsSolverToRevisionDelta: 0,
         severityVsRevisionToSynthesizerDelta: 0,
     };
+    const filterEntries = Object.entries(index.filterContext ?? {}).filter(
+        ([, value]) => value !== undefined && value !== null && value !== "",
+    );
 
     return (
         <section className="stack">
@@ -63,6 +66,33 @@ export default async function OverviewPage() {
                     value={confidenceCorrelation.severityVsRevisionToSynthesizerDelta}
                 />
             </div>
+
+            {filterEntries.length > 0 ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>Analysis filter context</h2>
+                    <p className="small muted">
+                        This index was generated from a filtered artifact subset.
+                    </p>
+                    <div className="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Filter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filterEntries.map(([key, value]) => (
+                                    <tr key={key}>
+                                        <td>{key}</td>
+                                        <td>{String(value)}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            ) : null}
 
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>Outlier runs (lowest avg similarity)</h2>

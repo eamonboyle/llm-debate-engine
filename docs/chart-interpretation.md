@@ -4,6 +4,10 @@ This document explains how to read the current research dashboard.
 
 ## Overview page
 
+If the index was generated with CLI filters, the overview now includes an
+**Analysis filter context** table. Treat all aggregate metrics and trends on that
+page as applying only to that filtered subset.
+
 ## Preset usage + benchmark trend charts
 
 - **Preset usage distribution** shows relative usage of `standard`, `research_deep`, and `fast_research`.
