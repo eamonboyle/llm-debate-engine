@@ -1,7 +1,25 @@
 import type { Metadata } from "next";
 import { RunCompareDeltaChart } from "../../../components/charts/RunCompareDeltaChart";
+import { InfoTooltip } from "../../../components/InfoTooltip";
 import { loadRunArtifacts } from "../../../lib/data";
 import { buildRunComparePayload } from "../../../lib/runCompare";
+
+function MetricCell({
+    label,
+    helpKey,
+}: {
+    label: string;
+    helpKey?: string;
+}) {
+    return (
+        <td>
+            <span className="table-header-with-help">
+                {label}
+                {helpKey && <InfoTooltip helpKey={helpKey} />}
+            </span>
+        </td>
+    );
+}
 
 export const metadata: Metadata = {
     title: "Run compare",
@@ -191,19 +209,25 @@ export default async function RunsComparePage({
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Step count</td>
+                                    <MetricCell label="Step count" helpKey="stepCount" />
                                     <td>{leftSnapshot.stepCount}</td>
                                     <td>{rightSnapshot.stepCount}</td>
                                     <td>{compare?.delta.stepCount}</td>
                                 </tr>
                                 <tr>
-                                    <td>Critique issue count</td>
+                                    <MetricCell
+                                        label="Critique issue count"
+                                        helpKey="issueCount"
+                                    />
                                     <td>{leftSnapshot.metrics.critique.issueCount}</td>
                                     <td>{rightSnapshot.metrics.critique.issueCount}</td>
                                     <td>{compare?.delta.critique.issueCount}</td>
                                 </tr>
                                 <tr>
-                                    <td>Solver confidence</td>
+                                    <MetricCell
+                                        label="Solver confidence"
+                                        helpKey="solverConfidence"
+                                    />
                                     <td>
                                         {formatMetric(leftSnapshot.metrics.confidence.solver)}
                                     </td>
@@ -215,7 +239,10 @@ export default async function RunsComparePage({
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Synthesizer confidence</td>
+                                    <MetricCell
+                                        label="Synthesizer confidence"
+                                        helpKey="synthConfidence"
+                                    />
                                     <td>
                                         {formatMetric(
                                             leftSnapshot.metrics.confidence.synthesizer,
@@ -233,7 +260,10 @@ export default async function RunsComparePage({
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Critique max severity</td>
+                                    <MetricCell
+                                        label="Critique max severity"
+                                        helpKey="maxSeverity"
+                                    />
                                     <td>
                                         {formatMetric(leftSnapshot.metrics.critique.maxSeverity)}
                                     </td>
@@ -247,7 +277,7 @@ export default async function RunsComparePage({
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Coherence</td>
+                                    <MetricCell label="Coherence" helpKey="coherence" />
                                     <td>{formatMetric(leftSnapshot.metrics.quality.coherence)}</td>
                                     <td>{formatMetric(rightSnapshot.metrics.quality.coherence)}</td>
                                     <td>
@@ -257,7 +287,10 @@ export default async function RunsComparePage({
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Completeness</td>
+                                    <MetricCell
+                                        label="Completeness"
+                                        helpKey="completeness"
+                                    />
                                     <td>
                                         {formatMetric(
                                             leftSnapshot.metrics.quality.completeness,
@@ -275,7 +308,10 @@ export default async function RunsComparePage({
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Factual risk</td>
+                                    <MetricCell
+                                        label="Factual risk"
+                                        helpKey="factualRisk"
+                                    />
                                     <td>
                                         {formatMetric(
                                             leftSnapshot.metrics.quality.factualRisk,
@@ -293,7 +329,10 @@ export default async function RunsComparePage({
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Evidence risk level</td>
+                                    <MetricCell
+                                        label="Evidence risk level"
+                                        helpKey="evidenceRiskLevel"
+                                    />
                                     <td>
                                         {formatMetric(
                                             leftSnapshot.metrics.research
@@ -314,7 +353,10 @@ export default async function RunsComparePage({
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Counterfactual mode count</td>
+                                    <MetricCell
+                                        label="Counterfactual mode count"
+                                        helpKey="cfModeCount"
+                                    />
                                     <td>
                                         {formatMetric(
                                             leftSnapshot.metrics.research
@@ -335,7 +377,10 @@ export default async function RunsComparePage({
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Top counterfactual mode</td>
+                                    <MetricCell
+                                        label="Top counterfactual mode"
+                                        helpKey="topCounterfactualMode"
+                                    />
                                     <td>
                                         {leftSnapshot.metrics.research
                                             .topCounterfactualFailureMode ?? "-"}

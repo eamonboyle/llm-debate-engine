@@ -10,6 +10,7 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import { InfoTooltip } from "../InfoTooltip";
 
 type BenchmarkDetailChartsProps = {
     benchmarkId: string;
@@ -93,7 +94,10 @@ export function BenchmarkDetailCharts({
         <div className="stack">
             <div className="two-col">
                 <div className="card" style={{ height: 340 }}>
-                    <h3 style={{ marginTop: 0 }}>Mode size distribution</h3>
+                    <h3 style={{ marginTop: 0 }}>
+                        Mode size distribution
+                        <InfoTooltip helpKey="modeStructure" />
+                    </h3>
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={modeData}>
                             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
@@ -111,7 +115,10 @@ export function BenchmarkDetailCharts({
                     </ResponsiveContainer>
                 </div>
                 <div className="card" style={{ height: 340 }}>
-                    <h3 style={{ marginTop: 0 }}>Threshold sensitivity</h3>
+                    <h3 style={{ marginTop: 0 }}>
+                        Threshold sensitivity
+                        <InfoTooltip helpKey="thresholdSensitivity" />
+                    </h3>
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={thresholdCounts}>
                             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
@@ -131,7 +138,10 @@ export function BenchmarkDetailCharts({
             </div>
 
             <div className="card">
-                <h3 style={{ marginTop: 0 }}>Pairwise similarity heatmap</h3>
+                <h3 style={{ marginTop: 0 }}>
+                    Pairwise similarity heatmap
+                    <InfoTooltip helpKey="pairwiseSimilarityHeatmap" />
+                </h3>
                 <p className="small muted">
                     source: {pairsSource} ({pairs.length} pairwise entries)
                 </p>

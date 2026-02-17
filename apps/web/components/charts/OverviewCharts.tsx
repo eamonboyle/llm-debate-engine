@@ -13,6 +13,7 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import { InfoTooltip } from "../InfoTooltip";
 
 type OverviewChartsProps = {
     issueTypeCounts: Record<string, number>;
@@ -61,7 +62,10 @@ export function OverviewCharts({
     return (
         <div className="two-col">
             <div className="card" style={{ height: 360 }}>
-                <h3 style={{ marginTop: 0 }}>Critique issue types</h3>
+                <h3 style={{ marginTop: 0 }}>
+                    Critique issue types
+                    <InfoTooltip helpKey="critiqueIssueTypes" />
+                </h3>
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={issueRows}>
                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
@@ -81,7 +85,10 @@ export function OverviewCharts({
                 </ResponsiveContainer>
             </div>
             <div className="card" style={{ height: 360 }}>
-                <h3 style={{ marginTop: 0 }}>Severity vs confidence delta</h3>
+                <h3 style={{ marginTop: 0 }}>
+                    Severity vs confidence delta
+                    <InfoTooltip helpKey="severityVsConfidenceDelta" />
+                </h3>
                 <ResponsiveContainer width="100%" height="100%">
                     <ScatterChart>
                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />

@@ -62,7 +62,11 @@ export default async function BenchmarksPage({
             </div>
 
             <div className="grid-4">
-                <MetricCard label="Total benchmarks" value={benchmarks.length} />
+                <MetricCard
+                    label="Total benchmarks"
+                    value={benchmarks.length}
+                    helpKey="benchmarkArtifacts"
+                />
                 <MetricCard
                     label="Filtered"
                     value={filtered.length}
@@ -76,9 +80,11 @@ export default async function BenchmarksPage({
                     label="Total runs"
                     value={filtered.reduce((s, b) => s + b.payload.runs, 0)}
                     helper="across filtered benchmarks"
+                    helpKey="runs"
                 />
                 <MetricCard
                     label="Avg entropy"
+                    helpKey="divergenceEntropy"
                     value={
                         filtered.length > 0
                             ? (
@@ -211,11 +217,20 @@ export default async function BenchmarksPage({
                                 />
                             ),
                         },
-                        { key: "runs", label: "Runs" },
-                        { key: "modeCount", label: "Modes" },
+                        {
+                            key: "runs",
+                            label: "Runs",
+                            helpKey: "runs",
+                        },
+                        {
+                            key: "modeCount",
+                            label: "Modes",
+                            helpKey: "modeCount",
+                        },
                         {
                             key: "entropy",
                             label: "Entropy",
+                            helpKey: "entropy",
                             render: (row) => (
                                 <span className="benchmark-entropy">
                                     {(row as { entropy: number }).entropy.toFixed(

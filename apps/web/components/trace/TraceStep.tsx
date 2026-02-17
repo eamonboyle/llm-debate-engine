@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { InfoTooltip } from "../InfoTooltip";
 
 type Step = {
     id: string;
@@ -251,13 +252,46 @@ export function TraceStep({
             <div className="trace-step-body">
                 <header className="trace-step-header">
                     <div className="trace-step-title">
-                        <strong>{step.agentName}</strong>
+                        <strong>
+                            {step.agentName}
+                            <InfoTooltip
+                                helpKey={
+                                    step.agentName in
+                                    {
+                                        SolverAgent: 1,
+                                        SolverRevisionAgent: 1,
+                                        SynthesizerAgent: 1,
+                                        EvidencePlannerAgent: 1,
+                                        CounterfactualAgent: 1,
+                                    }
+                                        ? step.agentName
+                                        : undefined
+                                }
+                            />
+                        </strong>
                         {kind && (
-                            <span
-                                className="trace-step-badge"
-                                style={{ background: kindColor }}
-                            >
-                                {kind}
+                            <span className="trace-step-badge-wrap">
+                                <span
+                                    className="trace-step-badge"
+                                    style={{ background: kindColor }}
+                                >
+                                    {kind}
+                                </span>
+                                <InfoTooltip
+                                    helpKey={
+                                        [
+                                            "proposal",
+                                            "critique",
+                                            "judgement",
+                                            "evidence_plan",
+                                            "counterfactual",
+                                            "decomposition",
+                                            "calibration",
+                                        ].includes(kind)
+                                            ? kind
+                                            : undefined
+                                    }
+                                />
                             </span>
                         )}
                     </div>

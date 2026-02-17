@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { InfoTooltip } from "./InfoTooltip";
 
 export type Column<T> = {
     key: string;
@@ -10,6 +11,8 @@ export type Column<T> = {
     showOnlyOnMobile?: boolean;
     /** CSS class for the table cell (desktop) */
     cellClass?: string;
+    /** Glossary key for contextual help tooltip in header */
+    helpKey?: string;
 };
 
 function truncate(str: string, maxLen: number): string {
@@ -47,7 +50,12 @@ export function ResponsiveTable<T extends Record<string, unknown>>({
                                     key={col.key}
                                     className={col.cellClass}
                                 >
-                                    {col.label}
+                                    <span className="table-header-with-help">
+                                        {col.label}
+                                        {col.helpKey && (
+                                            <InfoTooltip helpKey={col.helpKey} />
+                                        )}
+                                    </span>
                                 </th>
                             ))}
                         </tr>
@@ -75,7 +83,14 @@ export function ResponsiveTable<T extends Record<string, unknown>>({
                     <dl key={getRowId(row)} className="data-card">
                         {visibleColumns.map((col) => (
                             <div key={col.key}>
-                                <dt>{col.label}</dt>
+                                <dt>
+                                    <span className="table-header-with-help">
+                                        {col.label}
+                                        {col.helpKey && (
+                                            <InfoTooltip helpKey={col.helpKey} />
+                                        )}
+                                    </span>
+                                </dt>
                                 <dd>
                                     {col.render
                                         ? col.render(row)

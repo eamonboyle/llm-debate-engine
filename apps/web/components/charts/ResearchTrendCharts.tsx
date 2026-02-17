@@ -13,6 +13,7 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import { InfoTooltip } from "../InfoTooltip";
 
 type ResearchTrendChartsProps = {
     presets: Record<string, number>;
@@ -99,7 +100,10 @@ export function ResearchTrendCharts({
     return (
         <div className="trend-grid">
             <div className="card" style={{ height: 340 }}>
-                <h3 style={{ marginTop: 0 }}>Preset usage distribution</h3>
+                <h3 style={{ marginTop: 0 }}>
+                    Preset usage distribution
+                    <InfoTooltip helpKey="presetUsageDistribution" />
+                </h3>
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={presetRows}>
                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
@@ -118,7 +122,10 @@ export function ResearchTrendCharts({
                 </ResponsiveContainer>
             </div>
             <div className="card" style={{ height: 340 }}>
-                <h3 style={{ marginTop: 0 }}>Benchmark entropy & stability trend</h3>
+                <h3 style={{ marginTop: 0 }}>
+                    Benchmark entropy & stability trend
+                    <InfoTooltip helpKey="benchmarkEntropyStabilityTrend" />
+                </h3>
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={benchmarkTrendRows}>
                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
@@ -152,7 +159,10 @@ export function ResearchTrendCharts({
                 </ResponsiveContainer>
             </div>
             <div className="card" style={{ height: 340 }}>
-                <h3 style={{ marginTop: 0 }}>Evidence planner risk distribution</h3>
+                <h3 style={{ marginTop: 0 }}>
+                    Evidence planner risk distribution
+                    <InfoTooltip helpKey="evidencePlannerRiskDistribution" />
+                </h3>
                 {evidenceRiskRows.length === 0 ? (
                     <p className="small muted">
                         No evidence planner risk data available.
@@ -176,7 +186,10 @@ export function ResearchTrendCharts({
                 </ResponsiveContainer>
             </div>
             <div className="card" style={{ height: 340 }}>
-                <h3 style={{ marginTop: 0 }}>Evidence risk trend by run time</h3>
+                <h3 style={{ marginTop: 0 }}>
+                    Evidence risk trend by run time
+                    <InfoTooltip helpKey="evidenceRiskTrendByRunTime" />
+                </h3>
                 {runRiskTrendRows.length === 0 ? (
                     <p className="small muted">
                         No run-level evidence risk data available.

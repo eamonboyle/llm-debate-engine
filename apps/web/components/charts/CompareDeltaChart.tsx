@@ -10,6 +10,7 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import { InfoTooltip } from "../InfoTooltip";
 
 type CompareDeltaChartProps = {
     leftLabel: string;
@@ -39,7 +40,10 @@ export function CompareDeltaChart({
 
     return (
         <div className="card" style={{ height: 360 }}>
-            <h3 style={{ marginTop: 0 }}>Side-by-side metric comparison</h3>
+            <h3 style={{ marginTop: 0 }}>
+                Side-by-side metric comparison
+                <InfoTooltip helpKey="sideBySideMetricComparison" />
+            </h3>
             {chartRows.length === 0 ? (
                 <p className="small muted">
                     No numeric metrics available for chart comparison.

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Sora, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import { Nav } from "../components/Nav";
+import { TooltipProviderWrapper } from "../components/TooltipProviderWrapper";
 
 const sora = Sora({
     subsets: ["latin"],
@@ -69,10 +70,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             className={`${sora.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable}`}
         >
             <body className={ibmPlexSans.className}>
-                <main className="page-shell">
-                    <Nav />
-                    {children}
-                </main>
+                <TooltipProviderWrapper>
+                    <main className="page-shell">
+                        <Nav />
+                        {children}
+                    </main>
+                </TooltipProviderWrapper>
             </body>
         </html>
     );

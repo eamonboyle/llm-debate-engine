@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@radix-ui/react-tooltip": "^1.2.8",
     "next": "^16.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

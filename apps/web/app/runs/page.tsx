@@ -175,11 +175,20 @@ export default async function RunsPage({
                                 />
                             ),
                         },
-                        { key: "model", label: "Model" },
-                        { key: "preset", label: "Preset" },
+                        {
+                            key: "model",
+                            label: "Model",
+                            helpKey: "model",
+                        },
+                        {
+                            key: "preset",
+                            label: "Preset",
+                            helpKey: "preset",
+                        },
                         {
                             key: "fast",
                             label: "Fast",
+                            helpKey: "fastMode",
                             render: (row) =>
                                 (row as { fast: boolean }).fast ? "yes" : "no",
                         },

@@ -1036,6 +1036,12 @@ pre {
   flex-wrap: wrap;
 }
 
+.trace-step-badge-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
 .trace-step-badge {
   font-size: 0.6875rem;
   font-weight: 600;
@@ -1458,4 +1464,52 @@ pre {
   .trace-step-content {
     padding: 0.875rem 1rem;
   }
+}
+
+/* ==========================================================================
+   Info tooltip (help icons)
+   ========================================================================== */
+
+.info-tooltip-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-left: 0.25rem;
+  padding: 0;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-text-muted);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 50%;
+  cursor: help;
+  vertical-align: middle;
+  transition: color var(--duration-fast) ease, background var(--duration-fast) ease, border-color var(--duration-fast) ease;
+}
+
+.info-tooltip-trigger:hover {
+  color: var(--color-accent);
+  background: var(--color-accent-subtle);
+  border-color: var(--color-accent-muted);
+}
+
+.info-tooltip-content {
+  max-width: 280px;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+.table-header-with-help {
+  display: inline-flex;
+  align-items: center;
 }

@@ -59,18 +59,25 @@ export default async function OverviewPage() {
             </div>
 
             <div className="grid-4">
-                <MetricCard label="Run artifacts" value={index.totals.runs} />
+                <MetricCard
+                    label="Run artifacts"
+                    value={index.totals.runs}
+                    helpKey="runArtifacts"
+                />
                 <MetricCard
                     label="Benchmark artifacts"
                     value={index.totals.benchmarks}
+                    helpKey="benchmarkArtifacts"
                 />
                 <MetricCard
                     label="Skipped files"
                     value={index.totals.skippedFiles}
+                    helpKey="skippedFiles"
                 />
                 <MetricCard
                     label="Avg solver->revision Δ"
                     value={index.aggregates.confidenceDrift.solverToRevisionMean}
+                    helpKey="solverToRevisionDelta"
                 />
             </div>
 
@@ -78,18 +85,22 @@ export default async function OverviewPage() {
                 <MetricCard
                     label="corr(severity, solver->revision Δ)"
                     value={confidenceCorrelation.severityVsSolverToRevisionDelta}
+                    helpKey="severityVsSolverToRevisionDelta"
                 />
                 <MetricCard
                     label="corr(severity, revision->synth Δ)"
                     value={confidenceCorrelation.severityVsRevisionToSynthesizerDelta}
+                    helpKey="severityVsRevisionToSynthesizerDelta"
                 />
                 <MetricCard
                     label="Avg evidence-plan risk"
                     value={evidencePlanning.riskLevelMean}
+                    helpKey="evidenceRiskLevel"
                 />
                 <MetricCard
                     label="Unique counterfactual modes"
                     value={Object.keys(counterfactualFailureModeCounts).length}
+                    helpKey="uniqueCounterfactualModes"
                 />
             </div>
 
@@ -122,8 +133,12 @@ export default async function OverviewPage() {
                         columns={[
                             { key: "benchmarkId", label: "Benchmark" },
                             { key: "runId", label: "Run ID" },
-                            { key: "avgSimilarity", label: "Avg similarity" },
-                            { key: "zScore", label: "Z-score" },
+                            {
+                                key: "avgSimilarity",
+                                label: "Avg similarity",
+                                helpKey: "avgSimilarity",
+                            },
+                            { key: "zScore", label: "Z-score", helpKey: "zScore" },
                             {
                                 key: "open",
                                 label: "Open",
@@ -157,7 +172,11 @@ export default async function OverviewPage() {
                 ) : (
                     <ResponsiveTable
                         columns={[
-                            { key: "failureMode", label: "Failure mode" },
+                            {
+                                key: "failureMode",
+                                label: "Failure mode",
+                                helpKey: "counterfactualFailureModeCount",
+                            },
                             { key: "count", label: "Count" },
                         ]}
                         data={topCounterfactualFailureModes.map(([failureMode, count]) => ({
@@ -200,9 +219,17 @@ export default async function OverviewPage() {
                     columns={[
                         { key: "id", label: "ID" },
                         { key: "question", label: "Question" },
-                        { key: "pipelinePreset", label: "Preset" },
-                        { key: "model", label: "Model" },
-                        { key: "issueCount", label: "Issues" },
+                        {
+                            key: "pipelinePreset",
+                            label: "Preset",
+                            helpKey: "preset",
+                        },
+                        { key: "model", label: "Model", helpKey: "model" },
+                        {
+                            key: "issueCount",
+                            label: "Issues",
+                            helpKey: "issueCount",
+                        },
                         {
                             key: "finalAnswerPreview",
                             label: "Preview",
@@ -265,9 +292,17 @@ export default async function OverviewPage() {
                     columns={[
                         { key: "id", label: "ID" },
                         { key: "question", label: "Question" },
-                        { key: "runs", label: "Runs" },
-                        { key: "modeCount", label: "Mode count" },
-                        { key: "divergenceEntropy", label: "Entropy" },
+                        { key: "runs", label: "Runs", helpKey: "runs" },
+                        {
+                            key: "modeCount",
+                            label: "Mode count",
+                            helpKey: "modeCount",
+                        },
+                        {
+                            key: "divergenceEntropy",
+                            label: "Entropy",
+                            helpKey: "divergenceEntropy",
+                        },
                         {
                             key: "details",
                             label: "Open",

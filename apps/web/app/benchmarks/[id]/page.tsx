@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { loadBenchmarkById } from "../../../lib/data";
 import { MetricCard } from "../../../components/MetricCard";
+import { InfoTooltip } from "../../../components/InfoTooltip";
 import { ModeSizeBar } from "../../../components/benchmark/ModeSizeBar";
 import { BenchmarkDetailCharts } from "../../../components/charts/BenchmarkDetailCharts";
 import { ResponsiveTable } from "../../../components/ResponsiveTable";
@@ -74,19 +75,28 @@ export default async function BenchmarkDetailPage({
                         {benchmark.question}
                     </div>
                 </div>
-                <MetricCard label="Runs" value={benchmark.payload.runs} />
+                <MetricCard
+                    label="Runs"
+                    value={benchmark.payload.runs}
+                    helpKey="runs"
+                />
                 <MetricCard
                     label="Mode count"
                     value={benchmark.payload.modeCount}
+                    helpKey="modeCount"
                 />
                 <MetricCard
                     label="Divergence entropy"
                     value={benchmark.payload.divergenceEntropy}
+                    helpKey="divergenceEntropy"
                 />
             </div>
 
             <div className="card benchmark-mode-structure">
-                <h2 style={{ marginTop: 0 }}>Mode structure</h2>
+                <h2 style={{ marginTop: 0 }}>
+                    Mode structure
+                    <InfoTooltip helpKey="modeStructure" />
+                </h2>
                 <p className="small muted" style={{ marginBottom: "1rem" }}>
                     Distribution of runs across discovered answer modes
                 </p>
@@ -102,7 +112,10 @@ export default async function BenchmarkDetailPage({
             />
 
             <div className="card">
-                <h2 style={{ marginTop: 0 }}>Mode explorer</h2>
+                <h2 style={{ marginTop: 0 }}>
+                    Mode explorer
+                    <InfoTooltip helpKey="modeExplorer" />
+                </h2>
                 {modes.length === 0 ? (
                     <p className="muted">
                         No mode exemplars available in artifact.

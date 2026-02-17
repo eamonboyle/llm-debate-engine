@@ -9,6 +9,7 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import { InfoTooltip } from "../InfoTooltip";
 
 type RunCompareDeltaChartProps = {
     rows: Array<{
@@ -25,7 +26,10 @@ export function RunCompareDeltaChart({ rows }: RunCompareDeltaChartProps) {
 
     return (
         <div className="card" style={{ height: 360 }}>
-            <h3 style={{ marginTop: 0 }}>Run metric deltas (right - left)</h3>
+            <h3 style={{ marginTop: 0 }}>
+                Run metric deltas (right - left)
+                <InfoTooltip helpKey="runMetricDeltas" />
+            </h3>
             {chartRows.length === 0 ? (
                 <p className="small muted">
                     No numeric deltas available for chart comparison.
