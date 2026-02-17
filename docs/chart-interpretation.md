@@ -54,6 +54,9 @@ Interpretation:
 - The **Evidence planner risk distribution** bar chart shows score frequency.
   A right-skewed distribution (more 4/5 scores) indicates consistently
   high-risk planning conditions across runs.
+- The **Evidence risk trend by run time** line chart highlights temporal drift in
+  planning risk. Sustained upward movement can indicate progressively harder or
+  less-grounded question cohorts over time.
 
 ## 4) Outlier runs table
 

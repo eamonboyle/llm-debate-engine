@@ -23,6 +23,11 @@ type ResearchTrendChartsProps = {
         divergenceEntropy: number;
         stabilityPairwiseMean?: number;
     }>;
+    runs: Array<{
+        id: string;
+        createdAt: string;
+        evidenceRiskLevel?: number;
+    }>;
 };
 
 function shortLabel(id: string, createdAt: string, idx: number) {
@@ -37,6 +42,7 @@ export function ResearchTrendCharts({
     presets,
     evidenceRiskDistribution,
     benchmarks,
+    runs,
 }: ResearchTrendChartsProps) {
     const [mounted, setMounted] = useState(false);
     useEffect(() => {
@@ -68,10 +74,21 @@ export function ResearchTrendCharts({
             entropy: benchmark.divergenceEntropy,
             stability: benchmark.stabilityPairwiseMean ?? 0,
         }));
+    const runRiskTrendRows = runs
+        .slice()
+        .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+        .filter((run): run is { id: string; createdAt: string; evidenceRiskLevel: number } =>
+            typeof run.evidenceRiskLevel === "number",
+        )
+        .map((run, idx) => ({
+            label: shortLabel(run.id, run.createdAt, idx),
+            riskLevel: run.evidenceRiskLevel,
+        }));
 
     if (!mounted) {
         return (
-            <div className="three-col">
+            <div className="trend-grid">
+                <div className="card" style={{ height: 340 }} />
                 <div className="card" style={{ height: 340 }} />
                 <div className="card" style={{ height: 340 }} />
                 <div className="card" style={{ height: 340 }} />
@@ -80,7 +97,7 @@ export function ResearchTrendCharts({
     }
 
     return (
-        <div className="three-col">
+        <div className="trend-grid">
             <div className="card" style={{ height: 340 }}>
                 <h3 style={{ marginTop: 0 }}>Preset usage distribution</h3>
                 <ResponsiveContainer width="100%" height="100%">
@@ -136,6 +153,30 @@ export function ResearchTrendCharts({
                         <Legend />
                         <Bar dataKey="count" fill="#34d399" />
                     </BarChart>
+                </ResponsiveContainer>
+            </div>
+            <div className="card" style={{ height: 340 }}>
+                <h3 style={{ marginTop: 0 }}>Evidence risk trend by run time</h3>
+                {runRiskTrendRows.length === 0 ? (
+                    <p className="small muted">
+                        No run-level evidence risk data available.
+                    </p>
+                ) : null}
+                <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={runRiskTrendRows}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                        <XAxis dataKey="label" stroke="#94a3b8" />
+                        <YAxis stroke="#94a3b8" domain={[1, 5]} />
+                        <Tooltip />
+                        <Legend />
+                        <Line
+                            type="monotone"
+                            dataKey="riskLevel"
+                            stroke="#34d399"
+                            dot={false}
+                            name="evidenceRiskLevel"
+                        />
+                    </LineChart>
                 </ResponsiveContainer>
             </div>
         </div>

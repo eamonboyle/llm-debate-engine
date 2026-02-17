@@ -146,6 +146,11 @@ export default async function OverviewPage() {
                 evidenceRiskDistribution={
                     evidencePlanning.riskLevelDistribution ?? {}
                 }
+                runs={index.runs.map((run) => ({
+                    id: run.id,
+                    createdAt: run.createdAt,
+                    evidenceRiskLevel: run.research?.evidenceRiskLevel,
+                }))}
                 benchmarks={index.benchmarks.map((benchmark) => ({
                     id: benchmark.id,
                     createdAt: benchmark.createdAt,

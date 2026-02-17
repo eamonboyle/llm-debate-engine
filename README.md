@@ -185,6 +185,7 @@ This derived index powers the web dashboard.
 - `/` includes outlier run surfacing from pairwise similarity analysis
 - `/` includes preset distribution + benchmark entropy/stability trend charts
 - `/` includes evidence planner risk distribution chart
+- `/` includes evidence risk trend chart across runs
 - `/` shows analysis filter context when index is built with CLI filters
 - `/runs` Run artifact table
 - `/runs/[id]` Run trace viewer (step-by-step structured summaries + raw JSON)
