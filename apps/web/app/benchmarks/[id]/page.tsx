@@ -51,7 +51,7 @@ export default async function BenchmarkDetailPage({
                     {benchmark.id} ·{" "}
                     {new Date(benchmark.metadata.createdAt).toLocaleString()}
                 </p>
-                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                <div className="page-actions" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                     <Link
                         href={`/benchmarks/compare?left=${benchmark.id}`}
                         className="button secondary"

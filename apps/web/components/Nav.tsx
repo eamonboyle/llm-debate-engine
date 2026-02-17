@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 
 const NAV_ITEMS = [
     { href: "/", label: "Overview" },
@@ -25,6 +26,24 @@ function isActive(pathname: string, href: string): boolean {
 
 export function Nav() {
     const pathname = usePathname();
+    const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+    // Close mobile nav on route change
+    useEffect(() => {
+        setMobileNavOpen(false);
+    }, [pathname]);
+
+    // Prevent body scroll when mobile nav is open
+    useEffect(() => {
+        if (mobileNavOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [mobileNavOpen]);
 
     return (
         <header className="site-header">
@@ -33,7 +52,18 @@ export function Nav() {
                     <span className="site-brand-icon">◈</span>
                     <span className="site-brand-text">LLM Debate Research</span>
                 </Link>
-                <nav className="nav">
+                <button
+                    type="button"
+                    className="nav-toggle"
+                    aria-label="Toggle navigation menu"
+                    aria-expanded={mobileNavOpen}
+                    onClick={() => setMobileNavOpen((v) => !v)}
+                >
+                    <span className="nav-toggle-bar" />
+                    <span className="nav-toggle-bar" />
+                    <span className="nav-toggle-bar" />
+                </button>
+                <nav className={`nav ${mobileNavOpen ? "nav-open" : ""}`}>
                     {NAV_ITEMS.map((item) => {
                         const active = isActive(pathname, item.href);
                         return (
@@ -48,6 +78,11 @@ export function Nav() {
                     })}
                 </nav>
             </div>
+            <div
+                className={`nav-overlay ${mobileNavOpen ? "nav-overlay-visible" : ""}`}
+                aria-hidden="true"
+                onClick={() => setMobileNavOpen(false)}
+            />
         </header>
     );
 }

@@ -37,8 +37,8 @@ export function ResponsiveTable<T extends Record<string, unknown>>({
     );
 
     return (
-        <>
-            <div className="table-wrap">
+        <div className="responsive-table-container">
+            <div className="table-wrap table-wrap-swap">
                 <table>
                     <thead>
                         <tr>
@@ -91,7 +91,7 @@ export function ResponsiveTable<T extends Record<string, unknown>>({
                     </dl>
                 ))}
             </div>
-        </>
+        </div>
     );
 }
 

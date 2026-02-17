@@ -179,6 +179,7 @@ export default async function RunsComparePage({
                 <div className="stack">
                     <div className="card">
                         <h2 style={{ marginTop: 0 }}>Delta summary</h2>
+                        <div className="runs-compare-delta-wrap">
                         <table>
                             <thead>
                                 <tr>
@@ -347,6 +348,7 @@ export default async function RunsComparePage({
                                 </tr>
                             </tbody>
                         </table>
+                        </div>
                     </div>
                     <RunCompareDeltaChart rows={chartRows} />
                 </div>

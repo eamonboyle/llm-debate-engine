@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CollapsibleFilterCard } from "../../components/CollapsibleFilterCard";
 import { ResponsiveTable, TruncateText } from "../../components/ResponsiveTable";
 import { MetricCard } from "../../components/MetricCard";
 import {
@@ -91,7 +92,14 @@ export default async function BenchmarksPage({
                 />
             </div>
 
-            <form className="card" method="get">
+            <CollapsibleFilterCard
+                resultsSummary={
+                    <>
+                        {paging.startDisplay}-{paging.endDisplay} of {filtered.length} benchmarks
+                    </>
+                }
+            >
+            <form method="get">
                 <div className="filter-grid">
                     <input
                         name="q"
@@ -131,15 +139,7 @@ export default async function BenchmarksPage({
                         title="Created at or before"
                     />
                 </div>
-                <div
-                    style={{
-                        marginTop: "1rem",
-                        display: "grid",
-                        gap: "0.75rem",
-                        gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)",
-                        maxWidth: 360,
-                    }}
-                >
+                <div className="filter-sort-row">
                     <select name="sort" defaultValue={sort} className="input">
                         <option value="newest">Sort: newest first</option>
                         <option value="oldest">Sort: oldest first</option>
@@ -169,6 +169,7 @@ export default async function BenchmarksPage({
                     </span>
                 </div>
             </form>
+            </CollapsibleFilterCard>
 
             <div className="card">
                 <ResponsiveTable
