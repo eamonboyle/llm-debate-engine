@@ -1,67 +1,11 @@
 import { RunCompareDeltaChart } from "../../../components/charts/RunCompareDeltaChart";
-import { RunArtifact, loadRunArtifacts } from "../../../lib/data";
+import { loadRunArtifacts } from "../../../lib/data";
+import { buildRunComparePayload } from "../../../lib/runCompare";
 
 type CompareSearchParams = {
     left?: string;
     right?: string;
 };
-
-function toNumberOrNull(value: unknown): number | null {
-    return typeof value === "number" ? value : null;
-}
-
-function toRecord(value: unknown): Record<string, unknown> {
-    return value && typeof value === "object"
-        ? (value as Record<string, unknown>)
-        : {};
-}
-
-function getIssueCount(run: RunArtifact): number {
-    const critique = toRecord(run.run.metrics.critique);
-    const byType = toRecord(critique.byType);
-    let total = 0;
-    for (const value of Object.values(byType)) {
-        if (typeof value === "number" && Number.isFinite(value)) {
-            total += value;
-        }
-    }
-    return total;
-}
-
-function getRunSnapshot(run: RunArtifact) {
-    const confidence = toRecord(run.run.metrics.confidence);
-    const critique = toRecord(run.run.metrics.critique);
-    const quality = toRecord(run.run.metrics.quality);
-    return {
-        id: run.id,
-        question: run.question,
-        model: run.metadata.model,
-        pipelinePreset: run.metadata.pipelinePreset,
-        createdAt: run.metadata.createdAt,
-        stepCount: run.run.steps.length,
-        issueCount: getIssueCount(run),
-        confidence: {
-            solver: toNumberOrNull(confidence.solver),
-            revision: toNumberOrNull(confidence.revision),
-            synthesizer: toNumberOrNull(confidence.synthesizer),
-        },
-        critique: {
-            maxSeverity: toNumberOrNull(critique.maxSeverity),
-            avgSeverity: toNumberOrNull(critique.avgSeverity),
-        },
-        quality: {
-            coherence: toNumberOrNull(quality.coherence),
-            completeness: toNumberOrNull(quality.completeness),
-            factualRisk: toNumberOrNull(quality.factualRisk),
-            uncertaintyHandling: toNumberOrNull(quality.uncertaintyHandling),
-        },
-    };
-}
-
-function subtractOrNull(right: number | null, left: number | null) {
-    if (typeof left !== "number" || typeof right !== "number") return null;
-    return right - left;
-}
 
 function formatMetric(value: number | null) {
     return typeof value === "number" ? value.toFixed(3) : "-";
@@ -76,40 +20,32 @@ export default async function RunsComparePage({
     const runs = await loadRunArtifacts();
     const left = runs.find((run) => run.id === params.left) ?? null;
     const right = runs.find((run) => run.id === params.right) ?? null;
-    const leftSnapshot = left ? getRunSnapshot(left) : null;
-    const rightSnapshot = right ? getRunSnapshot(right) : null;
+    const compare = left && right ? buildRunComparePayload(left, right) : null;
+    const leftSnapshot = compare?.left ?? null;
+    const rightSnapshot = compare?.right ?? null;
 
     const chartRows =
-        leftSnapshot && rightSnapshot
+        compare
             ? [
                   {
                       metric: "stepCount",
-                      delta: rightSnapshot.stepCount - leftSnapshot.stepCount,
+                      delta: compare.delta.stepCount,
                   },
                   {
                       metric: "issueCount",
-                      delta: rightSnapshot.issueCount - leftSnapshot.issueCount,
+                      delta: compare.delta.critique.issueCount,
                   },
                   {
                       metric: "solverConf",
-                      delta: subtractOrNull(
-                          rightSnapshot.confidence.solver,
-                          leftSnapshot.confidence.solver,
-                      ),
+                      delta: compare.delta.confidence.solver,
                   },
                   {
                       metric: "synthConf",
-                      delta: subtractOrNull(
-                          rightSnapshot.confidence.synthesizer,
-                          leftSnapshot.confidence.synthesizer,
-                      ),
+                      delta: compare.delta.confidence.synthesizer,
                   },
                   {
                       metric: "factualRisk",
-                      delta: subtractOrNull(
-                          rightSnapshot.quality.factualRisk,
-                          leftSnapshot.quality.factualRisk,
-                      ),
+                      delta: compare.delta.quality.factualRisk,
                   },
               ]
             : [];
@@ -250,101 +186,101 @@ export default async function RunsComparePage({
                                     <td>Step count</td>
                                     <td>{leftSnapshot.stepCount}</td>
                                     <td>{rightSnapshot.stepCount}</td>
-                                    <td>
-                                        {rightSnapshot.stepCount - leftSnapshot.stepCount}
-                                    </td>
+                                    <td>{compare?.delta.stepCount}</td>
                                 </tr>
                                 <tr>
                                     <td>Critique issue count</td>
-                                    <td>{leftSnapshot.issueCount}</td>
-                                    <td>{rightSnapshot.issueCount}</td>
-                                    <td>
-                                        {rightSnapshot.issueCount - leftSnapshot.issueCount}
-                                    </td>
+                                    <td>{leftSnapshot.metrics.critique.issueCount}</td>
+                                    <td>{rightSnapshot.metrics.critique.issueCount}</td>
+                                    <td>{compare?.delta.critique.issueCount}</td>
                                 </tr>
                                 <tr>
                                     <td>Solver confidence</td>
-                                    <td>{formatMetric(leftSnapshot.confidence.solver)}</td>
-                                    <td>{formatMetric(rightSnapshot.confidence.solver)}</td>
                                     <td>
-                                        {formatMetric(
-                                            subtractOrNull(
-                                                rightSnapshot.confidence.solver,
-                                                leftSnapshot.confidence.solver,
-                                            ),
-                                        )}
+                                        {formatMetric(leftSnapshot.metrics.confidence.solver)}
+                                    </td>
+                                    <td>
+                                        {formatMetric(rightSnapshot.metrics.confidence.solver)}
+                                    </td>
+                                    <td>
+                                        {formatMetric(compare?.delta.confidence.solver ?? null)}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Synthesizer confidence</td>
                                     <td>
                                         {formatMetric(
-                                            leftSnapshot.confidence.synthesizer,
+                                            leftSnapshot.metrics.confidence.synthesizer,
                                         )}
                                     </td>
                                     <td>
                                         {formatMetric(
-                                            rightSnapshot.confidence.synthesizer,
+                                            rightSnapshot.metrics.confidence.synthesizer,
                                         )}
                                     </td>
                                     <td>
                                         {formatMetric(
-                                            subtractOrNull(
-                                                rightSnapshot.confidence.synthesizer,
-                                                leftSnapshot.confidence.synthesizer,
-                                            ),
+                                            compare?.delta.confidence.synthesizer ?? null,
                                         )}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Critique max severity</td>
-                                    <td>{formatMetric(leftSnapshot.critique.maxSeverity)}</td>
-                                    <td>{formatMetric(rightSnapshot.critique.maxSeverity)}</td>
+                                    <td>
+                                        {formatMetric(leftSnapshot.metrics.critique.maxSeverity)}
+                                    </td>
+                                    <td>
+                                        {formatMetric(rightSnapshot.metrics.critique.maxSeverity)}
+                                    </td>
                                     <td>
                                         {formatMetric(
-                                            subtractOrNull(
-                                                rightSnapshot.critique.maxSeverity,
-                                                leftSnapshot.critique.maxSeverity,
-                                            ),
+                                            compare?.delta.critique.maxSeverity ?? null,
                                         )}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Coherence</td>
-                                    <td>{formatMetric(leftSnapshot.quality.coherence)}</td>
-                                    <td>{formatMetric(rightSnapshot.quality.coherence)}</td>
+                                    <td>{formatMetric(leftSnapshot.metrics.quality.coherence)}</td>
+                                    <td>{formatMetric(rightSnapshot.metrics.quality.coherence)}</td>
                                     <td>
                                         {formatMetric(
-                                            subtractOrNull(
-                                                rightSnapshot.quality.coherence,
-                                                leftSnapshot.quality.coherence,
-                                            ),
+                                            compare?.delta.quality.coherence ?? null,
                                         )}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Completeness</td>
-                                    <td>{formatMetric(leftSnapshot.quality.completeness)}</td>
-                                    <td>{formatMetric(rightSnapshot.quality.completeness)}</td>
                                     <td>
                                         {formatMetric(
-                                            subtractOrNull(
-                                                rightSnapshot.quality.completeness,
-                                                leftSnapshot.quality.completeness,
-                                            ),
+                                            leftSnapshot.metrics.quality.completeness,
+                                        )}
+                                    </td>
+                                    <td>
+                                        {formatMetric(
+                                            rightSnapshot.metrics.quality.completeness,
+                                        )}
+                                    </td>
+                                    <td>
+                                        {formatMetric(
+                                            compare?.delta.quality.completeness ?? null,
                                         )}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Factual risk</td>
-                                    <td>{formatMetric(leftSnapshot.quality.factualRisk)}</td>
-                                    <td>{formatMetric(rightSnapshot.quality.factualRisk)}</td>
                                     <td>
                                         {formatMetric(
-                                            subtractOrNull(
-                                                rightSnapshot.quality.factualRisk,
-                                                leftSnapshot.quality.factualRisk,
-                                            ),
+                                            leftSnapshot.metrics.quality.factualRisk,
+                                        )}
+                                    </td>
+                                    <td>
+                                        {formatMetric(
+                                            rightSnapshot.metrics.quality.factualRisk,
+                                        )}
+                                    </td>
+                                    <td>
+                                        {formatMetric(
+                                            compare?.delta.quality.factualRisk ?? null,
                                         )}
                                     </td>
                                 </tr>
