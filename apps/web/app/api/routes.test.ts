@@ -6,6 +6,7 @@ import { GET as getAnalysis } from "./analysis/route";
 import { GET as getBenchmarks } from "./benchmarks/route";
 import { GET as getBenchmarksCompare } from "./benchmarks/compare/route";
 import { GET as getRunById } from "./runs/[id]/route";
+import { GET as getRunsCompare } from "./runs/compare/route";
 import { GET as getRuns } from "./runs/route";
 import { GET as getBenchmarkById } from "./benchmarks/[id]/route";
 import { GET as getBenchmarkPairsById } from "./benchmarks/[id]/pairs/route";
@@ -443,5 +444,141 @@ describe("web api routes", () => {
         expect(json.delta.modeCount).toBe(2);
         expect(json.delta.divergenceEntropy).toBeCloseTo(0.7, 3);
         expect(json.delta.stabilityPairwiseMean).toBeCloseTo(-0.3, 3);
+    });
+
+    it("returns run compare deltas", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_left.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_left",
+                question: "Q left",
+                metadata: {
+                    createdAt: "2025-01-01T00:00:00.000Z",
+                    model: "gpt",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run_left",
+                    finalAnswer: "A",
+                    steps: [{ id: "s1", agentName: "Solver", role: "solver" }],
+                    metrics: {
+                        confidence: {
+                            solver: 0.3,
+                            revision: 0.5,
+                            synthesizer: 0.6,
+                            solverToRevisionDelta: 0.2,
+                            revisionToSynthesizerDelta: 0.1,
+                        },
+                        critique: {
+                            byType: { factual_error: 1, omission: 1 },
+                            maxSeverity: 3,
+                            avgSeverity: 2.5,
+                        },
+                        quality: {
+                            coherence: 0.7,
+                            completeness: 0.6,
+                            factualRisk: 0.4,
+                            uncertaintyHandling: 0.5,
+                        },
+                    },
+                },
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "run_right.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_right",
+                question: "Q right",
+                metadata: {
+                    createdAt: "2025-01-01T00:00:00.000Z",
+                    model: "gpt",
+                    pipelinePreset: "research_deep",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run_right",
+                    finalAnswer: "B",
+                    steps: [
+                        { id: "s1", agentName: "Solver", role: "solver" },
+                        { id: "s2", agentName: "Skeptic", role: "skeptic" },
+                    ],
+                    metrics: {
+                        confidence: {
+                            solver: 0.6,
+                            revision: 0.7,
+                            synthesizer: 0.8,
+                            calibratedAdjusted: 0.75,
+                            solverToRevisionDelta: 0.1,
+                            revisionToSynthesizerDelta: 0.1,
+                        },
+                        critique: {
+                            byType: { factual_error: 3 },
+                            maxSeverity: 4,
+                            avgSeverity: 3.2,
+                        },
+                        quality: {
+                            coherence: 0.8,
+                            completeness: 0.9,
+                            factualRisk: 0.3,
+                            uncertaintyHandling: 0.8,
+                        },
+                    },
+                },
+            }),
+            "utf-8",
+        );
+
+        const response = await getRunsCompare(
+            new Request("http://localhost/api/runs/compare?left=run_left&right=run_right"),
+        );
+        expect(response.status).toBe(200);
+        const json = (await response.json()) as {
+            left: { id: string };
+            right: { id: string };
+            delta: {
+                stepCount: number;
+                confidence: {
+                    solver: number | null;
+                    calibratedAdjusted: number | null;
+                };
+                critique: {
+                    issueCount: number;
+                    maxSeverity: number | null;
+                };
+                quality: {
+                    completeness: number | null;
+                    factualRisk: number | null;
+                };
+            };
+        };
+        expect(json.left.id).toBe("run_left");
+        expect(json.right.id).toBe("run_right");
+        expect(json.delta.stepCount).toBe(1);
+        expect(json.delta.confidence.solver).toBeCloseTo(0.3, 3);
+        expect(json.delta.confidence.calibratedAdjusted).toBeNull();
+        expect(json.delta.critique.issueCount).toBe(1);
+        expect(json.delta.critique.maxSeverity).toBe(1);
+        expect(json.delta.quality.completeness).toBeCloseTo(0.3, 3);
+        expect(json.delta.quality.factualRisk).toBeCloseTo(-0.1, 3);
+    });
+
+    it("returns 400/404 for invalid run compare requests", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        const missingParams = await getRunsCompare(
+            new Request("http://localhost/api/runs/compare"),
+        );
+        expect(missingParams.status).toBe(400);
+
+        const notFound = await getRunsCompare(
+            new Request("http://localhost/api/runs/compare?left=a&right=b"),
+        );
+        expect(notFound.status).toBe(404);
     });
 });

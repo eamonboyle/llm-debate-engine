@@ -45,6 +45,23 @@ curl "http://localhost:3000/api/runs?model=gpt-5&preset=research_deep&fast=false
 
 Returns a single run artifact or 404.
 
+## `GET /api/runs/compare?left=:id&right=:id`
+
+Returns left/right run snapshots and computed deltas:
+
+- `stepCount`
+- `confidence` deltas (`solver`, `revision`, `synthesizer`,
+  `calibratedAdjusted`, stage deltas)
+- `critique` deltas (`issueCount`, `maxSeverity`, `avgSeverity`)
+- `quality` deltas (`coherence`, `completeness`, `factualRisk`,
+  `uncertaintyHandling`)
+
+Example:
+
+```bash
+curl "http://localhost:3000/api/runs/compare?left=run_a&right=run_b"
+```
+
 ## `GET /api/benchmarks`
 
 Returns benchmark artifact list with same filter params and pagination params as

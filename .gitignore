@@ -143,5 +143,5 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
 
-# Runs
-runs/
+# Runs artifacts (repo-root only)
+/runs/
