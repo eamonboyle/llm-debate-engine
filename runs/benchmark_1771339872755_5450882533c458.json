@@ -1,0 +1,231 @@
+{
+  "kind": "benchmark",
+  "id": "benchmark_1771339872755_5450882533c458",
+  "question": "Should we ban or heavily restrict facial recognition in public spaces?",
+  "metadata": {
+    "schemaVersion": 1,
+    "createdAt": "2026-02-17T14:51:12.755Z",
+    "model": "gpt-5-nano-2025-08-07",
+    "fastMode": false,
+    "pipelinePreset": "research_deep",
+    "pipelineVersion": "1.0.0",
+    "source": "cli"
+  },
+  "payload": {
+    "runs": 5,
+    "runIds": [
+      "run_1771339709420_a91bd240bd1a78",
+      "run_1771339672003_b154f33a776cc",
+      "run_1771339659374_ccefdd13095898",
+      "run_1771339853308_1eb452e8d01c3",
+      "run_1771339870601_367300aa6ecc7"
+    ],
+    "modeCount": 4,
+    "modeSizes": [
+      1,
+      2,
+      1,
+      1
+    ],
+    "divergenceEntropy": 1.9219280948873623,
+    "threshold": 0.9,
+    "modeCountAt0_8": 1,
+    "modeCountAt0_9": 4,
+    "modeCountAt0_95": 5,
+    "modes": [
+      {
+        "size": 1,
+        "members": [
+          0
+        ],
+        "exemplarIndex": 0,
+        "exemplarPreview": "Policy stance: default to banning broad public-space facial recognition deployments. Narrowly scoped pilots may be permitted only after a formal risk–benefit assessment that demonstrates compelling pu"
+      },
+      {
+        "size": 2,
+        "members": [
+          1,
+          2
+        ],
+        "exemplarIndex": 1,
+        "exemplarPreview": "Policy direction: adopt a phased, evidence-based, time-bound regulation of facial recognition in public spaces. Start with strong restrictions on public-space deployments, narrowly defined emergency e"
+      },
+      {
+        "size": 1,
+        "members": [
+          3
+        ],
+        "exemplarIndex": 3,
+        "exemplarPreview": "We should ban facial recognition in public spaces or apply very strict restrictions, supported by a robust governance framework. If a ban is not feasible in a jurisdiction, implement the strictest pra"
+      },
+      {
+        "size": 1,
+        "members": [
+          4
+        ],
+        "exemplarIndex": 4,
+        "exemplarPreview": "Default position: ban broad, general‑purpose, real‑time facial recognition in public spaces. Any permitted use should be highly restricted, narrowly defined, and governed by an explicit risk–benefit f"
+      }
+    ],
+    "modeCountClaimCentroid": 5,
+    "modeSizesClaimCentroid": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "divergenceEntropyClaimCentroid": 2.321928094887362,
+    "modeCountClaimCentroidAt0_8": 1,
+    "modeCountClaimCentroidAt0_9": 5,
+    "modeCountClaimCentroidAt0_95": 5,
+    "stabilityClaimCentroid": {
+      "pairwiseMean": 0.814,
+      "pairwiseStddev": 0.028,
+      "minPairwiseSimilarity": 0.759,
+      "maxPairwiseSimilarity": 0.856
+    },
+    "summary": {
+      "question": "Should we ban or heavily restrict facial recognition in public spaces?",
+      "runs": 5,
+      "runIds": [
+        "run_1771339709420_a91bd240bd1a78",
+        "run_1771339672003_b154f33a776cc",
+        "run_1771339659374_ccefdd13095898",
+        "run_1771339853308_1eb452e8d01c3",
+        "run_1771339870601_367300aa6ecc7"
+      ],
+      "consensus": {
+        "mean": 0.882,
+        "stddev": 0.02
+      },
+      "critiqueMaxSeverity": {
+        "mean": 5,
+        "stddev": 0
+      },
+      "modeCount": 4,
+      "modeSizes": [
+        1,
+        2,
+        1,
+        1
+      ],
+      "divergenceEntropy": 1.9219280948873623,
+      "threshold": 0.9,
+      "modeCountAt0_8": 1,
+      "modeCountAt0_9": 4,
+      "modeCountAt0_95": 5,
+      "modes": [
+        {
+          "size": 1,
+          "members": [
+            0
+          ],
+          "exemplarIndex": 0,
+          "exemplarPreview": "Policy stance: default to banning broad public-space facial recognition deployments. Narrowly scoped pilots may be permitted only after a formal risk–benefit assessment that demonstrates compelling pu"
+        },
+        {
+          "size": 2,
+          "members": [
+            1,
+            2
+          ],
+          "exemplarIndex": 1,
+          "exemplarPreview": "Policy direction: adopt a phased, evidence-based, time-bound regulation of facial recognition in public spaces. Start with strong restrictions on public-space deployments, narrowly defined emergency e"
+        },
+        {
+          "size": 1,
+          "members": [
+            3
+          ],
+          "exemplarIndex": 3,
+          "exemplarPreview": "We should ban facial recognition in public spaces or apply very strict restrictions, supported by a robust governance framework. If a ban is not feasible in a jurisdiction, implement the strictest pra"
+        },
+        {
+          "size": 1,
+          "members": [
+            4
+          ],
+          "exemplarIndex": 4,
+          "exemplarPreview": "Default position: ban broad, general‑purpose, real‑time facial recognition in public spaces. Any permitted use should be highly restricted, narrowly defined, and governed by an explicit risk–benefit f"
+        }
+      ],
+      "stability": {
+        "pairwiseMean": 0.858,
+        "pairwiseStddev": 0.032,
+        "minPairwiseSimilarity": 0.825,
+        "maxPairwiseSimilarity": 0.916,
+        "pairs": [
+          {
+            "i": 0,
+            "j": 1,
+            "similarity": 0.857
+          },
+          {
+            "i": 0,
+            "j": 2,
+            "similarity": 0.899
+          },
+          {
+            "i": 0,
+            "j": 3,
+            "similarity": 0.839
+          },
+          {
+            "i": 0,
+            "j": 4,
+            "similarity": 0.838
+          },
+          {
+            "i": 1,
+            "j": 2,
+            "similarity": 0.916
+          },
+          {
+            "i": 1,
+            "j": 3,
+            "similarity": 0.878
+          },
+          {
+            "i": 1,
+            "j": 4,
+            "similarity": 0.825
+          },
+          {
+            "i": 2,
+            "j": 3,
+            "similarity": 0.871
+          },
+          {
+            "i": 2,
+            "j": 4,
+            "similarity": 0.826
+          },
+          {
+            "i": 3,
+            "j": 4,
+            "similarity": 0.829
+          }
+        ]
+      },
+      "modeCountClaimCentroid": 5,
+      "modeSizesClaimCentroid": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "divergenceEntropyClaimCentroid": 2.321928094887362,
+      "modeCountClaimCentroidAt0_8": 1,
+      "modeCountClaimCentroidAt0_9": 5,
+      "modeCountClaimCentroidAt0_95": 5,
+      "stabilityClaimCentroid": {
+        "pairwiseMean": 0.814,
+        "pairwiseStddev": 0.028,
+        "minPairwiseSimilarity": 0.759,
+        "maxPairwiseSimilarity": 0.856
+      }
+    }
+  }
+}

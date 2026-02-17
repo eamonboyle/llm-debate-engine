@@ -1,0 +1,1334 @@
+{
+  "kind": "run",
+  "id": "run_1771337896110_a0e2f3069a7c28",
+  "question": "Is it defensible to prioritize the welfare of future generations over current ones?",
+  "run": {
+    "id": "run_1771337896110_a0e2f3069a7c28",
+    "createdAt": "2026-02-17T14:18:16.110Z",
+    "question": "Is it defensible to prioritize the welfare of future generations over current ones?",
+    "steps": [
+      {
+        "id": "step_1771337662433_67445c12b592b8",
+        "agentName": "QuestionDecomposerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:14:02.825Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a research planner. Decompose the question into sub-questions and hypotheses. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is it defensible to prioritize the welfare of future generations over current ones?"
+            }
+          ],
+          "schemaName": "QuestionDecomposition",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "framing": {
+                "type": "string"
+              },
+              "subQuestions": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "hypotheses": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "framing",
+              "subQuestions",
+              "hypotheses"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "framing": "Assess the normative and practical defensibility of giving priority to the welfare of future generations relative to current ones, considering ethical theories, measurement choices, and policy implications.",
+            "subQuestions": [
+              "What does it mean to 'prioritize' future welfare (strict preference, weighting, or discounting), and how would that translate into real-world decisions?",
+              "Which ethical theories (utilitarianism, prioritarianism, egalitarianism, rights-based theories, contractarianism) support or oppose prioritizing future generations, and what do they imply about justice across time?",
+              "How should welfare over time be defined and measured (happiness, capabilities, overall welfare), and what role do discount rates and time horizons play in that measurement?",
+              "How do discounting, risk, and deep uncertainty about the future affect the defensibility of prioritizing future welfare?",
+              "What are the principal objections to prioritizing future welfare (present-rights, duties to current individuals, fairness, and potential neglect of current suffering) and how might they be addressed?",
+              "In which domains (e.g., climate change, resource use, public health, education) is intergenerational prioritization more or less defensible, and why?",
+              "What institutional designs (legal rights, policy frameworks, international justice mechanisms) could implement defensible intergenerational prioritization without unduly harming present generations?",
+              "What assumptions about population, technology, and future preferences most influence defensibility, and how robust are conclusions to these assumptions?"
+            ],
+            "hypotheses": [
+              "Defensibility increases under low or zero discount rates with a long-term horizon and declines as the discount rate rises.",
+              "Prioritarian or egalitarian theories that weight the welfare of worse-off or equalizing across time tend to support prioritizing future welfare more than strict total-welfare utilitarianism.",
+              "Strong present-bias or assumptions of fixed present preferences weaken the defensibility of prioritizing future welfare unless offset by strong safeguards for current rights.",
+              "Intergenerational prioritization is more defensible in domains with large foreseeable long-term impacts and high uncertainty (e.g., climate change) than in domains with immediate, tangible harms.",
+              "Greater uncertainty about future populations, technologies, and values reduces the defensibility of fixed policies that prioritize future welfare and favors flexible or precautionary approaches.",
+              "Institutional designs that protect present individuals' rights while incorporating intergenerational weights can defend prioritizing future welfare without fully neglecting the needs of current generations."
+            ]
+          }
+        ],
+        "output": {
+          "kind": "decomposition",
+          "data": {
+            "framing": "Assess the normative and practical defensibility of giving priority to the welfare of future generations relative to current ones, considering ethical theories, measurement choices, and policy implications.",
+            "subQuestions": [
+              "What does it mean to 'prioritize' future welfare (strict preference, weighting, or discounting), and how would that translate into real-world decisions?",
+              "Which ethical theories (utilitarianism, prioritarianism, egalitarianism, rights-based theories, contractarianism) support or oppose prioritizing future generations, and what do they imply about justice across time?",
+              "How should welfare over time be defined and measured (happiness, capabilities, overall welfare), and what role do discount rates and time horizons play in that measurement?",
+              "How do discounting, risk, and deep uncertainty about the future affect the defensibility of prioritizing future welfare?",
+              "What are the principal objections to prioritizing future welfare (present-rights, duties to current individuals, fairness, and potential neglect of current suffering) and how might they be addressed?",
+              "In which domains (e.g., climate change, resource use, public health, education) is intergenerational prioritization more or less defensible, and why?",
+              "What institutional designs (legal rights, policy frameworks, international justice mechanisms) could implement defensible intergenerational prioritization without unduly harming present generations?",
+              "What assumptions about population, technology, and future preferences most influence defensibility, and how robust are conclusions to these assumptions?"
+            ],
+            "hypotheses": [
+              "Defensibility increases under low or zero discount rates with a long-term horizon and declines as the discount rate rises.",
+              "Prioritarian or egalitarian theories that weight the welfare of worse-off or equalizing across time tend to support prioritizing future welfare more than strict total-welfare utilitarianism.",
+              "Strong present-bias or assumptions of fixed present preferences weaken the defensibility of prioritizing future welfare unless offset by strong safeguards for current rights.",
+              "Intergenerational prioritization is more defensible in domains with large foreseeable long-term impacts and high uncertainty (e.g., climate change) than in domains with immediate, tangible harms.",
+              "Greater uncertainty about future populations, technologies, and values reduces the defensibility of fixed policies that prioritize future welfare and favors flexible or precautionary approaches.",
+              "Institutional designs that protect present individuals' rights while incorporating intergenerational weights can defend prioritizing future welfare without fully neglecting the needs of current generations."
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:14:22.433Z"
+      },
+      {
+        "id": "step_1771337677972_1d9359354a8ec",
+        "agentName": "EvidencePlannerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:14:22.433Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are an evidence planning specialist. Produce a compact evidence and verification plan for the question. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is it defensible to prioritize the welfare of future generations over current ones?"
+            }
+          ],
+          "schemaName": "EvidencePlan",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "evidenceRequirements": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "verificationChecks": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "majorUnknowns": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "riskLevel": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              }
+            },
+            "required": [
+              "evidenceRequirements",
+              "verificationChecks",
+              "majorUnknowns",
+              "riskLevel"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "evidenceRequirements": [
+              "Intergenerational justice theory and arguments for prioritizing future welfare (prioritarian, egalitarian, Rawlsian perspectives).",
+              "Discourse on discounting: justification of discount rates and their effect on long-term welfare weighting.",
+              "Empirical evidence on long-horizon policy impacts under alternative scenarios (climate, technology, resources, debt).",
+              "Case studies where long-term welfare considerations shaped policy (sustainability, precautionary principle).",
+              "Legal/ethical precedents and constitutional material addressing intergenerational equity."
+            ],
+            "verificationChecks": [
+              "Assess alignment with established intergenerational ethics theories and identify logical tensions.",
+              "Conduct sensitivity analyses on time horizons and discount rates to test robustness of conclusions.",
+              "Evaluate credibility and uncertainty of long-term projections; document assumptions explicitly.",
+              "Check for present-bias risks and apply safeguards to ensure future welfare is not systematically undervalued.",
+              "Incorporate interdisciplinary peer review and stakeholder input to validate defensibility."
+            ],
+            "majorUnknowns": [
+              "How to define and measure welfare across generations and allocate it fairly over time.",
+              "The appropriate social discount rate and justification across contexts.",
+              "Magnitude and imminence of existential and irreversible risks affecting future generations.",
+              "Uncertainty about population size and identity of future generations.",
+              "Trade-offs between current and future welfare under deep uncertainty."
+            ],
+            "riskLevel": 4
+          }
+        ],
+        "output": {
+          "kind": "evidence_plan",
+          "data": {
+            "evidenceRequirements": [
+              "Intergenerational justice theory and arguments for prioritizing future welfare (prioritarian, egalitarian, Rawlsian perspectives).",
+              "Discourse on discounting: justification of discount rates and their effect on long-term welfare weighting.",
+              "Empirical evidence on long-horizon policy impacts under alternative scenarios (climate, technology, resources, debt).",
+              "Case studies where long-term welfare considerations shaped policy (sustainability, precautionary principle).",
+              "Legal/ethical precedents and constitutional material addressing intergenerational equity."
+            ],
+            "verificationChecks": [
+              "Assess alignment with established intergenerational ethics theories and identify logical tensions.",
+              "Conduct sensitivity analyses on time horizons and discount rates to test robustness of conclusions.",
+              "Evaluate credibility and uncertainty of long-term projections; document assumptions explicitly.",
+              "Check for present-bias risks and apply safeguards to ensure future welfare is not systematically undervalued.",
+              "Incorporate interdisciplinary peer review and stakeholder input to validate defensibility."
+            ],
+            "majorUnknowns": [
+              "How to define and measure welfare across generations and allocate it fairly over time.",
+              "The appropriate social discount rate and justification across contexts.",
+              "Magnitude and imminence of existential and irreversible risks affecting future generations.",
+              "Uncertainty about population size and identity of future generations.",
+              "Trade-offs between current and future welfare under deep uncertainty."
+            ],
+            "riskLevel": 4
+          }
+        },
+        "completedAt": "2026-02-17T14:14:37.972Z"
+      },
+      {
+        "id": "step_1771337693446_1439914f2b924",
+        "agentName": "SolverAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T14:14:37.972Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.4,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver. Produce a direct, helpful answer. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is it defensible to prioritize the welfare of future generations over current ones?\n\nEvidence plan:\n{\n  \"evidenceRequirements\": [\n    \"Intergenerational justice theory and arguments for prioritizing future welfare (prioritarian, egalitarian, Rawlsian perspectives).\",\n    \"Discourse on discounting: justification of discount rates and their effect on long-term welfare weighting.\",\n    \"Empirical evidence on long-horizon policy impacts under alternative scenarios (climate, technology, resources, debt).\",\n    \"Case studies where long-term welfare considerations shaped policy (sustainability, precautionary principle).\",\n    \"Legal/ethical precedents and constitutional material addressing intergenerational equity.\"\n  ],\n  \"verificationChecks\": [\n    \"Assess alignment with established intergenerational ethics theories and identify logical tensions.\",\n    \"Conduct sensitivity analyses on time horizons and discount rates to test robustness of conclusions.\",\n    \"Evaluate credibility and uncertainty of long-term projections; document assumptions explicitly.\",\n    \"Check for present-bias risks and apply safeguards to ensure future welfare is not systematically undervalued.\",\n    \"Incorporate interdisciplinary peer review and stakeholder input to validate defensibility.\"\n  ],\n  \"majorUnknowns\": [\n    \"How to define and measure welfare across generations and allocate it fairly over time.\",\n    \"The appropriate social discount rate and justification across contexts.\",\n    \"Magnitude and imminence of existential and irreversible risks affecting future generations.\",\n    \"Uncertainty about population size and identity of future generations.\",\n    \"Trade-offs between current and future welfare under deep uncertainty.\"\n  ],\n  \"riskLevel\": 4\n}"
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Defensible in many major ethical frameworks, but not unconditionally. Intergenerational justice theories—prioritarianism, egalitarianism, and Rawlsian justice—argue that the welfare of future generations should count in current decision-making and that burdens and benefits should be weighed across time. Yet defensibility depends critically on how we treat discounting, horizon length, and risk: excessive discounting can undervalue future welfare, while transparent, context-sensitive discounting and robustness checks can preserve long-term considerations. Empirical and policy evidence from climate, technology, resources, and fiscal domains shows that long-horizon outcomes can be meaningfully affected by present choices, though results depend on assumptions and scenarios. Legal and ethical precedents increasingly recognize intergenerational equity, although enforceability varies. For defensible policies, design should include explicit long-term welfare weighting, sensitivity analyses over discount rates and time horizons, credible uncertainty assessment, safeguards against present-bias and undervaluing the future, and broad interdisciplinary stakeholder input.",
+            "keyClaims": [
+              "Intergenerational justice theories justify weighting future welfare in decision-making (prioritarian, egalitarian, Rawlsian).",
+              "Defensibility hinges on discounting choices, time horizons, and risk management.",
+              "Long-horizon policy impacts matter (climate, technology, resources, debt) and can be improved by prioritizing future welfare under appropriate assumptions.",
+              "Legal and ethical precedents acknowledge intergenerational equity, though enforceability varies.",
+              "Defensible design requires transparency, sensitivity analyses, uncertainty assessment, safeguards against present-bias, and stakeholder input."
+            ],
+            "assumptions": [
+              "Welfare can be defined and compared across generations.",
+              "A social discount rate can reflect intertemporal preferences and context and be justified.",
+              "Future generations exist and can be morally relevant to current policy.",
+              "Long-term projections are credible when assumptions are explicit and uncertainties are acknowledged.",
+              "It is possible to design policies that credibly protect or enhance future welfare without unduly sacrificing current welfare."
+            ],
+            "confidence": 0.65
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Defensible in many major ethical frameworks, but not unconditionally. Intergenerational justice theories—prioritarianism, egalitarianism, and Rawlsian justice—argue that the welfare of future generations should count in current decision-making and that burdens and benefits should be weighed across time. Yet defensibility depends critically on how we treat discounting, horizon length, and risk: excessive discounting can undervalue future welfare, while transparent, context-sensitive discounting and robustness checks can preserve long-term considerations. Empirical and policy evidence from climate, technology, resources, and fiscal domains shows that long-horizon outcomes can be meaningfully affected by present choices, though results depend on assumptions and scenarios. Legal and ethical precedents increasingly recognize intergenerational equity, although enforceability varies. For defensible policies, design should include explicit long-term welfare weighting, sensitivity analyses over discount rates and time horizons, credible uncertainty assessment, safeguards against present-bias and undervaluing the future, and broad interdisciplinary stakeholder input.",
+            "keyClaims": [
+              "Intergenerational justice theories justify weighting future welfare in decision-making (prioritarian, egalitarian, Rawlsian).",
+              "Defensibility hinges on discounting choices, time horizons, and risk management.",
+              "Long-horizon policy impacts matter (climate, technology, resources, debt) and can be improved by prioritizing future welfare under appropriate assumptions.",
+              "Legal and ethical precedents acknowledge intergenerational equity, though enforceability varies.",
+              "Defensible design requires transparency, sensitivity analyses, uncertainty assessment, safeguards against present-bias, and stakeholder input."
+            ],
+            "assumptions": [
+              "Welfare can be defined and compared across generations.",
+              "A social discount rate can reflect intertemporal preferences and context and be justified.",
+              "Future generations exist and can be morally relevant to current policy.",
+              "Long-term projections are credible when assumptions are explicit and uncertainties are acknowledged.",
+              "It is possible to design policies that credibly protect or enhance future welfare without unduly sacrificing current welfare."
+            ],
+            "confidence": 0.65
+          }
+        },
+        "completedAt": "2026-02-17T14:14:53.446Z"
+      },
+      {
+        "id": "step_1771337726318_84170287863588",
+        "agentName": "SkepticAgent",
+        "role": "skeptic",
+        "createdAt": "2026-02-17T14:14:53.446Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Skeptic. Critique the proposal rigorously. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is it defensible to prioritize the welfare of future generations over current ones?\n\nTarget agent: SolverAgent\n\nProposal JSON:\n{\n  \"answer\": \"Defensible in many major ethical frameworks, but not unconditionally. Intergenerational justice theories—prioritarianism, egalitarianism, and Rawlsian justice—argue that the welfare of future generations should count in current decision-making and that burdens and benefits should be weighed across time. Yet defensibility depends critically on how we treat discounting, horizon length, and risk: excessive discounting can undervalue future welfare, while transparent, context-sensitive discounting and robustness checks can preserve long-term considerations. Empirical and policy evidence from climate, technology, resources, and fiscal domains shows that long-horizon outcomes can be meaningfully affected by present choices, though results depend on assumptions and scenarios. Legal and ethical precedents increasingly recognize intergenerational equity, although enforceability varies. For defensible policies, design should include explicit long-term welfare weighting, sensitivity analyses over discount rates and time horizons, credible uncertainty assessment, safeguards against present-bias and undervaluing the future, and broad interdisciplinary stakeholder input.\",\n  \"keyClaims\": [\n    \"Intergenerational justice theories justify weighting future welfare in decision-making (prioritarian, egalitarian, Rawlsian).\",\n    \"Defensibility hinges on discounting choices, time horizons, and risk management.\",\n    \"Long-horizon policy impacts matter (climate, technology, resources, debt) and can be improved by prioritizing future welfare under appropriate assumptions.\",\n    \"Legal and ethical precedents acknowledge intergenerational equity, though enforceability varies.\",\n    \"Defensible design requires transparency, sensitivity analyses, uncertainty assessment, safeguards against present-bias, and stakeholder input.\"\n  ],\n  \"assumptions\": [\n    \"Welfare can be defined and compared across generations.\",\n    \"A social discount rate can reflect intertemporal preferences and context and be justified.\",\n    \"Future generations exist and can be morally relevant to current policy.\",\n    \"Long-term projections are credible when assumptions are explicit and uncertainties are acknowledged.\",\n    \"It is possible to design policies that credibly protect or enhance future welfare without unduly sacrificing current welfare.\"\n  ],\n  \"confidence\": 0.65\n}\n\nFind issues. Prefer factual risk, missing edge cases, ambiguity, and overconfidence."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "The claim that intergenerational weighting is widely accepted across priortarianism, egalitarianism, and Rawlsian justice is oversimplified; these theories diverge on how to aggregate across generations and on what 'welfare' means."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "Non-identity problem is not addressed: policies can change who exists in the future, complicating the idea of 'future welfare' weighting and raising questions about whether it's meaningful to compare welfare across trajectories that yield different people."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Within-future-generation distributional concerns are ignored: how to allocate benefits and burdens among people born in different generations or with different timings within those generations."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "Discount rate justification remains under-specified: what rate, how to choose it, and how to update it as evidence evolves; risk of normative capture or misinterpretation."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "Welfare definition across generations is unclear: are we using utility, capabilities, wellbeing, or multi-dimensional welfare? How to compare across vastly different contexts and time scales."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No explicit horizon or explicit handling of deep uncertainty; scenario planning or robust decision making methods are not described."
+              },
+              {
+                "severity": 3,
+                "type": "overconfidence",
+                "note": "Claim that policies can 'credibly protect or enhance future welfare without unduly sacrificing current welfare' overstates feasibility given political constraints and distributional trade-offs."
+              },
+              {
+                "severity": 2,
+                "type": "missing",
+                "note": "Legal/ethical precedents are cited but without specifics, citations, or acknowledgment of enforcement limits; needs concrete references."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "The claim that intergenerational weighting is widely accepted across priortarianism, egalitarianism, and Rawlsian justice is oversimplified; these theories diverge on how to aggregate across generations and on what 'welfare' means."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "Non-identity problem is not addressed: policies can change who exists in the future, complicating the idea of 'future welfare' weighting and raising questions about whether it's meaningful to compare welfare across trajectories that yield different people."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Within-future-generation distributional concerns are ignored: how to allocate benefits and burdens among people born in different generations or with different timings within those generations."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "Discount rate justification remains under-specified: what rate, how to choose it, and how to update it as evidence evolves; risk of normative capture or misinterpretation."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "Welfare definition across generations is unclear: are we using utility, capabilities, wellbeing, or multi-dimensional welfare? How to compare across vastly different contexts and time scales."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No explicit horizon or explicit handling of deep uncertainty; scenario planning or robust decision making methods are not described."
+              },
+              {
+                "severity": 3,
+                "type": "overconfidence",
+                "note": "Claim that policies can 'credibly protect or enhance future welfare without unduly sacrificing current welfare' overstates feasibility given political constraints and distributional trade-offs."
+              },
+              {
+                "severity": 2,
+                "type": "missing",
+                "note": "Legal/ethical precedents are cited but without specifics, citations, or acknowledgment of enforcement limits; needs concrete references."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:15:26.318Z"
+      },
+      {
+        "id": "step_1771337754020_c372c10c408878",
+        "agentName": "RedTeamAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:15:26.318Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a red-team analyst. Find high-risk failure modes and adversarial weaknesses in the answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is it defensible to prioritize the welfare of future generations over current ones?\n\nCandidate answer JSON:\n{\n  \"answer\": \"Defensible in many major ethical frameworks, but not unconditionally. Intergenerational justice theories—prioritarianism, egalitarianism, and Rawlsian justice—argue that the welfare of future generations should count in current decision-making and that burdens and benefits should be weighed across time. Yet defensibility depends critically on how we treat discounting, horizon length, and risk: excessive discounting can undervalue future welfare, while transparent, context-sensitive discounting and robustness checks can preserve long-term considerations. Empirical and policy evidence from climate, technology, resources, and fiscal domains shows that long-horizon outcomes can be meaningfully affected by present choices, though results depend on assumptions and scenarios. Legal and ethical precedents increasingly recognize intergenerational equity, although enforceability varies. For defensible policies, design should include explicit long-term welfare weighting, sensitivity analyses over discount rates and time horizons, credible uncertainty assessment, safeguards against present-bias and undervaluing the future, and broad interdisciplinary stakeholder input.\",\n  \"keyClaims\": [\n    \"Intergenerational justice theories justify weighting future welfare in decision-making (prioritarian, egalitarian, Rawlsian).\",\n    \"Defensibility hinges on discounting choices, time horizons, and risk management.\",\n    \"Long-horizon policy impacts matter (climate, technology, resources, debt) and can be improved by prioritizing future welfare under appropriate assumptions.\",\n    \"Legal and ethical precedents acknowledge intergenerational equity, though enforceability varies.\",\n    \"Defensible design requires transparency, sensitivity analyses, uncertainty assessment, safeguards against present-bias, and stakeholder input.\"\n  ],\n  \"assumptions\": [\n    \"Welfare can be defined and compared across generations.\",\n    \"A social discount rate can reflect intertemporal preferences and context and be justified.\",\n    \"Future generations exist and can be morally relevant to current policy.\",\n    \"Long-term projections are credible when assumptions are explicit and uncertainties are acknowledged.\",\n    \"It is possible to design policies that credibly protect or enhance future welfare without unduly sacrificing current welfare.\"\n  ],\n  \"confidence\": 0.65\n}\n\nReturn a rigorous critique with severe issues when justified."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "Candidate answer on intergenerational welfare defensibility",
+            "issues": [
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Note: This critique focuses on high-severity philosophical and practical gaps rather than minor wording issues."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Measurement and aggregation of welfare across generations are ill-defined; there is no explicit method for aggregating utility, wellbeing, rights, or capabilities over non-identical future populations."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Non-identity problem and intergenerational ethics: the answer presumes commensurability of welfare across future individuals; it fails to discuss that actions may change who exists, complicating any welfare weighting across generations."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Distributional considerations within future generations (inequality, rights, vulnerability) are not addressed; aggregating welfare ignores intra-future disparities."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Horizon length design is underspecified; no guidance on how long horizons should be or how to guard against horizon bias."
+              },
+              {
+                "severity": 2,
+                "type": "ambiguity",
+                "note": "Discounting justification is treated as acceptable; ethical arguments against heavy discounting or for alternative rates are not acknowledged; no transparent rationale for rate selection."
+              },
+              {
+                "severity": 2,
+                "type": "factual",
+                "note": "Statement about legal/ethical precedents recognizing intergenerational equity may overstate enforceability; needs examples and caveats across jurisdictions."
+              },
+              {
+                "severity": 2,
+                "type": "missing",
+                "note": "Practical implementation gaps: no discussion of governance, accountability, or stakeholder inclusion to ensure future welfare weighting; risk of bias or capture in policy design."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "Candidate answer on intergenerational welfare defensibility",
+            "issues": [
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Note: This critique focuses on high-severity philosophical and practical gaps rather than minor wording issues."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Measurement and aggregation of welfare across generations are ill-defined; there is no explicit method for aggregating utility, wellbeing, rights, or capabilities over non-identical future populations."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Non-identity problem and intergenerational ethics: the answer presumes commensurability of welfare across future individuals; it fails to discuss that actions may change who exists, complicating any welfare weighting across generations."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Distributional considerations within future generations (inequality, rights, vulnerability) are not addressed; aggregating welfare ignores intra-future disparities."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Horizon length design is underspecified; no guidance on how long horizons should be or how to guard against horizon bias."
+              },
+              {
+                "severity": 2,
+                "type": "ambiguity",
+                "note": "Discounting justification is treated as acceptable; ethical arguments against heavy discounting or for alternative rates are not acknowledged; no transparent rationale for rate selection."
+              },
+              {
+                "severity": 2,
+                "type": "factual",
+                "note": "Statement about legal/ethical precedents recognizing intergenerational equity may overstate enforceability; needs examples and caveats across jurisdictions."
+              },
+              {
+                "severity": 2,
+                "type": "missing",
+                "note": "Practical implementation gaps: no discussion of governance, accountability, or stakeholder inclusion to ensure future welfare weighting; risk of bias or capture in policy design."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:15:54.020Z"
+      },
+      {
+        "id": "step_1771337783818_a44cc3ef376c1",
+        "agentName": "SolverRevisionAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T14:15:54.020Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver revising your proposal after critique. Produce a revised AgentResponse that addresses all issues.\n\nInternal reasoning (do not put this in output fields):\n- Reference each critique issue in your reasoning before producing output.\n- Consider how each issue affects the answer, keyClaims, assumptions, and confidence.\n\nOutput requirements:\n- Change answer and keyClaims accordingly to address the critique.\n- Adjust confidence downward when critique severity is high (4–5).\n- Add assumptions when critique indicates ambiguity (type \"ambiguity\").\n- Keep keyClaims clean and non-duplicated.\n- Do not include any JSON fragments inside keyClaims. keyClaims must be plain English sentences only.\n- Do not reference the critique or revision process in answer, keyClaims, or assumptions—output only the revised content.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is it defensible to prioritize the welfare of future generations over current ones?\n\nOriginal proposal:\n{\n  \"answer\": \"Defensible in many major ethical frameworks, but not unconditionally. Intergenerational justice theories—prioritarianism, egalitarianism, and Rawlsian justice—argue that the welfare of future generations should count in current decision-making and that burdens and benefits should be weighed across time. Yet defensibility depends critically on how we treat discounting, horizon length, and risk: excessive discounting can undervalue future welfare, while transparent, context-sensitive discounting and robustness checks can preserve long-term considerations. Empirical and policy evidence from climate, technology, resources, and fiscal domains shows that long-horizon outcomes can be meaningfully affected by present choices, though results depend on assumptions and scenarios. Legal and ethical precedents increasingly recognize intergenerational equity, although enforceability varies. For defensible policies, design should include explicit long-term welfare weighting, sensitivity analyses over discount rates and time horizons, credible uncertainty assessment, safeguards against present-bias and undervaluing the future, and broad interdisciplinary stakeholder input.\",\n  \"keyClaims\": [\n    \"Intergenerational justice theories justify weighting future welfare in decision-making (prioritarian, egalitarian, Rawlsian).\",\n    \"Defensibility hinges on discounting choices, time horizons, and risk management.\",\n    \"Long-horizon policy impacts matter (climate, technology, resources, debt) and can be improved by prioritizing future welfare under appropriate assumptions.\",\n    \"Legal and ethical precedents acknowledge intergenerational equity, though enforceability varies.\",\n    \"Defensible design requires transparency, sensitivity analyses, uncertainty assessment, safeguards against present-bias, and stakeholder input.\"\n  ],\n  \"assumptions\": [\n    \"Welfare can be defined and compared across generations.\",\n    \"A social discount rate can reflect intertemporal preferences and context and be justified.\",\n    \"Future generations exist and can be morally relevant to current policy.\",\n    \"Long-term projections are credible when assumptions are explicit and uncertainties are acknowledged.\",\n    \"It is possible to design policies that credibly protect or enhance future welfare without unduly sacrificing current welfare.\"\n  ],\n  \"confidence\": 0.65\n}\n\nCritique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"The claim that intergenerational weighting is widely accepted across priortarianism, egalitarianism, and Rawlsian justice is oversimplified; these theories diverge on how to aggregate across generations and on what 'welfare' means.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"missing\",\n      \"note\": \"Non-identity problem is not addressed: policies can change who exists in the future, complicating the idea of 'future welfare' weighting and raising questions about whether it's meaningful to compare welfare across trajectories that yield different people.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Within-future-generation distributional concerns are ignored: how to allocate benefits and burdens among people born in different generations or with different timings within those generations.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"ambiguity\",\n      \"note\": \"Discount rate justification remains under-specified: what rate, how to choose it, and how to update it as evidence evolves; risk of normative capture or misinterpretation.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"ambiguity\",\n      \"note\": \"Welfare definition across generations is unclear: are we using utility, capabilities, wellbeing, or multi-dimensional welfare? How to compare across vastly different contexts and time scales.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"No explicit horizon or explicit handling of deep uncertainty; scenario planning or robust decision making methods are not described.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"overconfidence\",\n      \"note\": \"Claim that policies can 'credibly protect or enhance future welfare without unduly sacrificing current welfare' overstates feasibility given political constraints and distributional trade-offs.\"\n    },\n    {\n      \"severity\": 2,\n      \"type\": \"missing\",\n      \"note\": \"Legal/ethical precedents are cited but without specifics, citations, or acknowledgment of enforcement limits; needs concrete references.\"\n    }\n  ]\n}\n\nRevise the proposal to address each issue. Return the revised AgentResponse as valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Defensible in many ethical traditions, but only with explicit methods and honest limits. The non-identity problem shows we should evaluate policies by the welfare of the people who would exist under each option, not by assuming the same individuals across generations. Therefore, intergenerational weighting requires a clear, multi-dimensional notion of welfare (well-being, capabilities, health, education, security, and freedom) and a transparent method for comparing across very different contexts. Within-future-generation distribution matters: benefits and burdens should be examined for different cohorts and timing within future generations, not solely by total aggregates. Discounting, horizons, and deep uncertainty must be handled openly: specify a plausible range of social discount rates, declare the horizon(s) being considered, and use sensitivity analyses and robust decision-making (scenario planning and adaptive policies) to test robustness. There is empirical relevance: long-horizon outcomes in climate, technology, debt, and resource use are sensitive to present choices, but results depend on assumptions and scenarios. Legal and ethical precedents acknowledge intergenerational equity, though enforcement varies by domain and jurisdiction; policy work should cite concrete frameworks and acknowledge limits. For defensible design, adopt explicit long-term welfare weighting or multi-criteria evaluation, conduct transparent sensitivity analyses over discount rates and horizons, implement credible uncertainty assessments, guard against present-bias, and secure broad interdisciplinary stakeholder input.",
+            "keyClaims": [
+              "The non-identity problem requires evaluating policies by the welfare of future people who would exist under each option, not by assuming identical individuals across generations.",
+              "Welfare across generations should be multi-dimensional (well-being, capabilities, health, education, freedom) and defined clearly rather than reduced to a single metric.",
+              "Distribution within future generations matters and should be addressed, including how benefits and burdens fall across cohorts and timing within future generations.",
+              "Defensibility depends on explicit discounting, horizons, and treatment of deep uncertainty, with sensitivity analyses and robust decision-making used to test robustness.",
+              "Long-term impacts can be meaningfully influenced by present choices, but credibility depends on transparent assumptions and credible evidence.",
+              "Legal and ethical precedents acknowledge intergenerational equity, but enforcement is uneven; concrete references should be provided."
+            ],
+            "assumptions": [
+              "Welfare is multi-dimensional and comparable across generations via explicit criteria.",
+              "Policies can be evaluated by the welfare of future people who would exist under each policy option (non-identity).",
+              "A defensible analysis uses a range of social discount rates and explicit horizons, updated as evidence evolves.",
+              "Deep uncertainty is acknowledged with scenario planning and robust decision methods.",
+              "Results require credible evidence and transparent methodology; explicit references improve legitimacy and enforceability."
+            ],
+            "confidence": 0.4
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Defensible in many ethical traditions, but only with explicit methods and honest limits. The non-identity problem shows we should evaluate policies by the welfare of the people who would exist under each option, not by assuming the same individuals across generations. Therefore, intergenerational weighting requires a clear, multi-dimensional notion of welfare (well-being, capabilities, health, education, security, and freedom) and a transparent method for comparing across very different contexts. Within-future-generation distribution matters: benefits and burdens should be examined for different cohorts and timing within future generations, not solely by total aggregates. Discounting, horizons, and deep uncertainty must be handled openly: specify a plausible range of social discount rates, declare the horizon(s) being considered, and use sensitivity analyses and robust decision-making (scenario planning and adaptive policies) to test robustness. There is empirical relevance: long-horizon outcomes in climate, technology, debt, and resource use are sensitive to present choices, but results depend on assumptions and scenarios. Legal and ethical precedents acknowledge intergenerational equity, though enforcement varies by domain and jurisdiction; policy work should cite concrete frameworks and acknowledge limits. For defensible design, adopt explicit long-term welfare weighting or multi-criteria evaluation, conduct transparent sensitivity analyses over discount rates and horizons, implement credible uncertainty assessments, guard against present-bias, and secure broad interdisciplinary stakeholder input.",
+            "keyClaims": [
+              "The non-identity problem requires evaluating policies by the welfare of future people who would exist under each option, not by assuming identical individuals across generations.",
+              "Welfare across generations should be multi-dimensional (well-being, capabilities, health, education, freedom) and defined clearly rather than reduced to a single metric.",
+              "Distribution within future generations matters and should be addressed, including how benefits and burdens fall across cohorts and timing within future generations.",
+              "Defensibility depends on explicit discounting, horizons, and treatment of deep uncertainty, with sensitivity analyses and robust decision-making used to test robustness.",
+              "Long-term impacts can be meaningfully influenced by present choices, but credibility depends on transparent assumptions and credible evidence.",
+              "Legal and ethical precedents acknowledge intergenerational equity, but enforcement is uneven; concrete references should be provided."
+            ],
+            "assumptions": [
+              "Welfare is multi-dimensional and comparable across generations via explicit criteria.",
+              "Policies can be evaluated by the welfare of future people who would exist under each policy option (non-identity).",
+              "A defensible analysis uses a range of social discount rates and explicit horizons, updated as evidence evolves.",
+              "Deep uncertainty is acknowledged with scenario planning and robust decision methods.",
+              "Results require credible evidence and transparent methodology; explicit references improve legitimacy and enforceability."
+            ],
+            "confidence": 0.4
+          }
+        },
+        "completedAt": "2026-02-17T14:16:23.818Z"
+      },
+      {
+        "id": "step_1771337824297_bc3cce43f29bf",
+        "agentName": "SynthesizerAgent",
+        "role": "synthesizer",
+        "createdAt": "2026-02-17T14:16:23.818Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Synthesizer. Given the question, the solver's original proposal, the skeptic's critique, and the solver's revision, produce a final synthesized AgentResponse.\n\nInternal reasoning (do not put this in output fields):\n- Consider how the critique and revision improved or changed the proposal.\n- Synthesize the best elements into a coherent final answer.\n\nOutput requirements:\n- Produce a clear, well-supported answer that incorporates valid points from the debate.\n- keyClaims must be plain English sentences only. No JSON fragments.\n- Set confidence appropriately based on the debate outcome.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is it defensible to prioritize the welfare of future generations over current ones?\n\nSolver proposal:\n{\n  \"answer\": \"Defensible in many major ethical frameworks, but not unconditionally. Intergenerational justice theories—prioritarianism, egalitarianism, and Rawlsian justice—argue that the welfare of future generations should count in current decision-making and that burdens and benefits should be weighed across time. Yet defensibility depends critically on how we treat discounting, horizon length, and risk: excessive discounting can undervalue future welfare, while transparent, context-sensitive discounting and robustness checks can preserve long-term considerations. Empirical and policy evidence from climate, technology, resources, and fiscal domains shows that long-horizon outcomes can be meaningfully affected by present choices, though results depend on assumptions and scenarios. Legal and ethical precedents increasingly recognize intergenerational equity, although enforceability varies. For defensible policies, design should include explicit long-term welfare weighting, sensitivity analyses over discount rates and time horizons, credible uncertainty assessment, safeguards against present-bias and undervaluing the future, and broad interdisciplinary stakeholder input.\",\n  \"keyClaims\": [\n    \"Intergenerational justice theories justify weighting future welfare in decision-making (prioritarian, egalitarian, Rawlsian).\",\n    \"Defensibility hinges on discounting choices, time horizons, and risk management.\",\n    \"Long-horizon policy impacts matter (climate, technology, resources, debt) and can be improved by prioritizing future welfare under appropriate assumptions.\",\n    \"Legal and ethical precedents acknowledge intergenerational equity, though enforceability varies.\",\n    \"Defensible design requires transparency, sensitivity analyses, uncertainty assessment, safeguards against present-bias, and stakeholder input.\"\n  ],\n  \"assumptions\": [\n    \"Welfare can be defined and compared across generations.\",\n    \"A social discount rate can reflect intertemporal preferences and context and be justified.\",\n    \"Future generations exist and can be morally relevant to current policy.\",\n    \"Long-term projections are credible when assumptions are explicit and uncertainties are acknowledged.\",\n    \"It is possible to design policies that credibly protect or enhance future welfare without unduly sacrificing current welfare.\"\n  ],\n  \"confidence\": 0.65\n}\n\nSkeptic critique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"The claim that intergenerational weighting is widely accepted across priortarianism, egalitarianism, and Rawlsian justice is oversimplified; these theories diverge on how to aggregate across generations and on what 'welfare' means.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"missing\",\n      \"note\": \"Non-identity problem is not addressed: policies can change who exists in the future, complicating the idea of 'future welfare' weighting and raising questions about whether it's meaningful to compare welfare across trajectories that yield different people.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Within-future-generation distributional concerns are ignored: how to allocate benefits and burdens among people born in different generations or with different timings within those generations.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"ambiguity\",\n      \"note\": \"Discount rate justification remains under-specified: what rate, how to choose it, and how to update it as evidence evolves; risk of normative capture or misinterpretation.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"ambiguity\",\n      \"note\": \"Welfare definition across generations is unclear: are we using utility, capabilities, wellbeing, or multi-dimensional welfare? How to compare across vastly different contexts and time scales.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"No explicit horizon or explicit handling of deep uncertainty; scenario planning or robust decision making methods are not described.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"overconfidence\",\n      \"note\": \"Claim that policies can 'credibly protect or enhance future welfare without unduly sacrificing current welfare' overstates feasibility given political constraints and distributional trade-offs.\"\n    },\n    {\n      \"severity\": 2,\n      \"type\": \"missing\",\n      \"note\": \"Legal/ethical precedents are cited but without specifics, citations, or acknowledgment of enforcement limits; needs concrete references.\"\n    }\n  ]\n}\n\nSolver revision:\n{\n  \"answer\": \"Defensible in many ethical traditions, but only with explicit methods and honest limits. The non-identity problem shows we should evaluate policies by the welfare of the people who would exist under each option, not by assuming the same individuals across generations. Therefore, intergenerational weighting requires a clear, multi-dimensional notion of welfare (well-being, capabilities, health, education, security, and freedom) and a transparent method for comparing across very different contexts. Within-future-generation distribution matters: benefits and burdens should be examined for different cohorts and timing within future generations, not solely by total aggregates. Discounting, horizons, and deep uncertainty must be handled openly: specify a plausible range of social discount rates, declare the horizon(s) being considered, and use sensitivity analyses and robust decision-making (scenario planning and adaptive policies) to test robustness. There is empirical relevance: long-horizon outcomes in climate, technology, debt, and resource use are sensitive to present choices, but results depend on assumptions and scenarios. Legal and ethical precedents acknowledge intergenerational equity, though enforcement varies by domain and jurisdiction; policy work should cite concrete frameworks and acknowledge limits. For defensible design, adopt explicit long-term welfare weighting or multi-criteria evaluation, conduct transparent sensitivity analyses over discount rates and horizons, implement credible uncertainty assessments, guard against present-bias, and secure broad interdisciplinary stakeholder input.\",\n  \"keyClaims\": [\n    \"The non-identity problem requires evaluating policies by the welfare of future people who would exist under each option, not by assuming identical individuals across generations.\",\n    \"Welfare across generations should be multi-dimensional (well-being, capabilities, health, education, freedom) and defined clearly rather than reduced to a single metric.\",\n    \"Distribution within future generations matters and should be addressed, including how benefits and burdens fall across cohorts and timing within future generations.\",\n    \"Defensibility depends on explicit discounting, horizons, and treatment of deep uncertainty, with sensitivity analyses and robust decision-making used to test robustness.\",\n    \"Long-term impacts can be meaningfully influenced by present choices, but credibility depends on transparent assumptions and credible evidence.\",\n    \"Legal and ethical precedents acknowledge intergenerational equity, but enforcement is uneven; concrete references should be provided.\"\n  ],\n  \"assumptions\": [\n    \"Welfare is multi-dimensional and comparable across generations via explicit criteria.\",\n    \"Policies can be evaluated by the welfare of future people who would exist under each policy option (non-identity).\",\n    \"A defensible analysis uses a range of social discount rates and explicit horizons, updated as evidence evolves.\",\n    \"Deep uncertainty is acknowledged with scenario planning and robust decision methods.\",\n    \"Results require credible evidence and transparent methodology; explicit references improve legitimacy and enforceability.\"\n  ],\n  \"confidence\": 0.4\n}\n\nSynthesize a final AgentResponse from the debate. Return valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Defensible in many ethical traditions, but only if we commit to explicit methods and honest limits. The non-identity problem requires evaluating policies by the welfare of the people who would exist under each option, not by assuming identical individuals across generations. Welfare must be multi-dimensional (well-being, capabilities, health, education, security, freedom) and defined clearly rather than reduced to a single metric. Distribution within future generations matters and should be addressed across cohorts and timing within those generations. Discounting, horizons, and deep uncertainty must be handled openly: specify a plausible range of social discount rates and horizons, and use sensitivity analyses and robust decision-making (scenario planning, adaptive policies) to test robustness. Long-term policy outcomes are and can be meaningfully influenced by present choices, but credibility depends on transparent assumptions and credible evidence. Legal and ethical precedents acknowledge intergenerational equity, though enforcement varies; policy work should cite concrete frameworks and acknowledge limits. For defensible design, use explicit long-term weighting or multi-criteria evaluation, conduct transparent sensitivity analyses, implement credible uncertainty assessments, guard against present-bias, and secure broad interdisciplinary stakeholder input.",
+            "keyClaims": [
+              "The non-identity problem requires evaluating policies by the welfare of future people who would exist under each option, not by assuming identical individuals across generations.",
+              "Welfare across generations should be multi-dimensional (well-being, capabilities, health, education, security, freedom) and defined clearly rather than reduced to a single metric.",
+              "Distribution within future generations matters and should be addressed across cohorts and timing within those generations.",
+              "Defensibility depends on explicit discounting, horizons, and treatment of deep uncertainty, with sensitivity analyses and robust decision-making used to test robustness.",
+              "Long-term impacts can be meaningfully influenced by present choices, but credibility depends on transparent assumptions and credible evidence.",
+              "Legal and ethical precedents acknowledge intergenerational equity, though enforcement varies; policy work should cite concrete frameworks and acknowledge limits.",
+              "For defensible design, use explicit long-term weighting or multi-criteria evaluation, conduct transparent sensitivity analyses, implement credible uncertainty assessments, guard against present-bias, and secure broad interdisciplinary stakeholder input."
+            ],
+            "assumptions": [
+              "Welfare is multi-dimensional and can be compared across generations using explicit criteria.",
+              "Policies can be evaluated by the welfare of future people who would exist under each policy option (non-identity).",
+              "A defensible analysis uses a range of social discount rates and explicit horizons, updated as evidence evolves.",
+              "Deep uncertainty is acknowledged with scenario planning and robust decision methods.",
+              "Transparent methodology and credible evidence, with explicit references, improve legitimacy and enforceability."
+            ],
+            "confidence": 0.6
+          },
+          {
+            "answer": "Defensible in many ethical traditions, but only with explicit methods, transparent assumptions, and defensible evidence. The non-identity problem requires evaluating policies by the welfare of the people who would exist under each option, not by assuming identical individuals across generations. Welfare should be multi-dimensional (well-being, capabilities, health, education, security, freedom) and defined clearly. Distribution within future generations should be addressed across cohorts and timing. Discounting, horizons, and deep uncertainty should be handled openly with plausible ranges for discount rates and horizons, plus sensitivity analyses or robust decision-making to test robustness. Long-term policy outcomes are influenced by present choices, but credibility depends on transparent assumptions and credible evidence. Intergenerational equity is recognized in legal and ethical precedents, though enforcement varies; policy work should cite concrete frameworks and acknowledge limits. For defensible design, use long-term weighting or multi-criteria evaluation, conduct transparent sensitivity analyses, implement credible uncertainty assessments, guard against present-bias, and secure broad interdisciplinary stakeholder input.",
+            "keyClaims": [
+              "Policies should be judged by the welfare of future people who would exist under each option.",
+              "Welfare should be multi-dimensional (well-being, capabilities, health, education, security, freedom).",
+              "Distribution across cohorts and timing matters within future generations.",
+              "Explicit discounting, horizons, and treatment of deep uncertainty are needed, with sensitivity analyses or robust decision-making.",
+              "Credible policy outcomes require transparent assumptions and credible evidence.",
+              "Intergenerational equity is recognized in law and ethics, though enforcement varies.",
+              "Defensible design uses long-term weighting or multi-criteria evaluation with stakeholder input."
+            ],
+            "assumptions": [
+              "Welfare is multi-dimensional and comparable across generations.",
+              "Policies can be evaluated based on the welfare of future people under each option.",
+              "A range of discount rates and horizons should be considered.",
+              "Deep uncertainty should be addressed with scenario planning and robust methods.",
+              "Transparent methodology and credible evidence improve legitimacy.",
+              "Counterfactual risk: Non-identity problem makes cross-generational welfare comparison ill-defined because the people who exist under each option differ.",
+              "Judge summary: The proposal presents a coherent, transparency-focused framework for long-term policy evaluation with attention to uncertainty and multi-dimensional welfare, but it leaves major methodological gaps (non-identity handling, intra-future distribution, explicit aggregation methods, horizon and discounting specifics) and lacks concrete references or governance guidance. Substantial work is needed to render it practically defensible."
+            ],
+            "confidence": 0.72
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Defensible in many ethical traditions, but only with explicit methods, transparent assumptions, and defensible evidence. The non-identity problem requires evaluating policies by the welfare of the people who would exist under each option, not by assuming identical individuals across generations. Welfare should be multi-dimensional (well-being, capabilities, health, education, security, freedom) and defined clearly. Distribution within future generations should be addressed across cohorts and timing. Discounting, horizons, and deep uncertainty should be handled openly with plausible ranges for discount rates and horizons, plus sensitivity analyses or robust decision-making to test robustness. Long-term policy outcomes are influenced by present choices, but credibility depends on transparent assumptions and credible evidence. Intergenerational equity is recognized in legal and ethical precedents, though enforcement varies; policy work should cite concrete frameworks and acknowledge limits. For defensible design, use long-term weighting or multi-criteria evaluation, conduct transparent sensitivity analyses, implement credible uncertainty assessments, guard against present-bias, and secure broad interdisciplinary stakeholder input.",
+            "keyClaims": [
+              "Policies should be judged by the welfare of future people who would exist under each option.",
+              "Welfare should be multi-dimensional (well-being, capabilities, health, education, security, freedom).",
+              "Distribution across cohorts and timing matters within future generations.",
+              "Explicit discounting, horizons, and treatment of deep uncertainty are needed, with sensitivity analyses or robust decision-making.",
+              "Credible policy outcomes require transparent assumptions and credible evidence.",
+              "Intergenerational equity is recognized in law and ethics, though enforcement varies.",
+              "Defensible design uses long-term weighting or multi-criteria evaluation with stakeholder input."
+            ],
+            "assumptions": [
+              "Welfare is multi-dimensional and comparable across generations.",
+              "Policies can be evaluated based on the welfare of future people under each option.",
+              "A range of discount rates and horizons should be considered.",
+              "Deep uncertainty should be addressed with scenario planning and robust methods.",
+              "Transparent methodology and credible evidence improve legitimacy.",
+              "Counterfactual risk: Non-identity problem makes cross-generational welfare comparison ill-defined because the people who exist under each option differ.",
+              "Judge summary: The proposal presents a coherent, transparency-focused framework for long-term policy evaluation with attention to uncertainty and multi-dimensional welfare, but it leaves major methodological gaps (non-identity handling, intra-future distribution, explicit aggregation methods, horizon and discounting specifics) and lacks concrete references or governance guidance. Substantial work is needed to render it practically defensible."
+            ],
+            "confidence": 0.72
+          }
+        },
+        "completedAt": "2026-02-17T14:17:04.297Z"
+      },
+      {
+        "id": "step_1771337862249_a5fe2e2c976148",
+        "agentName": "CounterfactualAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:17:04.297Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a counterfactual analyst. Identify plausible failure modes, trigger conditions, and mitigations for the proposal. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is it defensible to prioritize the welfare of future generations over current ones?\n\nProposal:\n{\n  \"answer\": \"Defensible in many ethical traditions, but only with explicit methods, transparent assumptions, and defensible evidence. The non-identity problem requires evaluating policies by the welfare of the people who would exist under each option, not by assuming identical individuals across generations. Welfare should be multi-dimensional (well-being, capabilities, health, education, security, freedom) and defined clearly. Distribution within future generations should be addressed across cohorts and timing. Discounting, horizons, and deep uncertainty should be handled openly with plausible ranges for discount rates and horizons, plus sensitivity analyses or robust decision-making to test robustness. Long-term policy outcomes are influenced by present choices, but credibility depends on transparent assumptions and credible evidence. Intergenerational equity is recognized in legal and ethical precedents, though enforcement varies; policy work should cite concrete frameworks and acknowledge limits. For defensible design, use long-term weighting or multi-criteria evaluation, conduct transparent sensitivity analyses, implement credible uncertainty assessments, guard against present-bias, and secure broad interdisciplinary stakeholder input.\",\n  \"keyClaims\": [\n    \"Policies should be judged by the welfare of future people who would exist under each option.\",\n    \"Welfare should be multi-dimensional (well-being, capabilities, health, education, security, freedom).\",\n    \"Distribution across cohorts and timing matters within future generations.\",\n    \"Explicit discounting, horizons, and treatment of deep uncertainty are needed, with sensitivity analyses or robust decision-making.\",\n    \"Credible policy outcomes require transparent assumptions and credible evidence.\",\n    \"Intergenerational equity is recognized in law and ethics, though enforcement varies.\",\n    \"Defensible design uses long-term weighting or multi-criteria evaluation with stakeholder input.\"\n  ],\n  \"assumptions\": [\n    \"Welfare is multi-dimensional and comparable across generations.\",\n    \"Policies can be evaluated based on the welfare of future people under each option.\",\n    \"A range of discount rates and horizons should be considered.\",\n    \"Deep uncertainty should be addressed with scenario planning and robust methods.\",\n    \"Transparent methodology and credible evidence improve legitimacy.\"\n  ],\n  \"confidence\": 0.6\n}"
+            }
+          ],
+          "schemaName": "Counterfactual",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "failureModes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "triggerConditions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "mitigations": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "failureModes",
+              "triggerConditions",
+              "mitigations"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "failureModes": [
+              "Non-identity problem makes cross-generational welfare comparison ill-defined because the people who exist under each option differ.",
+              "Difficulty defining and measuring multi-dimensional welfare across generations (well-being, capabilities, health, education, security, freedom) in a consistent way.",
+              "Discounting choices or horizon selection systematically undervalue future welfare, biasing policy in favor of present generations.",
+              "Intra-generational distributional effects within future cohorts are neglected, leading to inequality or unfairness among future people.",
+              "High sensitivity to long-horizon forecasts and deep uncertainty yields brittle recommendations that fail under plausible scenarios.",
+              "Model and data uncertainty propagates through evaluations, undermining credibility of results.",
+              "Overreliance on quantitative metrics crowds out normative debate and risks misrepresenting non-quantifiable values.",
+              "Political incentives and present bias lead to weak commitment to long-term welfare goals.",
+              "Designs may create perverse incentives or gaming opportunities that improve measured welfare without improving real welfare.",
+              "Governance and enforcement challenges across jurisdictions threaten enforcement of intergenerational commitments."
+            ],
+            "triggerConditions": [
+              "Policy options change the set of individuals who exist (non-identity), complicating welfare comparison.",
+              "There is no agreed, transparent, multi-dimensional welfare metric or scoring method.",
+              "Analyses rely on a single (often steeply biased) discount rate or horizon.",
+              "Future inequality within generations emerges due to structural changes or policy impacts.",
+              "Forecasts involve deep uncertainty or potential structural breaks (e.g., climate tipping points, tech discontinuities).",
+              "Data or models used in evaluation are incomplete, biased, or poorly specified.",
+              "There is insufficient pluralistic normative input or contested moral frameworks.",
+              "Short-term political cycles or lobbying undermine long-term commitments.",
+              "Policy design incentivizes gaming or targets that improve indicators without improving welfare.",
+              "Cross-jurisdictional differences or weak legal frameworks undermine enforcement of intergenerational impact commitments."
+            ],
+            "mitigations": [
+              "Adopt a transparent, multi-criteria, non-identity aware evaluation framework; publish explicit welfare definitions and scoring rules.",
+              "Define and track a core set of cross-generational welfare indicators; decompose by cohort and timing; include distributional analyses.",
+              "Present a range of discount rates and horizons; conduct sensitivity analyses and robust decision-making (e.g., scenario planning, stress tests).",
+              "Incorporate distributional considerations within future generations (equity weighting, sufficiency principles) and conduct scenario-based equity assessments.",
+              "Use robust decision-making approaches to cope with deep uncertainty; include stress tests and adaptive policies.",
+              "Document data sources, validate models, use triangulation and backcasting; quantify uncertainty and propagate it through results.",
+              "Involve plural normative perspectives through deliberative processes; integrate qualitative values alongside quantitative metrics.",
+              "Establish credible long-term governance mechanisms, independent oversight, sunset clauses, and legal commitments to intergenerational goals.",
+              "Design metrics to minimize gaming; implement process and outcome evaluations; include checks and audits.",
+              "Harmonize international norms and establish cross-jurisdictional standards; ensure transparency and accountability mechanisms."
+            ]
+          }
+        ],
+        "output": {
+          "kind": "counterfactual",
+          "data": {
+            "failureModes": [
+              "Non-identity problem makes cross-generational welfare comparison ill-defined because the people who exist under each option differ.",
+              "Difficulty defining and measuring multi-dimensional welfare across generations (well-being, capabilities, health, education, security, freedom) in a consistent way.",
+              "Discounting choices or horizon selection systematically undervalue future welfare, biasing policy in favor of present generations.",
+              "Intra-generational distributional effects within future cohorts are neglected, leading to inequality or unfairness among future people.",
+              "High sensitivity to long-horizon forecasts and deep uncertainty yields brittle recommendations that fail under plausible scenarios.",
+              "Model and data uncertainty propagates through evaluations, undermining credibility of results.",
+              "Overreliance on quantitative metrics crowds out normative debate and risks misrepresenting non-quantifiable values.",
+              "Political incentives and present bias lead to weak commitment to long-term welfare goals.",
+              "Designs may create perverse incentives or gaming opportunities that improve measured welfare without improving real welfare.",
+              "Governance and enforcement challenges across jurisdictions threaten enforcement of intergenerational commitments."
+            ],
+            "triggerConditions": [
+              "Policy options change the set of individuals who exist (non-identity), complicating welfare comparison.",
+              "There is no agreed, transparent, multi-dimensional welfare metric or scoring method.",
+              "Analyses rely on a single (often steeply biased) discount rate or horizon.",
+              "Future inequality within generations emerges due to structural changes or policy impacts.",
+              "Forecasts involve deep uncertainty or potential structural breaks (e.g., climate tipping points, tech discontinuities).",
+              "Data or models used in evaluation are incomplete, biased, or poorly specified.",
+              "There is insufficient pluralistic normative input or contested moral frameworks.",
+              "Short-term political cycles or lobbying undermine long-term commitments.",
+              "Policy design incentivizes gaming or targets that improve indicators without improving welfare.",
+              "Cross-jurisdictional differences or weak legal frameworks undermine enforcement of intergenerational impact commitments."
+            ],
+            "mitigations": [
+              "Adopt a transparent, multi-criteria, non-identity aware evaluation framework; publish explicit welfare definitions and scoring rules.",
+              "Define and track a core set of cross-generational welfare indicators; decompose by cohort and timing; include distributional analyses.",
+              "Present a range of discount rates and horizons; conduct sensitivity analyses and robust decision-making (e.g., scenario planning, stress tests).",
+              "Incorporate distributional considerations within future generations (equity weighting, sufficiency principles) and conduct scenario-based equity assessments.",
+              "Use robust decision-making approaches to cope with deep uncertainty; include stress tests and adaptive policies.",
+              "Document data sources, validate models, use triangulation and backcasting; quantify uncertainty and propagate it through results.",
+              "Involve plural normative perspectives through deliberative processes; integrate qualitative values alongside quantitative metrics.",
+              "Establish credible long-term governance mechanisms, independent oversight, sunset clauses, and legal commitments to intergenerational goals.",
+              "Design metrics to minimize gaming; implement process and outcome evaluations; include checks and audits.",
+              "Harmonize international norms and establish cross-jurisdictional standards; ensure transparency and accountability mechanisms."
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:17:42.249Z"
+      },
+      {
+        "id": "step_1771337879566_b135df6edc00a8",
+        "agentName": "CalibrationAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:17:42.250Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a calibration auditor. Set adjusted confidence and claim-level confidences from the proposed answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Proposal JSON:\n{\n  \"answer\": \"Defensible in many ethical traditions, but only with explicit methods, transparent assumptions, and defensible evidence. The non-identity problem requires evaluating policies by the welfare of the people who would exist under each option, not by assuming identical individuals across generations. Welfare should be multi-dimensional (well-being, capabilities, health, education, security, freedom) and defined clearly. Distribution within future generations should be addressed across cohorts and timing. Discounting, horizons, and deep uncertainty should be handled openly with plausible ranges for discount rates and horizons, plus sensitivity analyses or robust decision-making to test robustness. Long-term policy outcomes are influenced by present choices, but credibility depends on transparent assumptions and credible evidence. Intergenerational equity is recognized in legal and ethical precedents, though enforcement varies; policy work should cite concrete frameworks and acknowledge limits. For defensible design, use long-term weighting or multi-criteria evaluation, conduct transparent sensitivity analyses, implement credible uncertainty assessments, guard against present-bias, and secure broad interdisciplinary stakeholder input.\",\n  \"keyClaims\": [\n    \"Policies should be judged by the welfare of future people who would exist under each option.\",\n    \"Welfare should be multi-dimensional (well-being, capabilities, health, education, security, freedom).\",\n    \"Distribution across cohorts and timing matters within future generations.\",\n    \"Explicit discounting, horizons, and treatment of deep uncertainty are needed, with sensitivity analyses or robust decision-making.\",\n    \"Credible policy outcomes require transparent assumptions and credible evidence.\",\n    \"Intergenerational equity is recognized in law and ethics, though enforcement varies.\",\n    \"Defensible design uses long-term weighting or multi-criteria evaluation with stakeholder input.\"\n  ],\n  \"assumptions\": [\n    \"Welfare is multi-dimensional and comparable across generations.\",\n    \"Policies can be evaluated based on the welfare of future people under each option.\",\n    \"A range of discount rates and horizons should be considered.\",\n    \"Deep uncertainty should be addressed with scenario planning and robust methods.\",\n    \"Transparent methodology and credible evidence improve legitimacy.\",\n    \"Counterfactual risk: Non-identity problem makes cross-generational welfare comparison ill-defined because the people who exist under each option differ.\"\n  ],\n  \"confidence\": 0.6\n}"
+            }
+          ],
+          "schemaName": "Calibration",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "adjustedConfidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "rationale": {
+                "type": "string"
+              },
+              "claimConfidences": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "claim": {
+                      "type": "string"
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    }
+                  },
+                  "required": [
+                    "claim",
+                    "confidence"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "adjustedConfidence",
+              "rationale",
+              "claimConfidences"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "adjustedConfidence": 0.72,
+            "rationale": "The proposal is coherent and aligns with common ethical reasoning for long-term policy design (multi-criteria evaluation, transparent sensitivity analyses). It addresses discounting, horizons, and deep uncertainty, and recognizes intergenerational equity. However several premises are debated in philosophy (notably evaluating welfare of future people under each option due to the non-identity problem) and the answer lacks citations or empirical grounding; as a result confidence in the entire package should be tempered, with higher confidence on widely-accepted practical steps and somewhat lower on contested philosophical assumptions.",
+            "claimConfidences": [
+              {
+                "claim": "Policies should be judged by the welfare of future people who would exist under each option.",
+                "confidence": 0.7
+              },
+              {
+                "claim": "Welfare should be multi-dimensional (well-being, capabilities, health, education, security, freedom).",
+                "confidence": 0.9
+              },
+              {
+                "claim": "Distribution across cohorts and timing matters within future generations.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Explicit discounting, horizons, and treatment of deep uncertainty are needed, with sensitivity analyses or robust decision-making.",
+                "confidence": 0.85
+              },
+              {
+                "claim": "Credible policy outcomes require transparent assumptions and credible evidence.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Intergenerational equity is recognized in law and ethics, though enforcement varies.",
+                "confidence": 0.75
+              },
+              {
+                "claim": "Defensible design uses long-term weighting or multi-criteria evaluation with stakeholder input.",
+                "confidence": 0.8
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "calibration",
+          "data": {
+            "adjustedConfidence": 0.72,
+            "rationale": "The proposal is coherent and aligns with common ethical reasoning for long-term policy design (multi-criteria evaluation, transparent sensitivity analyses). It addresses discounting, horizons, and deep uncertainty, and recognizes intergenerational equity. However several premises are debated in philosophy (notably evaluating welfare of future people under each option due to the non-identity problem) and the answer lacks citations or empirical grounding; as a result confidence in the entire package should be tempered, with higher confidence on widely-accepted practical steps and somewhat lower on contested philosophical assumptions.",
+            "claimConfidences": [
+              {
+                "claim": "Policies should be judged by the welfare of future people who would exist under each option.",
+                "confidence": 0.7
+              },
+              {
+                "claim": "Welfare should be multi-dimensional (well-being, capabilities, health, education, security, freedom).",
+                "confidence": 0.9
+              },
+              {
+                "claim": "Distribution across cohorts and timing matters within future generations.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Explicit discounting, horizons, and treatment of deep uncertainty are needed, with sensitivity analyses or robust decision-making.",
+                "confidence": 0.85
+              },
+              {
+                "claim": "Credible policy outcomes require transparent assumptions and credible evidence.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Intergenerational equity is recognized in law and ethics, though enforcement varies.",
+                "confidence": 0.75
+              },
+              {
+                "claim": "Defensible design uses long-term weighting or multi-criteria evaluation with stakeholder input.",
+                "confidence": 0.8
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:17:59.566Z"
+      },
+      {
+        "id": "step_1771337896110_db9d0525344e4",
+        "agentName": "JudgeAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:17:59.566Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a strict research judge. Score answer quality with rubric scores 1-5. Output only valid JSON matching schema."
+            },
+            {
+              "role": "user",
+              "content": "Final proposal JSON:\n{\n  \"answer\": \"Defensible in many ethical traditions, but only with explicit methods, transparent assumptions, and defensible evidence. The non-identity problem requires evaluating policies by the welfare of the people who would exist under each option, not by assuming identical individuals across generations. Welfare should be multi-dimensional (well-being, capabilities, health, education, security, freedom) and defined clearly. Distribution within future generations should be addressed across cohorts and timing. Discounting, horizons, and deep uncertainty should be handled openly with plausible ranges for discount rates and horizons, plus sensitivity analyses or robust decision-making to test robustness. Long-term policy outcomes are influenced by present choices, but credibility depends on transparent assumptions and credible evidence. Intergenerational equity is recognized in legal and ethical precedents, though enforcement varies; policy work should cite concrete frameworks and acknowledge limits. For defensible design, use long-term weighting or multi-criteria evaluation, conduct transparent sensitivity analyses, implement credible uncertainty assessments, guard against present-bias, and secure broad interdisciplinary stakeholder input.\",\n  \"keyClaims\": [\n    \"Policies should be judged by the welfare of future people who would exist under each option.\",\n    \"Welfare should be multi-dimensional (well-being, capabilities, health, education, security, freedom).\",\n    \"Distribution across cohorts and timing matters within future generations.\",\n    \"Explicit discounting, horizons, and treatment of deep uncertainty are needed, with sensitivity analyses or robust decision-making.\",\n    \"Credible policy outcomes require transparent assumptions and credible evidence.\",\n    \"Intergenerational equity is recognized in law and ethics, though enforcement varies.\",\n    \"Defensible design uses long-term weighting or multi-criteria evaluation with stakeholder input.\"\n  ],\n  \"assumptions\": [\n    \"Welfare is multi-dimensional and comparable across generations.\",\n    \"Policies can be evaluated based on the welfare of future people under each option.\",\n    \"A range of discount rates and horizons should be considered.\",\n    \"Deep uncertainty should be addressed with scenario planning and robust methods.\",\n    \"Transparent methodology and credible evidence improve legitimacy.\",\n    \"Counterfactual risk: Non-identity problem makes cross-generational welfare comparison ill-defined because the people who exist under each option differ.\"\n  ],\n  \"confidence\": 0.6\n}\n\nCritiques:\n[\n  {\n    \"targetAgent\": \"SolverAgent\",\n    \"issues\": [\n      {\n        \"severity\": 3,\n        \"type\": \"ambiguity\",\n        \"note\": \"The claim that intergenerational weighting is widely accepted across priortarianism, egalitarianism, and Rawlsian justice is oversimplified; these theories diverge on how to aggregate across generations and on what 'welfare' means.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"missing\",\n        \"note\": \"Non-identity problem is not addressed: policies can change who exists in the future, complicating the idea of 'future welfare' weighting and raising questions about whether it's meaningful to compare welfare across trajectories that yield different people.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"Within-future-generation distributional concerns are ignored: how to allocate benefits and burdens among people born in different generations or with different timings within those generations.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"ambiguity\",\n        \"note\": \"Discount rate justification remains under-specified: what rate, how to choose it, and how to update it as evidence evolves; risk of normative capture or misinterpretation.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"ambiguity\",\n        \"note\": \"Welfare definition across generations is unclear: are we using utility, capabilities, wellbeing, or multi-dimensional welfare? How to compare across vastly different contexts and time scales.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"No explicit horizon or explicit handling of deep uncertainty; scenario planning or robust decision making methods are not described.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"overconfidence\",\n        \"note\": \"Claim that policies can 'credibly protect or enhance future welfare without unduly sacrificing current welfare' overstates feasibility given political constraints and distributional trade-offs.\"\n      },\n      {\n        \"severity\": 2,\n        \"type\": \"missing\",\n        \"note\": \"Legal/ethical precedents are cited but without specifics, citations, or acknowledgment of enforcement limits; needs concrete references.\"\n      }\n    ]\n  },\n  {\n    \"targetAgent\": \"Candidate answer on intergenerational welfare defensibility\",\n    \"issues\": [\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"Note: This critique focuses on high-severity philosophical and practical gaps rather than minor wording issues.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"Measurement and aggregation of welfare across generations are ill-defined; there is no explicit method for aggregating utility, wellbeing, rights, or capabilities over non-identical future populations.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"Non-identity problem and intergenerational ethics: the answer presumes commensurability of welfare across future individuals; it fails to discuss that actions may change who exists, complicating any welfare weighting across generations.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"Distributional considerations within future generations (inequality, rights, vulnerability) are not addressed; aggregating welfare ignores intra-future disparities.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"ambiguity\",\n        \"note\": \"Horizon length design is underspecified; no guidance on how long horizons should be or how to guard against horizon bias.\"\n      },\n      {\n        \"severity\": 2,\n        \"type\": \"ambiguity\",\n        \"note\": \"Discounting justification is treated as acceptable; ethical arguments against heavy discounting or for alternative rates are not acknowledged; no transparent rationale for rate selection.\"\n      },\n      {\n        \"severity\": 2,\n        \"type\": \"factual\",\n        \"note\": \"Statement about legal/ethical precedents recognizing intergenerational equity may overstate enforceability; needs examples and caveats across jurisdictions.\"\n      },\n      {\n        \"severity\": 2,\n        \"type\": \"missing\",\n        \"note\": \"Practical implementation gaps: no discussion of governance, accountability, or stakeholder inclusion to ensure future welfare weighting; risk of bias or capture in policy design.\"\n      }\n    ]\n  }\n]"
+            }
+          ],
+          "schemaName": "Judgement",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "rubricScores": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "coherence": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "completeness": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "factualRisk": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "uncertaintyHandling": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  }
+                },
+                "required": [
+                  "coherence",
+                  "completeness",
+                  "factualRisk",
+                  "uncertaintyHandling"
+                ]
+              },
+              "strengths": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "weaknesses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "summary": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "rubricScores",
+              "strengths",
+              "weaknesses",
+              "summary"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "rubricScores": {
+              "coherence": 4,
+              "completeness": 3,
+              "factualRisk": 3,
+              "uncertaintyHandling": 4
+            },
+            "strengths": [
+              "Clear focus on multi-dimensional welfare and explicit policy evaluation criteria.",
+              "Acknowledges deep uncertainty, horizon considerations, and the need for sensitivity analyses and robust decision-making.",
+              "Promotes transparency, explicit assumptions, and stakeholder input.",
+              "Considers non-identity problem and the welfare of future people under each option (though needs more depth)."
+            ],
+            "weaknesses": [
+              "Overstates cross-generational acceptance of intergenerational weighting; lacks nuance about competing ethical theories.",
+              "Non-identity problem is not adequately addressed in practice; weighting across non-identical future populations remains ill-defined.",
+              "No explicit method for intra-future-generation distributional concerns (inequality, timing, rights) or how to aggregate welfare.",
+              "Discount rate justification, horizon length, and update rules are underspecified; risk of normative capture.",
+              "Definitions of 'welfare' across generations are unclear and may be ambiguous.",
+              "No concrete references or guidance on governance, accountability, or evidence standards."
+            ],
+            "summary": "The proposal presents a coherent, transparency-focused framework for long-term policy evaluation with attention to uncertainty and multi-dimensional welfare, but it leaves major methodological gaps (non-identity handling, intra-future distribution, explicit aggregation methods, horizon and discounting specifics) and lacks concrete references or governance guidance. Substantial work is needed to render it practically defensible."
+          }
+        ],
+        "output": {
+          "kind": "judgement",
+          "data": {
+            "rubricScores": {
+              "coherence": 4,
+              "completeness": 3,
+              "factualRisk": 3,
+              "uncertaintyHandling": 4
+            },
+            "strengths": [
+              "Clear focus on multi-dimensional welfare and explicit policy evaluation criteria.",
+              "Acknowledges deep uncertainty, horizon considerations, and the need for sensitivity analyses and robust decision-making.",
+              "Promotes transparency, explicit assumptions, and stakeholder input.",
+              "Considers non-identity problem and the welfare of future people under each option (though needs more depth)."
+            ],
+            "weaknesses": [
+              "Overstates cross-generational acceptance of intergenerational weighting; lacks nuance about competing ethical theories.",
+              "Non-identity problem is not adequately addressed in practice; weighting across non-identical future populations remains ill-defined.",
+              "No explicit method for intra-future-generation distributional concerns (inequality, timing, rights) or how to aggregate welfare.",
+              "Discount rate justification, horizon length, and update rules are underspecified; risk of normative capture.",
+              "Definitions of 'welfare' across generations are unclear and may be ambiguous.",
+              "No concrete references or guidance on governance, accountability, or evidence standards."
+            ],
+            "summary": "The proposal presents a coherent, transparency-focused framework for long-term policy evaluation with attention to uncertainty and multi-dimensional welfare, but it leaves major methodological gaps (non-identity handling, intra-future distribution, explicit aggregation methods, horizon and discounting specifics) and lacks concrete references or governance guidance. Substantial work is needed to render it practically defensible."
+          }
+        },
+        "completedAt": "2026-02-17T14:18:16.110Z"
+      }
+    ],
+    "finalAnswer": "Defensible in many ethical traditions, but only with explicit methods, transparent assumptions, and defensible evidence. The non-identity problem requires evaluating policies by the welfare of the people who would exist under each option, not by assuming identical individuals across generations. Welfare should be multi-dimensional (well-being, capabilities, health, education, security, freedom) and defined clearly. Distribution within future generations should be addressed across cohorts and timing. Discounting, horizons, and deep uncertainty should be handled openly with plausible ranges for discount rates and horizons, plus sensitivity analyses or robust decision-making to test robustness. Long-term policy outcomes are influenced by present choices, but credibility depends on transparent assumptions and credible evidence. Intergenerational equity is recognized in legal and ethical precedents, though enforcement varies; policy work should cite concrete frameworks and acknowledge limits. For defensible design, use long-term weighting or multi-criteria evaluation, conduct transparent sensitivity analyses, implement credible uncertainty assessments, guard against present-bias, and secure broad interdisciplinary stakeholder input.",
+    "metrics": {
+      "confidence": {
+        "solver": 0.65,
+        "revision": 0.4,
+        "synthesizer": 0.72,
+        "calibratedAdjusted": 0.72,
+        "solverToRevisionDelta": -0.25,
+        "revisionToSynthesizerDelta": 0.32
+      },
+      "critique": {
+        "maxSeverity": 5,
+        "avgSeverity": 3.125,
+        "byType": {
+          "ambiguity": 5,
+          "missing": 9,
+          "overconfidence": 1,
+          "factual": 1
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 3,
+        "factualRisk": 3,
+        "uncertaintyHandling": 4
+      },
+      "research": {
+        "evidenceRiskLevel": 4,
+        "counterfactualFailureModeCount": 10,
+        "topCounterfactualFailureMode": "Non-identity problem makes cross-generational welfare comparison ill-defined because the people who exist under each option differ."
+      },
+      "consensus": {
+        "included": [
+          "solver",
+          "revision",
+          "synthesizer"
+        ],
+        "pairs": [
+          {
+            "a": "solver",
+            "b": "revision",
+            "similarity": 0.887
+          },
+          {
+            "a": "solver",
+            "b": "synthesizer",
+            "similarity": 0.867
+          },
+          {
+            "a": "revision",
+            "b": "synthesizer",
+            "similarity": 0.926
+          }
+        ],
+        "strength": 0.893
+      }
+    }
+  },
+  "metadata": {
+    "schemaVersion": 1,
+    "createdAt": "2026-02-17T14:18:16.110Z",
+    "model": "gpt-5-nano-2025-08-07",
+    "fastMode": false,
+    "pipelinePreset": "research_deep",
+    "pipelineVersion": "1.0.0",
+    "source": "cli"
+  }
+}

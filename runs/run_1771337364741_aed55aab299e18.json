@@ -1,0 +1,1481 @@
+{
+  "kind": "run",
+  "id": "run_1771337364741_aed55aab299e18",
+  "question": "Should countries adopt open borders for migration?",
+  "run": {
+    "id": "run_1771337364741_aed55aab299e18",
+    "createdAt": "2026-02-17T14:09:24.741Z",
+    "question": "Should countries adopt open borders for migration?",
+    "steps": [
+      {
+        "id": "step_1771337161798_549511a423c808",
+        "agentName": "QuestionDecomposerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:05:32.229Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a research planner. Decompose the question into sub-questions and hypotheses. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should countries adopt open borders for migration?"
+            }
+          ],
+          "schemaName": "QuestionDecomposition",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "framing": {
+                "type": "string"
+              },
+              "subQuestions": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "hypotheses": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "framing",
+              "subQuestions",
+              "hypotheses"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "framing": "Evaluate the desirability, feasibility, and policy design implications of adopting open borders for migration across countries, including economic, social, security, and governance dimensions.",
+            "subQuestions": [
+              "How should 'open borders' be defined and scoped for analysis (which borders, which categories of movement, any exemptions or transitional rules)",
+              "What are the potential economic effects on sending and receiving countries (labor markets, wages, productivity, GDP, prices, fiscal balance)",
+              "How would open borders affect demographics (population size, age structure, dependency ratios) and long-run growth trajectories",
+              "What are the social, cultural, and community implications (integration, social cohesion, discrimination, values)",
+              "What are the security, immigration, border control, and public health implications, including risk management and policy responses",
+              "What policy design features are necessary to implement open borders responsibly (safety nets, housing, education, credential recognition, language training)",
+              "What lessons do historical or real-world cases (e.g., Schengen, regional unions, pilot programs) provide, and what are their limitations",
+              "How do effects vary by country characteristics (institutions, welfare state strength, labor market flexibility, geography, urbanization)",
+              "What are distributional and regional impacts (who gains or loses, urban vs rural, high-skill vs low-skill groups, income distribution)",
+              "What data, metrics, and research methods are needed to evaluate open-border policies and monitor outcomes",
+              "What are the political economy and transition dynamics (public opinion, coalition-building, sequencing, compensatory policies) that influence feasibility"
+            ],
+            "hypotheses": [
+              "H1: A full open-border regime would increase global GDP and efficiency due to improved labor reallocation, though effects vary by country.",
+              "H2: Receiving countries experience productivity gains and higher GDP per capita in the long run, but may see short-run wage pressure or unemployment in low-skilled segments without accompanying reforms.",
+              "H3: Open borders reduce aging-related fiscal pressures in destination countries through a younger migrant inflow, contingent on integration effectiveness.",
+              "H4: Short-run unemployment among native workers in some sectors may rise, with long-run adjustment leading to redistribution of jobs across the economy.",
+              "H5: Without policy measures, open borders place greater demand on public services (healthcare, housing, education) and may strain fiscal balances.",
+              "H6: Strong integration policies (language training, credential recognition, housing, access to services) improve labor market outcomes and public support for openness.",
+              "H7: Crime or security risks do not increase systematically under open borders when accompanied by effective governance and targeted policing, though short-term fluctuations may occur.",
+              "H8: High-skilled migration yields larger productivity and innovation gains for host economies than low-skilled migration, influencing the net benefits by migrant composition.",
+              "H9: Regional and sectoral effects are heterogeneous, with border regions adapting more quickly and urban areas benefiting differently than rural areas.",
+              "H10: Public opinion about open borders is shaped by perceived economic insecurity and institutional credibility; credible policies and compensation mechanisms can sustain more open migration."
+            ]
+          }
+        ],
+        "output": {
+          "kind": "decomposition",
+          "data": {
+            "framing": "Evaluate the desirability, feasibility, and policy design implications of adopting open borders for migration across countries, including economic, social, security, and governance dimensions.",
+            "subQuestions": [
+              "How should 'open borders' be defined and scoped for analysis (which borders, which categories of movement, any exemptions or transitional rules)",
+              "What are the potential economic effects on sending and receiving countries (labor markets, wages, productivity, GDP, prices, fiscal balance)",
+              "How would open borders affect demographics (population size, age structure, dependency ratios) and long-run growth trajectories",
+              "What are the social, cultural, and community implications (integration, social cohesion, discrimination, values)",
+              "What are the security, immigration, border control, and public health implications, including risk management and policy responses",
+              "What policy design features are necessary to implement open borders responsibly (safety nets, housing, education, credential recognition, language training)",
+              "What lessons do historical or real-world cases (e.g., Schengen, regional unions, pilot programs) provide, and what are their limitations",
+              "How do effects vary by country characteristics (institutions, welfare state strength, labor market flexibility, geography, urbanization)",
+              "What are distributional and regional impacts (who gains or loses, urban vs rural, high-skill vs low-skill groups, income distribution)",
+              "What data, metrics, and research methods are needed to evaluate open-border policies and monitor outcomes",
+              "What are the political economy and transition dynamics (public opinion, coalition-building, sequencing, compensatory policies) that influence feasibility"
+            ],
+            "hypotheses": [
+              "H1: A full open-border regime would increase global GDP and efficiency due to improved labor reallocation, though effects vary by country.",
+              "H2: Receiving countries experience productivity gains and higher GDP per capita in the long run, but may see short-run wage pressure or unemployment in low-skilled segments without accompanying reforms.",
+              "H3: Open borders reduce aging-related fiscal pressures in destination countries through a younger migrant inflow, contingent on integration effectiveness.",
+              "H4: Short-run unemployment among native workers in some sectors may rise, with long-run adjustment leading to redistribution of jobs across the economy.",
+              "H5: Without policy measures, open borders place greater demand on public services (healthcare, housing, education) and may strain fiscal balances.",
+              "H6: Strong integration policies (language training, credential recognition, housing, access to services) improve labor market outcomes and public support for openness.",
+              "H7: Crime or security risks do not increase systematically under open borders when accompanied by effective governance and targeted policing, though short-term fluctuations may occur.",
+              "H8: High-skilled migration yields larger productivity and innovation gains for host economies than low-skilled migration, influencing the net benefits by migrant composition.",
+              "H9: Regional and sectoral effects are heterogeneous, with border regions adapting more quickly and urban areas benefiting differently than rural areas.",
+              "H10: Public opinion about open borders is shaped by perceived economic insecurity and institutional credibility; credible policies and compensation mechanisms can sustain more open migration."
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:06:01.798Z"
+      },
+      {
+        "id": "step_1771337196034_3cb557de8db82",
+        "agentName": "EvidencePlannerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:06:01.798Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are an evidence planning specialist. Produce a compact evidence and verification plan for the question. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should countries adopt open borders for migration?"
+            }
+          ],
+          "schemaName": "EvidencePlan",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "evidenceRequirements": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "verificationChecks": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "majorUnknowns": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "riskLevel": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              }
+            },
+            "required": [
+              "evidenceRequirements",
+              "verificationChecks",
+              "majorUnknowns",
+              "riskLevel"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "evidenceRequirements": [
+              "Economic impacts: effects on GDP growth, per-capita income, unemployment by natives and migrants, wage gaps, productivity and sectoral output.",
+              "Fiscal impacts: net fiscal contribution of migrants (taxes, benefits, public services), pressure on health, education, housing, and pensions.",
+              "Demographic effects: population size, age structure, dependency ratios, fertility and long-term labor supply.",
+              "Labor market dynamics: skill mix alignment, native unemployment by skill, vacancy filling rates, entrepreneurship and innovation.",
+              "Social and governance outcomes: crime and safety indicators, social cohesion and trust, education attainment and health outcomes, housing demand and prices.",
+              "Administrative feasibility: border control capacity, asylum processing times, integration program uptake (language, training, recognition of credentials).",
+              "Policy design and implementation: phased pilots, metrics for rollback/expansion, integration with visa policies and asylum rules.",
+              "Regional and sectoral distribution: urban vs rural effects, regional wage and employment disparities, sector-specific impacts (healthcare, construction, tech).",
+              "Comparative evidence and causal analysis: natural experiments and quasi-experiments (e.g., Schengen-related policy changes, other regional experiments), cross-country panel studies, meta-analyses.",
+              "Data and methodologies: OECD/World Bank/IMF/IOM/UN datasets, robust econometric methods (DiD, synthetic control), scenario modeling and sensitivity analyses."
+            ],
+            "verificationChecks": [
+              "Conduct systematic reviews and meta-analyses of migration openness effects.",
+              "Apply quasi-experimental designs (difference-in-differences, synthetic control) around policy changes and natural experiments.",
+              "Develop scenario models comparing open-border versus managed/open-border regimes under different welfare and labor-market assumptions.",
+              "Cross-country panel analyses with standard controls for business cycle, institutions, and policy regimes.",
+              "Validate data using multiple sources (OECD, World Bank, IMF, UN, national statistics) and assess measurement error.",
+              "Pilot phased open-border programs with predefined metrics and monitoring plans; evaluate before scaling.",
+              "Assess distributional effects by region and by skill group; monitor housing, education and health service demand.",
+              "Incorporate public opinion and political feasibility metrics to gauge implementation risk.",
+              "Security risk assessment using crime, terrorism, and asylum adjudication data."
+            ],
+            "majorUnknowns": [
+              "Uncertain magnitude and distribution of native vs migrant employment and wage effects across skills and regions.",
+              "Net fiscal impact depends on welfare generosity, aging, healthcare costs, and integration success.",
+              "Long-run innovation, entrepreneurship, and productivity effects of higher immigration levels.",
+              "Political feasibility and public acceptance under different economic cycles and narratives.",
+              "Administrative capacity to scale border management, asylum processing, and integration services.",
+              "Housing market pressures and infrastructure requirements under sustained open migration.",
+              "Security and asylum system vulnerabilities under large-scale migration flows.",
+              "Heterogeneity of effects across countries with different institutions and welfare states.",
+              "Impact of climate-related migration and irregular entrants on policy design."
+            ],
+            "riskLevel": 4
+          }
+        ],
+        "output": {
+          "kind": "evidence_plan",
+          "data": {
+            "evidenceRequirements": [
+              "Economic impacts: effects on GDP growth, per-capita income, unemployment by natives and migrants, wage gaps, productivity and sectoral output.",
+              "Fiscal impacts: net fiscal contribution of migrants (taxes, benefits, public services), pressure on health, education, housing, and pensions.",
+              "Demographic effects: population size, age structure, dependency ratios, fertility and long-term labor supply.",
+              "Labor market dynamics: skill mix alignment, native unemployment by skill, vacancy filling rates, entrepreneurship and innovation.",
+              "Social and governance outcomes: crime and safety indicators, social cohesion and trust, education attainment and health outcomes, housing demand and prices.",
+              "Administrative feasibility: border control capacity, asylum processing times, integration program uptake (language, training, recognition of credentials).",
+              "Policy design and implementation: phased pilots, metrics for rollback/expansion, integration with visa policies and asylum rules.",
+              "Regional and sectoral distribution: urban vs rural effects, regional wage and employment disparities, sector-specific impacts (healthcare, construction, tech).",
+              "Comparative evidence and causal analysis: natural experiments and quasi-experiments (e.g., Schengen-related policy changes, other regional experiments), cross-country panel studies, meta-analyses.",
+              "Data and methodologies: OECD/World Bank/IMF/IOM/UN datasets, robust econometric methods (DiD, synthetic control), scenario modeling and sensitivity analyses."
+            ],
+            "verificationChecks": [
+              "Conduct systematic reviews and meta-analyses of migration openness effects.",
+              "Apply quasi-experimental designs (difference-in-differences, synthetic control) around policy changes and natural experiments.",
+              "Develop scenario models comparing open-border versus managed/open-border regimes under different welfare and labor-market assumptions.",
+              "Cross-country panel analyses with standard controls for business cycle, institutions, and policy regimes.",
+              "Validate data using multiple sources (OECD, World Bank, IMF, UN, national statistics) and assess measurement error.",
+              "Pilot phased open-border programs with predefined metrics and monitoring plans; evaluate before scaling.",
+              "Assess distributional effects by region and by skill group; monitor housing, education and health service demand.",
+              "Incorporate public opinion and political feasibility metrics to gauge implementation risk.",
+              "Security risk assessment using crime, terrorism, and asylum adjudication data."
+            ],
+            "majorUnknowns": [
+              "Uncertain magnitude and distribution of native vs migrant employment and wage effects across skills and regions.",
+              "Net fiscal impact depends on welfare generosity, aging, healthcare costs, and integration success.",
+              "Long-run innovation, entrepreneurship, and productivity effects of higher immigration levels.",
+              "Political feasibility and public acceptance under different economic cycles and narratives.",
+              "Administrative capacity to scale border management, asylum processing, and integration services.",
+              "Housing market pressures and infrastructure requirements under sustained open migration.",
+              "Security and asylum system vulnerabilities under large-scale migration flows.",
+              "Heterogeneity of effects across countries with different institutions and welfare states.",
+              "Impact of climate-related migration and irregular entrants on policy design."
+            ],
+            "riskLevel": 4
+          }
+        },
+        "completedAt": "2026-02-17T14:06:36.034Z"
+      },
+      {
+        "id": "step_1771337214752_f0c33cf7e92d08",
+        "agentName": "SolverAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T14:06:36.034Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.4,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver. Produce a direct, helpful answer. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should countries adopt open borders for migration?\n\nEvidence plan:\n{\n  \"evidenceRequirements\": [\n    \"Economic impacts: effects on GDP growth, per-capita income, unemployment by natives and migrants, wage gaps, productivity and sectoral output.\",\n    \"Fiscal impacts: net fiscal contribution of migrants (taxes, benefits, public services), pressure on health, education, housing, and pensions.\",\n    \"Demographic effects: population size, age structure, dependency ratios, fertility and long-term labor supply.\",\n    \"Labor market dynamics: skill mix alignment, native unemployment by skill, vacancy filling rates, entrepreneurship and innovation.\",\n    \"Social and governance outcomes: crime and safety indicators, social cohesion and trust, education attainment and health outcomes, housing demand and prices.\",\n    \"Administrative feasibility: border control capacity, asylum processing times, integration program uptake (language, training, recognition of credentials).\",\n    \"Policy design and implementation: phased pilots, metrics for rollback/expansion, integration with visa policies and asylum rules.\",\n    \"Regional and sectoral distribution: urban vs rural effects, regional wage and employment disparities, sector-specific impacts (healthcare, construction, tech).\",\n    \"Comparative evidence and causal analysis: natural experiments and quasi-experiments (e.g., Schengen-related policy changes, other regional experiments), cross-country panel studies, meta-analyses.\",\n    \"Data and methodologies: OECD/World Bank/IMF/IOM/UN datasets, robust econometric methods (DiD, synthetic control), scenario modeling and sensitivity analyses.\"\n  ],\n  \"verificationChecks\": [\n    \"Conduct systematic reviews and meta-analyses of migration openness effects.\",\n    \"Apply quasi-experimental designs (difference-in-differences, synthetic control) around policy changes and natural experiments.\",\n    \"Develop scenario models comparing open-border versus managed/open-border regimes under different welfare and labor-market assumptions.\",\n    \"Cross-country panel analyses with standard controls for business cycle, institutions, and policy regimes.\",\n    \"Validate data using multiple sources (OECD, World Bank, IMF, UN, national statistics) and assess measurement error.\",\n    \"Pilot phased open-border programs with predefined metrics and monitoring plans; evaluate before scaling.\",\n    \"Assess distributional effects by region and by skill group; monitor housing, education and health service demand.\",\n    \"Incorporate public opinion and political feasibility metrics to gauge implementation risk.\",\n    \"Security risk assessment using crime, terrorism, and asylum adjudication data.\"\n  ],\n  \"majorUnknowns\": [\n    \"Uncertain magnitude and distribution of native vs migrant employment and wage effects across skills and regions.\",\n    \"Net fiscal impact depends on welfare generosity, aging, healthcare costs, and integration success.\",\n    \"Long-run innovation, entrepreneurship, and productivity effects of higher immigration levels.\",\n    \"Political feasibility and public acceptance under different economic cycles and narratives.\",\n    \"Administrative capacity to scale border management, asylum processing, and integration services.\",\n    \"Housing market pressures and infrastructure requirements under sustained open migration.\",\n    \"Security and asylum system vulnerabilities under large-scale migration flows.\",\n    \"Heterogeneity of effects across countries with different institutions and welfare states.\",\n    \"Impact of climate-related migration and irregular entrants on policy design.\"\n  ],\n  \"riskLevel\": 4\n}"
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "There is no universal answer. Open borders can raise GDP and expand the labor force, but they also risk fiscal costs, housing and public-service burdens, and potential short-run wage or unemployment pressures for some natives if not well managed. A prudent path is phased, evidence‑driven pilots with robust evaluation, coupled with selective openness (by skill, region, or sector) and strong integration, asylum processing, housing, and education capacity. Outcomes will depend on country context (institutions, welfare state, labor-market flexibility) and on design choices that mitigate risks. Use rigorous quasi-experimental evidence and scenario modeling to guide scaling.",
+            "keyClaims": [
+              "Economic effects are context-dependent: potential GDP gains and larger labor supply, but uncertain wage/unemployment impacts by skill and region.",
+              "Fiscal and service pressures depend on welfare generosity, integration success, and public service capacity.",
+              "Housing, infrastructure, and local demand are critical bottlenecks influencing net benefits.",
+              "Policy design (phased pilots, metrics, integration programs, visa/asylum rules) largely determines success.",
+              "Administrative capacity and security/privacy considerations must scale in parallel with openness.",
+              "Evidence quality requires quasi-experimental studies, cross-country analyses, and robust data.",
+              "Public opinion and political feasibility shape implementation risk."
+            ],
+            "assumptions": [
+              "Credible, high-quality data from OECD/World Bank/IMF/UN/NA statistics are available.",
+              "Phased pilots can be implemented with predefined metrics and rollback rules.",
+              "Countries can scale integration services, housing, and public infrastructure if needed.",
+              "Policy effects vary across countries and are properly accounted for in evaluation.",
+              "Security, asylum systems, and governance can adapt to increasing mobility without unacceptable risks."
+            ],
+            "confidence": 0.62
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "There is no universal answer. Open borders can raise GDP and expand the labor force, but they also risk fiscal costs, housing and public-service burdens, and potential short-run wage or unemployment pressures for some natives if not well managed. A prudent path is phased, evidence‑driven pilots with robust evaluation, coupled with selective openness (by skill, region, or sector) and strong integration, asylum processing, housing, and education capacity. Outcomes will depend on country context (institutions, welfare state, labor-market flexibility) and on design choices that mitigate risks. Use rigorous quasi-experimental evidence and scenario modeling to guide scaling.",
+            "keyClaims": [
+              "Economic effects are context-dependent: potential GDP gains and larger labor supply, but uncertain wage/unemployment impacts by skill and region.",
+              "Fiscal and service pressures depend on welfare generosity, integration success, and public service capacity.",
+              "Housing, infrastructure, and local demand are critical bottlenecks influencing net benefits.",
+              "Policy design (phased pilots, metrics, integration programs, visa/asylum rules) largely determines success.",
+              "Administrative capacity and security/privacy considerations must scale in parallel with openness.",
+              "Evidence quality requires quasi-experimental studies, cross-country analyses, and robust data.",
+              "Public opinion and political feasibility shape implementation risk."
+            ],
+            "assumptions": [
+              "Credible, high-quality data from OECD/World Bank/IMF/UN/NA statistics are available.",
+              "Phased pilots can be implemented with predefined metrics and rollback rules.",
+              "Countries can scale integration services, housing, and public infrastructure if needed.",
+              "Policy effects vary across countries and are properly accounted for in evaluation.",
+              "Security, asylum systems, and governance can adapt to increasing mobility without unacceptable risks."
+            ],
+            "confidence": 0.62
+          }
+        },
+        "completedAt": "2026-02-17T14:06:54.752Z"
+      },
+      {
+        "id": "step_1771337242051_7311809b425028",
+        "agentName": "SkepticAgent",
+        "role": "skeptic",
+        "createdAt": "2026-02-17T14:06:54.753Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Skeptic. Critique the proposal rigorously. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should countries adopt open borders for migration?\n\nTarget agent: SolverAgent\n\nProposal JSON:\n{\n  \"answer\": \"There is no universal answer. Open borders can raise GDP and expand the labor force, but they also risk fiscal costs, housing and public-service burdens, and potential short-run wage or unemployment pressures for some natives if not well managed. A prudent path is phased, evidence‑driven pilots with robust evaluation, coupled with selective openness (by skill, region, or sector) and strong integration, asylum processing, housing, and education capacity. Outcomes will depend on country context (institutions, welfare state, labor-market flexibility) and on design choices that mitigate risks. Use rigorous quasi-experimental evidence and scenario modeling to guide scaling.\",\n  \"keyClaims\": [\n    \"Economic effects are context-dependent: potential GDP gains and larger labor supply, but uncertain wage/unemployment impacts by skill and region.\",\n    \"Fiscal and service pressures depend on welfare generosity, integration success, and public service capacity.\",\n    \"Housing, infrastructure, and local demand are critical bottlenecks influencing net benefits.\",\n    \"Policy design (phased pilots, metrics, integration programs, visa/asylum rules) largely determines success.\",\n    \"Administrative capacity and security/privacy considerations must scale in parallel with openness.\",\n    \"Evidence quality requires quasi-experimental studies, cross-country analyses, and robust data.\",\n    \"Public opinion and political feasibility shape implementation risk.\"\n  ],\n  \"assumptions\": [\n    \"Credible, high-quality data from OECD/World Bank/IMF/UN/NA statistics are available.\",\n    \"Phased pilots can be implemented with predefined metrics and rollback rules.\",\n    \"Countries can scale integration services, housing, and public infrastructure if needed.\",\n    \"Policy effects vary across countries and are properly accounted for in evaluation.\",\n    \"Security, asylum systems, and governance can adapt to increasing mobility without unacceptable risks.\"\n  ],\n  \"confidence\": 0.62\n}\n\nFind issues. Prefer factual risk, missing edge cases, ambiguity, and overconfidence."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 5,
+                "type": "factual",
+                "note": "The claim that open borders universally raise GDP and expand the labor supply is not supported across all contexts; evidence is mixed and sensitive to elasticities, capital deepening, and productivity—long-run effects may differ from short-run projections."
+              },
+              {
+                "severity": 5,
+                "type": "factual",
+                "note": "Fiscal and public‑service costs depend heavily on welfare generosity, integration success, and public capacity; the proposal provides no quantified estimates or explicit budget rules, risking underrating costs."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Distributional impacts are underaddressed: low/skilled native workers, regional economies, and vulnerable groups may bear disproportionate costs or face wage suppression; requires explicit distributional analysis."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Housing, infrastructure, and local demand bottlenecks are highlighted but not modeled; neglecting supply constraints can erase potential net gains."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Policy design specifics (phased pilots, metrics, evaluation framework, rollback criteria) are underspecified, creating vulnerability to design bias and failed scaling."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "What exactly qualifies as selective openness (by skill, region, or sector) and how it should be operationalized across different countries remains undefined."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": " Metrics, endpoints, timeframes, and data sources for “robust quasi‑experimental” evaluation are not specified, making success criteria unclear."
+              },
+              {
+                "severity": 4,
+                "type": "logic",
+                "note": "Assuming that pilot successes will generalize to wider implementation ignores path dependence, externalities, and selection bias that can skew outcomes."
+              },
+              {
+                "severity": 3,
+                "type": "overconfidence",
+                "note": "Credibility is attributed to high‑quality OECD/World Bank/IMF/UN data, but cross‑country comparability and coverage gaps can bias conclusions; overreliance on these sources without caveats is risky."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Security, asylum processing, and governance adaptations are mentioned but not defined or anchored; insufficient attention to controls, privacy, and potential security risks under higher mobility."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": " Macroeconomic feedbacks (inflation, exchange rates, capital flows, monetary policy interactions) are omitted, yet mobility shocks can affect these channels and policy space."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 5,
+                "type": "factual",
+                "note": "The claim that open borders universally raise GDP and expand the labor supply is not supported across all contexts; evidence is mixed and sensitive to elasticities, capital deepening, and productivity—long-run effects may differ from short-run projections."
+              },
+              {
+                "severity": 5,
+                "type": "factual",
+                "note": "Fiscal and public‑service costs depend heavily on welfare generosity, integration success, and public capacity; the proposal provides no quantified estimates or explicit budget rules, risking underrating costs."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Distributional impacts are underaddressed: low/skilled native workers, regional economies, and vulnerable groups may bear disproportionate costs or face wage suppression; requires explicit distributional analysis."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Housing, infrastructure, and local demand bottlenecks are highlighted but not modeled; neglecting supply constraints can erase potential net gains."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Policy design specifics (phased pilots, metrics, evaluation framework, rollback criteria) are underspecified, creating vulnerability to design bias and failed scaling."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "What exactly qualifies as selective openness (by skill, region, or sector) and how it should be operationalized across different countries remains undefined."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": " Metrics, endpoints, timeframes, and data sources for “robust quasi‑experimental” evaluation are not specified, making success criteria unclear."
+              },
+              {
+                "severity": 4,
+                "type": "logic",
+                "note": "Assuming that pilot successes will generalize to wider implementation ignores path dependence, externalities, and selection bias that can skew outcomes."
+              },
+              {
+                "severity": 3,
+                "type": "overconfidence",
+                "note": "Credibility is attributed to high‑quality OECD/World Bank/IMF/UN data, but cross‑country comparability and coverage gaps can bias conclusions; overreliance on these sources without caveats is risky."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Security, asylum processing, and governance adaptations are mentioned but not defined or anchored; insufficient attention to controls, privacy, and potential security risks under higher mobility."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": " Macroeconomic feedbacks (inflation, exchange rates, capital flows, monetary policy interactions) are omitted, yet mobility shocks can affect these channels and policy space."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:07:22.051Z"
+      },
+      {
+        "id": "step_1771337268688_ffef72126cc368",
+        "agentName": "RedTeamAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:07:22.051Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a red-team analyst. Find high-risk failure modes and adversarial weaknesses in the answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should countries adopt open borders for migration?\n\nCandidate answer JSON:\n{\n  \"answer\": \"There is no universal answer. Open borders can raise GDP and expand the labor force, but they also risk fiscal costs, housing and public-service burdens, and potential short-run wage or unemployment pressures for some natives if not well managed. A prudent path is phased, evidence‑driven pilots with robust evaluation, coupled with selective openness (by skill, region, or sector) and strong integration, asylum processing, housing, and education capacity. Outcomes will depend on country context (institutions, welfare state, labor-market flexibility) and on design choices that mitigate risks. Use rigorous quasi-experimental evidence and scenario modeling to guide scaling.\",\n  \"keyClaims\": [\n    \"Economic effects are context-dependent: potential GDP gains and larger labor supply, but uncertain wage/unemployment impacts by skill and region.\",\n    \"Fiscal and service pressures depend on welfare generosity, integration success, and public service capacity.\",\n    \"Housing, infrastructure, and local demand are critical bottlenecks influencing net benefits.\",\n    \"Policy design (phased pilots, metrics, integration programs, visa/asylum rules) largely determines success.\",\n    \"Administrative capacity and security/privacy considerations must scale in parallel with openness.\",\n    \"Evidence quality requires quasi-experimental studies, cross-country analyses, and robust data.\",\n    \"Public opinion and political feasibility shape implementation risk.\"\n  ],\n  \"assumptions\": [\n    \"Credible, high-quality data from OECD/World Bank/IMF/UN/NA statistics are available.\",\n    \"Phased pilots can be implemented with predefined metrics and rollback rules.\",\n    \"Countries can scale integration services, housing, and public infrastructure if needed.\",\n    \"Policy effects vary across countries and are properly accounted for in evaluation.\",\n    \"Security, asylum systems, and governance can adapt to increasing mobility without unacceptable risks.\"\n  ],\n  \"confidence\": 0.62\n}\n\nReturn a rigorous critique with severe issues when justified."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "Open borders policy critique",
+            "issues": [
+              {
+                "severity": 5,
+                "type": "factual",
+                "note": "Assumes open borders yield GDP gains and larger labor supply without quantifying magnitudes or distributional effects; lacks explicit ranges, uncertainty, or scenario analysis."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "No explicit operational definition of 'open borders' (who can move, under what conditions, duration, asylum vs. economic migration, temporary vs. permanent)."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "No fiscal analysis of migration: costs and revenues, welfare state interactions, taxation implications, and financing of public services under different openness levels."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "References to 'phased pilots' and 'scale' lack concrete timelines, thresholds, evaluation criteria, and decision rules for scaling up or rollback."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Insufficient treatment of security, border control, asylum processing capacity, and risks of fraud or abuse; no operational risk assessment."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "No discussion of distributional impacts within natives (wage, unemployment, housing demand) by skill or region, nor consideration of policy responses to these effects."
+              },
+              {
+                "severity": 3,
+                "type": "factual",
+                "note": "Assumes high-quality, comparable data from OECD/World Bank/IMF/UN; ignores that data quality and comparability vary across countries and over time."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No analysis of international spillovers on origin countries (brain drain, remittances, development) or potential compensation/mitigation mechanisms."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Suggests 'by skill, region, or sector' openness but provides no criteria, prioritization framework, or safeguards against discrimination and inequitable access."
+              },
+              {
+                "severity": 2,
+                "type": "overconfidence",
+                "note": "Claims 'robust quasi-experimental evidence' will guide scaling without specifying the research design, metrics, data quality checks, or rollback rules; otherwise, evidence base may be overstated."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "Open borders policy critique",
+            "issues": [
+              {
+                "severity": 5,
+                "type": "factual",
+                "note": "Assumes open borders yield GDP gains and larger labor supply without quantifying magnitudes or distributional effects; lacks explicit ranges, uncertainty, or scenario analysis."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "No explicit operational definition of 'open borders' (who can move, under what conditions, duration, asylum vs. economic migration, temporary vs. permanent)."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "No fiscal analysis of migration: costs and revenues, welfare state interactions, taxation implications, and financing of public services under different openness levels."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "References to 'phased pilots' and 'scale' lack concrete timelines, thresholds, evaluation criteria, and decision rules for scaling up or rollback."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Insufficient treatment of security, border control, asylum processing capacity, and risks of fraud or abuse; no operational risk assessment."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "No discussion of distributional impacts within natives (wage, unemployment, housing demand) by skill or region, nor consideration of policy responses to these effects."
+              },
+              {
+                "severity": 3,
+                "type": "factual",
+                "note": "Assumes high-quality, comparable data from OECD/World Bank/IMF/UN; ignores that data quality and comparability vary across countries and over time."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No analysis of international spillovers on origin countries (brain drain, remittances, development) or potential compensation/mitigation mechanisms."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Suggests 'by skill, region, or sector' openness but provides no criteria, prioritization framework, or safeguards against discrimination and inequitable access."
+              },
+              {
+                "severity": 2,
+                "type": "overconfidence",
+                "note": "Claims 'robust quasi-experimental evidence' will guide scaling without specifying the research design, metrics, data quality checks, or rollback rules; otherwise, evidence base may be overstated."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:07:48.688Z"
+      },
+      {
+        "id": "step_1771337289300_c3e5fea56b8458",
+        "agentName": "SolverRevisionAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T14:07:48.688Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver revising your proposal after critique. Produce a revised AgentResponse that addresses all issues.\n\nInternal reasoning (do not put this in output fields):\n- Reference each critique issue in your reasoning before producing output.\n- Consider how each issue affects the answer, keyClaims, assumptions, and confidence.\n\nOutput requirements:\n- Change answer and keyClaims accordingly to address the critique.\n- Adjust confidence downward when critique severity is high (4–5).\n- Add assumptions when critique indicates ambiguity (type \"ambiguity\").\n- Keep keyClaims clean and non-duplicated.\n- Do not include any JSON fragments inside keyClaims. keyClaims must be plain English sentences only.\n- Do not reference the critique or revision process in answer, keyClaims, or assumptions—output only the revised content.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should countries adopt open borders for migration?\n\nOriginal proposal:\n{\n  \"answer\": \"There is no universal answer. Open borders can raise GDP and expand the labor force, but they also risk fiscal costs, housing and public-service burdens, and potential short-run wage or unemployment pressures for some natives if not well managed. A prudent path is phased, evidence‑driven pilots with robust evaluation, coupled with selective openness (by skill, region, or sector) and strong integration, asylum processing, housing, and education capacity. Outcomes will depend on country context (institutions, welfare state, labor-market flexibility) and on design choices that mitigate risks. Use rigorous quasi-experimental evidence and scenario modeling to guide scaling.\",\n  \"keyClaims\": [\n    \"Economic effects are context-dependent: potential GDP gains and larger labor supply, but uncertain wage/unemployment impacts by skill and region.\",\n    \"Fiscal and service pressures depend on welfare generosity, integration success, and public service capacity.\",\n    \"Housing, infrastructure, and local demand are critical bottlenecks influencing net benefits.\",\n    \"Policy design (phased pilots, metrics, integration programs, visa/asylum rules) largely determines success.\",\n    \"Administrative capacity and security/privacy considerations must scale in parallel with openness.\",\n    \"Evidence quality requires quasi-experimental studies, cross-country analyses, and robust data.\",\n    \"Public opinion and political feasibility shape implementation risk.\"\n  ],\n  \"assumptions\": [\n    \"Credible, high-quality data from OECD/World Bank/IMF/UN/NA statistics are available.\",\n    \"Phased pilots can be implemented with predefined metrics and rollback rules.\",\n    \"Countries can scale integration services, housing, and public infrastructure if needed.\",\n    \"Policy effects vary across countries and are properly accounted for in evaluation.\",\n    \"Security, asylum systems, and governance can adapt to increasing mobility without unacceptable risks.\"\n  ],\n  \"confidence\": 0.62\n}\n\nCritique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 5,\n      \"type\": \"factual\",\n      \"note\": \"The claim that open borders universally raise GDP and expand the labor supply is not supported across all contexts; evidence is mixed and sensitive to elasticities, capital deepening, and productivity—long-run effects may differ from short-run projections.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"factual\",\n      \"note\": \"Fiscal and public‑service costs depend heavily on welfare generosity, integration success, and public capacity; the proposal provides no quantified estimates or explicit budget rules, risking underrating costs.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Distributional impacts are underaddressed: low/skilled native workers, regional economies, and vulnerable groups may bear disproportionate costs or face wage suppression; requires explicit distributional analysis.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Housing, infrastructure, and local demand bottlenecks are highlighted but not modeled; neglecting supply constraints can erase potential net gains.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Policy design specifics (phased pilots, metrics, evaluation framework, rollback criteria) are underspecified, creating vulnerability to design bias and failed scaling.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"What exactly qualifies as selective openness (by skill, region, or sector) and how it should be operationalized across different countries remains undefined.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \" Metrics, endpoints, timeframes, and data sources for “robust quasi‑experimental” evaluation are not specified, making success criteria unclear.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"logic\",\n      \"note\": \"Assuming that pilot successes will generalize to wider implementation ignores path dependence, externalities, and selection bias that can skew outcomes.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"overconfidence\",\n      \"note\": \"Credibility is attributed to high‑quality OECD/World Bank/IMF/UN data, but cross‑country comparability and coverage gaps can bias conclusions; overreliance on these sources without caveats is risky.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Security, asylum processing, and governance adaptations are mentioned but not defined or anchored; insufficient attention to controls, privacy, and potential security risks under higher mobility.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \" Macroeconomic feedbacks (inflation, exchange rates, capital flows, monetary policy interactions) are omitted, yet mobility shocks can affect these channels and policy space.\"\n    }\n  ]\n}\n\nRevise the proposal to address each issue. Return the revised AgentResponse as valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Open borders are not universally beneficial; outcomes depend on country-specific institutions, labor markets, and public capacity. Evidence on GDP gains and labor-supply expansion is mixed, and long-run effects can differ from short-run projections. Without careful design, fiscal costs, housing shortages, and public-service burdens may erode any gains. A prudent approach uses phased, evidence-driven pilots with clear budgets and robust integration, asylum processing, and housing/education capacity, alongside selective openness by skill, region, or sector. Evaluation should rely on rigorous quasi-experimental analysis, scenario modeling, and predefined decision rules (milestones, budgets, rollback criteria) before scaling. Key design choices—and their interaction with macro conditions—determine net benefits. Operationalization requires explicit categories of openness, clear eligibility rules, and sunset clauses with transparent data dashboards. Data should come from diverse sources, including administrative records and high-quality international databases, but with caveats about comparability. Security, privacy, and asylum processing must be embedded in governance designs and not treated as afterthoughts. Macro feedbacks (inflation, exchange rates, capital flows) should be monitored as part of ongoing assessment. Distributional impacts should be analyzed and mitigated for low-skilled workers and regional economies.",
+            "keyClaims": [
+              "Economic effects are context-dependent and evidence of universal GDP gains is mixed.",
+              "Long-run outcomes depend on capital deepening, productivity, and design.",
+              "Fiscal and service costs depend on welfare generosity, integration success, and capacity; explicit budgets and guardrails are needed.",
+              "Housing and infrastructure constraints can limit net benefits and must be modeled.",
+              "Policy design quality (phased pilots, metrics, evaluation, rollback) largely determines success.",
+              "Selective openness by skill, region, or sector should be defined and operationalized with clear rules.",
+              "Evaluation frameworks must specify endpoints, data sources, timeframes, and methods.",
+              "Pilot results may not generalize due to path dependence and biases; plan for externalities and selection effects.",
+              "Data quality caveats apply; avoid overreliance on cross-country aggregates without caveats.",
+              "Security, asylum processing, and governance require defined controls, privacy protections, and governance structures.",
+              "Macroeconomic feedbacks should be monitored as mobility shocks interact with inflation, exchange rates, and capital flows."
+            ],
+            "assumptions": [
+              "Credible data will be available from multiple sources with appropriate caveats.",
+              "Governments can fund housing, infrastructure, and integration capacity at scale if warranted by results.",
+              "Political feasibility and legitimacy can be built through stakeholder engagement and transparent evaluation.",
+              "Pilot programs can be rolled back or adjusted based on predefined criteria.",
+              "Sufficient administrative capacity exists to monitor, enforce, and adjust openness policies."
+            ],
+            "confidence": 0.44
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Open borders are not universally beneficial; outcomes depend on country-specific institutions, labor markets, and public capacity. Evidence on GDP gains and labor-supply expansion is mixed, and long-run effects can differ from short-run projections. Without careful design, fiscal costs, housing shortages, and public-service burdens may erode any gains. A prudent approach uses phased, evidence-driven pilots with clear budgets and robust integration, asylum processing, and housing/education capacity, alongside selective openness by skill, region, or sector. Evaluation should rely on rigorous quasi-experimental analysis, scenario modeling, and predefined decision rules (milestones, budgets, rollback criteria) before scaling. Key design choices—and their interaction with macro conditions—determine net benefits. Operationalization requires explicit categories of openness, clear eligibility rules, and sunset clauses with transparent data dashboards. Data should come from diverse sources, including administrative records and high-quality international databases, but with caveats about comparability. Security, privacy, and asylum processing must be embedded in governance designs and not treated as afterthoughts. Macro feedbacks (inflation, exchange rates, capital flows) should be monitored as part of ongoing assessment. Distributional impacts should be analyzed and mitigated for low-skilled workers and regional economies.",
+            "keyClaims": [
+              "Economic effects are context-dependent and evidence of universal GDP gains is mixed.",
+              "Long-run outcomes depend on capital deepening, productivity, and design.",
+              "Fiscal and service costs depend on welfare generosity, integration success, and capacity; explicit budgets and guardrails are needed.",
+              "Housing and infrastructure constraints can limit net benefits and must be modeled.",
+              "Policy design quality (phased pilots, metrics, evaluation, rollback) largely determines success.",
+              "Selective openness by skill, region, or sector should be defined and operationalized with clear rules.",
+              "Evaluation frameworks must specify endpoints, data sources, timeframes, and methods.",
+              "Pilot results may not generalize due to path dependence and biases; plan for externalities and selection effects.",
+              "Data quality caveats apply; avoid overreliance on cross-country aggregates without caveats.",
+              "Security, asylum processing, and governance require defined controls, privacy protections, and governance structures.",
+              "Macroeconomic feedbacks should be monitored as mobility shocks interact with inflation, exchange rates, and capital flows."
+            ],
+            "assumptions": [
+              "Credible data will be available from multiple sources with appropriate caveats.",
+              "Governments can fund housing, infrastructure, and integration capacity at scale if warranted by results.",
+              "Political feasibility and legitimacy can be built through stakeholder engagement and transparent evaluation.",
+              "Pilot programs can be rolled back or adjusted based on predefined criteria.",
+              "Sufficient administrative capacity exists to monitor, enforce, and adjust openness policies."
+            ],
+            "confidence": 0.44
+          }
+        },
+        "completedAt": "2026-02-17T14:08:09.300Z"
+      },
+      {
+        "id": "step_1771337306639_e97455fc44ac68",
+        "agentName": "SynthesizerAgent",
+        "role": "synthesizer",
+        "createdAt": "2026-02-17T14:08:09.301Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Synthesizer. Given the question, the solver's original proposal, the skeptic's critique, and the solver's revision, produce a final synthesized AgentResponse.\n\nInternal reasoning (do not put this in output fields):\n- Consider how the critique and revision improved or changed the proposal.\n- Synthesize the best elements into a coherent final answer.\n\nOutput requirements:\n- Produce a clear, well-supported answer that incorporates valid points from the debate.\n- keyClaims must be plain English sentences only. No JSON fragments.\n- Set confidence appropriately based on the debate outcome.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should countries adopt open borders for migration?\n\nSolver proposal:\n{\n  \"answer\": \"There is no universal answer. Open borders can raise GDP and expand the labor force, but they also risk fiscal costs, housing and public-service burdens, and potential short-run wage or unemployment pressures for some natives if not well managed. A prudent path is phased, evidence‑driven pilots with robust evaluation, coupled with selective openness (by skill, region, or sector) and strong integration, asylum processing, housing, and education capacity. Outcomes will depend on country context (institutions, welfare state, labor-market flexibility) and on design choices that mitigate risks. Use rigorous quasi-experimental evidence and scenario modeling to guide scaling.\",\n  \"keyClaims\": [\n    \"Economic effects are context-dependent: potential GDP gains and larger labor supply, but uncertain wage/unemployment impacts by skill and region.\",\n    \"Fiscal and service pressures depend on welfare generosity, integration success, and public service capacity.\",\n    \"Housing, infrastructure, and local demand are critical bottlenecks influencing net benefits.\",\n    \"Policy design (phased pilots, metrics, integration programs, visa/asylum rules) largely determines success.\",\n    \"Administrative capacity and security/privacy considerations must scale in parallel with openness.\",\n    \"Evidence quality requires quasi-experimental studies, cross-country analyses, and robust data.\",\n    \"Public opinion and political feasibility shape implementation risk.\"\n  ],\n  \"assumptions\": [\n    \"Credible, high-quality data from OECD/World Bank/IMF/UN/NA statistics are available.\",\n    \"Phased pilots can be implemented with predefined metrics and rollback rules.\",\n    \"Countries can scale integration services, housing, and public infrastructure if needed.\",\n    \"Policy effects vary across countries and are properly accounted for in evaluation.\",\n    \"Security, asylum systems, and governance can adapt to increasing mobility without unacceptable risks.\"\n  ],\n  \"confidence\": 0.62\n}\n\nSkeptic critique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 5,\n      \"type\": \"factual\",\n      \"note\": \"The claim that open borders universally raise GDP and expand the labor supply is not supported across all contexts; evidence is mixed and sensitive to elasticities, capital deepening, and productivity—long-run effects may differ from short-run projections.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"factual\",\n      \"note\": \"Fiscal and public‑service costs depend heavily on welfare generosity, integration success, and public capacity; the proposal provides no quantified estimates or explicit budget rules, risking underrating costs.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Distributional impacts are underaddressed: low/skilled native workers, regional economies, and vulnerable groups may bear disproportionate costs or face wage suppression; requires explicit distributional analysis.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Housing, infrastructure, and local demand bottlenecks are highlighted but not modeled; neglecting supply constraints can erase potential net gains.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Policy design specifics (phased pilots, metrics, evaluation framework, rollback criteria) are underspecified, creating vulnerability to design bias and failed scaling.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"What exactly qualifies as selective openness (by skill, region, or sector) and how it should be operationalized across different countries remains undefined.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \" Metrics, endpoints, timeframes, and data sources for “robust quasi‑experimental” evaluation are not specified, making success criteria unclear.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"logic\",\n      \"note\": \"Assuming that pilot successes will generalize to wider implementation ignores path dependence, externalities, and selection bias that can skew outcomes.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"overconfidence\",\n      \"note\": \"Credibility is attributed to high‑quality OECD/World Bank/IMF/UN data, but cross‑country comparability and coverage gaps can bias conclusions; overreliance on these sources without caveats is risky.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Security, asylum processing, and governance adaptations are mentioned but not defined or anchored; insufficient attention to controls, privacy, and potential security risks under higher mobility.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \" Macroeconomic feedbacks (inflation, exchange rates, capital flows, monetary policy interactions) are omitted, yet mobility shocks can affect these channels and policy space.\"\n    }\n  ]\n}\n\nSolver revision:\n{\n  \"answer\": \"Open borders are not universally beneficial; outcomes depend on country-specific institutions, labor markets, and public capacity. Evidence on GDP gains and labor-supply expansion is mixed, and long-run effects can differ from short-run projections. Without careful design, fiscal costs, housing shortages, and public-service burdens may erode any gains. A prudent approach uses phased, evidence-driven pilots with clear budgets and robust integration, asylum processing, and housing/education capacity, alongside selective openness by skill, region, or sector. Evaluation should rely on rigorous quasi-experimental analysis, scenario modeling, and predefined decision rules (milestones, budgets, rollback criteria) before scaling. Key design choices—and their interaction with macro conditions—determine net benefits. Operationalization requires explicit categories of openness, clear eligibility rules, and sunset clauses with transparent data dashboards. Data should come from diverse sources, including administrative records and high-quality international databases, but with caveats about comparability. Security, privacy, and asylum processing must be embedded in governance designs and not treated as afterthoughts. Macro feedbacks (inflation, exchange rates, capital flows) should be monitored as part of ongoing assessment. Distributional impacts should be analyzed and mitigated for low-skilled workers and regional economies.\",\n  \"keyClaims\": [\n    \"Economic effects are context-dependent and evidence of universal GDP gains is mixed.\",\n    \"Long-run outcomes depend on capital deepening, productivity, and design.\",\n    \"Fiscal and service costs depend on welfare generosity, integration success, and capacity; explicit budgets and guardrails are needed.\",\n    \"Housing and infrastructure constraints can limit net benefits and must be modeled.\",\n    \"Policy design quality (phased pilots, metrics, evaluation, rollback) largely determines success.\",\n    \"Selective openness by skill, region, or sector should be defined and operationalized with clear rules.\",\n    \"Evaluation frameworks must specify endpoints, data sources, timeframes, and methods.\",\n    \"Pilot results may not generalize due to path dependence and biases; plan for externalities and selection effects.\",\n    \"Data quality caveats apply; avoid overreliance on cross-country aggregates without caveats.\",\n    \"Security, asylum processing, and governance require defined controls, privacy protections, and governance structures.\",\n    \"Macroeconomic feedbacks should be monitored as mobility shocks interact with inflation, exchange rates, and capital flows.\"\n  ],\n  \"assumptions\": [\n    \"Credible data will be available from multiple sources with appropriate caveats.\",\n    \"Governments can fund housing, infrastructure, and integration capacity at scale if warranted by results.\",\n    \"Political feasibility and legitimacy can be built through stakeholder engagement and transparent evaluation.\",\n    \"Pilot programs can be rolled back or adjusted based on predefined criteria.\",\n    \"Sufficient administrative capacity exists to monitor, enforce, and adjust openness policies.\"\n  ],\n  \"confidence\": 0.44\n}\n\nSynthesize a final AgentResponse from the debate. Return valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Open borders should not be treated as a universal policy. Whether to open borders depends on country-specific institutions, labor markets, and public capacity. Evidence shows GDP gains and labor-supply effects are mixed and can differ in the long run from short-run projections. Without careful design, fiscal costs, housing shortages, and strain on public services can erode potential benefits. A prudent path is phased, evidence-driven pilots with clear budgets and strong integration, asylum processing, and housing/education capacity, combined with selective openness by skill, region, or sector. Evaluation should rely on rigorous quasi-experimental analysis, scenario modeling, and predefined decision rules (milestones, budgets, rollback criteria) before scaling. Operationalize explicit openness categories and eligibility rules, include sunset clauses with transparent dashboards, and embed security, privacy, and governance safeguards. Monitor macro feedbacks (inflation, exchange rates, capital flows). Explicitly analyze distributional impacts to protect low-skilled workers and regional economies.",
+            "keyClaims": [
+              "Economic effects are context-dependent and evidence for universal GDP gains is mixed.",
+              "Long-run outcomes depend on capital deepening, productivity, and the design of openness.",
+              "Fiscal and service costs depend on welfare generosity, integration success, and capacity; explicit budgets and guardrails are needed.",
+              "Housing and infrastructure constraints can limit net benefits and must be modeled.",
+              "Policy design quality (phased pilots, metrics, evaluation, rollback) largely determines success.",
+              "Selective openness by skill, region, or sector should be defined and operationalized with clear rules.",
+              "Evaluation frameworks must specify endpoints, data sources, timeframes, and analytic methods.",
+              "Pilot results may not generalize due to path dependence, externalities, and selection effects.",
+              "Data quality caveats apply; avoid overreliance on cross-country aggregates without caveats.",
+              "Security, asylum processing, and governance require defined controls and privacy protections embedded in design.",
+              "Macroeconomic feedbacks (inflation, exchange rates, capital flows) should be monitored as mobility interacts with macro conditions.",
+              "Distributional impacts should be analyzed and mitigated for low-skilled workers and regional economies."
+            ],
+            "assumptions": [
+              "Credible data will be available from multiple sources with caveats.",
+              "Governments can fund housing, infrastructure, and integration capacity at scale if warranted by results.",
+              "Political feasibility can be built through stakeholder engagement and transparent evaluation.",
+              "Pilot programs can be rolled back or adjusted based on predefined criteria.",
+              "Sufficient administrative capacity exists to monitor, enforce, and adjust openness policies.",
+              "Counterfactual risk: Fiscal overrun due to higher-than-expected welfare, housing, and integration costs",
+              "Judge summary: The proposal offers a coherent, cautious framework for evaluating openness to migration through phased pilots, guardrails, and an emphasis on governance, evaluation, and macro monitoring. However, it is incomplete and somewhat aspirational: it lacks explicit budgets and cost estimates, clear operational definitions and criteria for selective openness, detailed evaluation metrics and data sources, and thorough treatment of supply constraints, distributional impacts, security controls, and international spillovers. To improve rigor, the plan should specify budget rules, concrete eligibility criteria, measurable evaluation endpoints with data requirements, supply-side modeling for housing/infrastructure, distributional impact plans, and risk-management provisions across macro and security dimensions."
+            ],
+            "confidence": 0.65
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Open borders should not be treated as a universal policy. Whether to open borders depends on country-specific institutions, labor markets, and public capacity. Evidence shows GDP gains and labor-supply effects are mixed and can differ in the long run from short-run projections. Without careful design, fiscal costs, housing shortages, and strain on public services can erode potential benefits. A prudent path is phased, evidence-driven pilots with clear budgets and strong integration, asylum processing, and housing/education capacity, combined with selective openness by skill, region, or sector. Evaluation should rely on rigorous quasi-experimental analysis, scenario modeling, and predefined decision rules (milestones, budgets, rollback criteria) before scaling. Operationalize explicit openness categories and eligibility rules, include sunset clauses with transparent dashboards, and embed security, privacy, and governance safeguards. Monitor macro feedbacks (inflation, exchange rates, capital flows). Explicitly analyze distributional impacts to protect low-skilled workers and regional economies.",
+            "keyClaims": [
+              "Economic effects are context-dependent and evidence for universal GDP gains is mixed.",
+              "Long-run outcomes depend on capital deepening, productivity, and the design of openness.",
+              "Fiscal and service costs depend on welfare generosity, integration success, and capacity; explicit budgets and guardrails are needed.",
+              "Housing and infrastructure constraints can limit net benefits and must be modeled.",
+              "Policy design quality (phased pilots, metrics, evaluation, rollback) largely determines success.",
+              "Selective openness by skill, region, or sector should be defined and operationalized with clear rules.",
+              "Evaluation frameworks must specify endpoints, data sources, timeframes, and analytic methods.",
+              "Pilot results may not generalize due to path dependence, externalities, and selection effects.",
+              "Data quality caveats apply; avoid overreliance on cross-country aggregates without caveats.",
+              "Security, asylum processing, and governance require defined controls and privacy protections embedded in design.",
+              "Macroeconomic feedbacks (inflation, exchange rates, capital flows) should be monitored as mobility interacts with macro conditions.",
+              "Distributional impacts should be analyzed and mitigated for low-skilled workers and regional economies."
+            ],
+            "assumptions": [
+              "Credible data will be available from multiple sources with caveats.",
+              "Governments can fund housing, infrastructure, and integration capacity at scale if warranted by results.",
+              "Political feasibility can be built through stakeholder engagement and transparent evaluation.",
+              "Pilot programs can be rolled back or adjusted based on predefined criteria.",
+              "Sufficient administrative capacity exists to monitor, enforce, and adjust openness policies.",
+              "Counterfactual risk: Fiscal overrun due to higher-than-expected welfare, housing, and integration costs",
+              "Judge summary: The proposal offers a coherent, cautious framework for evaluating openness to migration through phased pilots, guardrails, and an emphasis on governance, evaluation, and macro monitoring. However, it is incomplete and somewhat aspirational: it lacks explicit budgets and cost estimates, clear operational definitions and criteria for selective openness, detailed evaluation metrics and data sources, and thorough treatment of supply constraints, distributional impacts, security controls, and international spillovers. To improve rigor, the plan should specify budget rules, concrete eligibility criteria, measurable evaluation endpoints with data requirements, supply-side modeling for housing/infrastructure, distributional impact plans, and risk-management provisions across macro and security dimensions."
+            ],
+            "confidence": 0.65
+          }
+        },
+        "completedAt": "2026-02-17T14:08:26.639Z"
+      },
+      {
+        "id": "step_1771337322263_0095df925fc5",
+        "agentName": "CounterfactualAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:08:26.639Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a counterfactual analyst. Identify plausible failure modes, trigger conditions, and mitigations for the proposal. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should countries adopt open borders for migration?\n\nProposal:\n{\n  \"answer\": \"Open borders should not be treated as a universal policy. Whether to open borders depends on country-specific institutions, labor markets, and public capacity. Evidence shows GDP gains and labor-supply effects are mixed and can differ in the long run from short-run projections. Without careful design, fiscal costs, housing shortages, and strain on public services can erode potential benefits. A prudent path is phased, evidence-driven pilots with clear budgets and strong integration, asylum processing, and housing/education capacity, combined with selective openness by skill, region, or sector. Evaluation should rely on rigorous quasi-experimental analysis, scenario modeling, and predefined decision rules (milestones, budgets, rollback criteria) before scaling. Operationalize explicit openness categories and eligibility rules, include sunset clauses with transparent dashboards, and embed security, privacy, and governance safeguards. Monitor macro feedbacks (inflation, exchange rates, capital flows). Explicitly analyze distributional impacts to protect low-skilled workers and regional economies.\",\n  \"keyClaims\": [\n    \"Economic effects are context-dependent and evidence for universal GDP gains is mixed.\",\n    \"Long-run outcomes depend on capital deepening, productivity, and the design of openness.\",\n    \"Fiscal and service costs depend on welfare generosity, integration success, and capacity; explicit budgets and guardrails are needed.\",\n    \"Housing and infrastructure constraints can limit net benefits and must be modeled.\",\n    \"Policy design quality (phased pilots, metrics, evaluation, rollback) largely determines success.\",\n    \"Selective openness by skill, region, or sector should be defined and operationalized with clear rules.\",\n    \"Evaluation frameworks must specify endpoints, data sources, timeframes, and analytic methods.\",\n    \"Pilot results may not generalize due to path dependence, externalities, and selection effects.\",\n    \"Data quality caveats apply; avoid overreliance on cross-country aggregates without caveats.\",\n    \"Security, asylum processing, and governance require defined controls and privacy protections embedded in design.\",\n    \"Macroeconomic feedbacks (inflation, exchange rates, capital flows) should be monitored as mobility interacts with macro conditions.\",\n    \"Distributional impacts should be analyzed and mitigated for low-skilled workers and regional economies.\"\n  ],\n  \"assumptions\": [\n    \"Credible data will be available from multiple sources with caveats.\",\n    \"Governments can fund housing, infrastructure, and integration capacity at scale if warranted by results.\",\n    \"Political feasibility can be built through stakeholder engagement and transparent evaluation.\",\n    \"Pilot programs can be rolled back or adjusted based on predefined criteria.\",\n    \"Sufficient administrative capacity exists to monitor, enforce, and adjust openness policies.\"\n  ],\n  \"confidence\": 0.58\n}"
+            }
+          ],
+          "schemaName": "Counterfactual",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "failureModes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "triggerConditions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "mitigations": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "failureModes",
+              "triggerConditions",
+              "mitigations"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "failureModes": [
+              "Fiscal overrun due to higher-than-expected welfare, housing, and integration costs",
+              "Housing market pressures (rental price hikes, limited supply) in major cities leading to affordability crises",
+              "Public service capacity strain (healthcare, education, housing, policing) exceeding budgeting and staffing plans",
+              "Labor market disruption for low-skilled workers with wage suppression or local unemployment spikes",
+              "Widening regional inequality and urban-rural disparities as benefits concentrate in select areas",
+              "Security, asylum processing, and governance vulnerabilities (backlogs, fraud, privacy breaches)",
+              "Administrative complexity and bureaucratic inefficiencies in visa/permits leading to delays and misallocation",
+              "Policy path dependence and political backlash eroding public trust and future openness opportunities",
+              "Data quality and evaluation challenges causing incorrect scaling, misinterpreting results due to selection bias",
+              "Macro spillovers (inflation, exchange rate volatility, capital flows) amplified by migration and policy design",
+              "External shocks (economic downturns, climate-related displacement) exacerbating negative outcomes when openness is expanding"
+            ],
+            "triggerConditions": [
+              "Pilot budget overruns exceeding predefined thresholds",
+              "Housing affordability deterioration (e.g., rents up beyond a set percentile or index) in key pilot cities within a defined period",
+              "Public service wait times or capacity utilization exceeding preset caps",
+              "Unemployment or underemployment among low-skilled workers rising by a predefined margin",
+              "Asylum processing backlogs exceeding target processing times or backlogs crossing thresholds",
+              "Security incidents or breaches tied to migration flows surpassing risk thresholds",
+              "Inflation or exchange-rate volatility linked to migrant movements exceeding bands",
+              "Regional GDP growth or investment in pilot regions falling below milestones",
+              "Failure to achieve key integration or job-matching endpoints by milestones",
+              "Detection of governance, compliance, or fraud issues within pilot funding or implementation"
+            ],
+            "mitigations": [
+              "Institute phased pilots with explicit budgets, milestone reviews, and automatic rollback if endpoints are missed",
+              "Invest in housing stock, urban planning, language and credential recognition, and job-training to offset integration costs",
+              "Implement selective openness by skill, region, or sector with clear eligibility rules and strong asylum processing",
+              "Strengthen governance with independent audits, transparent dashboards, data-sharing standards, and privacy safeguards",
+              "Provide surge capacity for public services and targeted funding to protect vulnerable populations during scale-up",
+              "Apply macroeconomic safeguards (fiscal buffers, counter-cyclical tools) to dampen inflation or capital-flow shocks",
+              "Introduce labor-market protections (minimum wage considerations, retraining programs, wage subsidies) to cushion low-skilled workers",
+              "Target regional development investments to lagging areas to counteract uneven benefits",
+              "Standardize evaluation metrics, conduct ex-ante and ex-post analyses, and plan sensitivity analyses to prevent misinterpretation",
+              "Enhance security and due-process mechanisms in asylum handling to prevent backlogs and human-rights concerns",
+              "Define sunset clauses and predefined exit strategies with clear rollback criteria and emergency triggers"
+            ]
+          }
+        ],
+        "output": {
+          "kind": "counterfactual",
+          "data": {
+            "failureModes": [
+              "Fiscal overrun due to higher-than-expected welfare, housing, and integration costs",
+              "Housing market pressures (rental price hikes, limited supply) in major cities leading to affordability crises",
+              "Public service capacity strain (healthcare, education, housing, policing) exceeding budgeting and staffing plans",
+              "Labor market disruption for low-skilled workers with wage suppression or local unemployment spikes",
+              "Widening regional inequality and urban-rural disparities as benefits concentrate in select areas",
+              "Security, asylum processing, and governance vulnerabilities (backlogs, fraud, privacy breaches)",
+              "Administrative complexity and bureaucratic inefficiencies in visa/permits leading to delays and misallocation",
+              "Policy path dependence and political backlash eroding public trust and future openness opportunities",
+              "Data quality and evaluation challenges causing incorrect scaling, misinterpreting results due to selection bias",
+              "Macro spillovers (inflation, exchange rate volatility, capital flows) amplified by migration and policy design",
+              "External shocks (economic downturns, climate-related displacement) exacerbating negative outcomes when openness is expanding"
+            ],
+            "triggerConditions": [
+              "Pilot budget overruns exceeding predefined thresholds",
+              "Housing affordability deterioration (e.g., rents up beyond a set percentile or index) in key pilot cities within a defined period",
+              "Public service wait times or capacity utilization exceeding preset caps",
+              "Unemployment or underemployment among low-skilled workers rising by a predefined margin",
+              "Asylum processing backlogs exceeding target processing times or backlogs crossing thresholds",
+              "Security incidents or breaches tied to migration flows surpassing risk thresholds",
+              "Inflation or exchange-rate volatility linked to migrant movements exceeding bands",
+              "Regional GDP growth or investment in pilot regions falling below milestones",
+              "Failure to achieve key integration or job-matching endpoints by milestones",
+              "Detection of governance, compliance, or fraud issues within pilot funding or implementation"
+            ],
+            "mitigations": [
+              "Institute phased pilots with explicit budgets, milestone reviews, and automatic rollback if endpoints are missed",
+              "Invest in housing stock, urban planning, language and credential recognition, and job-training to offset integration costs",
+              "Implement selective openness by skill, region, or sector with clear eligibility rules and strong asylum processing",
+              "Strengthen governance with independent audits, transparent dashboards, data-sharing standards, and privacy safeguards",
+              "Provide surge capacity for public services and targeted funding to protect vulnerable populations during scale-up",
+              "Apply macroeconomic safeguards (fiscal buffers, counter-cyclical tools) to dampen inflation or capital-flow shocks",
+              "Introduce labor-market protections (minimum wage considerations, retraining programs, wage subsidies) to cushion low-skilled workers",
+              "Target regional development investments to lagging areas to counteract uneven benefits",
+              "Standardize evaluation metrics, conduct ex-ante and ex-post analyses, and plan sensitivity analyses to prevent misinterpretation",
+              "Enhance security and due-process mechanisms in asylum handling to prevent backlogs and human-rights concerns",
+              "Define sunset clauses and predefined exit strategies with clear rollback criteria and emergency triggers"
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:08:42.263Z"
+      },
+      {
+        "id": "step_1771337344754_af452d67f2eda8",
+        "agentName": "CalibrationAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:08:42.264Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a calibration auditor. Set adjusted confidence and claim-level confidences from the proposed answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Proposal JSON:\n{\n  \"answer\": \"Open borders should not be treated as a universal policy. Whether to open borders depends on country-specific institutions, labor markets, and public capacity. Evidence shows GDP gains and labor-supply effects are mixed and can differ in the long run from short-run projections. Without careful design, fiscal costs, housing shortages, and strain on public services can erode potential benefits. A prudent path is phased, evidence-driven pilots with clear budgets and strong integration, asylum processing, and housing/education capacity, combined with selective openness by skill, region, or sector. Evaluation should rely on rigorous quasi-experimental analysis, scenario modeling, and predefined decision rules (milestones, budgets, rollback criteria) before scaling. Operationalize explicit openness categories and eligibility rules, include sunset clauses with transparent dashboards, and embed security, privacy, and governance safeguards. Monitor macro feedbacks (inflation, exchange rates, capital flows). Explicitly analyze distributional impacts to protect low-skilled workers and regional economies.\",\n  \"keyClaims\": [\n    \"Economic effects are context-dependent and evidence for universal GDP gains is mixed.\",\n    \"Long-run outcomes depend on capital deepening, productivity, and the design of openness.\",\n    \"Fiscal and service costs depend on welfare generosity, integration success, and capacity; explicit budgets and guardrails are needed.\",\n    \"Housing and infrastructure constraints can limit net benefits and must be modeled.\",\n    \"Policy design quality (phased pilots, metrics, evaluation, rollback) largely determines success.\",\n    \"Selective openness by skill, region, or sector should be defined and operationalized with clear rules.\",\n    \"Evaluation frameworks must specify endpoints, data sources, timeframes, and analytic methods.\",\n    \"Pilot results may not generalize due to path dependence, externalities, and selection effects.\",\n    \"Data quality caveats apply; avoid overreliance on cross-country aggregates without caveats.\",\n    \"Security, asylum processing, and governance require defined controls and privacy protections embedded in design.\",\n    \"Macroeconomic feedbacks (inflation, exchange rates, capital flows) should be monitored as mobility interacts with macro conditions.\",\n    \"Distributional impacts should be analyzed and mitigated for low-skilled workers and regional economies.\"\n  ],\n  \"assumptions\": [\n    \"Credible data will be available from multiple sources with caveats.\",\n    \"Governments can fund housing, infrastructure, and integration capacity at scale if warranted by results.\",\n    \"Political feasibility can be built through stakeholder engagement and transparent evaluation.\",\n    \"Pilot programs can be rolled back or adjusted based on predefined criteria.\",\n    \"Sufficient administrative capacity exists to monitor, enforce, and adjust openness policies.\",\n    \"Counterfactual risk: Fiscal overrun due to higher-than-expected welfare, housing, and integration costs\"\n  ],\n  \"confidence\": 0.58\n}"
+            }
+          ],
+          "schemaName": "Calibration",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "adjustedConfidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "rationale": {
+                "type": "string"
+              },
+              "claimConfidences": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "claim": {
+                      "type": "string"
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    }
+                  },
+                  "required": [
+                    "claim",
+                    "confidence"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "adjustedConfidence",
+              "rationale",
+              "claimConfidences"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "adjustedConfidence": 0.65,
+            "rationale": "Confidences calibrated against the proposal's hedged, evidence-driven framing. Each claim is directly echoed in the text, but with varying degrees of generalization and uncertainty (e.g., generalization across countries, long-run effects, and pilot generalizability). The numbers reflect both explicit support in the proposal and the inherent uncertainties typically associated with open-border policy analyses.",
+            "claimConfidences": [
+              {
+                "claim": "Economic effects are context-dependent and evidence for universal GDP gains is mixed.",
+                "confidence": 0.78
+              },
+              {
+                "claim": "Long-run outcomes depend on capital deepening, productivity, and the design of openness.",
+                "confidence": 0.74
+              },
+              {
+                "claim": "Fiscal and service costs depend on welfare generosity, integration success, and capacity; explicit budgets and guardrails are needed.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Housing and infrastructure constraints can limit net benefits and must be modeled.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Policy design quality (phased pilots, metrics, evaluation, rollback) largely determines success.",
+                "confidence": 0.85
+              },
+              {
+                "claim": "Selective openness by skill, region, or sector should be defined and operationalized with clear rules.",
+                "confidence": 0.82
+              },
+              {
+                "claim": "Evaluation frameworks must specify endpoints, data sources, timeframes, and analytic methods.",
+                "confidence": 0.88
+              },
+              {
+                "claim": "Pilot results may not generalize due to path dependence, externalities, and selection effects.",
+                "confidence": 0.92
+              },
+              {
+                "claim": "Data quality caveats apply; avoid overreliance on cross-country aggregates without caveats.",
+                "confidence": 0.84
+              },
+              {
+                "claim": "Security, asylum processing, and governance require defined controls and privacy protections embedded in design.",
+                "confidence": 0.84
+              },
+              {
+                "claim": "Macroeconomic feedbacks (inflation, exchange rates, capital flows) should be monitored as mobility interacts with macro conditions.",
+                "confidence": 0.86
+              },
+              {
+                "claim": "Distributional impacts should be analyzed and mitigated for low-skilled workers and regional economies.",
+                "confidence": 0.93
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "calibration",
+          "data": {
+            "adjustedConfidence": 0.65,
+            "rationale": "Confidences calibrated against the proposal's hedged, evidence-driven framing. Each claim is directly echoed in the text, but with varying degrees of generalization and uncertainty (e.g., generalization across countries, long-run effects, and pilot generalizability). The numbers reflect both explicit support in the proposal and the inherent uncertainties typically associated with open-border policy analyses.",
+            "claimConfidences": [
+              {
+                "claim": "Economic effects are context-dependent and evidence for universal GDP gains is mixed.",
+                "confidence": 0.78
+              },
+              {
+                "claim": "Long-run outcomes depend on capital deepening, productivity, and the design of openness.",
+                "confidence": 0.74
+              },
+              {
+                "claim": "Fiscal and service costs depend on welfare generosity, integration success, and capacity; explicit budgets and guardrails are needed.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Housing and infrastructure constraints can limit net benefits and must be modeled.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Policy design quality (phased pilots, metrics, evaluation, rollback) largely determines success.",
+                "confidence": 0.85
+              },
+              {
+                "claim": "Selective openness by skill, region, or sector should be defined and operationalized with clear rules.",
+                "confidence": 0.82
+              },
+              {
+                "claim": "Evaluation frameworks must specify endpoints, data sources, timeframes, and analytic methods.",
+                "confidence": 0.88
+              },
+              {
+                "claim": "Pilot results may not generalize due to path dependence, externalities, and selection effects.",
+                "confidence": 0.92
+              },
+              {
+                "claim": "Data quality caveats apply; avoid overreliance on cross-country aggregates without caveats.",
+                "confidence": 0.84
+              },
+              {
+                "claim": "Security, asylum processing, and governance require defined controls and privacy protections embedded in design.",
+                "confidence": 0.84
+              },
+              {
+                "claim": "Macroeconomic feedbacks (inflation, exchange rates, capital flows) should be monitored as mobility interacts with macro conditions.",
+                "confidence": 0.86
+              },
+              {
+                "claim": "Distributional impacts should be analyzed and mitigated for low-skilled workers and regional economies.",
+                "confidence": 0.93
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:09:04.754Z"
+      },
+      {
+        "id": "step_1771337364741_1c81eca809c238",
+        "agentName": "JudgeAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:09:04.755Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a strict research judge. Score answer quality with rubric scores 1-5. Output only valid JSON matching schema."
+            },
+            {
+              "role": "user",
+              "content": "Final proposal JSON:\n{\n  \"answer\": \"Open borders should not be treated as a universal policy. Whether to open borders depends on country-specific institutions, labor markets, and public capacity. Evidence shows GDP gains and labor-supply effects are mixed and can differ in the long run from short-run projections. Without careful design, fiscal costs, housing shortages, and strain on public services can erode potential benefits. A prudent path is phased, evidence-driven pilots with clear budgets and strong integration, asylum processing, and housing/education capacity, combined with selective openness by skill, region, or sector. Evaluation should rely on rigorous quasi-experimental analysis, scenario modeling, and predefined decision rules (milestones, budgets, rollback criteria) before scaling. Operationalize explicit openness categories and eligibility rules, include sunset clauses with transparent dashboards, and embed security, privacy, and governance safeguards. Monitor macro feedbacks (inflation, exchange rates, capital flows). Explicitly analyze distributional impacts to protect low-skilled workers and regional economies.\",\n  \"keyClaims\": [\n    \"Economic effects are context-dependent and evidence for universal GDP gains is mixed.\",\n    \"Long-run outcomes depend on capital deepening, productivity, and the design of openness.\",\n    \"Fiscal and service costs depend on welfare generosity, integration success, and capacity; explicit budgets and guardrails are needed.\",\n    \"Housing and infrastructure constraints can limit net benefits and must be modeled.\",\n    \"Policy design quality (phased pilots, metrics, evaluation, rollback) largely determines success.\",\n    \"Selective openness by skill, region, or sector should be defined and operationalized with clear rules.\",\n    \"Evaluation frameworks must specify endpoints, data sources, timeframes, and analytic methods.\",\n    \"Pilot results may not generalize due to path dependence, externalities, and selection effects.\",\n    \"Data quality caveats apply; avoid overreliance on cross-country aggregates without caveats.\",\n    \"Security, asylum processing, and governance require defined controls and privacy protections embedded in design.\",\n    \"Macroeconomic feedbacks (inflation, exchange rates, capital flows) should be monitored as mobility interacts with macro conditions.\",\n    \"Distributional impacts should be analyzed and mitigated for low-skilled workers and regional economies.\"\n  ],\n  \"assumptions\": [\n    \"Credible data will be available from multiple sources with caveats.\",\n    \"Governments can fund housing, infrastructure, and integration capacity at scale if warranted by results.\",\n    \"Political feasibility can be built through stakeholder engagement and transparent evaluation.\",\n    \"Pilot programs can be rolled back or adjusted based on predefined criteria.\",\n    \"Sufficient administrative capacity exists to monitor, enforce, and adjust openness policies.\",\n    \"Counterfactual risk: Fiscal overrun due to higher-than-expected welfare, housing, and integration costs\"\n  ],\n  \"confidence\": 0.58\n}\n\nCritiques:\n[\n  {\n    \"targetAgent\": \"SolverAgent\",\n    \"issues\": [\n      {\n        \"severity\": 5,\n        \"type\": \"factual\",\n        \"note\": \"The claim that open borders universally raise GDP and expand the labor supply is not supported across all contexts; evidence is mixed and sensitive to elasticities, capital deepening, and productivity—long-run effects may differ from short-run projections.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"factual\",\n        \"note\": \"Fiscal and public‑service costs depend heavily on welfare generosity, integration success, and public capacity; the proposal provides no quantified estimates or explicit budget rules, risking underrating costs.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"Distributional impacts are underaddressed: low/skilled native workers, regional economies, and vulnerable groups may bear disproportionate costs or face wage suppression; requires explicit distributional analysis.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"Housing, infrastructure, and local demand bottlenecks are highlighted but not modeled; neglecting supply constraints can erase potential net gains.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"Policy design specifics (phased pilots, metrics, evaluation framework, rollback criteria) are underspecified, creating vulnerability to design bias and failed scaling.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"ambiguity\",\n        \"note\": \"What exactly qualifies as selective openness (by skill, region, or sector) and how it should be operationalized across different countries remains undefined.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"ambiguity\",\n        \"note\": \" Metrics, endpoints, timeframes, and data sources for “robust quasi‑experimental” evaluation are not specified, making success criteria unclear.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"logic\",\n        \"note\": \"Assuming that pilot successes will generalize to wider implementation ignores path dependence, externalities, and selection bias that can skew outcomes.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"overconfidence\",\n        \"note\": \"Credibility is attributed to high‑quality OECD/World Bank/IMF/UN data, but cross‑country comparability and coverage gaps can bias conclusions; overreliance on these sources without caveats is risky.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"Security, asylum processing, and governance adaptations are mentioned but not defined or anchored; insufficient attention to controls, privacy, and potential security risks under higher mobility.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \" Macroeconomic feedbacks (inflation, exchange rates, capital flows, monetary policy interactions) are omitted, yet mobility shocks can affect these channels and policy space.\"\n      }\n    ]\n  },\n  {\n    \"targetAgent\": \"Open borders policy critique\",\n    \"issues\": [\n      {\n        \"severity\": 5,\n        \"type\": \"factual\",\n        \"note\": \"Assumes open borders yield GDP gains and larger labor supply without quantifying magnitudes or distributional effects; lacks explicit ranges, uncertainty, or scenario analysis.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"missing\",\n        \"note\": \"No explicit operational definition of 'open borders' (who can move, under what conditions, duration, asylum vs. economic migration, temporary vs. permanent).\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"missing\",\n        \"note\": \"No fiscal analysis of migration: costs and revenues, welfare state interactions, taxation implications, and financing of public services under different openness levels.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"ambiguity\",\n        \"note\": \"References to 'phased pilots' and 'scale' lack concrete timelines, thresholds, evaluation criteria, and decision rules for scaling up or rollback.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"Insufficient treatment of security, border control, asylum processing capacity, and risks of fraud or abuse; no operational risk assessment.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"No discussion of distributional impacts within natives (wage, unemployment, housing demand) by skill or region, nor consideration of policy responses to these effects.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"factual\",\n        \"note\": \"Assumes high-quality, comparable data from OECD/World Bank/IMF/UN; ignores that data quality and comparability vary across countries and over time.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"No analysis of international spillovers on origin countries (brain drain, remittances, development) or potential compensation/mitigation mechanisms.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"ambiguity\",\n        \"note\": \"Suggests 'by skill, region, or sector' openness but provides no criteria, prioritization framework, or safeguards against discrimination and inequitable access.\"\n      },\n      {\n        \"severity\": 2,\n        \"type\": \"overconfidence\",\n        \"note\": \"Claims 'robust quasi-experimental evidence' will guide scaling without specifying the research design, metrics, data quality checks, or rollback rules; otherwise, evidence base may be overstated.\"\n      }\n    ]\n  }\n]"
+            }
+          ],
+          "schemaName": "Judgement",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "rubricScores": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "coherence": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "completeness": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "factualRisk": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "uncertaintyHandling": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  }
+                },
+                "required": [
+                  "coherence",
+                  "completeness",
+                  "factualRisk",
+                  "uncertaintyHandling"
+                ]
+              },
+              "strengths": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "weaknesses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "summary": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "rubricScores",
+              "strengths",
+              "weaknesses",
+              "summary"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "rubricScores": {
+              "coherence": 4,
+              "completeness": 3,
+              "factualRisk": 4,
+              "uncertaintyHandling": 3
+            },
+            "strengths": [
+              "Clear emphasis on phased, evidence-driven pilots with predefined milestones and rollback rules.",
+              "Explicit focus on governance, privacy, security, and capacity-building, including housing and integration.",
+              "Utilizes an evaluation framework with endpoints, data sources, and timeframes discussed in principle.",
+              "Acknowledges distributional impacts and the importance of monitoring macroeconomic feedback.",
+              "Advocates transparency through dashboards and sunset clauses, and explicit openness categories."
+            ],
+            "weaknesses": [
+              "Lacks quantified budget estimates and explicit cost rules; fiscal implications are underspecified.",
+              "Ambiguity around what exactly constitutes 'open borders' and how selective openness by skill/region/sector should be operationalized.",
+              "Evaluation design is described but without concrete metrics, endpoints, timeframes, or data-source specifications.",
+              "Insufficient treatment of housing, infrastructure constraints, and housing-demand dynamics; no supply-side modeling.",
+              "Distributional analysis is not explicit enough (impacts on natives, low-skilled workers, regional economies) and lacks planned mitigations.",
+              "Security, asylum processing, and governance risks are mentioned but not defined or anchored with controls.",
+              "No discussion of international spillovers, brain drain, remittances, or origin-country effects, nor mitigation strategies.",
+              "Assumes high-quality data without addressing variability in data quality and comparability across contexts.",
+              "Macroeconomic channels (inflation, exchange rates, capital flows, monetary policy interactions) are not explicitly modeled or monitored."
+            ],
+            "summary": "The proposal offers a coherent, cautious framework for evaluating openness to migration through phased pilots, guardrails, and an emphasis on governance, evaluation, and macro monitoring. However, it is incomplete and somewhat aspirational: it lacks explicit budgets and cost estimates, clear operational definitions and criteria for selective openness, detailed evaluation metrics and data sources, and thorough treatment of supply constraints, distributional impacts, security controls, and international spillovers. To improve rigor, the plan should specify budget rules, concrete eligibility criteria, measurable evaluation endpoints with data requirements, supply-side modeling for housing/infrastructure, distributional impact plans, and risk-management provisions across macro and security dimensions."
+          }
+        ],
+        "output": {
+          "kind": "judgement",
+          "data": {
+            "rubricScores": {
+              "coherence": 4,
+              "completeness": 3,
+              "factualRisk": 4,
+              "uncertaintyHandling": 3
+            },
+            "strengths": [
+              "Clear emphasis on phased, evidence-driven pilots with predefined milestones and rollback rules.",
+              "Explicit focus on governance, privacy, security, and capacity-building, including housing and integration.",
+              "Utilizes an evaluation framework with endpoints, data sources, and timeframes discussed in principle.",
+              "Acknowledges distributional impacts and the importance of monitoring macroeconomic feedback.",
+              "Advocates transparency through dashboards and sunset clauses, and explicit openness categories."
+            ],
+            "weaknesses": [
+              "Lacks quantified budget estimates and explicit cost rules; fiscal implications are underspecified.",
+              "Ambiguity around what exactly constitutes 'open borders' and how selective openness by skill/region/sector should be operationalized.",
+              "Evaluation design is described but without concrete metrics, endpoints, timeframes, or data-source specifications.",
+              "Insufficient treatment of housing, infrastructure constraints, and housing-demand dynamics; no supply-side modeling.",
+              "Distributional analysis is not explicit enough (impacts on natives, low-skilled workers, regional economies) and lacks planned mitigations.",
+              "Security, asylum processing, and governance risks are mentioned but not defined or anchored with controls.",
+              "No discussion of international spillovers, brain drain, remittances, or origin-country effects, nor mitigation strategies.",
+              "Assumes high-quality data without addressing variability in data quality and comparability across contexts.",
+              "Macroeconomic channels (inflation, exchange rates, capital flows, monetary policy interactions) are not explicitly modeled or monitored."
+            ],
+            "summary": "The proposal offers a coherent, cautious framework for evaluating openness to migration through phased pilots, guardrails, and an emphasis on governance, evaluation, and macro monitoring. However, it is incomplete and somewhat aspirational: it lacks explicit budgets and cost estimates, clear operational definitions and criteria for selective openness, detailed evaluation metrics and data sources, and thorough treatment of supply constraints, distributional impacts, security controls, and international spillovers. To improve rigor, the plan should specify budget rules, concrete eligibility criteria, measurable evaluation endpoints with data requirements, supply-side modeling for housing/infrastructure, distributional impact plans, and risk-management provisions across macro and security dimensions."
+          }
+        },
+        "completedAt": "2026-02-17T14:09:24.741Z"
+      }
+    ],
+    "finalAnswer": "Open borders should not be treated as a universal policy. Whether to open borders depends on country-specific institutions, labor markets, and public capacity. Evidence shows GDP gains and labor-supply effects are mixed and can differ in the long run from short-run projections. Without careful design, fiscal costs, housing shortages, and strain on public services can erode potential benefits. A prudent path is phased, evidence-driven pilots with clear budgets and strong integration, asylum processing, and housing/education capacity, combined with selective openness by skill, region, or sector. Evaluation should rely on rigorous quasi-experimental analysis, scenario modeling, and predefined decision rules (milestones, budgets, rollback criteria) before scaling. Operationalize explicit openness categories and eligibility rules, include sunset clauses with transparent dashboards, and embed security, privacy, and governance safeguards. Monitor macro feedbacks (inflation, exchange rates, capital flows). Explicitly analyze distributional impacts to protect low-skilled workers and regional economies.",
+    "metrics": {
+      "confidence": {
+        "solver": 0.62,
+        "revision": 0.44,
+        "synthesizer": 0.65,
+        "calibratedAdjusted": 0.65,
+        "solverToRevisionDelta": -0.18,
+        "revisionToSynthesizerDelta": 0.21
+      },
+      "critique": {
+        "maxSeverity": 5,
+        "avgSeverity": 3.81,
+        "byType": {
+          "factual": 4,
+          "missing": 10,
+          "ambiguity": 4,
+          "logic": 1,
+          "overconfidence": 2
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 3,
+        "factualRisk": 4,
+        "uncertaintyHandling": 3
+      },
+      "research": {
+        "evidenceRiskLevel": 4,
+        "counterfactualFailureModeCount": 11,
+        "topCounterfactualFailureMode": "Fiscal overrun due to higher-than-expected welfare, housing, and integration costs"
+      },
+      "consensus": {
+        "included": [
+          "solver",
+          "revision",
+          "synthesizer"
+        ],
+        "pairs": [
+          {
+            "a": "solver",
+            "b": "revision",
+            "similarity": 0.867
+          },
+          {
+            "a": "solver",
+            "b": "synthesizer",
+            "similarity": 0.899
+          },
+          {
+            "a": "revision",
+            "b": "synthesizer",
+            "similarity": 0.959
+          }
+        ],
+        "strength": 0.908
+      }
+    }
+  },
+  "metadata": {
+    "schemaVersion": 1,
+    "createdAt": "2026-02-17T14:09:24.741Z",
+    "model": "gpt-5-nano-2025-08-07",
+    "fastMode": false,
+    "pipelinePreset": "research_deep",
+    "pipelineVersion": "1.0.0",
+    "source": "cli"
+  }
+}

@@ -1,0 +1,1365 @@
+{
+  "kind": "run",
+  "id": "run_1771339358393_be66419088a87",
+  "question": "Should governments subsidize or ban cryptocurrency?",
+  "run": {
+    "id": "run_1771339358393_be66419088a87",
+    "createdAt": "2026-02-17T14:42:38.393Z",
+    "question": "Should governments subsidize or ban cryptocurrency?",
+    "steps": [
+      {
+        "id": "step_1771339172518_e1cfd127b02448",
+        "agentName": "QuestionDecomposerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:39:08.605Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a research planner. Decompose the question into sub-questions and hypotheses. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should governments subsidize or ban cryptocurrency?"
+            }
+          ],
+          "schemaName": "QuestionDecomposition",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "framing": {
+                "type": "string"
+              },
+              "subQuestions": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "hypotheses": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "framing",
+              "subQuestions",
+              "hypotheses"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "framing": "Policy framing: evaluate whether governments should subsidize or ban cryptocurrency, considering objectives such as financial stability, innovation, consumer protection, taxation, illicit activity, energy use, and international coordination.",
+            "subQuestions": [
+              "What objectives should govern cryptocurrency policy (e.g., economic growth, innovation, consumer protection, monetary sovereignty, tax revenue, energy efficiency, crime prevention)?",
+              "What are the expected effects of government subsidies for cryptocurrency on innovation, market development, and fiscal risk?",
+              "What are the expected effects of banning or restricting cryptocurrency on illicit activity, consumer protection, and financial inclusion?",
+              "How would each option affect monetary policy effectiveness, financial stability, and systemic risk?",
+              "What are the administrative, enforcement, and governance challenges of subsidies vs bans, including international coordination?",
+              "What are the distributional and equity impacts (who gains and who bears costs) of each policy option?",
+              "Are there alternative regulatory pathways (taxation, licensing, disclosure, consumer protections) that balance objectives without a full subsidy or ban?",
+              "What evidence from other jurisdictions informs likely outcomes, and how should we monitor and evaluate impact over time?"
+            ],
+            "hypotheses": [
+              "Subsidies for cryptocurrency will spur domestic innovation and market development but entail large fiscal costs and potential misallocation of capital if poorly targeted.",
+              "Bans or strict prohibitions will reduce on-shore crypto activity and illicit transactions but may push activity underground and weaken consumer protections.",
+              "A targeted regulatory approach (taxation, licensing, disclosure, consumer protections) can achieve better overall outcomes than a pure subsidy or ban.",
+              "The effectiveness of subsidies depends on governance, oversight, and accountability; without safeguards, benefits accrue mainly to incumbents and speculative actors.",
+              "Policy bans face enforcement challenges and cross-border leakage, limiting effectiveness unless supported by international coordination.",
+              "Environmental and energy impacts of cryptocurrency policy depend on design details (e.g., whether miners are restricted) rather than on subsidy vs ban alone.",
+              "Financial stability risks from crypto exposure depend on the scale of adoption; low exposure yields minimal systemic risk, but rapid growth could raise vulnerabilities.",
+              "International coordination is critical to prevent regulatory arbitrage and to ensure policy coherence across borders."
+            ]
+          }
+        ],
+        "output": {
+          "kind": "decomposition",
+          "data": {
+            "framing": "Policy framing: evaluate whether governments should subsidize or ban cryptocurrency, considering objectives such as financial stability, innovation, consumer protection, taxation, illicit activity, energy use, and international coordination.",
+            "subQuestions": [
+              "What objectives should govern cryptocurrency policy (e.g., economic growth, innovation, consumer protection, monetary sovereignty, tax revenue, energy efficiency, crime prevention)?",
+              "What are the expected effects of government subsidies for cryptocurrency on innovation, market development, and fiscal risk?",
+              "What are the expected effects of banning or restricting cryptocurrency on illicit activity, consumer protection, and financial inclusion?",
+              "How would each option affect monetary policy effectiveness, financial stability, and systemic risk?",
+              "What are the administrative, enforcement, and governance challenges of subsidies vs bans, including international coordination?",
+              "What are the distributional and equity impacts (who gains and who bears costs) of each policy option?",
+              "Are there alternative regulatory pathways (taxation, licensing, disclosure, consumer protections) that balance objectives without a full subsidy or ban?",
+              "What evidence from other jurisdictions informs likely outcomes, and how should we monitor and evaluate impact over time?"
+            ],
+            "hypotheses": [
+              "Subsidies for cryptocurrency will spur domestic innovation and market development but entail large fiscal costs and potential misallocation of capital if poorly targeted.",
+              "Bans or strict prohibitions will reduce on-shore crypto activity and illicit transactions but may push activity underground and weaken consumer protections.",
+              "A targeted regulatory approach (taxation, licensing, disclosure, consumer protections) can achieve better overall outcomes than a pure subsidy or ban.",
+              "The effectiveness of subsidies depends on governance, oversight, and accountability; without safeguards, benefits accrue mainly to incumbents and speculative actors.",
+              "Policy bans face enforcement challenges and cross-border leakage, limiting effectiveness unless supported by international coordination.",
+              "Environmental and energy impacts of cryptocurrency policy depend on design details (e.g., whether miners are restricted) rather than on subsidy vs ban alone.",
+              "Financial stability risks from crypto exposure depend on the scale of adoption; low exposure yields minimal systemic risk, but rapid growth could raise vulnerabilities.",
+              "International coordination is critical to prevent regulatory arbitrage and to ensure policy coherence across borders."
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:39:32.518Z"
+      },
+      {
+        "id": "step_1771339192588_267259514d7bc8",
+        "agentName": "EvidencePlannerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:39:32.518Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are an evidence planning specialist. Produce a compact evidence and verification plan for the question. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should governments subsidize or ban cryptocurrency?"
+            }
+          ],
+          "schemaName": "EvidencePlan",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "evidenceRequirements": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "verificationChecks": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "majorUnknowns": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "riskLevel": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              }
+            },
+            "required": [
+              "evidenceRequirements",
+              "verificationChecks",
+              "majorUnknowns",
+              "riskLevel"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "evidenceRequirements": [
+              "Macro-economic impact estimates for subsidy scenarios (GDP, investment, employment, tax revenue, and price effects) attributed to government subsidies for cryptocurrency industries.",
+              "Macro-economic impact estimates for ban scenarios (GDP, unemployment, tax revenue, inflation, financial stability implications, and black markets) attributed to prohibitions on cryptocurrency activities.",
+              "Consumer protection and financial stability outcomes (fraud losses, insolvencies, investor protection costs, bank exposure to crypto, and systemic risk indicators) under each policy.",
+              "Innovation and competitiveness effects (startup activity, venture funding, R&D in blockchain/crypto, skilled labour retention) under subsidies vs bans.",
+              "Monetary policy and financial system implications (effect on monetary sovereignty, CBDCs, payment system resilience, cross-border capital flows).",
+              "Energy use and environmental impact (mining energy demand, emissions, grid reliability) under different policy regimes.",
+              "Feasibility and enforcement costs (administrative burden, evasion, regulatory compliance costs) and governance quality indicators.",
+              "Equity and distributional effects (impact on unbanked populations, low-income households, regional disparities).",
+              "International coordination and regulatory arbitrage potential (spillovers, cross-border enforcement, treaty implications)."
+            ],
+            "verificationChecks": [
+              "Synthesize country case studies (e.g., China crypto ban, El Salvador Bitcoin law, US regulatory shifts) and assess causal attribution.",
+              "Run cross-country panel analyses with policy indicators for subsidies and bans against macro and crypto-market outcomes.",
+              "Perform event studies around policy announcements to capture market and activity responses.",
+              "Conduct cost-benefit analyses under multiple scenarios with sensitivity analyses (discount rate, policy design, enforcement strength).",
+              "Evaluate energy usage data from mining operations and emissions under policies; compare with counterfactual.",
+              "Assess regulatory enforcement costs and fraud/consumer protection metrics before and after policy changes.",
+              "Examine regulatory spillovers and arbitrage indicators across borders.",
+              "Audit for methodological limitations and robustness using synthetic control methods or placebo tests."
+            ],
+            "majorUnknowns": [
+              "Long-term technology trajectory and substitution effects between crypto usage and fiat/CBDC ecosystems.",
+              "Global policy coherence: how other countries' policies may undermine domestic incentives (regulatory arbitrage).",
+              "Scale and persistence of illicit activity under different policy regimes.",
+              "Accuracy of illicit activity proxies and enforcement effectiveness.",
+              "Impact of central bank digital currencies (CBDCs) and layer-2 solutions on future need for subsidies or bans."
+            ],
+            "riskLevel": 4
+          }
+        ],
+        "output": {
+          "kind": "evidence_plan",
+          "data": {
+            "evidenceRequirements": [
+              "Macro-economic impact estimates for subsidy scenarios (GDP, investment, employment, tax revenue, and price effects) attributed to government subsidies for cryptocurrency industries.",
+              "Macro-economic impact estimates for ban scenarios (GDP, unemployment, tax revenue, inflation, financial stability implications, and black markets) attributed to prohibitions on cryptocurrency activities.",
+              "Consumer protection and financial stability outcomes (fraud losses, insolvencies, investor protection costs, bank exposure to crypto, and systemic risk indicators) under each policy.",
+              "Innovation and competitiveness effects (startup activity, venture funding, R&D in blockchain/crypto, skilled labour retention) under subsidies vs bans.",
+              "Monetary policy and financial system implications (effect on monetary sovereignty, CBDCs, payment system resilience, cross-border capital flows).",
+              "Energy use and environmental impact (mining energy demand, emissions, grid reliability) under different policy regimes.",
+              "Feasibility and enforcement costs (administrative burden, evasion, regulatory compliance costs) and governance quality indicators.",
+              "Equity and distributional effects (impact on unbanked populations, low-income households, regional disparities).",
+              "International coordination and regulatory arbitrage potential (spillovers, cross-border enforcement, treaty implications)."
+            ],
+            "verificationChecks": [
+              "Synthesize country case studies (e.g., China crypto ban, El Salvador Bitcoin law, US regulatory shifts) and assess causal attribution.",
+              "Run cross-country panel analyses with policy indicators for subsidies and bans against macro and crypto-market outcomes.",
+              "Perform event studies around policy announcements to capture market and activity responses.",
+              "Conduct cost-benefit analyses under multiple scenarios with sensitivity analyses (discount rate, policy design, enforcement strength).",
+              "Evaluate energy usage data from mining operations and emissions under policies; compare with counterfactual.",
+              "Assess regulatory enforcement costs and fraud/consumer protection metrics before and after policy changes.",
+              "Examine regulatory spillovers and arbitrage indicators across borders.",
+              "Audit for methodological limitations and robustness using synthetic control methods or placebo tests."
+            ],
+            "majorUnknowns": [
+              "Long-term technology trajectory and substitution effects between crypto usage and fiat/CBDC ecosystems.",
+              "Global policy coherence: how other countries' policies may undermine domestic incentives (regulatory arbitrage).",
+              "Scale and persistence of illicit activity under different policy regimes.",
+              "Accuracy of illicit activity proxies and enforcement effectiveness.",
+              "Impact of central bank digital currencies (CBDCs) and layer-2 solutions on future need for subsidies or bans."
+            ],
+            "riskLevel": 4
+          }
+        },
+        "completedAt": "2026-02-17T14:39:52.589Z"
+      },
+      {
+        "id": "step_1771339204222_8e0723093953a8",
+        "agentName": "SolverAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T14:39:52.589Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.4,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver. Produce a direct, helpful answer. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should governments subsidize or ban cryptocurrency?\n\nEvidence plan:\n{\n  \"evidenceRequirements\": [\n    \"Macro-economic impact estimates for subsidy scenarios (GDP, investment, employment, tax revenue, and price effects) attributed to government subsidies for cryptocurrency industries.\",\n    \"Macro-economic impact estimates for ban scenarios (GDP, unemployment, tax revenue, inflation, financial stability implications, and black markets) attributed to prohibitions on cryptocurrency activities.\",\n    \"Consumer protection and financial stability outcomes (fraud losses, insolvencies, investor protection costs, bank exposure to crypto, and systemic risk indicators) under each policy.\",\n    \"Innovation and competitiveness effects (startup activity, venture funding, R&D in blockchain/crypto, skilled labour retention) under subsidies vs bans.\",\n    \"Monetary policy and financial system implications (effect on monetary sovereignty, CBDCs, payment system resilience, cross-border capital flows).\",\n    \"Energy use and environmental impact (mining energy demand, emissions, grid reliability) under different policy regimes.\",\n    \"Feasibility and enforcement costs (administrative burden, evasion, regulatory compliance costs) and governance quality indicators.\",\n    \"Equity and distributional effects (impact on unbanked populations, low-income households, regional disparities).\",\n    \"International coordination and regulatory arbitrage potential (spillovers, cross-border enforcement, treaty implications).\"\n  ],\n  \"verificationChecks\": [\n    \"Synthesize country case studies (e.g., China crypto ban, El Salvador Bitcoin law, US regulatory shifts) and assess causal attribution.\",\n    \"Run cross-country panel analyses with policy indicators for subsidies and bans against macro and crypto-market outcomes.\",\n    \"Perform event studies around policy announcements to capture market and activity responses.\",\n    \"Conduct cost-benefit analyses under multiple scenarios with sensitivity analyses (discount rate, policy design, enforcement strength).\",\n    \"Evaluate energy usage data from mining operations and emissions under policies; compare with counterfactual.\",\n    \"Assess regulatory enforcement costs and fraud/consumer protection metrics before and after policy changes.\",\n    \"Examine regulatory spillovers and arbitrage indicators across borders.\",\n    \"Audit for methodological limitations and robustness using synthetic control methods or placebo tests.\"\n  ],\n  \"majorUnknowns\": [\n    \"Long-term technology trajectory and substitution effects between crypto usage and fiat/CBDC ecosystems.\",\n    \"Global policy coherence: how other countries' policies may undermine domestic incentives (regulatory arbitrage).\",\n    \"Scale and persistence of illicit activity under different policy regimes.\",\n    \"Accuracy of illicit activity proxies and enforcement effectiveness.\",\n    \"Impact of central bank digital currencies (CBDCs) and layer-2 solutions on future need for subsidies or bans.\"\n  ],\n  \"riskLevel\": 4\n}"
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "A blanket subsidy or a blanket ban is not advisable. A pragmatic approach combines targeted subsidies to support innovation, financial inclusion, and critical infrastructure, with strict bans and robust regulation to curb illicit use, fraud, and financial instability. Policymakers should pursue a phased, evidence‑driven program—start with pilot subsidy mechanisms and risk‑based licensing, implement clear consumer protections, require sunset clauses and performance metrics, and pursue international coordination to minimize regulatory arbitrage and energy/environmental impacts. Consider central bank digital currency (CBDC) as a complement to preserve monetary sovereignty and payment system resilience.",
+            "keyClaims": [
+              "A mixed policy (subsidies + bans) is more effective than either extreme.",
+              "Subsidies should be targeted, time-bound, and outcome-based.",
+              "Bans should focus on illicit activities and fraud; a blanket ban risks stifling beneficial innovation.",
+              "Regulatory clarity, consumer protections, and financial stability safeguards are essential.",
+              "International cooperation reduces regulatory arbitrage and spillovers.",
+              "CBDCs can complement or replace some crypto functions in policy objectives."
+            ],
+            "assumptions": [
+              "Policy effectiveness depends on enforcement capacity and data availability.",
+              "There will be political and public acceptance constraints.",
+              "Technology and market dynamics may shift, requiring adaptive regulation.",
+              "Energy and environmental impacts can be mitigated through policy design and CBDC implementation."
+            ],
+            "confidence": 0.63
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "A blanket subsidy or a blanket ban is not advisable. A pragmatic approach combines targeted subsidies to support innovation, financial inclusion, and critical infrastructure, with strict bans and robust regulation to curb illicit use, fraud, and financial instability. Policymakers should pursue a phased, evidence‑driven program—start with pilot subsidy mechanisms and risk‑based licensing, implement clear consumer protections, require sunset clauses and performance metrics, and pursue international coordination to minimize regulatory arbitrage and energy/environmental impacts. Consider central bank digital currency (CBDC) as a complement to preserve monetary sovereignty and payment system resilience.",
+            "keyClaims": [
+              "A mixed policy (subsidies + bans) is more effective than either extreme.",
+              "Subsidies should be targeted, time-bound, and outcome-based.",
+              "Bans should focus on illicit activities and fraud; a blanket ban risks stifling beneficial innovation.",
+              "Regulatory clarity, consumer protections, and financial stability safeguards are essential.",
+              "International cooperation reduces regulatory arbitrage and spillovers.",
+              "CBDCs can complement or replace some crypto functions in policy objectives."
+            ],
+            "assumptions": [
+              "Policy effectiveness depends on enforcement capacity and data availability.",
+              "There will be political and public acceptance constraints.",
+              "Technology and market dynamics may shift, requiring adaptive regulation.",
+              "Energy and environmental impacts can be mitigated through policy design and CBDC implementation."
+            ],
+            "confidence": 0.63
+          }
+        },
+        "completedAt": "2026-02-17T14:40:04.222Z"
+      },
+      {
+        "id": "step_1771339227060_092f99164fdc88",
+        "agentName": "SkepticAgent",
+        "role": "skeptic",
+        "createdAt": "2026-02-17T14:40:04.222Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Skeptic. Critique the proposal rigorously. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should governments subsidize or ban cryptocurrency?\n\nTarget agent: SolverAgent\n\nProposal JSON:\n{\n  \"answer\": \"A blanket subsidy or a blanket ban is not advisable. A pragmatic approach combines targeted subsidies to support innovation, financial inclusion, and critical infrastructure, with strict bans and robust regulation to curb illicit use, fraud, and financial instability. Policymakers should pursue a phased, evidence‑driven program—start with pilot subsidy mechanisms and risk‑based licensing, implement clear consumer protections, require sunset clauses and performance metrics, and pursue international coordination to minimize regulatory arbitrage and energy/environmental impacts. Consider central bank digital currency (CBDC) as a complement to preserve monetary sovereignty and payment system resilience.\",\n  \"keyClaims\": [\n    \"A mixed policy (subsidies + bans) is more effective than either extreme.\",\n    \"Subsidies should be targeted, time-bound, and outcome-based.\",\n    \"Bans should focus on illicit activities and fraud; a blanket ban risks stifling beneficial innovation.\",\n    \"Regulatory clarity, consumer protections, and financial stability safeguards are essential.\",\n    \"International cooperation reduces regulatory arbitrage and spillovers.\",\n    \"CBDCs can complement or replace some crypto functions in policy objectives.\"\n  ],\n  \"assumptions\": [\n    \"Policy effectiveness depends on enforcement capacity and data availability.\",\n    \"There will be political and public acceptance constraints.\",\n    \"Technology and market dynamics may shift, requiring adaptive regulation.\",\n    \"Energy and environmental impacts can be mitigated through policy design and CBDC implementation.\"\n  ],\n  \"confidence\": 0.63\n}\n\nFind issues. Prefer factual risk, missing edge cases, ambiguity, and overconfidence."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "CBDC tradeoffs are understated: design choices affect bank funding, privacy, monetary policy transmission, and operational costs; the claim that CBDC will complement or replace crypto functions is not empirically established."
+              },
+              {
+                "severity": 3,
+                "type": "logic",
+                "note": "The proposal assumes a synergistic effect of subsidies and bans without a stated theory or evidence; subsidies may undermine bans by shaping market dynamics, regulatory capture, or misallocation."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "No concrete governance framework: enforcement mechanisms, resource allocation, penalties, and oversight are unspecified; missing milestones and evaluation criteria."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Subsidies are not defined: what forms (grants, tax credits, procurement incentives), eligibility, scale, sunset criteria, and performance metrics are unclear; 'outcome-based' definitions are not provided."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Macroeconomic and financial stability considerations are underdeveloped: impact on banks, credit, monetary policy transmission, cross-border spillovers, and the role of AML/KYC/regulatory arbitrage are not quantified."
+              },
+              {
+                "severity": 2,
+                "type": "overconfidence",
+                "note": "The 0.63 confidence and asserted energy/environmental mitigation depend on design details; without modeling or data, this remains speculative."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "International coordination is mentioned but lacks mechanism: which bodies, standards, enforcement, and how to handle cross-border enforcement and sanctions."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Equity and distributional effects are not analyzed: which populations gain/lose from subsidies or bans, and how to prevent exacerbating existing inequalities."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "CBDC tradeoffs are understated: design choices affect bank funding, privacy, monetary policy transmission, and operational costs; the claim that CBDC will complement or replace crypto functions is not empirically established."
+              },
+              {
+                "severity": 3,
+                "type": "logic",
+                "note": "The proposal assumes a synergistic effect of subsidies and bans without a stated theory or evidence; subsidies may undermine bans by shaping market dynamics, regulatory capture, or misallocation."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "No concrete governance framework: enforcement mechanisms, resource allocation, penalties, and oversight are unspecified; missing milestones and evaluation criteria."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Subsidies are not defined: what forms (grants, tax credits, procurement incentives), eligibility, scale, sunset criteria, and performance metrics are unclear; 'outcome-based' definitions are not provided."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Macroeconomic and financial stability considerations are underdeveloped: impact on banks, credit, monetary policy transmission, cross-border spillovers, and the role of AML/KYC/regulatory arbitrage are not quantified."
+              },
+              {
+                "severity": 2,
+                "type": "overconfidence",
+                "note": "The 0.63 confidence and asserted energy/environmental mitigation depend on design details; without modeling or data, this remains speculative."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "International coordination is mentioned but lacks mechanism: which bodies, standards, enforcement, and how to handle cross-border enforcement and sanctions."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Equity and distributional effects are not analyzed: which populations gain/lose from subsidies or bans, and how to prevent exacerbating existing inequalities."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:40:27.060Z"
+      },
+      {
+        "id": "step_1771339259885_cf236793b9d3d8",
+        "agentName": "RedTeamAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:40:27.060Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a red-team analyst. Find high-risk failure modes and adversarial weaknesses in the answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should governments subsidize or ban cryptocurrency?\n\nCandidate answer JSON:\n{\n  \"answer\": \"A blanket subsidy or a blanket ban is not advisable. A pragmatic approach combines targeted subsidies to support innovation, financial inclusion, and critical infrastructure, with strict bans and robust regulation to curb illicit use, fraud, and financial instability. Policymakers should pursue a phased, evidence‑driven program—start with pilot subsidy mechanisms and risk‑based licensing, implement clear consumer protections, require sunset clauses and performance metrics, and pursue international coordination to minimize regulatory arbitrage and energy/environmental impacts. Consider central bank digital currency (CBDC) as a complement to preserve monetary sovereignty and payment system resilience.\",\n  \"keyClaims\": [\n    \"A mixed policy (subsidies + bans) is more effective than either extreme.\",\n    \"Subsidies should be targeted, time-bound, and outcome-based.\",\n    \"Bans should focus on illicit activities and fraud; a blanket ban risks stifling beneficial innovation.\",\n    \"Regulatory clarity, consumer protections, and financial stability safeguards are essential.\",\n    \"International cooperation reduces regulatory arbitrage and spillovers.\",\n    \"CBDCs can complement or replace some crypto functions in policy objectives.\"\n  ],\n  \"assumptions\": [\n    \"Policy effectiveness depends on enforcement capacity and data availability.\",\n    \"There will be political and public acceptance constraints.\",\n    \"Technology and market dynamics may shift, requiring adaptive regulation.\",\n    \"Energy and environmental impacts can be mitigated through policy design and CBDC implementation.\"\n  ],\n  \"confidence\": 0.63\n}\n\nReturn a rigorous critique with severe issues when justified."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "Policy makers / Regulators",
+            "issues": [
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "No enforcement architecture: budget, personnel, penalties, oversight, and governance for pilots and risk-based licensing. Without concrete implementation details, the proposed plan is impractical."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "Privacy, surveillance, and civil-liberties implications are unaddressed. CBDC and crypto regulation can enable broad data collection and coercive oversight; risk of chilling effects."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "Definitions of 'illicit use', 'fraud', 'financial instability' and 'risk-based licensing' are vague; no thresholds, metrics, or guardrails to prevent abuse or selective enforcement."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Tax policy and tax treatment of crypto transactions, holdings, and mining/mining energy credits are not discussed; crucial for incentives, compliance, and revenue."
+              },
+              {
+                "severity": 4,
+                "type": "logic",
+                "note": "Assuming a mixed policy is superior without empirical evidence or scenario analysis; neglects risk of policy capture or diminished returns under different market regimes."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "CBDC role is uncertain ('complement or replace') and dependent on design choices; without scenario analysis, the conclusion is speculative."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No concrete energy-use or environmental standards, monitoring, or compliance mechanisms; claims about mitigating impacts are unsubstantiated."
+              },
+              {
+                "severity": 3,
+                "type": "overconfidence",
+                "note": "Optimistic assumption that international coordination will minimize regulatory arbitrage; in practice, jurisdictions will diverge and enforcement will be uneven, enabling leakage."
+              },
+              {
+                "severity": 2,
+                "type": "missing",
+                "note": "Lack of evaluation metrics and sunset criteria for subsidies; no plan for iterative reallocation or revocation based on performance."
+              },
+              {
+                "severity": 2,
+                "type": "missing",
+                "note": "Policy gaps on non-custodial vs custodial crypto, DeFi, cross-border payments, and privacy-preserving technologies; ambiguity about regulatory reach."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "Policy makers / Regulators",
+            "issues": [
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "No enforcement architecture: budget, personnel, penalties, oversight, and governance for pilots and risk-based licensing. Without concrete implementation details, the proposed plan is impractical."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "Privacy, surveillance, and civil-liberties implications are unaddressed. CBDC and crypto regulation can enable broad data collection and coercive oversight; risk of chilling effects."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "Definitions of 'illicit use', 'fraud', 'financial instability' and 'risk-based licensing' are vague; no thresholds, metrics, or guardrails to prevent abuse or selective enforcement."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Tax policy and tax treatment of crypto transactions, holdings, and mining/mining energy credits are not discussed; crucial for incentives, compliance, and revenue."
+              },
+              {
+                "severity": 4,
+                "type": "logic",
+                "note": "Assuming a mixed policy is superior without empirical evidence or scenario analysis; neglects risk of policy capture or diminished returns under different market regimes."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "CBDC role is uncertain ('complement or replace') and dependent on design choices; without scenario analysis, the conclusion is speculative."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No concrete energy-use or environmental standards, monitoring, or compliance mechanisms; claims about mitigating impacts are unsubstantiated."
+              },
+              {
+                "severity": 3,
+                "type": "overconfidence",
+                "note": "Optimistic assumption that international coordination will minimize regulatory arbitrage; in practice, jurisdictions will diverge and enforcement will be uneven, enabling leakage."
+              },
+              {
+                "severity": 2,
+                "type": "missing",
+                "note": "Lack of evaluation metrics and sunset criteria for subsidies; no plan for iterative reallocation or revocation based on performance."
+              },
+              {
+                "severity": 2,
+                "type": "missing",
+                "note": "Policy gaps on non-custodial vs custodial crypto, DeFi, cross-border payments, and privacy-preserving technologies; ambiguity about regulatory reach."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:40:59.885Z"
+      },
+      {
+        "id": "step_1771339283711_aa6c3a5325c668",
+        "agentName": "SolverRevisionAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T14:40:59.885Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver revising your proposal after critique. Produce a revised AgentResponse that addresses all issues.\n\nInternal reasoning (do not put this in output fields):\n- Reference each critique issue in your reasoning before producing output.\n- Consider how each issue affects the answer, keyClaims, assumptions, and confidence.\n\nOutput requirements:\n- Change answer and keyClaims accordingly to address the critique.\n- Adjust confidence downward when critique severity is high (4–5).\n- Add assumptions when critique indicates ambiguity (type \"ambiguity\").\n- Keep keyClaims clean and non-duplicated.\n- Do not include any JSON fragments inside keyClaims. keyClaims must be plain English sentences only.\n- Do not reference the critique or revision process in answer, keyClaims, or assumptions—output only the revised content.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should governments subsidize or ban cryptocurrency?\n\nOriginal proposal:\n{\n  \"answer\": \"A blanket subsidy or a blanket ban is not advisable. A pragmatic approach combines targeted subsidies to support innovation, financial inclusion, and critical infrastructure, with strict bans and robust regulation to curb illicit use, fraud, and financial instability. Policymakers should pursue a phased, evidence‑driven program—start with pilot subsidy mechanisms and risk‑based licensing, implement clear consumer protections, require sunset clauses and performance metrics, and pursue international coordination to minimize regulatory arbitrage and energy/environmental impacts. Consider central bank digital currency (CBDC) as a complement to preserve monetary sovereignty and payment system resilience.\",\n  \"keyClaims\": [\n    \"A mixed policy (subsidies + bans) is more effective than either extreme.\",\n    \"Subsidies should be targeted, time-bound, and outcome-based.\",\n    \"Bans should focus on illicit activities and fraud; a blanket ban risks stifling beneficial innovation.\",\n    \"Regulatory clarity, consumer protections, and financial stability safeguards are essential.\",\n    \"International cooperation reduces regulatory arbitrage and spillovers.\",\n    \"CBDCs can complement or replace some crypto functions in policy objectives.\"\n  ],\n  \"assumptions\": [\n    \"Policy effectiveness depends on enforcement capacity and data availability.\",\n    \"There will be political and public acceptance constraints.\",\n    \"Technology and market dynamics may shift, requiring adaptive regulation.\",\n    \"Energy and environmental impacts can be mitigated through policy design and CBDC implementation.\"\n  ],\n  \"confidence\": 0.63\n}\n\nCritique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 4,\n      \"type\": \"factual\",\n      \"note\": \"CBDC tradeoffs are understated: design choices affect bank funding, privacy, monetary policy transmission, and operational costs; the claim that CBDC will complement or replace crypto functions is not empirically established.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"logic\",\n      \"note\": \"The proposal assumes a synergistic effect of subsidies and bans without a stated theory or evidence; subsidies may undermine bans by shaping market dynamics, regulatory capture, or misallocation.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"No concrete governance framework: enforcement mechanisms, resource allocation, penalties, and oversight are unspecified; missing milestones and evaluation criteria.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"Subsidies are not defined: what forms (grants, tax credits, procurement incentives), eligibility, scale, sunset criteria, and performance metrics are unclear; 'outcome-based' definitions are not provided.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Macroeconomic and financial stability considerations are underdeveloped: impact on banks, credit, monetary policy transmission, cross-border spillovers, and the role of AML/KYC/regulatory arbitrage are not quantified.\"\n    },\n    {\n      \"severity\": 2,\n      \"type\": \"overconfidence\",\n      \"note\": \"The 0.63 confidence and asserted energy/environmental mitigation depend on design details; without modeling or data, this remains speculative.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"International coordination is mentioned but lacks mechanism: which bodies, standards, enforcement, and how to handle cross-border enforcement and sanctions.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"Equity and distributional effects are not analyzed: which populations gain/lose from subsidies or bans, and how to prevent exacerbating existing inequalities.\"\n    }\n  ]\n}\n\nRevise the proposal to address each issue. Return the revised AgentResponse as valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Governments should not pursue a blanket subsidy or a blanket ban on cryptocurrency. Instead, adopt a phased, evidence‑driven policy that couples targeted, outcome‑based subsidies to support innovation and financial inclusion with risk‑based licensing, enforcement, and focused prohibitions to curb illicit use and fraud. The core architecture includes: a clear governance framework with accountable agencies and evaluation, a well‑defined subsidy design, robust licensing and AML/KYC regimes, consumer protections, and sunset and performance review mechanisms; deliberate international coordination to minimize regulatory arbitrage and cross‑border spillovers; and a cautious, technology‑neutral approach to central bank digital currency (CBDC) as a potential complement, not an assumed substitute. The policy should be implemented with explicit milestones, transparent reporting, and an emphasis on macroeconomic and energy considerations to preserve financial stability and equitable outcomes.",
+            "keyClaims": [
+              "A targeted, evidence‑based mix of subsidies and regulation is preferable to either a subsidy‑first or a ban‑first approach.",
+              "Subsidies must be time‑bound, project‑specific, and linked to measurable outcomes with sunset clauses.",
+              "Regulation should emphasize licensing, AML/KYC, consumer protections, and penalties for illicit activity rather than broad prohibitions.",
+              "A formal governance and evaluation framework is essential to allocate resources, monitor impact, and adjust policy.",
+              "International coordination with standards bodies reduces regulatory arbitrage and cross‑border risks.",
+              "CBDCs should be evaluated cautiously as a potential complement, with design decisions that consider banking stability and monetary policy transmission."
+            ],
+            "assumptions": [
+              "Regulatory capacity, data availability, and political will are sufficient to implement phased, outcome‑based programs.",
+              "There will be ongoing technological and market evolution requiring adaptive policy design.",
+              "Subsidies can be structured to minimize distortions and capture broad benefits without crowding out private investment.",
+              "Energy and environmental impacts can be mitigated through policy design and CBDC considerations, but require clear metrics and reporting."
+            ],
+            "confidence": 0.4
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Governments should not pursue a blanket subsidy or a blanket ban on cryptocurrency. Instead, adopt a phased, evidence‑driven policy that couples targeted, outcome‑based subsidies to support innovation and financial inclusion with risk‑based licensing, enforcement, and focused prohibitions to curb illicit use and fraud. The core architecture includes: a clear governance framework with accountable agencies and evaluation, a well‑defined subsidy design, robust licensing and AML/KYC regimes, consumer protections, and sunset and performance review mechanisms; deliberate international coordination to minimize regulatory arbitrage and cross‑border spillovers; and a cautious, technology‑neutral approach to central bank digital currency (CBDC) as a potential complement, not an assumed substitute. The policy should be implemented with explicit milestones, transparent reporting, and an emphasis on macroeconomic and energy considerations to preserve financial stability and equitable outcomes.",
+            "keyClaims": [
+              "A targeted, evidence‑based mix of subsidies and regulation is preferable to either a subsidy‑first or a ban‑first approach.",
+              "Subsidies must be time‑bound, project‑specific, and linked to measurable outcomes with sunset clauses.",
+              "Regulation should emphasize licensing, AML/KYC, consumer protections, and penalties for illicit activity rather than broad prohibitions.",
+              "A formal governance and evaluation framework is essential to allocate resources, monitor impact, and adjust policy.",
+              "International coordination with standards bodies reduces regulatory arbitrage and cross‑border risks.",
+              "CBDCs should be evaluated cautiously as a potential complement, with design decisions that consider banking stability and monetary policy transmission."
+            ],
+            "assumptions": [
+              "Regulatory capacity, data availability, and political will are sufficient to implement phased, outcome‑based programs.",
+              "There will be ongoing technological and market evolution requiring adaptive policy design.",
+              "Subsidies can be structured to minimize distortions and capture broad benefits without crowding out private investment.",
+              "Energy and environmental impacts can be mitigated through policy design and CBDC considerations, but require clear metrics and reporting."
+            ],
+            "confidence": 0.4
+          }
+        },
+        "completedAt": "2026-02-17T14:41:23.711Z"
+      },
+      {
+        "id": "step_1771339299788_5466b8ecf7c698",
+        "agentName": "SynthesizerAgent",
+        "role": "synthesizer",
+        "createdAt": "2026-02-17T14:41:23.712Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Synthesizer. Given the question, the solver's original proposal, the skeptic's critique, and the solver's revision, produce a final synthesized AgentResponse.\n\nInternal reasoning (do not put this in output fields):\n- Consider how the critique and revision improved or changed the proposal.\n- Synthesize the best elements into a coherent final answer.\n\nOutput requirements:\n- Produce a clear, well-supported answer that incorporates valid points from the debate.\n- keyClaims must be plain English sentences only. No JSON fragments.\n- Set confidence appropriately based on the debate outcome.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should governments subsidize or ban cryptocurrency?\n\nSolver proposal:\n{\n  \"answer\": \"A blanket subsidy or a blanket ban is not advisable. A pragmatic approach combines targeted subsidies to support innovation, financial inclusion, and critical infrastructure, with strict bans and robust regulation to curb illicit use, fraud, and financial instability. Policymakers should pursue a phased, evidence‑driven program—start with pilot subsidy mechanisms and risk‑based licensing, implement clear consumer protections, require sunset clauses and performance metrics, and pursue international coordination to minimize regulatory arbitrage and energy/environmental impacts. Consider central bank digital currency (CBDC) as a complement to preserve monetary sovereignty and payment system resilience.\",\n  \"keyClaims\": [\n    \"A mixed policy (subsidies + bans) is more effective than either extreme.\",\n    \"Subsidies should be targeted, time-bound, and outcome-based.\",\n    \"Bans should focus on illicit activities and fraud; a blanket ban risks stifling beneficial innovation.\",\n    \"Regulatory clarity, consumer protections, and financial stability safeguards are essential.\",\n    \"International cooperation reduces regulatory arbitrage and spillovers.\",\n    \"CBDCs can complement or replace some crypto functions in policy objectives.\"\n  ],\n  \"assumptions\": [\n    \"Policy effectiveness depends on enforcement capacity and data availability.\",\n    \"There will be political and public acceptance constraints.\",\n    \"Technology and market dynamics may shift, requiring adaptive regulation.\",\n    \"Energy and environmental impacts can be mitigated through policy design and CBDC implementation.\"\n  ],\n  \"confidence\": 0.63\n}\n\nSkeptic critique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 4,\n      \"type\": \"factual\",\n      \"note\": \"CBDC tradeoffs are understated: design choices affect bank funding, privacy, monetary policy transmission, and operational costs; the claim that CBDC will complement or replace crypto functions is not empirically established.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"logic\",\n      \"note\": \"The proposal assumes a synergistic effect of subsidies and bans without a stated theory or evidence; subsidies may undermine bans by shaping market dynamics, regulatory capture, or misallocation.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"No concrete governance framework: enforcement mechanisms, resource allocation, penalties, and oversight are unspecified; missing milestones and evaluation criteria.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"Subsidies are not defined: what forms (grants, tax credits, procurement incentives), eligibility, scale, sunset criteria, and performance metrics are unclear; 'outcome-based' definitions are not provided.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Macroeconomic and financial stability considerations are underdeveloped: impact on banks, credit, monetary policy transmission, cross-border spillovers, and the role of AML/KYC/regulatory arbitrage are not quantified.\"\n    },\n    {\n      \"severity\": 2,\n      \"type\": \"overconfidence\",\n      \"note\": \"The 0.63 confidence and asserted energy/environmental mitigation depend on design details; without modeling or data, this remains speculative.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"International coordination is mentioned but lacks mechanism: which bodies, standards, enforcement, and how to handle cross-border enforcement and sanctions.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"Equity and distributional effects are not analyzed: which populations gain/lose from subsidies or bans, and how to prevent exacerbating existing inequalities.\"\n    }\n  ]\n}\n\nSolver revision:\n{\n  \"answer\": \"Governments should not pursue a blanket subsidy or a blanket ban on cryptocurrency. Instead, adopt a phased, evidence‑driven policy that couples targeted, outcome‑based subsidies to support innovation and financial inclusion with risk‑based licensing, enforcement, and focused prohibitions to curb illicit use and fraud. The core architecture includes: a clear governance framework with accountable agencies and evaluation, a well‑defined subsidy design, robust licensing and AML/KYC regimes, consumer protections, and sunset and performance review mechanisms; deliberate international coordination to minimize regulatory arbitrage and cross‑border spillovers; and a cautious, technology‑neutral approach to central bank digital currency (CBDC) as a potential complement, not an assumed substitute. The policy should be implemented with explicit milestones, transparent reporting, and an emphasis on macroeconomic and energy considerations to preserve financial stability and equitable outcomes.\",\n  \"keyClaims\": [\n    \"A targeted, evidence‑based mix of subsidies and regulation is preferable to either a subsidy‑first or a ban‑first approach.\",\n    \"Subsidies must be time‑bound, project‑specific, and linked to measurable outcomes with sunset clauses.\",\n    \"Regulation should emphasize licensing, AML/KYC, consumer protections, and penalties for illicit activity rather than broad prohibitions.\",\n    \"A formal governance and evaluation framework is essential to allocate resources, monitor impact, and adjust policy.\",\n    \"International coordination with standards bodies reduces regulatory arbitrage and cross‑border risks.\",\n    \"CBDCs should be evaluated cautiously as a potential complement, with design decisions that consider banking stability and monetary policy transmission.\"\n  ],\n  \"assumptions\": [\n    \"Regulatory capacity, data availability, and political will are sufficient to implement phased, outcome‑based programs.\",\n    \"There will be ongoing technological and market evolution requiring adaptive policy design.\",\n    \"Subsidies can be structured to minimize distortions and capture broad benefits without crowding out private investment.\",\n    \"Energy and environmental impacts can be mitigated through policy design and CBDC considerations, but require clear metrics and reporting.\"\n  ],\n  \"confidence\": 0.4\n}\n\nSynthesize a final AgentResponse from the debate. Return valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Governments should not pursue a blanket subsidy or blanket ban on cryptocurrency. Instead, adopt a phased, evidence‑based policy that couples targeted, sunset‑bound subsidies to support innovation and financial inclusion with risk‑based licensing, AML/KYC, consumer protections, and focused prohibitions to curb illicit activity. The policy should be governed by an explicit framework with accountable agencies, transparent evaluation, and clear milestones. Subsidies should be project‑specific, outcome‑based, and designed to minimize distortions, with sunset clauses and performance metrics; funding should be conditional on measurable benefits like inclusion, security, or the adoption of compliant infrastructure. Regulation should emphasize licensing, supervision, and penalties for fraud rather than broad prohibitions; enforcement requires adequate resources and cross‑border cooperation to curb regulatory arbitrage. International coordination with standards bodies is essential to minimize spillovers. CBDCs should be evaluated cautiously as a potential complement, not a substitute for private‑market activity, with design choices that preserve financial stability and monetary policy transmission. Policymakers should explicitly consider macroeconomic stability, energy use, and equity in any design, and publish regular reports on progress and lessons learned.",
+            "keyClaims": [
+              "A targeted, evidence‑based mix of subsidies and regulation is preferable to either extreme.",
+              "Subsidies must be time-bound, project‑specific, and linked to measurable outcomes with sunset clauses.",
+              "Regulation should emphasize licensing, AML/KYC, consumer protections, and penalties for illicit activity rather than broad prohibitions.",
+              "A formal governance and evaluation framework is essential to allocate resources, monitor impact, and adjust policy.",
+              "International coordination with standards bodies reduces regulatory arbitrage and cross‑border risks.",
+              "CBDCs should be evaluated cautiously as a potential complement, with design decisions that consider banking stability and monetary policy transmission.",
+              "Policy design must consider macroeconomic stability, energy use, and equitable outcomes."
+            ],
+            "assumptions": [
+              "Regulatory capacity, data availability, and political will are sufficient to implement phased, outcome‑based programs.",
+              "There will be ongoing technological and market evolution requiring adaptive policy design.",
+              "Subsidies can be structured to minimize distortions and capture broad benefits without crowding out private investment.",
+              "Energy and environmental impacts can be mitigated through policy design and CBDC considerations, but require clear metrics and reporting.",
+              "Equity and distributional effects should be explicitly considered to prevent widening inequalities.",
+              "Counterfactual risk: Budgetary distortions due to mis-targeted subsidies that distort private investment and crowd out innovation.",
+              "Judge summary: The proposal presents a coherent, principled framework favoring a phased, outcome-based mix of subsidies and regulation, with governance and international coordination. However, it is under-specified on implementation details, enforcement architecture, subsidy design, definitions and guardrails, tax and energy policy, and equity considerations. It lacks scenario analysis and empirical backing, making it difficult to assess robustness and practical feasibility. To improve, provide concrete governance structures, explicit subsidy mechanisms and metrics, clear definitions and thresholds, a plan for budget and personnel, and a formal evaluation process with milestones and sunset criteria. Also address privacy implications, energy standards, tax treatment, and regulatory reach for emerging areas like DeFi and cross-border crypto activity."
+            ],
+            "confidence": 0.76
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Governments should not pursue a blanket subsidy or blanket ban on cryptocurrency. Instead, adopt a phased, evidence‑based policy that couples targeted, sunset‑bound subsidies to support innovation and financial inclusion with risk‑based licensing, AML/KYC, consumer protections, and focused prohibitions to curb illicit activity. The policy should be governed by an explicit framework with accountable agencies, transparent evaluation, and clear milestones. Subsidies should be project‑specific, outcome‑based, and designed to minimize distortions, with sunset clauses and performance metrics; funding should be conditional on measurable benefits like inclusion, security, or the adoption of compliant infrastructure. Regulation should emphasize licensing, supervision, and penalties for fraud rather than broad prohibitions; enforcement requires adequate resources and cross‑border cooperation to curb regulatory arbitrage. International coordination with standards bodies is essential to minimize spillovers. CBDCs should be evaluated cautiously as a potential complement, not a substitute for private‑market activity, with design choices that preserve financial stability and monetary policy transmission. Policymakers should explicitly consider macroeconomic stability, energy use, and equity in any design, and publish regular reports on progress and lessons learned.",
+            "keyClaims": [
+              "A targeted, evidence‑based mix of subsidies and regulation is preferable to either extreme.",
+              "Subsidies must be time-bound, project‑specific, and linked to measurable outcomes with sunset clauses.",
+              "Regulation should emphasize licensing, AML/KYC, consumer protections, and penalties for illicit activity rather than broad prohibitions.",
+              "A formal governance and evaluation framework is essential to allocate resources, monitor impact, and adjust policy.",
+              "International coordination with standards bodies reduces regulatory arbitrage and cross‑border risks.",
+              "CBDCs should be evaluated cautiously as a potential complement, with design decisions that consider banking stability and monetary policy transmission.",
+              "Policy design must consider macroeconomic stability, energy use, and equitable outcomes."
+            ],
+            "assumptions": [
+              "Regulatory capacity, data availability, and political will are sufficient to implement phased, outcome‑based programs.",
+              "There will be ongoing technological and market evolution requiring adaptive policy design.",
+              "Subsidies can be structured to minimize distortions and capture broad benefits without crowding out private investment.",
+              "Energy and environmental impacts can be mitigated through policy design and CBDC considerations, but require clear metrics and reporting.",
+              "Equity and distributional effects should be explicitly considered to prevent widening inequalities.",
+              "Counterfactual risk: Budgetary distortions due to mis-targeted subsidies that distort private investment and crowd out innovation.",
+              "Judge summary: The proposal presents a coherent, principled framework favoring a phased, outcome-based mix of subsidies and regulation, with governance and international coordination. However, it is under-specified on implementation details, enforcement architecture, subsidy design, definitions and guardrails, tax and energy policy, and equity considerations. It lacks scenario analysis and empirical backing, making it difficult to assess robustness and practical feasibility. To improve, provide concrete governance structures, explicit subsidy mechanisms and metrics, clear definitions and thresholds, a plan for budget and personnel, and a formal evaluation process with milestones and sunset criteria. Also address privacy implications, energy standards, tax treatment, and regulatory reach for emerging areas like DeFi and cross-border crypto activity."
+            ],
+            "confidence": 0.76
+          }
+        },
+        "completedAt": "2026-02-17T14:41:39.788Z"
+      },
+      {
+        "id": "step_1771339328194_8a729d7342463",
+        "agentName": "CounterfactualAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:41:39.788Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a counterfactual analyst. Identify plausible failure modes, trigger conditions, and mitigations for the proposal. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should governments subsidize or ban cryptocurrency?\n\nProposal:\n{\n  \"answer\": \"Governments should not pursue a blanket subsidy or blanket ban on cryptocurrency. Instead, adopt a phased, evidence‑based policy that couples targeted, sunset‑bound subsidies to support innovation and financial inclusion with risk‑based licensing, AML/KYC, consumer protections, and focused prohibitions to curb illicit activity. The policy should be governed by an explicit framework with accountable agencies, transparent evaluation, and clear milestones. Subsidies should be project‑specific, outcome‑based, and designed to minimize distortions, with sunset clauses and performance metrics; funding should be conditional on measurable benefits like inclusion, security, or the adoption of compliant infrastructure. Regulation should emphasize licensing, supervision, and penalties for fraud rather than broad prohibitions; enforcement requires adequate resources and cross‑border cooperation to curb regulatory arbitrage. International coordination with standards bodies is essential to minimize spillovers. CBDCs should be evaluated cautiously as a potential complement, not a substitute for private‑market activity, with design choices that preserve financial stability and monetary policy transmission. Policymakers should explicitly consider macroeconomic stability, energy use, and equity in any design, and publish regular reports on progress and lessons learned.\",\n  \"keyClaims\": [\n    \"A targeted, evidence‑based mix of subsidies and regulation is preferable to either extreme.\",\n    \"Subsidies must be time-bound, project‑specific, and linked to measurable outcomes with sunset clauses.\",\n    \"Regulation should emphasize licensing, AML/KYC, consumer protections, and penalties for illicit activity rather than broad prohibitions.\",\n    \"A formal governance and evaluation framework is essential to allocate resources, monitor impact, and adjust policy.\",\n    \"International coordination with standards bodies reduces regulatory arbitrage and cross‑border risks.\",\n    \"CBDCs should be evaluated cautiously as a potential complement, with design decisions that consider banking stability and monetary policy transmission.\",\n    \"Policy design must consider macroeconomic stability, energy use, and equitable outcomes.\"\n  ],\n  \"assumptions\": [\n    \"Regulatory capacity, data availability, and political will are sufficient to implement phased, outcome‑based programs.\",\n    \"There will be ongoing technological and market evolution requiring adaptive policy design.\",\n    \"Subsidies can be structured to minimize distortions and capture broad benefits without crowding out private investment.\",\n    \"Energy and environmental impacts can be mitigated through policy design and CBDC considerations, but require clear metrics and reporting.\",\n    \"Equity and distributional effects should be explicitly considered to prevent widening inequalities.\"\n  ],\n  \"confidence\": 0.57\n}"
+            }
+          ],
+          "schemaName": "Counterfactual",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "failureModes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "triggerConditions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "mitigations": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "failureModes",
+              "triggerConditions",
+              "mitigations"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "failureModes": [
+              "Budgetary distortions due to mis-targeted subsidies that distort private investment and crowd out innovation.",
+              "Regulatory arbitrage and inconsistent rules across jurisdictions undermining policy effectiveness.",
+              "Inadequate measurement and data quality leading to mis-timed sunsets or subsidy allocation errors.",
+              "Capture of subsidies by political actors or incumbent firms resulting in skewed distribution and reduced innovation.",
+              "Subsidies failing to curb illicit activity due to enforcement gaps or scope limitations.",
+              "Innovation stagnation or reduced market competition caused by protectionist subsidy environments.",
+              "Unintended energy or environmental externalities despite mitigation measures.",
+              "CBDC design choices that threaten financial stability or suppress private innovation rather than complement it.",
+              "Governance failures due to opaque processes, weak accountability, or poor evaluation leading to misallocation.",
+              "Cross-border enforcement gaps enabling fraud, tax evasion, or regulatory arbitrage.",
+              "Long-term subsidy dependence creating cliff effects when sunset clauses trigger and private investment fails to materialize."
+            ],
+            "triggerConditions": [
+              "A rapid surge in subsidy demand or market hype increases fiscal exposure beyond budget forecasts.",
+              "Audits or whistleblower reports reveal widespread fraud, ghost projects, or misreported outcomes.",
+              "Reliable AML/KYC data becomes unavailable due to privacy constraints or data-sharing blockages.",
+              "Regulatory funding or political support erodes, reducing enforcement capacity and oversight.",
+              "International standard-setting bodies fail to align, creating regulatory arbitrage across borders.",
+              "A sharp rise in energy prices or concerns about environmental impact undermine policy goals.",
+              "A major cyber-security incident or platform failure disrupts subsidy delivery and trust.",
+              "A macroeconomic shock or sovereign stress reduces fiscal space for subsidies.",
+              "Widespread use of crypto products outside regulated channels compromises consumer protections.",
+              "CBDC experiments reveal systemic risks requiring policy reversal or tighter containment.",
+              "Political cycles delay reforms or extend subsidies beyond prudent sunset, creating fiscal or market distortions."
+            ],
+            "mitigations": [
+              "Institute strict, independent evaluation of subsidies with predefined KPIs and transparent reporting.",
+              "Limit subsidies to project-specific, outcome-based funding with explicit sunset clauses and caps.",
+              "Enforce robust AML/KYC controls, periodic audits, and severe penalties for fraud or misreporting; establish cross-border cooperation.",
+              "Create an accountable governance framework with a dedicated regulator, clear mandate, and public annual reviews.",
+              "Implement automatic sunset triggers tied to measurable milestones; include fallback plans to preserve essential services.",
+              "Invest in high-quality data collection, open data standards, and third-party verification to improve measurement accuracy.",
+              "Diversify funding sources, maintain contingency reserves, and avoid guarantees that could distort markets.",
+              "Design risk-based licensing and supervision that protects consumers while preserving innovation; pursue fraud penalties over blanket bans.",
+              "Impose anti-capture safeguards: anti-corruption measures, conflict of interest rules, and open procurement processes.",
+              "Coordinate with international bodies to reduce arbitrage; align with global standards and cross-border enforcement.",
+              "Pilot CBDC considerations with a separate, cautious evaluation track focusing on financial stability and monetary policy transmission; ensure interoperability and limit systemic risk."
+            ]
+          }
+        ],
+        "output": {
+          "kind": "counterfactual",
+          "data": {
+            "failureModes": [
+              "Budgetary distortions due to mis-targeted subsidies that distort private investment and crowd out innovation.",
+              "Regulatory arbitrage and inconsistent rules across jurisdictions undermining policy effectiveness.",
+              "Inadequate measurement and data quality leading to mis-timed sunsets or subsidy allocation errors.",
+              "Capture of subsidies by political actors or incumbent firms resulting in skewed distribution and reduced innovation.",
+              "Subsidies failing to curb illicit activity due to enforcement gaps or scope limitations.",
+              "Innovation stagnation or reduced market competition caused by protectionist subsidy environments.",
+              "Unintended energy or environmental externalities despite mitigation measures.",
+              "CBDC design choices that threaten financial stability or suppress private innovation rather than complement it.",
+              "Governance failures due to opaque processes, weak accountability, or poor evaluation leading to misallocation.",
+              "Cross-border enforcement gaps enabling fraud, tax evasion, or regulatory arbitrage.",
+              "Long-term subsidy dependence creating cliff effects when sunset clauses trigger and private investment fails to materialize."
+            ],
+            "triggerConditions": [
+              "A rapid surge in subsidy demand or market hype increases fiscal exposure beyond budget forecasts.",
+              "Audits or whistleblower reports reveal widespread fraud, ghost projects, or misreported outcomes.",
+              "Reliable AML/KYC data becomes unavailable due to privacy constraints or data-sharing blockages.",
+              "Regulatory funding or political support erodes, reducing enforcement capacity and oversight.",
+              "International standard-setting bodies fail to align, creating regulatory arbitrage across borders.",
+              "A sharp rise in energy prices or concerns about environmental impact undermine policy goals.",
+              "A major cyber-security incident or platform failure disrupts subsidy delivery and trust.",
+              "A macroeconomic shock or sovereign stress reduces fiscal space for subsidies.",
+              "Widespread use of crypto products outside regulated channels compromises consumer protections.",
+              "CBDC experiments reveal systemic risks requiring policy reversal or tighter containment.",
+              "Political cycles delay reforms or extend subsidies beyond prudent sunset, creating fiscal or market distortions."
+            ],
+            "mitigations": [
+              "Institute strict, independent evaluation of subsidies with predefined KPIs and transparent reporting.",
+              "Limit subsidies to project-specific, outcome-based funding with explicit sunset clauses and caps.",
+              "Enforce robust AML/KYC controls, periodic audits, and severe penalties for fraud or misreporting; establish cross-border cooperation.",
+              "Create an accountable governance framework with a dedicated regulator, clear mandate, and public annual reviews.",
+              "Implement automatic sunset triggers tied to measurable milestones; include fallback plans to preserve essential services.",
+              "Invest in high-quality data collection, open data standards, and third-party verification to improve measurement accuracy.",
+              "Diversify funding sources, maintain contingency reserves, and avoid guarantees that could distort markets.",
+              "Design risk-based licensing and supervision that protects consumers while preserving innovation; pursue fraud penalties over blanket bans.",
+              "Impose anti-capture safeguards: anti-corruption measures, conflict of interest rules, and open procurement processes.",
+              "Coordinate with international bodies to reduce arbitrage; align with global standards and cross-border enforcement.",
+              "Pilot CBDC considerations with a separate, cautious evaluation track focusing on financial stability and monetary policy transmission; ensure interoperability and limit systemic risk."
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:42:08.194Z"
+      },
+      {
+        "id": "step_1771339344652_d124bb1e6d0a4",
+        "agentName": "CalibrationAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:42:08.194Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a calibration auditor. Set adjusted confidence and claim-level confidences from the proposed answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Proposal JSON:\n{\n  \"answer\": \"Governments should not pursue a blanket subsidy or blanket ban on cryptocurrency. Instead, adopt a phased, evidence‑based policy that couples targeted, sunset‑bound subsidies to support innovation and financial inclusion with risk‑based licensing, AML/KYC, consumer protections, and focused prohibitions to curb illicit activity. The policy should be governed by an explicit framework with accountable agencies, transparent evaluation, and clear milestones. Subsidies should be project‑specific, outcome‑based, and designed to minimize distortions, with sunset clauses and performance metrics; funding should be conditional on measurable benefits like inclusion, security, or the adoption of compliant infrastructure. Regulation should emphasize licensing, supervision, and penalties for fraud rather than broad prohibitions; enforcement requires adequate resources and cross‑border cooperation to curb regulatory arbitrage. International coordination with standards bodies is essential to minimize spillovers. CBDCs should be evaluated cautiously as a potential complement, not a substitute for private‑market activity, with design choices that preserve financial stability and monetary policy transmission. Policymakers should explicitly consider macroeconomic stability, energy use, and equity in any design, and publish regular reports on progress and lessons learned.\",\n  \"keyClaims\": [\n    \"A targeted, evidence‑based mix of subsidies and regulation is preferable to either extreme.\",\n    \"Subsidies must be time-bound, project‑specific, and linked to measurable outcomes with sunset clauses.\",\n    \"Regulation should emphasize licensing, AML/KYC, consumer protections, and penalties for illicit activity rather than broad prohibitions.\",\n    \"A formal governance and evaluation framework is essential to allocate resources, monitor impact, and adjust policy.\",\n    \"International coordination with standards bodies reduces regulatory arbitrage and cross‑border risks.\",\n    \"CBDCs should be evaluated cautiously as a potential complement, with design decisions that consider banking stability and monetary policy transmission.\",\n    \"Policy design must consider macroeconomic stability, energy use, and equitable outcomes.\"\n  ],\n  \"assumptions\": [\n    \"Regulatory capacity, data availability, and political will are sufficient to implement phased, outcome‑based programs.\",\n    \"There will be ongoing technological and market evolution requiring adaptive policy design.\",\n    \"Subsidies can be structured to minimize distortions and capture broad benefits without crowding out private investment.\",\n    \"Energy and environmental impacts can be mitigated through policy design and CBDC considerations, but require clear metrics and reporting.\",\n    \"Equity and distributional effects should be explicitly considered to prevent widening inequalities.\",\n    \"Counterfactual risk: Budgetary distortions due to mis-targeted subsidies that distort private investment and crowd out innovation.\"\n  ],\n  \"confidence\": 0.57\n}"
+            }
+          ],
+          "schemaName": "Calibration",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "adjustedConfidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "rationale": {
+                "type": "string"
+              },
+              "claimConfidences": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "claim": {
+                      "type": "string"
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    }
+                  },
+                  "required": [
+                    "claim",
+                    "confidence"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "adjustedConfidence",
+              "rationale",
+              "claimConfidences"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "adjustedConfidence": 0.76,
+            "rationale": "The adjusted confidence is the aggregate (average) of the per-claim confidences assigned to the seven key claims, reflecting consistency and the normative framing of the proposal. Each claim was scored on how strongly the proposal supports it, with higher scores for claims that are directly asserted and well-integrated into the proposed policy design. The overall score (~0.76) indicates moderate to high confidence in the alignment of the proposal with these claims, while acknowledging the normative and context-dependent nature of policy recommendations that would require empirical validation and implementation planning.",
+            "claimConfidences": [
+              {
+                "claim": "A targeted, evidence-based mix of subsidies and regulation is preferable to either extreme.",
+                "confidence": 0.72
+              },
+              {
+                "claim": "Subsidies must be time-bound, project-specific, and linked to measurable outcomes with sunset clauses.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Regulation should emphasize licensing, AML/KYC, consumer protections, and penalties for illicit activity rather than broad prohibitions.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "A formal governance and evaluation framework is essential to allocate resources, monitor impact, and adjust policy.",
+                "confidence": 0.78
+              },
+              {
+                "claim": "International coordination with standards bodies reduces regulatory arbitrage and cross-border risks.",
+                "confidence": 0.75
+              },
+              {
+                "claim": "CBDCs should be evaluated cautiously as a potential complement, with design decisions that consider banking stability and monetary policy transmission.",
+                "confidence": 0.7
+              },
+              {
+                "claim": "Policy design must consider macroeconomic stability, energy use, and equitable outcomes.",
+                "confidence": 0.8
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "calibration",
+          "data": {
+            "adjustedConfidence": 0.76,
+            "rationale": "The adjusted confidence is the aggregate (average) of the per-claim confidences assigned to the seven key claims, reflecting consistency and the normative framing of the proposal. Each claim was scored on how strongly the proposal supports it, with higher scores for claims that are directly asserted and well-integrated into the proposed policy design. The overall score (~0.76) indicates moderate to high confidence in the alignment of the proposal with these claims, while acknowledging the normative and context-dependent nature of policy recommendations that would require empirical validation and implementation planning.",
+            "claimConfidences": [
+              {
+                "claim": "A targeted, evidence-based mix of subsidies and regulation is preferable to either extreme.",
+                "confidence": 0.72
+              },
+              {
+                "claim": "Subsidies must be time-bound, project-specific, and linked to measurable outcomes with sunset clauses.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Regulation should emphasize licensing, AML/KYC, consumer protections, and penalties for illicit activity rather than broad prohibitions.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "A formal governance and evaluation framework is essential to allocate resources, monitor impact, and adjust policy.",
+                "confidence": 0.78
+              },
+              {
+                "claim": "International coordination with standards bodies reduces regulatory arbitrage and cross-border risks.",
+                "confidence": 0.75
+              },
+              {
+                "claim": "CBDCs should be evaluated cautiously as a potential complement, with design decisions that consider banking stability and monetary policy transmission.",
+                "confidence": 0.7
+              },
+              {
+                "claim": "Policy design must consider macroeconomic stability, energy use, and equitable outcomes.",
+                "confidence": 0.8
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:42:24.652Z"
+      },
+      {
+        "id": "step_1771339358393_9b190f4e0d1768",
+        "agentName": "JudgeAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:42:24.653Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a strict research judge. Score answer quality with rubric scores 1-5. Output only valid JSON matching schema."
+            },
+            {
+              "role": "user",
+              "content": "Final proposal JSON:\n{\n  \"answer\": \"Governments should not pursue a blanket subsidy or blanket ban on cryptocurrency. Instead, adopt a phased, evidence‑based policy that couples targeted, sunset‑bound subsidies to support innovation and financial inclusion with risk‑based licensing, AML/KYC, consumer protections, and focused prohibitions to curb illicit activity. The policy should be governed by an explicit framework with accountable agencies, transparent evaluation, and clear milestones. Subsidies should be project‑specific, outcome‑based, and designed to minimize distortions, with sunset clauses and performance metrics; funding should be conditional on measurable benefits like inclusion, security, or the adoption of compliant infrastructure. Regulation should emphasize licensing, supervision, and penalties for fraud rather than broad prohibitions; enforcement requires adequate resources and cross‑border cooperation to curb regulatory arbitrage. International coordination with standards bodies is essential to minimize spillovers. CBDCs should be evaluated cautiously as a potential complement, not a substitute for private‑market activity, with design choices that preserve financial stability and monetary policy transmission. Policymakers should explicitly consider macroeconomic stability, energy use, and equity in any design, and publish regular reports on progress and lessons learned.\",\n  \"keyClaims\": [\n    \"A targeted, evidence‑based mix of subsidies and regulation is preferable to either extreme.\",\n    \"Subsidies must be time-bound, project‑specific, and linked to measurable outcomes with sunset clauses.\",\n    \"Regulation should emphasize licensing, AML/KYC, consumer protections, and penalties for illicit activity rather than broad prohibitions.\",\n    \"A formal governance and evaluation framework is essential to allocate resources, monitor impact, and adjust policy.\",\n    \"International coordination with standards bodies reduces regulatory arbitrage and cross‑border risks.\",\n    \"CBDCs should be evaluated cautiously as a potential complement, with design decisions that consider banking stability and monetary policy transmission.\",\n    \"Policy design must consider macroeconomic stability, energy use, and equitable outcomes.\"\n  ],\n  \"assumptions\": [\n    \"Regulatory capacity, data availability, and political will are sufficient to implement phased, outcome‑based programs.\",\n    \"There will be ongoing technological and market evolution requiring adaptive policy design.\",\n    \"Subsidies can be structured to minimize distortions and capture broad benefits without crowding out private investment.\",\n    \"Energy and environmental impacts can be mitigated through policy design and CBDC considerations, but require clear metrics and reporting.\",\n    \"Equity and distributional effects should be explicitly considered to prevent widening inequalities.\",\n    \"Counterfactual risk: Budgetary distortions due to mis-targeted subsidies that distort private investment and crowd out innovation.\"\n  ],\n  \"confidence\": 0.57\n}\n\nCritiques:\n[\n  {\n    \"targetAgent\": \"SolverAgent\",\n    \"issues\": [\n      {\n        \"severity\": 4,\n        \"type\": \"factual\",\n        \"note\": \"CBDC tradeoffs are understated: design choices affect bank funding, privacy, monetary policy transmission, and operational costs; the claim that CBDC will complement or replace crypto functions is not empirically established.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"logic\",\n        \"note\": \"The proposal assumes a synergistic effect of subsidies and bans without a stated theory or evidence; subsidies may undermine bans by shaping market dynamics, regulatory capture, or misallocation.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"No concrete governance framework: enforcement mechanisms, resource allocation, penalties, and oversight are unspecified; missing milestones and evaluation criteria.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"ambiguity\",\n        \"note\": \"Subsidies are not defined: what forms (grants, tax credits, procurement incentives), eligibility, scale, sunset criteria, and performance metrics are unclear; 'outcome-based' definitions are not provided.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"Macroeconomic and financial stability considerations are underdeveloped: impact on banks, credit, monetary policy transmission, cross-border spillovers, and the role of AML/KYC/regulatory arbitrage are not quantified.\"\n      },\n      {\n        \"severity\": 2,\n        \"type\": \"overconfidence\",\n        \"note\": \"The 0.63 confidence and asserted energy/environmental mitigation depend on design details; without modeling or data, this remains speculative.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"ambiguity\",\n        \"note\": \"International coordination is mentioned but lacks mechanism: which bodies, standards, enforcement, and how to handle cross-border enforcement and sanctions.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"Equity and distributional effects are not analyzed: which populations gain/lose from subsidies or bans, and how to prevent exacerbating existing inequalities.\"\n      }\n    ]\n  },\n  {\n    \"targetAgent\": \"Policy makers / Regulators\",\n    \"issues\": [\n      {\n        \"severity\": 5,\n        \"type\": \"missing\",\n        \"note\": \"No enforcement architecture: budget, personnel, penalties, oversight, and governance for pilots and risk-based licensing. Without concrete implementation details, the proposed plan is impractical.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"missing\",\n        \"note\": \"Privacy, surveillance, and civil-liberties implications are unaddressed. CBDC and crypto regulation can enable broad data collection and coercive oversight; risk of chilling effects.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"ambiguity\",\n        \"note\": \"Definitions of 'illicit use', 'fraud', 'financial instability' and 'risk-based licensing' are vague; no thresholds, metrics, or guardrails to prevent abuse or selective enforcement.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"Tax policy and tax treatment of crypto transactions, holdings, and mining/mining energy credits are not discussed; crucial for incentives, compliance, and revenue.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"logic\",\n        \"note\": \"Assuming a mixed policy is superior without empirical evidence or scenario analysis; neglects risk of policy capture or diminished returns under different market regimes.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"ambiguity\",\n        \"note\": \"CBDC role is uncertain ('complement or replace') and dependent on design choices; without scenario analysis, the conclusion is speculative.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"No concrete energy-use or environmental standards, monitoring, or compliance mechanisms; claims about mitigating impacts are unsubstantiated.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"overconfidence\",\n        \"note\": \"Optimistic assumption that international coordination will minimize regulatory arbitrage; in practice, jurisdictions will diverge and enforcement will be uneven, enabling leakage.\"\n      },\n      {\n        \"severity\": 2,\n        \"type\": \"missing\",\n        \"note\": \"Lack of evaluation metrics and sunset criteria for subsidies; no plan for iterative reallocation or revocation based on performance.\"\n      },\n      {\n        \"severity\": 2,\n        \"type\": \"missing\",\n        \"note\": \"Policy gaps on non-custodial vs custodial crypto, DeFi, cross-border payments, and privacy-preserving technologies; ambiguity about regulatory reach.\"\n      }\n    ]\n  }\n]"
+            }
+          ],
+          "schemaName": "Judgement",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "rubricScores": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "coherence": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "completeness": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "factualRisk": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "uncertaintyHandling": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  }
+                },
+                "required": [
+                  "coherence",
+                  "completeness",
+                  "factualRisk",
+                  "uncertaintyHandling"
+                ]
+              },
+              "strengths": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "weaknesses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "summary": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "rubricScores",
+              "strengths",
+              "weaknesses",
+              "summary"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "rubricScores": {
+              "coherence": 3,
+              "completeness": 3,
+              "factualRisk": 3,
+              "uncertaintyHandling": 2
+            },
+            "strengths": [
+              "Phased, evidence-based approach with sunset clauses and measurable outcomes.",
+              "Clear emphasis on targeted regulation (licensing, AML/KYC, consumer protections) over blanket bans.",
+              "Advocates a governance and evaluation framework to monitor impact and adjust policy.",
+              "Acknowledges the role of international coordination and standards bodies to reduce regulatory arbitrage.",
+              "Notes cautious consideration of CBDCs as a potential complement with attention to financial stability and monetary policy transmission."
+            ],
+            "weaknesses": [
+              "No concrete enforcement architecture or budgetary/resource allocation plan; enforcement, penalties, and oversight are underspecified.",
+              "Subsidy design details are missing (forms, eligibility, scale, sunset criteria, performance metrics) and outcome-based criteria are not defined.",
+              "Key terms (illicit use, risk-based licensing, fraud, financial instability) lack precise definitions, thresholds, and guardrails.",
+              "Tax policy, energy standards, and environmental considerations are not fleshed out; no metrics or compliance mechanisms provided.",
+              "Lack of scenario analysis or empirical evidence to support the claim that a mixed policy reduces risk; no robustness checks or design space exploration.",
+              "Detailed governance mechanisms for international coordination (which bodies, how enforcement works across borders, sanctions) are not specified.",
+              "Equity and distributional impacts are not analyzed, leaving questions about who gains or loses from proposed subsidies and regulations, and how to prevent widening inequalities.",
+              "Privacy, surveillance, and civil-liberties implications, especially related to CBDCs and data access, are not addressed.",
+              "No discussion of non-custodial vs custodial crypto, DeFi, cross-border payments, or privacy-preserving tech; regulatory reach remains ambiguous."
+            ],
+            "summary": "The proposal presents a coherent, principled framework favoring a phased, outcome-based mix of subsidies and regulation, with governance and international coordination. However, it is under-specified on implementation details, enforcement architecture, subsidy design, definitions and guardrails, tax and energy policy, and equity considerations. It lacks scenario analysis and empirical backing, making it difficult to assess robustness and practical feasibility. To improve, provide concrete governance structures, explicit subsidy mechanisms and metrics, clear definitions and thresholds, a plan for budget and personnel, and a formal evaluation process with milestones and sunset criteria. Also address privacy implications, energy standards, tax treatment, and regulatory reach for emerging areas like DeFi and cross-border crypto activity."
+          }
+        ],
+        "output": {
+          "kind": "judgement",
+          "data": {
+            "rubricScores": {
+              "coherence": 3,
+              "completeness": 3,
+              "factualRisk": 3,
+              "uncertaintyHandling": 2
+            },
+            "strengths": [
+              "Phased, evidence-based approach with sunset clauses and measurable outcomes.",
+              "Clear emphasis on targeted regulation (licensing, AML/KYC, consumer protections) over blanket bans.",
+              "Advocates a governance and evaluation framework to monitor impact and adjust policy.",
+              "Acknowledges the role of international coordination and standards bodies to reduce regulatory arbitrage.",
+              "Notes cautious consideration of CBDCs as a potential complement with attention to financial stability and monetary policy transmission."
+            ],
+            "weaknesses": [
+              "No concrete enforcement architecture or budgetary/resource allocation plan; enforcement, penalties, and oversight are underspecified.",
+              "Subsidy design details are missing (forms, eligibility, scale, sunset criteria, performance metrics) and outcome-based criteria are not defined.",
+              "Key terms (illicit use, risk-based licensing, fraud, financial instability) lack precise definitions, thresholds, and guardrails.",
+              "Tax policy, energy standards, and environmental considerations are not fleshed out; no metrics or compliance mechanisms provided.",
+              "Lack of scenario analysis or empirical evidence to support the claim that a mixed policy reduces risk; no robustness checks or design space exploration.",
+              "Detailed governance mechanisms for international coordination (which bodies, how enforcement works across borders, sanctions) are not specified.",
+              "Equity and distributional impacts are not analyzed, leaving questions about who gains or loses from proposed subsidies and regulations, and how to prevent widening inequalities.",
+              "Privacy, surveillance, and civil-liberties implications, especially related to CBDCs and data access, are not addressed.",
+              "No discussion of non-custodial vs custodial crypto, DeFi, cross-border payments, or privacy-preserving tech; regulatory reach remains ambiguous."
+            ],
+            "summary": "The proposal presents a coherent, principled framework favoring a phased, outcome-based mix of subsidies and regulation, with governance and international coordination. However, it is under-specified on implementation details, enforcement architecture, subsidy design, definitions and guardrails, tax and energy policy, and equity considerations. It lacks scenario analysis and empirical backing, making it difficult to assess robustness and practical feasibility. To improve, provide concrete governance structures, explicit subsidy mechanisms and metrics, clear definitions and thresholds, a plan for budget and personnel, and a formal evaluation process with milestones and sunset criteria. Also address privacy implications, energy standards, tax treatment, and regulatory reach for emerging areas like DeFi and cross-border crypto activity."
+          }
+        },
+        "completedAt": "2026-02-17T14:42:38.393Z"
+      }
+    ],
+    "finalAnswer": "Governments should not pursue a blanket subsidy or blanket ban on cryptocurrency. Instead, adopt a phased, evidence‑based policy that couples targeted, sunset‑bound subsidies to support innovation and financial inclusion with risk‑based licensing, AML/KYC, consumer protections, and focused prohibitions to curb illicit activity. The policy should be governed by an explicit framework with accountable agencies, transparent evaluation, and clear milestones. Subsidies should be project‑specific, outcome‑based, and designed to minimize distortions, with sunset clauses and performance metrics; funding should be conditional on measurable benefits like inclusion, security, or the adoption of compliant infrastructure. Regulation should emphasize licensing, supervision, and penalties for fraud rather than broad prohibitions; enforcement requires adequate resources and cross‑border cooperation to curb regulatory arbitrage. International coordination with standards bodies is essential to minimize spillovers. CBDCs should be evaluated cautiously as a potential complement, not a substitute for private‑market activity, with design choices that preserve financial stability and monetary policy transmission. Policymakers should explicitly consider macroeconomic stability, energy use, and equity in any design, and publish regular reports on progress and lessons learned.",
+    "metrics": {
+      "confidence": {
+        "solver": 0.63,
+        "revision": 0.4,
+        "synthesizer": 0.76,
+        "calibratedAdjusted": 0.76,
+        "solverToRevisionDelta": -0.23,
+        "revisionToSynthesizerDelta": 0.36
+      },
+      "critique": {
+        "maxSeverity": 5,
+        "avgSeverity": 3.389,
+        "byType": {
+          "factual": 1,
+          "logic": 2,
+          "missing": 9,
+          "ambiguity": 4,
+          "overconfidence": 2
+        }
+      },
+      "quality": {
+        "coherence": 3,
+        "completeness": 3,
+        "factualRisk": 3,
+        "uncertaintyHandling": 2
+      },
+      "research": {
+        "evidenceRiskLevel": 4,
+        "counterfactualFailureModeCount": 11,
+        "topCounterfactualFailureMode": "Budgetary distortions due to mis-targeted subsidies that distort private investment and crowd out innovation."
+      },
+      "consensus": {
+        "included": [
+          "solver",
+          "revision",
+          "synthesizer"
+        ],
+        "pairs": [
+          {
+            "a": "solver",
+            "b": "revision",
+            "similarity": 0.778
+          },
+          {
+            "a": "solver",
+            "b": "synthesizer",
+            "similarity": 0.774
+          },
+          {
+            "a": "revision",
+            "b": "synthesizer",
+            "similarity": 0.957
+          }
+        ],
+        "strength": 0.836
+      }
+    }
+  },
+  "metadata": {
+    "schemaVersion": 1,
+    "createdAt": "2026-02-17T14:42:38.393Z",
+    "model": "gpt-5-nano-2025-08-07",
+    "fastMode": false,
+    "pipelinePreset": "research_deep",
+    "pipelineVersion": "1.0.0",
+    "source": "cli"
+  }
+}

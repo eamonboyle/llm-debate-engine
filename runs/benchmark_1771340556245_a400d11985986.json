@@ -1,0 +1,231 @@
+{
+  "kind": "benchmark",
+  "id": "benchmark_1771340556245_a400d11985986",
+  "question": "Is the precautionary principle a sound basis for technology regulation?",
+  "metadata": {
+    "schemaVersion": 1,
+    "createdAt": "2026-02-17T15:02:36.245Z",
+    "model": "gpt-5-nano-2025-08-07",
+    "fastMode": false,
+    "pipelinePreset": "research_deep",
+    "pipelineVersion": "1.0.0",
+    "source": "cli"
+  },
+  "payload": {
+    "runs": 5,
+    "runIds": [
+      "run_1771340320577_2dbd209ed89498",
+      "run_1771340315595_1e45c0ccbef9d8",
+      "run_1771340333452_31e8f2d6be07f8",
+      "run_1771340553572_5e6b56391bc808",
+      "run_1771340542739_d78315f68b0ba8"
+    ],
+    "modeCount": 4,
+    "modeSizes": [
+      1,
+      1,
+      1,
+      2
+    ],
+    "divergenceEntropy": 1.9219280948873623,
+    "threshold": 0.9,
+    "modeCountAt0_8": 2,
+    "modeCountAt0_9": 4,
+    "modeCountAt0_95": 5,
+    "modes": [
+      {
+        "size": 1,
+        "members": [
+          0
+        ],
+        "exemplarIndex": 0,
+        "exemplarPreview": "PPP can be a sensible instrument for technology regulation, but only when bounded by a disciplined decision framework that explicitly weighs uncertainties, potential harms, and the costs and benefits "
+      },
+      {
+        "size": 1,
+        "members": [
+          1
+        ],
+        "exemplarIndex": 1,
+        "exemplarPreview": "The precautionary principle can be a sound basis for technology regulation when embedded in adaptive, risk-based governance rather than used as an absolute ban. Its value comes from making risk thresh"
+      },
+      {
+        "size": 1,
+        "members": [
+          2
+        ],
+        "exemplarIndex": 2,
+        "exemplarPreview": "Yes, but only when embedded in a narrowly scoped, time-bound, evidence-informed governance framework. The precautionary principle can help prevent irreversible harms under deep uncertainty if it is de"
+      },
+      {
+        "size": 2,
+        "members": [
+          3,
+          4
+        ],
+        "exemplarIndex": 3,
+        "exemplarPreview": "The precautionary principle can be a useful element of technology regulation, but its soundness is not universal. Its acceptability depends on precise definitions, explicit welfare and distributional "
+      }
+    ],
+    "modeCountClaimCentroid": 5,
+    "modeSizesClaimCentroid": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "divergenceEntropyClaimCentroid": 2.321928094887362,
+    "modeCountClaimCentroidAt0_8": 2,
+    "modeCountClaimCentroidAt0_9": 5,
+    "modeCountClaimCentroidAt0_95": 5,
+    "stabilityClaimCentroid": {
+      "pairwiseMean": 0.801,
+      "pairwiseStddev": 0.043,
+      "minPairwiseSimilarity": 0.751,
+      "maxPairwiseSimilarity": 0.896
+    },
+    "summary": {
+      "question": "Is the precautionary principle a sound basis for technology regulation?",
+      "runs": 5,
+      "runIds": [
+        "run_1771340320577_2dbd209ed89498",
+        "run_1771340315595_1e45c0ccbef9d8",
+        "run_1771340333452_31e8f2d6be07f8",
+        "run_1771340553572_5e6b56391bc808",
+        "run_1771340542739_d78315f68b0ba8"
+      ],
+      "consensus": {
+        "mean": 0.924,
+        "stddev": 0.023
+      },
+      "critiqueMaxSeverity": {
+        "mean": 4.8,
+        "stddev": 0.447
+      },
+      "modeCount": 4,
+      "modeSizes": [
+        1,
+        1,
+        1,
+        2
+      ],
+      "divergenceEntropy": 1.9219280948873623,
+      "threshold": 0.9,
+      "modeCountAt0_8": 2,
+      "modeCountAt0_9": 4,
+      "modeCountAt0_95": 5,
+      "modes": [
+        {
+          "size": 1,
+          "members": [
+            0
+          ],
+          "exemplarIndex": 0,
+          "exemplarPreview": "PPP can be a sensible instrument for technology regulation, but only when bounded by a disciplined decision framework that explicitly weighs uncertainties, potential harms, and the costs and benefits "
+        },
+        {
+          "size": 1,
+          "members": [
+            1
+          ],
+          "exemplarIndex": 1,
+          "exemplarPreview": "The precautionary principle can be a sound basis for technology regulation when embedded in adaptive, risk-based governance rather than used as an absolute ban. Its value comes from making risk thresh"
+        },
+        {
+          "size": 1,
+          "members": [
+            2
+          ],
+          "exemplarIndex": 2,
+          "exemplarPreview": "Yes, but only when embedded in a narrowly scoped, time-bound, evidence-informed governance framework. The precautionary principle can help prevent irreversible harms under deep uncertainty if it is de"
+        },
+        {
+          "size": 2,
+          "members": [
+            3,
+            4
+          ],
+          "exemplarIndex": 3,
+          "exemplarPreview": "The precautionary principle can be a useful element of technology regulation, but its soundness is not universal. Its acceptability depends on precise definitions, explicit welfare and distributional "
+        }
+      ],
+      "stability": {
+        "pairwiseMean": 0.813,
+        "pairwiseStddev": 0.061,
+        "minPairwiseSimilarity": 0.704,
+        "maxPairwiseSimilarity": 0.924,
+        "pairs": [
+          {
+            "i": 0,
+            "j": 1,
+            "similarity": 0.704
+          },
+          {
+            "i": 0,
+            "j": 2,
+            "similarity": 0.747
+          },
+          {
+            "i": 0,
+            "j": 3,
+            "similarity": 0.784
+          },
+          {
+            "i": 0,
+            "j": 4,
+            "similarity": 0.783
+          },
+          {
+            "i": 1,
+            "j": 2,
+            "similarity": 0.828
+          },
+          {
+            "i": 1,
+            "j": 3,
+            "similarity": 0.846
+          },
+          {
+            "i": 1,
+            "j": 4,
+            "similarity": 0.82
+          },
+          {
+            "i": 2,
+            "j": 3,
+            "similarity": 0.853
+          },
+          {
+            "i": 2,
+            "j": 4,
+            "similarity": 0.836
+          },
+          {
+            "i": 3,
+            "j": 4,
+            "similarity": 0.924
+          }
+        ]
+      },
+      "modeCountClaimCentroid": 5,
+      "modeSizesClaimCentroid": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "divergenceEntropyClaimCentroid": 2.321928094887362,
+      "modeCountClaimCentroidAt0_8": 2,
+      "modeCountClaimCentroidAt0_9": 5,
+      "modeCountClaimCentroidAt0_95": 5,
+      "stabilityClaimCentroid": {
+        "pairwiseMean": 0.801,
+        "pairwiseStddev": 0.043,
+        "minPairwiseSimilarity": 0.751,
+        "maxPairwiseSimilarity": 0.896
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+id,question,createdAt,model,pipelinePreset,fastMode,runs,modeCount,modeSizes,divergenceEntropy,stabilityPairwiseMean,threshold
+benchmark_1771322068310_3aa3bf8e08c788,Should social media platforms be held liable for user-generated content?,2026-02-17T09:54:28.310Z,gpt-5-nano-2025-08-07,research_deep,false,5,5,1|1|1|1|1,2.321928094887362,0.839,0.9
+benchmark_1771339872755_5450882533c458,Should we ban or heavily restrict facial recognition in public spaces?,2026-02-17T14:51:12.755Z,gpt-5-nano-2025-08-07,research_deep,false,5,4,1|2|1|1,1.9219280948873623,0.858,0.9
+benchmark_1771340556245_a400d11985986,Is the precautionary principle a sound basis for technology regulation?,2026-02-17T15:02:36.245Z,gpt-5-nano-2025-08-07,research_deep,false,5,4,1|1|1|2,1.9219280948873623,0.813,0.9
+benchmark_1771341288792_0922b306e9b72,Should we prioritize AI safety research over AI capability research?,2026-02-17T15:14:48.792Z,gpt-5-nano-2025-08-07,research_deep,false,5,5,1|1|1|1|1,2.321928094887362,0.719,0.9
+benchmark_1771341934570_cb5fa43b309ec,Is degrowth a viable solution to climate change?,2026-02-17T15:25:34.570Z,gpt-5-nano-2025-08-07,research_deep,false,5,4,1|2|1|1,1.9219280948873623,0.871,0.9
+benchmark_1771342676099_703f78c9eaf418,Should we establish a global minimum corporate tax?,2026-02-17T15:37:56.099Z,gpt-5-nano-2025-08-07,research_deep,false,5,5,1|1|1|1|1,2.321928094887362,0.788,0.9

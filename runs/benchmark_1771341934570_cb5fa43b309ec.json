@@ -1,0 +1,231 @@
+{
+  "kind": "benchmark",
+  "id": "benchmark_1771341934570_cb5fa43b309ec",
+  "question": "Is degrowth a viable solution to climate change?",
+  "metadata": {
+    "schemaVersion": 1,
+    "createdAt": "2026-02-17T15:25:34.570Z",
+    "model": "gpt-5-nano-2025-08-07",
+    "fastMode": false,
+    "pipelinePreset": "research_deep",
+    "pipelineVersion": "1.0.0",
+    "source": "cli"
+  },
+  "payload": {
+    "runs": 5,
+    "runIds": [
+      "run_1771341686512_78756216d0d8a8",
+      "run_1771341700678_c826737328dd38",
+      "run_1771341689197_37b75442ec70c",
+      "run_1771341918134_3d6f72b150717",
+      "run_1771341931575_51a2085a363488"
+    ],
+    "modeCount": 4,
+    "modeSizes": [
+      1,
+      2,
+      1,
+      1
+    ],
+    "divergenceEntropy": 1.9219280948873623,
+    "threshold": 0.9,
+    "modeCountAt0_8": 1,
+    "modeCountAt0_9": 4,
+    "modeCountAt0_95": 5,
+    "modes": [
+      {
+        "size": 1,
+        "members": [
+          0
+        ],
+        "exemplarIndex": 0,
+        "exemplarPreview": "Definitions and scope: Degrowth means policy-driven reductions in energy demand and material throughput achieved through sufficiency, efficiency, and a reorientation of welfare toward health, educatio"
+      },
+      {
+        "size": 2,
+        "members": [
+          1,
+          4
+        ],
+        "exemplarIndex": 1,
+        "exemplarPreview": "Degrowth is not a universal fix for climate change. It can contribute within a broader climate strategy, but only if definitions, governance, and time horizons are explicit. Specifically: operationali"
+      },
+      {
+        "size": 1,
+        "members": [
+          2
+        ],
+        "exemplarIndex": 2,
+        "exemplarPreview": "Degrowth can be part of climate strategy but is not a guaranteed universal solution. It is viable only with a credible policy design, appropriate context, and a credible transition plan. A plausible d"
+      },
+      {
+        "size": 1,
+        "members": [
+          3
+        ],
+        "exemplarIndex": 3,
+        "exemplarPreview": "Degrowth is not universally viable; its viability depends on explicit definitions, credible targets, and robust policy and energy-transition plans. I propose three testable variants: sufficiency-based"
+      }
+    ],
+    "modeCountClaimCentroid": 5,
+    "modeSizesClaimCentroid": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "divergenceEntropyClaimCentroid": 2.321928094887362,
+    "modeCountClaimCentroidAt0_8": 1,
+    "modeCountClaimCentroidAt0_9": 5,
+    "modeCountClaimCentroidAt0_95": 5,
+    "stabilityClaimCentroid": {
+      "pairwiseMean": 0.844,
+      "pairwiseStddev": 0.017,
+      "minPairwiseSimilarity": 0.816,
+      "maxPairwiseSimilarity": 0.864
+    },
+    "summary": {
+      "question": "Is degrowth a viable solution to climate change?",
+      "runs": 5,
+      "runIds": [
+        "run_1771341686512_78756216d0d8a8",
+        "run_1771341700678_c826737328dd38",
+        "run_1771341689197_37b75442ec70c",
+        "run_1771341918134_3d6f72b150717",
+        "run_1771341931575_51a2085a363488"
+      ],
+      "consensus": {
+        "mean": 0.928,
+        "stddev": 0.027
+      },
+      "critiqueMaxSeverity": {
+        "mean": 5,
+        "stddev": 0
+      },
+      "modeCount": 4,
+      "modeSizes": [
+        1,
+        2,
+        1,
+        1
+      ],
+      "divergenceEntropy": 1.9219280948873623,
+      "threshold": 0.9,
+      "modeCountAt0_8": 1,
+      "modeCountAt0_9": 4,
+      "modeCountAt0_95": 5,
+      "modes": [
+        {
+          "size": 1,
+          "members": [
+            0
+          ],
+          "exemplarIndex": 0,
+          "exemplarPreview": "Definitions and scope: Degrowth means policy-driven reductions in energy demand and material throughput achieved through sufficiency, efficiency, and a reorientation of welfare toward health, educatio"
+        },
+        {
+          "size": 2,
+          "members": [
+            1,
+            4
+          ],
+          "exemplarIndex": 1,
+          "exemplarPreview": "Degrowth is not a universal fix for climate change. It can contribute within a broader climate strategy, but only if definitions, governance, and time horizons are explicit. Specifically: operationali"
+        },
+        {
+          "size": 1,
+          "members": [
+            2
+          ],
+          "exemplarIndex": 2,
+          "exemplarPreview": "Degrowth can be part of climate strategy but is not a guaranteed universal solution. It is viable only with a credible policy design, appropriate context, and a credible transition plan. A plausible d"
+        },
+        {
+          "size": 1,
+          "members": [
+            3
+          ],
+          "exemplarIndex": 3,
+          "exemplarPreview": "Degrowth is not universally viable; its viability depends on explicit definitions, credible targets, and robust policy and energy-transition plans. I propose three testable variants: sufficiency-based"
+        }
+      ],
+      "stability": {
+        "pairwiseMean": 0.871,
+        "pairwiseStddev": 0.024,
+        "minPairwiseSimilarity": 0.833,
+        "maxPairwiseSimilarity": 0.914,
+        "pairs": [
+          {
+            "i": 0,
+            "j": 1,
+            "similarity": 0.881
+          },
+          {
+            "i": 0,
+            "j": 2,
+            "similarity": 0.87
+          },
+          {
+            "i": 0,
+            "j": 3,
+            "similarity": 0.868
+          },
+          {
+            "i": 0,
+            "j": 4,
+            "similarity": 0.861
+          },
+          {
+            "i": 1,
+            "j": 2,
+            "similarity": 0.879
+          },
+          {
+            "i": 1,
+            "j": 3,
+            "similarity": 0.833
+          },
+          {
+            "i": 1,
+            "j": 4,
+            "similarity": 0.914
+          },
+          {
+            "i": 2,
+            "j": 3,
+            "similarity": 0.866
+          },
+          {
+            "i": 2,
+            "j": 4,
+            "similarity": 0.897
+          },
+          {
+            "i": 3,
+            "j": 4,
+            "similarity": 0.838
+          }
+        ]
+      },
+      "modeCountClaimCentroid": 5,
+      "modeSizesClaimCentroid": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "divergenceEntropyClaimCentroid": 2.321928094887362,
+      "modeCountClaimCentroidAt0_8": 1,
+      "modeCountClaimCentroidAt0_9": 5,
+      "modeCountClaimCentroidAt0_95": 5,
+      "stabilityClaimCentroid": {
+        "pairwiseMean": 0.844,
+        "pairwiseStddev": 0.017,
+        "minPairwiseSimilarity": 0.816,
+        "maxPairwiseSimilarity": 0.864
+      }
+    }
+  }
+}

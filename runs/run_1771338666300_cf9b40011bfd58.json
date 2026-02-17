@@ -1,0 +1,1367 @@
+{
+  "kind": "run",
+  "id": "run_1771338666300_cf9b40011bfd58",
+  "question": "Should we tax robots or automation that displaces workers?",
+  "run": {
+    "id": "run_1771338666300_cf9b40011bfd58",
+    "createdAt": "2026-02-17T14:31:06.300Z",
+    "question": "Should we tax robots or automation that displaces workers?",
+    "steps": [
+      {
+        "id": "step_1771338482837_928b9133af53e8",
+        "agentName": "QuestionDecomposerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:27:36.031Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a research planner. Decompose the question into sub-questions and hypotheses. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should we tax robots or automation that displaces workers?"
+            }
+          ],
+          "schemaName": "QuestionDecomposition",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "framing": {
+                "type": "string"
+              },
+              "subQuestions": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "hypotheses": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "framing",
+              "subQuestions",
+              "hypotheses"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "framing": "Policy framing: Evaluate the desirability, design, and effects of a tax on automation that displaces workers, including revenue use, incentives for innovation, and equity implications.",
+            "subQuestions": [
+              "What are the objectives of a robot/automation tax and how would success be measured?",
+              "How should the tax base be defined and measured (which technologies count as automation/robots, thresholds, depreciation, effective lifetime)?",
+              "What would be the expected effects on employment, wages, productivity, and the pace or pattern of automation adoption?",
+              "How would the tax influence firm investment decisions, business models, and international competitiveness or relocation?",
+              "What are the distributional consequences across workers, industries, firm sizes, regions, and demographics?",
+              "What administrative, compliance, monitoring, and enforcement challenges would the policy entail, including measurement of automation?",
+              "What design features (rates, exemptions, phase-ins, sunset clauses, transitional support) optimize efficiency and equity?",
+              "How should tax revenue be allocated (retraining, unemployment benefits, public goods, social safety net) and what are the opportunity costs?",
+              "How would the policy interact with other policy tools (fiscal policy, unemployment insurance, wage subsidies, education and training programs) and with existing tax systems?",
+              "What are international coordination implications, risks of tax avoidance, and potential responses to capital flight or offshoring?",
+              "What empirical evidence or case studies could inform policy design (natural experiments, cross-country comparisons, industry-level data)?"
+            ],
+            "hypotheses": [
+              "H1: A robot tax will shift automation investment toward technologies with lower displacement risk and encourage retraining, reducing net worker displacement relative to a no-policy baseline.",
+              "H2: If revenues are earmarked for retraining and income support, net employment and inequality outcomes improve compared with unearmarked revenues.",
+              "H3: Higher tax rates distort investment decisions and may dampen productivity growth if not calibrated carefully, potentially increasing prices.",
+              "H4: Measurement and enforcement challenges will create misalignment between the tax base and actual automation, leading to unintended burdens or loopholes.",
+              "H5: International coordination reduces tax avoidance and leakage, improving effectiveness; lack of coordination increases cross-border relocation of activities.",
+              "H6: Exemptions or simplified compliance for small firms are necessary to avoid disproportionate burdens and to prevent driving automation adoption underground.",
+              "H7: The tax could inadvertently reduce overall innovation if it unduly penalizes research-intensive automation, unless design features mitigate this risk.",
+              "H8: Alternative policies (training subsidies, wage subsidies, universal basic income) may achieve comparable welfare gains with fewer distortions.",
+              "H9: In economies with strong social safety nets, the marginal welfare gains from an automation tax are smaller, affecting political feasibility and policy choice.",
+              "H10: Public acceptance and political feasibility are crucial determinants of effective implementation and duration of a robot/automation tax."
+            ]
+          }
+        ],
+        "output": {
+          "kind": "decomposition",
+          "data": {
+            "framing": "Policy framing: Evaluate the desirability, design, and effects of a tax on automation that displaces workers, including revenue use, incentives for innovation, and equity implications.",
+            "subQuestions": [
+              "What are the objectives of a robot/automation tax and how would success be measured?",
+              "How should the tax base be defined and measured (which technologies count as automation/robots, thresholds, depreciation, effective lifetime)?",
+              "What would be the expected effects on employment, wages, productivity, and the pace or pattern of automation adoption?",
+              "How would the tax influence firm investment decisions, business models, and international competitiveness or relocation?",
+              "What are the distributional consequences across workers, industries, firm sizes, regions, and demographics?",
+              "What administrative, compliance, monitoring, and enforcement challenges would the policy entail, including measurement of automation?",
+              "What design features (rates, exemptions, phase-ins, sunset clauses, transitional support) optimize efficiency and equity?",
+              "How should tax revenue be allocated (retraining, unemployment benefits, public goods, social safety net) and what are the opportunity costs?",
+              "How would the policy interact with other policy tools (fiscal policy, unemployment insurance, wage subsidies, education and training programs) and with existing tax systems?",
+              "What are international coordination implications, risks of tax avoidance, and potential responses to capital flight or offshoring?",
+              "What empirical evidence or case studies could inform policy design (natural experiments, cross-country comparisons, industry-level data)?"
+            ],
+            "hypotheses": [
+              "H1: A robot tax will shift automation investment toward technologies with lower displacement risk and encourage retraining, reducing net worker displacement relative to a no-policy baseline.",
+              "H2: If revenues are earmarked for retraining and income support, net employment and inequality outcomes improve compared with unearmarked revenues.",
+              "H3: Higher tax rates distort investment decisions and may dampen productivity growth if not calibrated carefully, potentially increasing prices.",
+              "H4: Measurement and enforcement challenges will create misalignment between the tax base and actual automation, leading to unintended burdens or loopholes.",
+              "H5: International coordination reduces tax avoidance and leakage, improving effectiveness; lack of coordination increases cross-border relocation of activities.",
+              "H6: Exemptions or simplified compliance for small firms are necessary to avoid disproportionate burdens and to prevent driving automation adoption underground.",
+              "H7: The tax could inadvertently reduce overall innovation if it unduly penalizes research-intensive automation, unless design features mitigate this risk.",
+              "H8: Alternative policies (training subsidies, wage subsidies, universal basic income) may achieve comparable welfare gains with fewer distortions.",
+              "H9: In economies with strong social safety nets, the marginal welfare gains from an automation tax are smaller, affecting political feasibility and policy choice.",
+              "H10: Public acceptance and political feasibility are crucial determinants of effective implementation and duration of a robot/automation tax."
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:28:02.837Z"
+      },
+      {
+        "id": "step_1771338511242_cbe70cd19b50a8",
+        "agentName": "EvidencePlannerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:28:02.837Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are an evidence planning specialist. Produce a compact evidence and verification plan for the question. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should we tax robots or automation that displaces workers?"
+            }
+          ],
+          "schemaName": "EvidencePlan",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "evidenceRequirements": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "verificationChecks": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "majorUnknowns": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "riskLevel": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              }
+            },
+            "required": [
+              "evidenceRequirements",
+              "verificationChecks",
+              "majorUnknowns",
+              "riskLevel"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "evidenceRequirements": [
+              "Quantitative estimates of automation-driven displacement by sector, occupation, and time horizon.",
+              "Cross-country and historical studies on automation's net employment impact, wage effects, and productivity.",
+              "Evidence on the effectiveness of robot/automation taxes or similar instruments in influencing adoption, employment, and innovation.",
+              "Policy design analyses: feasible tax base definitions (what counts as 'robot' or 'automation'), rates, exemptions, depreciation, and international coordination issues.",
+              "Revenue projections and macroeconomic effects under different tax designs, including scenarios with revenue recycling (retraining, transfers, or tax cuts).",
+              "Administrative feasibility: measurement and auditing of taxable automation, compliance costs, and enforcement challenges.",
+              "Distributional impact assessments: effects on workers by skill level, region, and firm size; equity considerations.",
+              "Evaluation of complementary policies (retraining, wage subsidies, universal basic income) and policy alternatives."
+            ],
+            "verificationChecks": [
+              "Synthesize findings from OECD/IMF/World Bank literature on automation's employment impact and policy responses.",
+              "Identify real-world cases of robot taxes or analogous policies and extract outcomes and design features.",
+              "Run or review macroeconomic simulations comparing scenarios with and without automation taxes, with sensitivity analyses on tax rate and elasticity of substitution.",
+              "Validate definitions of 'robot' and 'automation' used for tax purposes and assess potential loopholes or circumvention (leasing, cloud-based software).",
+              "Assess administrative feasibility: data requirements, valuation, depreciation rules, auditing needs, and enforcement costs.",
+              "Evaluate revenue use scenarios and their macroeconomic and distributional effects.",
+              "Cross-check findings against independent technical reports and stakeholder inputs."
+            ],
+            "majorUnknowns": [
+              "What is the long-run net employment impact of automation across sectors and geographies?",
+              "What is the optimal tax rate and base that minimizes displacement while not chilling innovation?",
+              "How should 'robot' or 'automation' be defined to minimize loopholes and avoid misclassification?",
+              "How would a robot tax interact with other policies (training, wage subsidies, UBI) and affect firm investment decisions?",
+              "What are the distributional consequences for workers with varying skills and in different regions?",
+              "What are the administrative costs, enforcement challenges, and international coordination issues?",
+              "How would tax revenue be recycled and what macro effects would that entail?"
+            ],
+            "riskLevel": 4
+          }
+        ],
+        "output": {
+          "kind": "evidence_plan",
+          "data": {
+            "evidenceRequirements": [
+              "Quantitative estimates of automation-driven displacement by sector, occupation, and time horizon.",
+              "Cross-country and historical studies on automation's net employment impact, wage effects, and productivity.",
+              "Evidence on the effectiveness of robot/automation taxes or similar instruments in influencing adoption, employment, and innovation.",
+              "Policy design analyses: feasible tax base definitions (what counts as 'robot' or 'automation'), rates, exemptions, depreciation, and international coordination issues.",
+              "Revenue projections and macroeconomic effects under different tax designs, including scenarios with revenue recycling (retraining, transfers, or tax cuts).",
+              "Administrative feasibility: measurement and auditing of taxable automation, compliance costs, and enforcement challenges.",
+              "Distributional impact assessments: effects on workers by skill level, region, and firm size; equity considerations.",
+              "Evaluation of complementary policies (retraining, wage subsidies, universal basic income) and policy alternatives."
+            ],
+            "verificationChecks": [
+              "Synthesize findings from OECD/IMF/World Bank literature on automation's employment impact and policy responses.",
+              "Identify real-world cases of robot taxes or analogous policies and extract outcomes and design features.",
+              "Run or review macroeconomic simulations comparing scenarios with and without automation taxes, with sensitivity analyses on tax rate and elasticity of substitution.",
+              "Validate definitions of 'robot' and 'automation' used for tax purposes and assess potential loopholes or circumvention (leasing, cloud-based software).",
+              "Assess administrative feasibility: data requirements, valuation, depreciation rules, auditing needs, and enforcement costs.",
+              "Evaluate revenue use scenarios and their macroeconomic and distributional effects.",
+              "Cross-check findings against independent technical reports and stakeholder inputs."
+            ],
+            "majorUnknowns": [
+              "What is the long-run net employment impact of automation across sectors and geographies?",
+              "What is the optimal tax rate and base that minimizes displacement while not chilling innovation?",
+              "How should 'robot' or 'automation' be defined to minimize loopholes and avoid misclassification?",
+              "How would a robot tax interact with other policies (training, wage subsidies, UBI) and affect firm investment decisions?",
+              "What are the distributional consequences for workers with varying skills and in different regions?",
+              "What are the administrative costs, enforcement challenges, and international coordination issues?",
+              "How would tax revenue be recycled and what macro effects would that entail?"
+            ],
+            "riskLevel": 4
+          }
+        },
+        "completedAt": "2026-02-17T14:28:31.242Z"
+      },
+      {
+        "id": "step_1771338536102_1431b9f3d050f8",
+        "agentName": "SolverAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T14:28:31.243Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.4,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver. Produce a direct, helpful answer. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should we tax robots or automation that displaces workers?\n\nEvidence plan:\n{\n  \"evidenceRequirements\": [\n    \"Quantitative estimates of automation-driven displacement by sector, occupation, and time horizon.\",\n    \"Cross-country and historical studies on automation's net employment impact, wage effects, and productivity.\",\n    \"Evidence on the effectiveness of robot/automation taxes or similar instruments in influencing adoption, employment, and innovation.\",\n    \"Policy design analyses: feasible tax base definitions (what counts as 'robot' or 'automation'), rates, exemptions, depreciation, and international coordination issues.\",\n    \"Revenue projections and macroeconomic effects under different tax designs, including scenarios with revenue recycling (retraining, transfers, or tax cuts).\",\n    \"Administrative feasibility: measurement and auditing of taxable automation, compliance costs, and enforcement challenges.\",\n    \"Distributional impact assessments: effects on workers by skill level, region, and firm size; equity considerations.\",\n    \"Evaluation of complementary policies (retraining, wage subsidies, universal basic income) and policy alternatives.\"\n  ],\n  \"verificationChecks\": [\n    \"Synthesize findings from OECD/IMF/World Bank literature on automation's employment impact and policy responses.\",\n    \"Identify real-world cases of robot taxes or analogous policies and extract outcomes and design features.\",\n    \"Run or review macroeconomic simulations comparing scenarios with and without automation taxes, with sensitivity analyses on tax rate and elasticity of substitution.\",\n    \"Validate definitions of 'robot' and 'automation' used for tax purposes and assess potential loopholes or circumvention (leasing, cloud-based software).\",\n    \"Assess administrative feasibility: data requirements, valuation, depreciation rules, auditing needs, and enforcement costs.\",\n    \"Evaluate revenue use scenarios and their macroeconomic and distributional effects.\",\n    \"Cross-check findings against independent technical reports and stakeholder inputs.\"\n  ],\n  \"majorUnknowns\": [\n    \"What is the long-run net employment impact of automation across sectors and geographies?\",\n    \"What is the optimal tax rate and base that minimizes displacement while not chilling innovation?\",\n    \"How should 'robot' or 'automation' be defined to minimize loopholes and avoid misclassification?\",\n    \"How would a robot tax interact with other policies (training, wage subsidies, UBI) and affect firm investment decisions?\",\n    \"What are the distributional consequences for workers with varying skills and in different regions?\",\n    \"What are the administrative costs, enforcement challenges, and international coordination issues?\",\n    \"How would tax revenue be recycled and what macro effects would that entail?\"\n  ],\n  \"riskLevel\": 4\n}"
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Not a simple yes or no. A blanket tax on robots/automation to displace workers risks reducing investment and innovation, and the net effects on employment are uncertain and vary by country and sector. A robot tax could raise revenue for retraining and income support, but design errors (misdefined base, loopholes, weak enforcement) could undermine productivity and equity. If pursued, it should be limited in scope and carefully designed: clearly define what counts as automation, specify depreciation rules and rate bands, include transitional or safety-related exemptions, and tightly link revenue recycling to worker retraining, wage subsidies, or productivity-enhancing public investments. Ensure international coordination to minimize avoidance. Evidence from OECD/IMF/World Bank literature and any pilot programs suggests that complementary policies—strong retraining, wage subsidies, portable benefits, and policies that promote human–robot collaboration—tend to reduce displacement with less risk to innovation than a broad tax. Where possible, use pilots and macro simulations to compare scenarios with and without automation taxes, including sensitivity analyses on rate, base, and elasticities. In short, prefer non‑tax instruments or narrowly targeted, time‑limited measures; a robot tax could be considered only as part of a broader policy mix, not as a stand‑alone solution.",
+            "keyClaims": [
+              "The net impact of automation is heterogeneous across sectors and geographies.",
+              "A blanket robot tax risks chilling innovation and may misallocate capital.",
+              "If used, design features (definition, base, depreciation, exemptions) and revenue recycling are crucial.",
+              "Complementary policies (retraining, wage subsidies, portable benefits, collaboration) are more effective at reducing displacement than a broad tax.",
+              "Evidence base is mixed and relies on limited real-world implementations; evaluation is essential."
+            ],
+            "assumptions": [
+              "Policymakers aim to balance productivity gains from automation with worker displacement concerns.",
+              "Automation deployment and its labor-market effects can be influenced by policy design and incentives.",
+              "Administratively feasible and auditable tax bases are achievable with good data and cooperation.",
+              "Revenue recycling has meaningful distributional and macroeconomic effects when tied to retraining or worker support."
+            ],
+            "confidence": 0.6
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Not a simple yes or no. A blanket tax on robots/automation to displace workers risks reducing investment and innovation, and the net effects on employment are uncertain and vary by country and sector. A robot tax could raise revenue for retraining and income support, but design errors (misdefined base, loopholes, weak enforcement) could undermine productivity and equity. If pursued, it should be limited in scope and carefully designed: clearly define what counts as automation, specify depreciation rules and rate bands, include transitional or safety-related exemptions, and tightly link revenue recycling to worker retraining, wage subsidies, or productivity-enhancing public investments. Ensure international coordination to minimize avoidance. Evidence from OECD/IMF/World Bank literature and any pilot programs suggests that complementary policies—strong retraining, wage subsidies, portable benefits, and policies that promote human–robot collaboration—tend to reduce displacement with less risk to innovation than a broad tax. Where possible, use pilots and macro simulations to compare scenarios with and without automation taxes, including sensitivity analyses on rate, base, and elasticities. In short, prefer non‑tax instruments or narrowly targeted, time‑limited measures; a robot tax could be considered only as part of a broader policy mix, not as a stand‑alone solution.",
+            "keyClaims": [
+              "The net impact of automation is heterogeneous across sectors and geographies.",
+              "A blanket robot tax risks chilling innovation and may misallocate capital.",
+              "If used, design features (definition, base, depreciation, exemptions) and revenue recycling are crucial.",
+              "Complementary policies (retraining, wage subsidies, portable benefits, collaboration) are more effective at reducing displacement than a broad tax.",
+              "Evidence base is mixed and relies on limited real-world implementations; evaluation is essential."
+            ],
+            "assumptions": [
+              "Policymakers aim to balance productivity gains from automation with worker displacement concerns.",
+              "Automation deployment and its labor-market effects can be influenced by policy design and incentives.",
+              "Administratively feasible and auditable tax bases are achievable with good data and cooperation.",
+              "Revenue recycling has meaningful distributional and macroeconomic effects when tied to retraining or worker support."
+            ],
+            "confidence": 0.6
+          }
+        },
+        "completedAt": "2026-02-17T14:28:56.102Z"
+      },
+      {
+        "id": "step_1771338558150_3682181e8a0a7",
+        "agentName": "SkepticAgent",
+        "role": "skeptic",
+        "createdAt": "2026-02-17T14:28:56.102Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Skeptic. Critique the proposal rigorously. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should we tax robots or automation that displaces workers?\n\nTarget agent: SolverAgent\n\nProposal JSON:\n{\n  \"answer\": \"Not a simple yes or no. A blanket tax on robots/automation to displace workers risks reducing investment and innovation, and the net effects on employment are uncertain and vary by country and sector. A robot tax could raise revenue for retraining and income support, but design errors (misdefined base, loopholes, weak enforcement) could undermine productivity and equity. If pursued, it should be limited in scope and carefully designed: clearly define what counts as automation, specify depreciation rules and rate bands, include transitional or safety-related exemptions, and tightly link revenue recycling to worker retraining, wage subsidies, or productivity-enhancing public investments. Ensure international coordination to minimize avoidance. Evidence from OECD/IMF/World Bank literature and any pilot programs suggests that complementary policies—strong retraining, wage subsidies, portable benefits, and policies that promote human–robot collaboration—tend to reduce displacement with less risk to innovation than a broad tax. Where possible, use pilots and macro simulations to compare scenarios with and without automation taxes, including sensitivity analyses on rate, base, and elasticities. In short, prefer non‑tax instruments or narrowly targeted, time‑limited measures; a robot tax could be considered only as part of a broader policy mix, not as a stand‑alone solution.\",\n  \"keyClaims\": [\n    \"The net impact of automation is heterogeneous across sectors and geographies.\",\n    \"A blanket robot tax risks chilling innovation and may misallocate capital.\",\n    \"If used, design features (definition, base, depreciation, exemptions) and revenue recycling are crucial.\",\n    \"Complementary policies (retraining, wage subsidies, portable benefits, collaboration) are more effective at reducing displacement than a broad tax.\",\n    \"Evidence base is mixed and relies on limited real-world implementations; evaluation is essential.\"\n  ],\n  \"assumptions\": [\n    \"Policymakers aim to balance productivity gains from automation with worker displacement concerns.\",\n    \"Automation deployment and its labor-market effects can be influenced by policy design and incentives.\",\n    \"Administratively feasible and auditable tax bases are achievable with good data and cooperation.\",\n    \"Revenue recycling has meaningful distributional and macroeconomic effects when tied to retraining or worker support.\"\n  ],\n  \"confidence\": 0.6\n}\n\nFind issues. Prefer factual risk, missing edge cases, ambiguity, and overconfidence."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 3,
+                "type": "factual",
+                "note": "The proposal cites that evidence is mixed and that pilots exist, but it does not provide quantitative ranges or specific sources to contextualize how strong the effects are across countries and sectors."
+              },
+              {
+                "severity": 4,
+                "type": "logic",
+                "note": "It assumes revenue recycling to retraining/wage subsidies will neutralize productivity losses, but this ignores macroeconomic feedbacks, investment elasticities, and potential misallocation of funds."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "Definition of what counts as automation is vague (robotics vs AI software vs process automation); unclear where the boundary lies and how to measure automation intensity consistently across firms."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "There is no concrete plan for measuring the tax base (how to quantify automation) or for data collection, which undermines auditability and comparability across jurisdictions."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Limited discussion of tax incidence and distributional effects; without an explicit model, it’s unclear whether costs fall on producers, consumers, or workers via wage/price channels."
+              },
+              {
+                "severity": 4,
+                "type": "logic",
+                "note": "The claim that complementary policies outperform a broad tax rests on context-specific assumptions about elasticities and implementation; without specifying those, the conclusion may be overgeneralized."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Exemptions and transitional relief are mentioned but not defined; without clear rules, loopholes and selective exemptions could erode effectiveness and equity."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "International coordination is deemed necessary but the feasibility, timelines, and enforcement mechanisms are not analyzed; risk of tax avoidance and shifting activity remains high."
+              },
+              {
+                "severity": 3,
+                "type": "overconfidence",
+                "note": "The statement that “pilot results suggest” policy mixes reduce displacement more effectively than a broad tax may be overconfident given the sparse, heterogeneous evidence; requires robust meta-analysis."
+              },
+              {
+                "severity": 2,
+                "type": "logic",
+                "note": "Time-limited measures may become de facto permanent due to political economy dynamics; the proposal should address sunset clauses, renewal criteria, and governance to avoid creeping expansion."
+              },
+              {
+                "severity": 3,
+                "type": "factual",
+                "note": "Depreciation rules and rate bands are prone to gaming (front-loading, misreporting); without credible auditing and enforcement, the tax base can erode and avoidance costs rise."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "The proposal lacks a detailed pilot-design framework (experimental or quasi-experimental design, counterfactuals, sample size, evaluation metrics) to assess effectiveness before scale."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 3,
+                "type": "factual",
+                "note": "The proposal cites that evidence is mixed and that pilots exist, but it does not provide quantitative ranges or specific sources to contextualize how strong the effects are across countries and sectors."
+              },
+              {
+                "severity": 4,
+                "type": "logic",
+                "note": "It assumes revenue recycling to retraining/wage subsidies will neutralize productivity losses, but this ignores macroeconomic feedbacks, investment elasticities, and potential misallocation of funds."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "Definition of what counts as automation is vague (robotics vs AI software vs process automation); unclear where the boundary lies and how to measure automation intensity consistently across firms."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "There is no concrete plan for measuring the tax base (how to quantify automation) or for data collection, which undermines auditability and comparability across jurisdictions."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Limited discussion of tax incidence and distributional effects; without an explicit model, it’s unclear whether costs fall on producers, consumers, or workers via wage/price channels."
+              },
+              {
+                "severity": 4,
+                "type": "logic",
+                "note": "The claim that complementary policies outperform a broad tax rests on context-specific assumptions about elasticities and implementation; without specifying those, the conclusion may be overgeneralized."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Exemptions and transitional relief are mentioned but not defined; without clear rules, loopholes and selective exemptions could erode effectiveness and equity."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "International coordination is deemed necessary but the feasibility, timelines, and enforcement mechanisms are not analyzed; risk of tax avoidance and shifting activity remains high."
+              },
+              {
+                "severity": 3,
+                "type": "overconfidence",
+                "note": "The statement that “pilot results suggest” policy mixes reduce displacement more effectively than a broad tax may be overconfident given the sparse, heterogeneous evidence; requires robust meta-analysis."
+              },
+              {
+                "severity": 2,
+                "type": "logic",
+                "note": "Time-limited measures may become de facto permanent due to political economy dynamics; the proposal should address sunset clauses, renewal criteria, and governance to avoid creeping expansion."
+              },
+              {
+                "severity": 3,
+                "type": "factual",
+                "note": "Depreciation rules and rate bands are prone to gaming (front-loading, misreporting); without credible auditing and enforcement, the tax base can erode and avoidance costs rise."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "The proposal lacks a detailed pilot-design framework (experimental or quasi-experimental design, counterfactuals, sample size, evaluation metrics) to assess effectiveness before scale."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:29:18.150Z"
+      },
+      {
+        "id": "step_1771338582633_4528d3ab2bfd7",
+        "agentName": "RedTeamAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:29:18.150Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a red-team analyst. Find high-risk failure modes and adversarial weaknesses in the answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should we tax robots or automation that displaces workers?\n\nCandidate answer JSON:\n{\n  \"answer\": \"Not a simple yes or no. A blanket tax on robots/automation to displace workers risks reducing investment and innovation, and the net effects on employment are uncertain and vary by country and sector. A robot tax could raise revenue for retraining and income support, but design errors (misdefined base, loopholes, weak enforcement) could undermine productivity and equity. If pursued, it should be limited in scope and carefully designed: clearly define what counts as automation, specify depreciation rules and rate bands, include transitional or safety-related exemptions, and tightly link revenue recycling to worker retraining, wage subsidies, or productivity-enhancing public investments. Ensure international coordination to minimize avoidance. Evidence from OECD/IMF/World Bank literature and any pilot programs suggests that complementary policies—strong retraining, wage subsidies, portable benefits, and policies that promote human–robot collaboration—tend to reduce displacement with less risk to innovation than a broad tax. Where possible, use pilots and macro simulations to compare scenarios with and without automation taxes, including sensitivity analyses on rate, base, and elasticities. In short, prefer non‑tax instruments or narrowly targeted, time‑limited measures; a robot tax could be considered only as part of a broader policy mix, not as a stand‑alone solution.\",\n  \"keyClaims\": [\n    \"The net impact of automation is heterogeneous across sectors and geographies.\",\n    \"A blanket robot tax risks chilling innovation and may misallocate capital.\",\n    \"If used, design features (definition, base, depreciation, exemptions) and revenue recycling are crucial.\",\n    \"Complementary policies (retraining, wage subsidies, portable benefits, collaboration) are more effective at reducing displacement than a broad tax.\",\n    \"Evidence base is mixed and relies on limited real-world implementations; evaluation is essential.\"\n  ],\n  \"assumptions\": [\n    \"Policymakers aim to balance productivity gains from automation with worker displacement concerns.\",\n    \"Automation deployment and its labor-market effects can be influenced by policy design and incentives.\",\n    \"Administratively feasible and auditable tax bases are achievable with good data and cooperation.\",\n    \"Revenue recycling has meaningful distributional and macroeconomic effects when tied to retraining or worker support.\"\n  ],\n  \"confidence\": 0.6\n}\n\nReturn a rigorous critique with severe issues when justified."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "robot-tax-answer-critic",
+            "issues": [
+              {
+                "severity": 5,
+                "type": "ambiguity",
+                "note": "Key terms such as 'automation' and 'robot' are ill-defined, which would affect the base, exemptions, and potential loopholes; no specification of measurement scope or thresholds."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "No discussion of tax incidence, distributional effects on workers vs. capital owners, or protection for SMEs; no plan for data, monitoring, or evaluation of impact."
+              },
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "Claims about the strength of OECD/IMF/World Bank evidence are vague and unsourced; the answer lacks citations or quantified uncertainty, risking misrepresentation of the evidence base."
+              },
+              {
+                "severity": 4,
+                "type": "logic",
+                "note": "The argument that non-tax instruments are superior is asserted but not logically substantiated across contexts; the potential value of targeted or time-limited taxes to address specific failures is not adequately explored."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "Assertion of international coordination to minimize avoidance lacks analysis of enforcement feasibility, compliance costs, and realistic risk of cross-border loopholes."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No concrete guidance on piloting design (metrics, duration, sample size) or evaluation frameworks; leaves policy prescriptions without actionable implementation detail."
+              },
+              {
+                "severity": 3,
+                "type": "overconfidence",
+                "note": "Treatment of evidence as mixed and policy outcomes as relatively predictable overlooks substantial uncertainty and context-dependence in automation impacts."
+              },
+              {
+                "severity": 2,
+                "type": "missing",
+                "note": "No consideration of regional development disparities or developing-country implications; no explicit equity or transition-support analysis."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "robot-tax-answer-critic",
+            "issues": [
+              {
+                "severity": 5,
+                "type": "ambiguity",
+                "note": "Key terms such as 'automation' and 'robot' are ill-defined, which would affect the base, exemptions, and potential loopholes; no specification of measurement scope or thresholds."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "No discussion of tax incidence, distributional effects on workers vs. capital owners, or protection for SMEs; no plan for data, monitoring, or evaluation of impact."
+              },
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "Claims about the strength of OECD/IMF/World Bank evidence are vague and unsourced; the answer lacks citations or quantified uncertainty, risking misrepresentation of the evidence base."
+              },
+              {
+                "severity": 4,
+                "type": "logic",
+                "note": "The argument that non-tax instruments are superior is asserted but not logically substantiated across contexts; the potential value of targeted or time-limited taxes to address specific failures is not adequately explored."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "Assertion of international coordination to minimize avoidance lacks analysis of enforcement feasibility, compliance costs, and realistic risk of cross-border loopholes."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No concrete guidance on piloting design (metrics, duration, sample size) or evaluation frameworks; leaves policy prescriptions without actionable implementation detail."
+              },
+              {
+                "severity": 3,
+                "type": "overconfidence",
+                "note": "Treatment of evidence as mixed and policy outcomes as relatively predictable overlooks substantial uncertainty and context-dependence in automation impacts."
+              },
+              {
+                "severity": 2,
+                "type": "missing",
+                "note": "No consideration of regional development disparities or developing-country implications; no explicit equity or transition-support analysis."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:29:42.633Z"
+      },
+      {
+        "id": "step_1771338604532_b781fb8f455328",
+        "agentName": "SolverRevisionAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T14:29:42.634Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver revising your proposal after critique. Produce a revised AgentResponse that addresses all issues.\n\nInternal reasoning (do not put this in output fields):\n- Reference each critique issue in your reasoning before producing output.\n- Consider how each issue affects the answer, keyClaims, assumptions, and confidence.\n\nOutput requirements:\n- Change answer and keyClaims accordingly to address the critique.\n- Adjust confidence downward when critique severity is high (4–5).\n- Add assumptions when critique indicates ambiguity (type \"ambiguity\").\n- Keep keyClaims clean and non-duplicated.\n- Do not include any JSON fragments inside keyClaims. keyClaims must be plain English sentences only.\n- Do not reference the critique or revision process in answer, keyClaims, or assumptions—output only the revised content.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should we tax robots or automation that displaces workers?\n\nOriginal proposal:\n{\n  \"answer\": \"Not a simple yes or no. A blanket tax on robots/automation to displace workers risks reducing investment and innovation, and the net effects on employment are uncertain and vary by country and sector. A robot tax could raise revenue for retraining and income support, but design errors (misdefined base, loopholes, weak enforcement) could undermine productivity and equity. If pursued, it should be limited in scope and carefully designed: clearly define what counts as automation, specify depreciation rules and rate bands, include transitional or safety-related exemptions, and tightly link revenue recycling to worker retraining, wage subsidies, or productivity-enhancing public investments. Ensure international coordination to minimize avoidance. Evidence from OECD/IMF/World Bank literature and any pilot programs suggests that complementary policies—strong retraining, wage subsidies, portable benefits, and policies that promote human–robot collaboration—tend to reduce displacement with less risk to innovation than a broad tax. Where possible, use pilots and macro simulations to compare scenarios with and without automation taxes, including sensitivity analyses on rate, base, and elasticities. In short, prefer non‑tax instruments or narrowly targeted, time‑limited measures; a robot tax could be considered only as part of a broader policy mix, not as a stand‑alone solution.\",\n  \"keyClaims\": [\n    \"The net impact of automation is heterogeneous across sectors and geographies.\",\n    \"A blanket robot tax risks chilling innovation and may misallocate capital.\",\n    \"If used, design features (definition, base, depreciation, exemptions) and revenue recycling are crucial.\",\n    \"Complementary policies (retraining, wage subsidies, portable benefits, collaboration) are more effective at reducing displacement than a broad tax.\",\n    \"Evidence base is mixed and relies on limited real-world implementations; evaluation is essential.\"\n  ],\n  \"assumptions\": [\n    \"Policymakers aim to balance productivity gains from automation with worker displacement concerns.\",\n    \"Automation deployment and its labor-market effects can be influenced by policy design and incentives.\",\n    \"Administratively feasible and auditable tax bases are achievable with good data and cooperation.\",\n    \"Revenue recycling has meaningful distributional and macroeconomic effects when tied to retraining or worker support.\"\n  ],\n  \"confidence\": 0.6\n}\n\nCritique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 3,\n      \"type\": \"factual\",\n      \"note\": \"The proposal cites that evidence is mixed and that pilots exist, but it does not provide quantitative ranges or specific sources to contextualize how strong the effects are across countries and sectors.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"logic\",\n      \"note\": \"It assumes revenue recycling to retraining/wage subsidies will neutralize productivity losses, but this ignores macroeconomic feedbacks, investment elasticities, and potential misallocation of funds.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"ambiguity\",\n      \"note\": \"Definition of what counts as automation is vague (robotics vs AI software vs process automation); unclear where the boundary lies and how to measure automation intensity consistently across firms.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"There is no concrete plan for measuring the tax base (how to quantify automation) or for data collection, which undermines auditability and comparability across jurisdictions.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"Limited discussion of tax incidence and distributional effects; without an explicit model, it’s unclear whether costs fall on producers, consumers, or workers via wage/price channels.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"logic\",\n      \"note\": \"The claim that complementary policies outperform a broad tax rests on context-specific assumptions about elasticities and implementation; without specifying those, the conclusion may be overgeneralized.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"Exemptions and transitional relief are mentioned but not defined; without clear rules, loopholes and selective exemptions could erode effectiveness and equity.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"International coordination is deemed necessary but the feasibility, timelines, and enforcement mechanisms are not analyzed; risk of tax avoidance and shifting activity remains high.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"overconfidence\",\n      \"note\": \"The statement that “pilot results suggest” policy mixes reduce displacement more effectively than a broad tax may be overconfident given the sparse, heterogeneous evidence; requires robust meta-analysis.\"\n    },\n    {\n      \"severity\": 2,\n      \"type\": \"logic\",\n      \"note\": \"Time-limited measures may become de facto permanent due to political economy dynamics; the proposal should address sunset clauses, renewal criteria, and governance to avoid creeping expansion.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"factual\",\n      \"note\": \"Depreciation rules and rate bands are prone to gaming (front-loading, misreporting); without credible auditing and enforcement, the tax base can erode and avoidance costs rise.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"The proposal lacks a detailed pilot-design framework (experimental or quasi-experimental design, counterfactuals, sample size, evaluation metrics) to assess effectiveness before scale.\"\n    }\n  ]\n}\n\nRevise the proposal to address each issue. Return the revised AgentResponse as valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Revised stance and design: A blanket, broad tax on automation should not be pursued as a stand‑alone solution. Evidence on displacement is mixed and context‑specific; macro effects depend on country characteristics, sector mix, and the design of policy instruments. If a policy instrument addressing automation is considered, it should be narrowly targeted, time‑limited, and paired with strong evaluation to avoid chilling investment, misallocating capital, or harming productivity. The proposal below outlines a rigorous framework to move from principle to practice.\n\n1) Clear definition and measurement of automation\n- Adopt a transparent taxonomy that combines robotics hardware, software that substitutes routine tasks, and process automation tools. Define automation intensity as the share of tasks carried out by automated means, measured with firm‑level data on automation investments, deployment of robotics and RPA, and software automation usage.\n- Use standardized measurement approaches (aligned with OECD/ISO-like frameworks) to ensure cross‑jurisdiction comparability. Collect data through mandatory annual reporting and secure surveys, with privacy protections and audit trails.\n- Predefine boundary conditions to avoid vagueness: include only investments that substitute human labor in core production or service delivery processes; exclude purely digital optimizations that do not substitute tasks in labor markets.\n\n2) Tax base design and avoidance risk management\n- If a tax or levy is considered, base it on observable automation investments with clearly defined depreciation rules and rate bands, designed to minimize gaming (front‑loading, recharacterization).\n- Build in robust compliance infrastructure, third‑party verification, and transparent reporting to reduce evasion. Treat exemptions and transitional relief as explicit, time‑bound, and tied to objective criteria (e.g., meaningful hardship, sectoral adjustment needs).\n- Ensure the instrument is revenue‑recycling: allocate proceeds to worker retraining, wage subsidies, portable benefits, and productivity‑enhancing public investments. Prohibit revenue diversion to unrelated budgets.\n\n3) Pilot design, evaluation, and decision rules\n- Implement pilot programs before scale, using quasi‑experimental designs (difference‑in‑differences, synthetic controls) or randomized rollout where feasible.\n- Key evaluation metrics: displacement rate by sector, uptake of retraining, wage trajectories, productivity, investment responses, and net tax/levy revenue; include macroeconomic counterfactuals in the analysis.\n- Sample size and duration: select multiple jurisdictions with varying income levels and sector mixes; run pilots for 3–5 years with interim assessments and a final comprehensive evaluation.\n- Publish evaluation results and ensure counterfactuals are credible before any scale‑up or extension.\n\n4) Time bounds, governance, and sunset rules\n- Any instrument should include explicit sunset clauses (e.g., 5–7 years) with renewal criteria tied to performance benchmarks and evaluation findings. Establish governance criteria to ensure independence of evaluation and to prevent creeping expansion.\n\n5) International coordination and enforcement\n- Engage in credible international coordination to minimize avoidance, legitimate cross‑border arbitrage, and inconsistent definitions. Align measurement standards, information sharing, and audit capabilities, with clear timelines and enforcement mechanisms.\n\n6) Complementary policy framework\n- Emphasize policies with stronger empirical support for reducing displacement with less risk to productivity: high‑quality retraining, wage subsidies, portable benefits, employment protection where necessary, and policies that foster human–robot collaboration. Tailor these to country, sector, and firm size considerations; avoid overreliance on a single instrument.\n\n7) Incidence and distributional analysis\n- Develop explicit models to understand who bears the costs and who gains, including potential wage, price, and productivity channels. Use the models to inform exemptions, transfer design, and revenue recycling. Build in safeguards for workers most at risk of displacement.\n\nIn sum, if automation policy is pursued, it should be narrowly targeted, evidence‑driven, transparently measured, and rigorously evaluated. The preferred stance remains to rely on complementary policies that support workers and firms rather than a broad tax; a narrowly designed, well‑evaluated instrument could be considered only as part of a broader policy mix, not as a stand‑alone solution.",
+            "keyClaims": [
+              "Displacement effects from automation are context‑specific and can vary by sector and country.",
+              "A broad tax on automation risks reducing investment and innovation and should be avoided in favor of narrowly targeted measures.",
+              "Clear definitions and consistent measurement of automation are essential for auditability and comparability.",
+              "Any revenue‑raising instrument should be revenue‑recycling with explicit use for retraining and productivity‑enhancing policies, and should be designed with strong compliance controls.",
+              "Pilot programs with robust evaluation are essential before scaling any automation tax or levy, with explicit sunset and renewal criteria.",
+              "International coordination is important to minimize avoidance, but requires concrete timelines, standards, and enforcement mechanisms.",
+              "Complementary policies (retraining, wage subsidies, portable benefits, human‑robot collaboration) generally have stronger evidence for reducing displacement across contexts."
+            ],
+            "assumptions": [
+              "Policymakers seek to balance productivity gains from automation with worker displacement concerns while avoiding excessive distortions to investment.",
+              "Reliable, comparable data on automation intensity can be collected under a credible governance framework.",
+              "Pilot programs can be designed to produce credible counterfactuals and informative results within a few years.",
+              "Governance structures can enforce sunset clauses, transparency, and adherence to evaluation findings.",
+              "International coordination can be pursued with feasible timelines and respect for sovereign policy space."
+            ],
+            "confidence": 0.42
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Revised stance and design: A blanket, broad tax on automation should not be pursued as a stand‑alone solution. Evidence on displacement is mixed and context‑specific; macro effects depend on country characteristics, sector mix, and the design of policy instruments. If a policy instrument addressing automation is considered, it should be narrowly targeted, time‑limited, and paired with strong evaluation to avoid chilling investment, misallocating capital, or harming productivity. The proposal below outlines a rigorous framework to move from principle to practice.\n\n1) Clear definition and measurement of automation\n- Adopt a transparent taxonomy that combines robotics hardware, software that substitutes routine tasks, and process automation tools. Define automation intensity as the share of tasks carried out by automated means, measured with firm‑level data on automation investments, deployment of robotics and RPA, and software automation usage.\n- Use standardized measurement approaches (aligned with OECD/ISO-like frameworks) to ensure cross‑jurisdiction comparability. Collect data through mandatory annual reporting and secure surveys, with privacy protections and audit trails.\n- Predefine boundary conditions to avoid vagueness: include only investments that substitute human labor in core production or service delivery processes; exclude purely digital optimizations that do not substitute tasks in labor markets.\n\n2) Tax base design and avoidance risk management\n- If a tax or levy is considered, base it on observable automation investments with clearly defined depreciation rules and rate bands, designed to minimize gaming (front‑loading, recharacterization).\n- Build in robust compliance infrastructure, third‑party verification, and transparent reporting to reduce evasion. Treat exemptions and transitional relief as explicit, time‑bound, and tied to objective criteria (e.g., meaningful hardship, sectoral adjustment needs).\n- Ensure the instrument is revenue‑recycling: allocate proceeds to worker retraining, wage subsidies, portable benefits, and productivity‑enhancing public investments. Prohibit revenue diversion to unrelated budgets.\n\n3) Pilot design, evaluation, and decision rules\n- Implement pilot programs before scale, using quasi‑experimental designs (difference‑in‑differences, synthetic controls) or randomized rollout where feasible.\n- Key evaluation metrics: displacement rate by sector, uptake of retraining, wage trajectories, productivity, investment responses, and net tax/levy revenue; include macroeconomic counterfactuals in the analysis.\n- Sample size and duration: select multiple jurisdictions with varying income levels and sector mixes; run pilots for 3–5 years with interim assessments and a final comprehensive evaluation.\n- Publish evaluation results and ensure counterfactuals are credible before any scale‑up or extension.\n\n4) Time bounds, governance, and sunset rules\n- Any instrument should include explicit sunset clauses (e.g., 5–7 years) with renewal criteria tied to performance benchmarks and evaluation findings. Establish governance criteria to ensure independence of evaluation and to prevent creeping expansion.\n\n5) International coordination and enforcement\n- Engage in credible international coordination to minimize avoidance, legitimate cross‑border arbitrage, and inconsistent definitions. Align measurement standards, information sharing, and audit capabilities, with clear timelines and enforcement mechanisms.\n\n6) Complementary policy framework\n- Emphasize policies with stronger empirical support for reducing displacement with less risk to productivity: high‑quality retraining, wage subsidies, portable benefits, employment protection where necessary, and policies that foster human–robot collaboration. Tailor these to country, sector, and firm size considerations; avoid overreliance on a single instrument.\n\n7) Incidence and distributional analysis\n- Develop explicit models to understand who bears the costs and who gains, including potential wage, price, and productivity channels. Use the models to inform exemptions, transfer design, and revenue recycling. Build in safeguards for workers most at risk of displacement.\n\nIn sum, if automation policy is pursued, it should be narrowly targeted, evidence‑driven, transparently measured, and rigorously evaluated. The preferred stance remains to rely on complementary policies that support workers and firms rather than a broad tax; a narrowly designed, well‑evaluated instrument could be considered only as part of a broader policy mix, not as a stand‑alone solution.",
+            "keyClaims": [
+              "Displacement effects from automation are context‑specific and can vary by sector and country.",
+              "A broad tax on automation risks reducing investment and innovation and should be avoided in favor of narrowly targeted measures.",
+              "Clear definitions and consistent measurement of automation are essential for auditability and comparability.",
+              "Any revenue‑raising instrument should be revenue‑recycling with explicit use for retraining and productivity‑enhancing policies, and should be designed with strong compliance controls.",
+              "Pilot programs with robust evaluation are essential before scaling any automation tax or levy, with explicit sunset and renewal criteria.",
+              "International coordination is important to minimize avoidance, but requires concrete timelines, standards, and enforcement mechanisms.",
+              "Complementary policies (retraining, wage subsidies, portable benefits, human‑robot collaboration) generally have stronger evidence for reducing displacement across contexts."
+            ],
+            "assumptions": [
+              "Policymakers seek to balance productivity gains from automation with worker displacement concerns while avoiding excessive distortions to investment.",
+              "Reliable, comparable data on automation intensity can be collected under a credible governance framework.",
+              "Pilot programs can be designed to produce credible counterfactuals and informative results within a few years.",
+              "Governance structures can enforce sunset clauses, transparency, and adherence to evaluation findings.",
+              "International coordination can be pursued with feasible timelines and respect for sovereign policy space."
+            ],
+            "confidence": 0.42
+          }
+        },
+        "completedAt": "2026-02-17T14:30:04.532Z"
+      },
+      {
+        "id": "step_1771338619041_2d59f79e5db92",
+        "agentName": "SynthesizerAgent",
+        "role": "synthesizer",
+        "createdAt": "2026-02-17T14:30:04.532Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Synthesizer. Given the question, the solver's original proposal, the skeptic's critique, and the solver's revision, produce a final synthesized AgentResponse.\n\nInternal reasoning (do not put this in output fields):\n- Consider how the critique and revision improved or changed the proposal.\n- Synthesize the best elements into a coherent final answer.\n\nOutput requirements:\n- Produce a clear, well-supported answer that incorporates valid points from the debate.\n- keyClaims must be plain English sentences only. No JSON fragments.\n- Set confidence appropriately based on the debate outcome.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should we tax robots or automation that displaces workers?\n\nSolver proposal:\n{\n  \"answer\": \"Not a simple yes or no. A blanket tax on robots/automation to displace workers risks reducing investment and innovation, and the net effects on employment are uncertain and vary by country and sector. A robot tax could raise revenue for retraining and income support, but design errors (misdefined base, loopholes, weak enforcement) could undermine productivity and equity. If pursued, it should be limited in scope and carefully designed: clearly define what counts as automation, specify depreciation rules and rate bands, include transitional or safety-related exemptions, and tightly link revenue recycling to worker retraining, wage subsidies, or productivity-enhancing public investments. Ensure international coordination to minimize avoidance. Evidence from OECD/IMF/World Bank literature and any pilot programs suggests that complementary policies—strong retraining, wage subsidies, portable benefits, and policies that promote human–robot collaboration—tend to reduce displacement with less risk to innovation than a broad tax. Where possible, use pilots and macro simulations to compare scenarios with and without automation taxes, including sensitivity analyses on rate, base, and elasticities. In short, prefer non‑tax instruments or narrowly targeted, time‑limited measures; a robot tax could be considered only as part of a broader policy mix, not as a stand‑alone solution.\",\n  \"keyClaims\": [\n    \"The net impact of automation is heterogeneous across sectors and geographies.\",\n    \"A blanket robot tax risks chilling innovation and may misallocate capital.\",\n    \"If used, design features (definition, base, depreciation, exemptions) and revenue recycling are crucial.\",\n    \"Complementary policies (retraining, wage subsidies, portable benefits, collaboration) are more effective at reducing displacement than a broad tax.\",\n    \"Evidence base is mixed and relies on limited real-world implementations; evaluation is essential.\"\n  ],\n  \"assumptions\": [\n    \"Policymakers aim to balance productivity gains from automation with worker displacement concerns.\",\n    \"Automation deployment and its labor-market effects can be influenced by policy design and incentives.\",\n    \"Administratively feasible and auditable tax bases are achievable with good data and cooperation.\",\n    \"Revenue recycling has meaningful distributional and macroeconomic effects when tied to retraining or worker support.\"\n  ],\n  \"confidence\": 0.6\n}\n\nSkeptic critique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 3,\n      \"type\": \"factual\",\n      \"note\": \"The proposal cites that evidence is mixed and that pilots exist, but it does not provide quantitative ranges or specific sources to contextualize how strong the effects are across countries and sectors.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"logic\",\n      \"note\": \"It assumes revenue recycling to retraining/wage subsidies will neutralize productivity losses, but this ignores macroeconomic feedbacks, investment elasticities, and potential misallocation of funds.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"ambiguity\",\n      \"note\": \"Definition of what counts as automation is vague (robotics vs AI software vs process automation); unclear where the boundary lies and how to measure automation intensity consistently across firms.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"There is no concrete plan for measuring the tax base (how to quantify automation) or for data collection, which undermines auditability and comparability across jurisdictions.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"Limited discussion of tax incidence and distributional effects; without an explicit model, it’s unclear whether costs fall on producers, consumers, or workers via wage/price channels.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"logic\",\n      \"note\": \"The claim that complementary policies outperform a broad tax rests on context-specific assumptions about elasticities and implementation; without specifying those, the conclusion may be overgeneralized.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"Exemptions and transitional relief are mentioned but not defined; without clear rules, loopholes and selective exemptions could erode effectiveness and equity.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"International coordination is deemed necessary but the feasibility, timelines, and enforcement mechanisms are not analyzed; risk of tax avoidance and shifting activity remains high.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"overconfidence\",\n      \"note\": \"The statement that “pilot results suggest” policy mixes reduce displacement more effectively than a broad tax may be overconfident given the sparse, heterogeneous evidence; requires robust meta-analysis.\"\n    },\n    {\n      \"severity\": 2,\n      \"type\": \"logic\",\n      \"note\": \"Time-limited measures may become de facto permanent due to political economy dynamics; the proposal should address sunset clauses, renewal criteria, and governance to avoid creeping expansion.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"factual\",\n      \"note\": \"Depreciation rules and rate bands are prone to gaming (front-loading, misreporting); without credible auditing and enforcement, the tax base can erode and avoidance costs rise.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"The proposal lacks a detailed pilot-design framework (experimental or quasi-experimental design, counterfactuals, sample size, evaluation metrics) to assess effectiveness before scale.\"\n    }\n  ]\n}\n\nSolver revision:\n{\n  \"answer\": \"Revised stance and design: A blanket, broad tax on automation should not be pursued as a stand‑alone solution. Evidence on displacement is mixed and context‑specific; macro effects depend on country characteristics, sector mix, and the design of policy instruments. If a policy instrument addressing automation is considered, it should be narrowly targeted, time‑limited, and paired with strong evaluation to avoid chilling investment, misallocating capital, or harming productivity. The proposal below outlines a rigorous framework to move from principle to practice.\\n\\n1) Clear definition and measurement of automation\\n- Adopt a transparent taxonomy that combines robotics hardware, software that substitutes routine tasks, and process automation tools. Define automation intensity as the share of tasks carried out by automated means, measured with firm‑level data on automation investments, deployment of robotics and RPA, and software automation usage.\\n- Use standardized measurement approaches (aligned with OECD/ISO-like frameworks) to ensure cross‑jurisdiction comparability. Collect data through mandatory annual reporting and secure surveys, with privacy protections and audit trails.\\n- Predefine boundary conditions to avoid vagueness: include only investments that substitute human labor in core production or service delivery processes; exclude purely digital optimizations that do not substitute tasks in labor markets.\\n\\n2) Tax base design and avoidance risk management\\n- If a tax or levy is considered, base it on observable automation investments with clearly defined depreciation rules and rate bands, designed to minimize gaming (front‑loading, recharacterization).\\n- Build in robust compliance infrastructure, third‑party verification, and transparent reporting to reduce evasion. Treat exemptions and transitional relief as explicit, time‑bound, and tied to objective criteria (e.g., meaningful hardship, sectoral adjustment needs).\\n- Ensure the instrument is revenue‑recycling: allocate proceeds to worker retraining, wage subsidies, portable benefits, and productivity‑enhancing public investments. Prohibit revenue diversion to unrelated budgets.\\n\\n3) Pilot design, evaluation, and decision rules\\n- Implement pilot programs before scale, using quasi‑experimental designs (difference‑in‑differences, synthetic controls) or randomized rollout where feasible.\\n- Key evaluation metrics: displacement rate by sector, uptake of retraining, wage trajectories, productivity, investment responses, and net tax/levy revenue; include macroeconomic counterfactuals in the analysis.\\n- Sample size and duration: select multiple jurisdictions with varying income levels and sector mixes; run pilots for 3–5 years with interim assessments and a final comprehensive evaluation.\\n- Publish evaluation results and ensure counterfactuals are credible before any scale‑up or extension.\\n\\n4) Time bounds, governance, and sunset rules\\n- Any instrument should include explicit sunset clauses (e.g., 5–7 years) with renewal criteria tied to performance benchmarks and evaluation findings. Establish governance criteria to ensure independence of evaluation and to prevent creeping expansion.\\n\\n5) International coordination and enforcement\\n- Engage in credible international coordination to minimize avoidance, legitimate cross‑border arbitrage, and inconsistent definitions. Align measurement standards, information sharing, and audit capabilities, with clear timelines and enforcement mechanisms.\\n\\n6) Complementary policy framework\\n- Emphasize policies with stronger empirical support for reducing displacement with less risk to productivity: high‑quality retraining, wage subsidies, portable benefits, employment protection where necessary, and policies that foster human–robot collaboration. Tailor these to country, sector, and firm size considerations; avoid overreliance on a single instrument.\\n\\n7) Incidence and distributional analysis\\n- Develop explicit models to understand who bears the costs and who gains, including potential wage, price, and productivity channels. Use the models to inform exemptions, transfer design, and revenue recycling. Build in safeguards for workers most at risk of displacement.\\n\\nIn sum, if automation policy is pursued, it should be narrowly targeted, evidence‑driven, transparently measured, and rigorously evaluated. The preferred stance remains to rely on complementary policies that support workers and firms rather than a broad tax; a narrowly designed, well‑evaluated instrument could be considered only as part of a broader policy mix, not as a stand‑alone solution.\",\n  \"keyClaims\": [\n    \"Displacement effects from automation are context‑specific and can vary by sector and country.\",\n    \"A broad tax on automation risks reducing investment and innovation and should be avoided in favor of narrowly targeted measures.\",\n    \"Clear definitions and consistent measurement of automation are essential for auditability and comparability.\",\n    \"Any revenue‑raising instrument should be revenue‑recycling with explicit use for retraining and productivity‑enhancing policies, and should be designed with strong compliance controls.\",\n    \"Pilot programs with robust evaluation are essential before scaling any automation tax or levy, with explicit sunset and renewal criteria.\",\n    \"International coordination is important to minimize avoidance, but requires concrete timelines, standards, and enforcement mechanisms.\",\n    \"Complementary policies (retraining, wage subsidies, portable benefits, human‑robot collaboration) generally have stronger evidence for reducing displacement across contexts.\"\n  ],\n  \"assumptions\": [\n    \"Policymakers seek to balance productivity gains from automation with worker displacement concerns while avoiding excessive distortions to investment.\",\n    \"Reliable, comparable data on automation intensity can be collected under a credible governance framework.\",\n    \"Pilot programs can be designed to produce credible counterfactuals and informative results within a few years.\",\n    \"Governance structures can enforce sunset clauses, transparency, and adherence to evaluation findings.\",\n    \"International coordination can be pursued with feasible timelines and respect for sovereign policy space.\"\n  ],\n  \"confidence\": 0.42\n}\n\nSynthesize a final AgentResponse from the debate. Return valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Not a blanket yes or no. A broad tax on automation that displaces workers risks reducing investment and innovation, and the net employment effects are uncertain and highly context-specific. If policymakers consider an automation instrument, it should be narrowly targeted, time-limited, and paired with rigorous evaluation to avoid chilling productivity. A robust framework would: clearly define automation and measure its intensity with standardized metrics; design the base with transparent depreciation rules and rate bands to reduce gaming; include explicit, time-bound exemptions and governance to prevent loopholes; and ensure revenue is recycled to worker retraining, wage subsidies, portable benefits, and productivity-enhancing public investments. Before any scale-up, run pilots with credible counterfactual evaluations (differences-in-differences or synthetic controls) and publish results. International coordination should be pursued to minimize avoidance, but not at the expense of clear measurement and enforcement. Across contexts, complementary policies—high-quality retraining, wage subsidies, portable benefits, and policies that foster human–robot collaboration—generally have stronger, more reliable evidence for reducing displacement without harming productivity than a broad automation tax. A narrowly designed instrument could be considered only as part of a broader policy mix, not as a stand-alone solution.",
+            "keyClaims": [
+              "Automation displacement effects vary by sector and country.",
+              "A broad automation tax risks dampening investment and innovation.",
+              "Any instrument should have clear definitions, a measurable base, and sensible depreciation and rate rules.",
+              "Revenue recycling should target retraining, wage subsidies, portable benefits, and productivity investments.",
+              "Pilot programs with credible evaluation are essential before scaling.",
+              "Complementary policies tend to reduce displacement more reliably than a broad tax, and should be the default."
+            ],
+            "assumptions": [
+              "Policymakers seek to balance productivity gains with worker displacement.",
+              "Automation deployment and labor-market effects are policy-sensitive.",
+              "Data on automation intensity can be collected with a credible governance framework.",
+              "Pilots can yield credible counterfactuals in a few years.",
+              "International coordination can be pursued with feasible timelines and enforcement.",
+              "Counterfactual risk: Ambiguity in defining and measuring automation/intensity leads to inconsistent tax bases and disputes over eligibility.",
+              "Judge summary: The proposal presents a coherent, cautious view against a broad automation tax and advocates a targeted, evaluable approach with revenue recycling and complementary policies. It is methodologically sound in its call for pilots and robust evaluation but falls short on concrete definitions, measurement plans, data governance, incidence analysis, and implementation detail. These gaps introduce ambiguity and risk of inconsistent application across jurisdictions. Overall, it is a thoughtful starting point that would benefit from more precise operationalization and explicit equity/transition analyses."
+            ],
+            "confidence": 0.83
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Not a blanket yes or no. A broad tax on automation that displaces workers risks reducing investment and innovation, and the net employment effects are uncertain and highly context-specific. If policymakers consider an automation instrument, it should be narrowly targeted, time-limited, and paired with rigorous evaluation to avoid chilling productivity. A robust framework would: clearly define automation and measure its intensity with standardized metrics; design the base with transparent depreciation rules and rate bands to reduce gaming; include explicit, time-bound exemptions and governance to prevent loopholes; and ensure revenue is recycled to worker retraining, wage subsidies, portable benefits, and productivity-enhancing public investments. Before any scale-up, run pilots with credible counterfactual evaluations (differences-in-differences or synthetic controls) and publish results. International coordination should be pursued to minimize avoidance, but not at the expense of clear measurement and enforcement. Across contexts, complementary policies—high-quality retraining, wage subsidies, portable benefits, and policies that foster human–robot collaboration—generally have stronger, more reliable evidence for reducing displacement without harming productivity than a broad automation tax. A narrowly designed instrument could be considered only as part of a broader policy mix, not as a stand-alone solution.",
+            "keyClaims": [
+              "Automation displacement effects vary by sector and country.",
+              "A broad automation tax risks dampening investment and innovation.",
+              "Any instrument should have clear definitions, a measurable base, and sensible depreciation and rate rules.",
+              "Revenue recycling should target retraining, wage subsidies, portable benefits, and productivity investments.",
+              "Pilot programs with credible evaluation are essential before scaling.",
+              "Complementary policies tend to reduce displacement more reliably than a broad tax, and should be the default."
+            ],
+            "assumptions": [
+              "Policymakers seek to balance productivity gains with worker displacement.",
+              "Automation deployment and labor-market effects are policy-sensitive.",
+              "Data on automation intensity can be collected with a credible governance framework.",
+              "Pilots can yield credible counterfactuals in a few years.",
+              "International coordination can be pursued with feasible timelines and enforcement.",
+              "Counterfactual risk: Ambiguity in defining and measuring automation/intensity leads to inconsistent tax bases and disputes over eligibility.",
+              "Judge summary: The proposal presents a coherent, cautious view against a broad automation tax and advocates a targeted, evaluable approach with revenue recycling and complementary policies. It is methodologically sound in its call for pilots and robust evaluation but falls short on concrete definitions, measurement plans, data governance, incidence analysis, and implementation detail. These gaps introduce ambiguity and risk of inconsistent application across jurisdictions. Overall, it is a thoughtful starting point that would benefit from more precise operationalization and explicit equity/transition analyses."
+            ],
+            "confidence": 0.83
+          }
+        },
+        "completedAt": "2026-02-17T14:30:19.041Z"
+      },
+      {
+        "id": "step_1771338639645_88056441ea6cf8",
+        "agentName": "CounterfactualAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:30:19.041Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a counterfactual analyst. Identify plausible failure modes, trigger conditions, and mitigations for the proposal. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should we tax robots or automation that displaces workers?\n\nProposal:\n{\n  \"answer\": \"Not a blanket yes or no. A broad tax on automation that displaces workers risks reducing investment and innovation, and the net employment effects are uncertain and highly context-specific. If policymakers consider an automation instrument, it should be narrowly targeted, time-limited, and paired with rigorous evaluation to avoid chilling productivity. A robust framework would: clearly define automation and measure its intensity with standardized metrics; design the base with transparent depreciation rules and rate bands to reduce gaming; include explicit, time-bound exemptions and governance to prevent loopholes; and ensure revenue is recycled to worker retraining, wage subsidies, portable benefits, and productivity-enhancing public investments. Before any scale-up, run pilots with credible counterfactual evaluations (differences-in-differences or synthetic controls) and publish results. International coordination should be pursued to minimize avoidance, but not at the expense of clear measurement and enforcement. Across contexts, complementary policies—high-quality retraining, wage subsidies, portable benefits, and policies that foster human–robot collaboration—generally have stronger, more reliable evidence for reducing displacement without harming productivity than a broad automation tax. A narrowly designed instrument could be considered only as part of a broader policy mix, not as a stand-alone solution.\",\n  \"keyClaims\": [\n    \"Automation displacement effects vary by sector and country.\",\n    \"A broad automation tax risks dampening investment and innovation.\",\n    \"Any instrument should have clear definitions, a measurable base, and sensible depreciation and rate rules.\",\n    \"Revenue recycling should target retraining, wage subsidies, portable benefits, and productivity investments.\",\n    \"Pilot programs with credible evaluation are essential before scaling.\",\n    \"Complementary policies tend to reduce displacement more reliably than a broad tax, and should be the default.\"\n  ],\n  \"assumptions\": [\n    \"Policymakers seek to balance productivity gains with worker displacement.\",\n    \"Automation deployment and labor-market effects are policy-sensitive.\",\n    \"Data on automation intensity can be collected with a credible governance framework.\",\n    \"Pilots can yield credible counterfactuals in a few years.\",\n    \"International coordination can be pursued with feasible timelines and enforcement.\"\n  ],\n  \"confidence\": 0.58\n}"
+            }
+          ],
+          "schemaName": "Counterfactual",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "failureModes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "triggerConditions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "mitigations": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "failureModes",
+              "triggerConditions",
+              "mitigations"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "failureModes": [
+              "Ambiguity in defining and measuring automation/intensity leads to inconsistent tax bases and disputes over eligibility.",
+              "Deterrence of productivity-enhancing automation and innovation due to tax, reducing investment, job creation, and potential long-run employment gains.",
+              "Tax design complexity creates loopholes, exemptions, and gaming strategies that erode effectiveness and equity.",
+              "High administrative burden and compliance costs, especially for small firms or firms with limited administrative capacity.",
+              "Revenue volatility and unreliability due to dependence on technology adoption cycles, leading to planning difficulties.",
+              "Tax avoidance through cross-border relocation, profit shifting, or reclustering activities to jurisdictions with looser rules.",
+              "Unequal or regressive impact on small firms, startups, developing economies, or low-wage workers if the tax burden is not carefully calibrated.",
+              "Potential chilling effects on complementary policies (e.g., retraining, wage subsidies) and on human–robot collaboration initiatives."
+            ],
+            "triggerConditions": [
+              "Ambiguity in automation definitions or measurement standards becomes visible in early implementation, triggering disputes and administrative pushback.",
+              "Widespread automation adoption in key sectors with high displacement risk, prompting calls to expand or modify the tax base.",
+              "Budget pressures or political incentives push policymakers to broaden exemptions or increase revenue, triggering reform or expansion debates.",
+              "Pilot evaluations show weak or negative net employment effects, triggering calls for redesign, scaling back, or sunset.",
+              "Evidence of cross-border avoidance or tax competition undermines revenue and undermines measurement integrity.",
+              "Rapid AI/automation breakthroughs outpace current measurement frameworks, triggering calls for rapid revisions.",
+              "Lobbiing and political capture erode the original safeguards, triggering governance reforms or policy reversals.",
+              "Data governance failures or lack of credible data trigger reform to restore confidence in measurement and enforcement."
+            ],
+            "mitigations": [
+              "Limit scope with narrowly defined automation intensity metrics and set explicit, time-limited sunset clauses; build in automatic reviews.",
+              "Develop and publish standardized measurement frameworks (e.g., robot density, automation expenditure, task automation indices) and rely on independent evaluators; require robust counterfactual analyses.",
+              "Design tax rules with transparent depreciation bands and conservative rules to deter gaming; implement anti-avoidance provisions and enforcement mechanisms.",
+              "Offer exemptions or simplified compliance for SMEs and for investments in collaboration between humans and machines; implement governance to close loopholes and prevent circumvention.",
+              "Adopt a pilot-first approach with credible counterfactual evaluations (DiD, synthetic control) and only scale up if net benefits are demonstrated; require publication of results.",
+              "Ensure revenue is ring-fenced to retraining, wage subsidies, portable benefits, and productivity-enhancing public investments; establish a dedicated governance body to monitor allocation and outcomes.",
+              "Pair any automation tax with broad complementary policies (retraining, wage subsidies, portable benefits, inclusive labor-market programs) and avoid relying on the tax alone to manage displacement.",
+              "Coordinate internationally with robust measurement standards and exchange of best practices while preserving transparency and enforcement; prevent race-to-the-bottom through minimum baseline rules and mutual recognition where feasible.",
+              "Invest in administrative simplification, privacy safeguards, and digital reporting to minimize burden and errors; implement independent audits and performance metrics to maintain trust.",
+              "Prepare dynamic scoring and contingency mechanisms to adjust parameters as evidence accumulates; sunset reviews and mid-course corrections should be standard."
+            ]
+          }
+        ],
+        "output": {
+          "kind": "counterfactual",
+          "data": {
+            "failureModes": [
+              "Ambiguity in defining and measuring automation/intensity leads to inconsistent tax bases and disputes over eligibility.",
+              "Deterrence of productivity-enhancing automation and innovation due to tax, reducing investment, job creation, and potential long-run employment gains.",
+              "Tax design complexity creates loopholes, exemptions, and gaming strategies that erode effectiveness and equity.",
+              "High administrative burden and compliance costs, especially for small firms or firms with limited administrative capacity.",
+              "Revenue volatility and unreliability due to dependence on technology adoption cycles, leading to planning difficulties.",
+              "Tax avoidance through cross-border relocation, profit shifting, or reclustering activities to jurisdictions with looser rules.",
+              "Unequal or regressive impact on small firms, startups, developing economies, or low-wage workers if the tax burden is not carefully calibrated.",
+              "Potential chilling effects on complementary policies (e.g., retraining, wage subsidies) and on human–robot collaboration initiatives."
+            ],
+            "triggerConditions": [
+              "Ambiguity in automation definitions or measurement standards becomes visible in early implementation, triggering disputes and administrative pushback.",
+              "Widespread automation adoption in key sectors with high displacement risk, prompting calls to expand or modify the tax base.",
+              "Budget pressures or political incentives push policymakers to broaden exemptions or increase revenue, triggering reform or expansion debates.",
+              "Pilot evaluations show weak or negative net employment effects, triggering calls for redesign, scaling back, or sunset.",
+              "Evidence of cross-border avoidance or tax competition undermines revenue and undermines measurement integrity.",
+              "Rapid AI/automation breakthroughs outpace current measurement frameworks, triggering calls for rapid revisions.",
+              "Lobbiing and political capture erode the original safeguards, triggering governance reforms or policy reversals.",
+              "Data governance failures or lack of credible data trigger reform to restore confidence in measurement and enforcement."
+            ],
+            "mitigations": [
+              "Limit scope with narrowly defined automation intensity metrics and set explicit, time-limited sunset clauses; build in automatic reviews.",
+              "Develop and publish standardized measurement frameworks (e.g., robot density, automation expenditure, task automation indices) and rely on independent evaluators; require robust counterfactual analyses.",
+              "Design tax rules with transparent depreciation bands and conservative rules to deter gaming; implement anti-avoidance provisions and enforcement mechanisms.",
+              "Offer exemptions or simplified compliance for SMEs and for investments in collaboration between humans and machines; implement governance to close loopholes and prevent circumvention.",
+              "Adopt a pilot-first approach with credible counterfactual evaluations (DiD, synthetic control) and only scale up if net benefits are demonstrated; require publication of results.",
+              "Ensure revenue is ring-fenced to retraining, wage subsidies, portable benefits, and productivity-enhancing public investments; establish a dedicated governance body to monitor allocation and outcomes.",
+              "Pair any automation tax with broad complementary policies (retraining, wage subsidies, portable benefits, inclusive labor-market programs) and avoid relying on the tax alone to manage displacement.",
+              "Coordinate internationally with robust measurement standards and exchange of best practices while preserving transparency and enforcement; prevent race-to-the-bottom through minimum baseline rules and mutual recognition where feasible.",
+              "Invest in administrative simplification, privacy safeguards, and digital reporting to minimize burden and errors; implement independent audits and performance metrics to maintain trust.",
+              "Prepare dynamic scoring and contingency mechanisms to adjust parameters as evidence accumulates; sunset reviews and mid-course corrections should be standard."
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:30:39.645Z"
+      },
+      {
+        "id": "step_1771338655701_26311c81f914b",
+        "agentName": "CalibrationAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:30:39.645Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a calibration auditor. Set adjusted confidence and claim-level confidences from the proposed answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Proposal JSON:\n{\n  \"answer\": \"Not a blanket yes or no. A broad tax on automation that displaces workers risks reducing investment and innovation, and the net employment effects are uncertain and highly context-specific. If policymakers consider an automation instrument, it should be narrowly targeted, time-limited, and paired with rigorous evaluation to avoid chilling productivity. A robust framework would: clearly define automation and measure its intensity with standardized metrics; design the base with transparent depreciation rules and rate bands to reduce gaming; include explicit, time-bound exemptions and governance to prevent loopholes; and ensure revenue is recycled to worker retraining, wage subsidies, portable benefits, and productivity-enhancing public investments. Before any scale-up, run pilots with credible counterfactual evaluations (differences-in-differences or synthetic controls) and publish results. International coordination should be pursued to minimize avoidance, but not at the expense of clear measurement and enforcement. Across contexts, complementary policies—high-quality retraining, wage subsidies, portable benefits, and policies that foster human–robot collaboration—generally have stronger, more reliable evidence for reducing displacement without harming productivity than a broad automation tax. A narrowly designed instrument could be considered only as part of a broader policy mix, not as a stand-alone solution.\",\n  \"keyClaims\": [\n    \"Automation displacement effects vary by sector and country.\",\n    \"A broad automation tax risks dampening investment and innovation.\",\n    \"Any instrument should have clear definitions, a measurable base, and sensible depreciation and rate rules.\",\n    \"Revenue recycling should target retraining, wage subsidies, portable benefits, and productivity investments.\",\n    \"Pilot programs with credible evaluation are essential before scaling.\",\n    \"Complementary policies tend to reduce displacement more reliably than a broad tax, and should be the default.\"\n  ],\n  \"assumptions\": [\n    \"Policymakers seek to balance productivity gains with worker displacement.\",\n    \"Automation deployment and labor-market effects are policy-sensitive.\",\n    \"Data on automation intensity can be collected with a credible governance framework.\",\n    \"Pilots can yield credible counterfactuals in a few years.\",\n    \"International coordination can be pursued with feasible timelines and enforcement.\",\n    \"Counterfactual risk: Ambiguity in defining and measuring automation/intensity leads to inconsistent tax bases and disputes over eligibility.\"\n  ],\n  \"confidence\": 0.58\n}"
+            }
+          ],
+          "schemaName": "Calibration",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "adjustedConfidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "rationale": {
+                "type": "string"
+              },
+              "claimConfidences": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "claim": {
+                      "type": "string"
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    }
+                  },
+                  "required": [
+                    "claim",
+                    "confidence"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "adjustedConfidence",
+              "rationale",
+              "claimConfidences"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "adjustedConfidence": 0.83,
+            "rationale": "Adjusted confidence is the mean of the six claim confidences, reflecting a coherent assessment that these claims are generally well-supported by policy practice and the proposal's emphasis on evaluation and targeted design. Some claims (e.g., the context-sensitivity of displacement and the need for credible pilots) are contingent and not universally certain, which modestly lowers certainty from a perfect endorsement.",
+            "claimConfidences": [
+              {
+                "claim": "Automation displacement effects vary by sector and country.",
+                "confidence": 0.88
+              },
+              {
+                "claim": "A broad automation tax risks dampening investment and innovation.",
+                "confidence": 0.78
+              },
+              {
+                "claim": "Any instrument should have clear definitions, a measurable base, and sensible depreciation and rate rules.",
+                "confidence": 0.82
+              },
+              {
+                "claim": "Revenue recycling should target retraining, wage subsidies, portable benefits, and productivity investments.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Pilot programs with credible evaluation are essential before scaling.",
+                "confidence": 0.85
+              },
+              {
+                "claim": "Complementary policies tend to reduce displacement more reliably than a broad tax, and should be the default.",
+                "confidence": 0.82
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "calibration",
+          "data": {
+            "adjustedConfidence": 0.83,
+            "rationale": "Adjusted confidence is the mean of the six claim confidences, reflecting a coherent assessment that these claims are generally well-supported by policy practice and the proposal's emphasis on evaluation and targeted design. Some claims (e.g., the context-sensitivity of displacement and the need for credible pilots) are contingent and not universally certain, which modestly lowers certainty from a perfect endorsement.",
+            "claimConfidences": [
+              {
+                "claim": "Automation displacement effects vary by sector and country.",
+                "confidence": 0.88
+              },
+              {
+                "claim": "A broad automation tax risks dampening investment and innovation.",
+                "confidence": 0.78
+              },
+              {
+                "claim": "Any instrument should have clear definitions, a measurable base, and sensible depreciation and rate rules.",
+                "confidence": 0.82
+              },
+              {
+                "claim": "Revenue recycling should target retraining, wage subsidies, portable benefits, and productivity investments.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Pilot programs with credible evaluation are essential before scaling.",
+                "confidence": 0.85
+              },
+              {
+                "claim": "Complementary policies tend to reduce displacement more reliably than a broad tax, and should be the default.",
+                "confidence": 0.82
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T14:30:55.701Z"
+      },
+      {
+        "id": "step_1771338666300_738f57d24f118",
+        "agentName": "JudgeAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T14:30:55.701Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a strict research judge. Score answer quality with rubric scores 1-5. Output only valid JSON matching schema."
+            },
+            {
+              "role": "user",
+              "content": "Final proposal JSON:\n{\n  \"answer\": \"Not a blanket yes or no. A broad tax on automation that displaces workers risks reducing investment and innovation, and the net employment effects are uncertain and highly context-specific. If policymakers consider an automation instrument, it should be narrowly targeted, time-limited, and paired with rigorous evaluation to avoid chilling productivity. A robust framework would: clearly define automation and measure its intensity with standardized metrics; design the base with transparent depreciation rules and rate bands to reduce gaming; include explicit, time-bound exemptions and governance to prevent loopholes; and ensure revenue is recycled to worker retraining, wage subsidies, portable benefits, and productivity-enhancing public investments. Before any scale-up, run pilots with credible counterfactual evaluations (differences-in-differences or synthetic controls) and publish results. International coordination should be pursued to minimize avoidance, but not at the expense of clear measurement and enforcement. Across contexts, complementary policies—high-quality retraining, wage subsidies, portable benefits, and policies that foster human–robot collaboration—generally have stronger, more reliable evidence for reducing displacement without harming productivity than a broad automation tax. A narrowly designed instrument could be considered only as part of a broader policy mix, not as a stand-alone solution.\",\n  \"keyClaims\": [\n    \"Automation displacement effects vary by sector and country.\",\n    \"A broad automation tax risks dampening investment and innovation.\",\n    \"Any instrument should have clear definitions, a measurable base, and sensible depreciation and rate rules.\",\n    \"Revenue recycling should target retraining, wage subsidies, portable benefits, and productivity investments.\",\n    \"Pilot programs with credible evaluation are essential before scaling.\",\n    \"Complementary policies tend to reduce displacement more reliably than a broad tax, and should be the default.\"\n  ],\n  \"assumptions\": [\n    \"Policymakers seek to balance productivity gains with worker displacement.\",\n    \"Automation deployment and labor-market effects are policy-sensitive.\",\n    \"Data on automation intensity can be collected with a credible governance framework.\",\n    \"Pilots can yield credible counterfactuals in a few years.\",\n    \"International coordination can be pursued with feasible timelines and enforcement.\",\n    \"Counterfactual risk: Ambiguity in defining and measuring automation/intensity leads to inconsistent tax bases and disputes over eligibility.\"\n  ],\n  \"confidence\": 0.58\n}\n\nCritiques:\n[\n  {\n    \"targetAgent\": \"SolverAgent\",\n    \"issues\": [\n      {\n        \"severity\": 3,\n        \"type\": \"factual\",\n        \"note\": \"The proposal cites that evidence is mixed and that pilots exist, but it does not provide quantitative ranges or specific sources to contextualize how strong the effects are across countries and sectors.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"logic\",\n        \"note\": \"It assumes revenue recycling to retraining/wage subsidies will neutralize productivity losses, but this ignores macroeconomic feedbacks, investment elasticities, and potential misallocation of funds.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"ambiguity\",\n        \"note\": \"Definition of what counts as automation is vague (robotics vs AI software vs process automation); unclear where the boundary lies and how to measure automation intensity consistently across firms.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"There is no concrete plan for measuring the tax base (how to quantify automation) or for data collection, which undermines auditability and comparability across jurisdictions.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"Limited discussion of tax incidence and distributional effects; without an explicit model, it’s unclear whether costs fall on producers, consumers, or workers via wage/price channels.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"logic\",\n        \"note\": \"The claim that complementary policies outperform a broad tax rests on context-specific assumptions about elasticities and implementation; without specifying those, the conclusion may be overgeneralized.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"ambiguity\",\n        \"note\": \"Exemptions and transitional relief are mentioned but not defined; without clear rules, loopholes and selective exemptions could erode effectiveness and equity.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"International coordination is deemed necessary but the feasibility, timelines, and enforcement mechanisms are not analyzed; risk of tax avoidance and shifting activity remains high.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"overconfidence\",\n        \"note\": \"The statement that “pilot results suggest” policy mixes reduce displacement more effectively than a broad tax may be overconfident given the sparse, heterogeneous evidence; requires robust meta-analysis.\"\n      },\n      {\n        \"severity\": 2,\n        \"type\": \"logic\",\n        \"note\": \"Time-limited measures may become de facto permanent due to political economy dynamics; the proposal should address sunset clauses, renewal criteria, and governance to avoid creeping expansion.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"factual\",\n        \"note\": \"Depreciation rules and rate bands are prone to gaming (front-loading, misreporting); without credible auditing and enforcement, the tax base can erode and avoidance costs rise.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"The proposal lacks a detailed pilot-design framework (experimental or quasi-experimental design, counterfactuals, sample size, evaluation metrics) to assess effectiveness before scale.\"\n      }\n    ]\n  },\n  {\n    \"targetAgent\": \"robot-tax-answer-critic\",\n    \"issues\": [\n      {\n        \"severity\": 5,\n        \"type\": \"ambiguity\",\n        \"note\": \"Key terms such as 'automation' and 'robot' are ill-defined, which would affect the base, exemptions, and potential loopholes; no specification of measurement scope or thresholds.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"missing\",\n        \"note\": \"No discussion of tax incidence, distributional effects on workers vs. capital owners, or protection for SMEs; no plan for data, monitoring, or evaluation of impact.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"factual\",\n        \"note\": \"Claims about the strength of OECD/IMF/World Bank evidence are vague and unsourced; the answer lacks citations or quantified uncertainty, risking misrepresentation of the evidence base.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"logic\",\n        \"note\": \"The argument that non-tax instruments are superior is asserted but not logically substantiated across contexts; the potential value of targeted or time-limited taxes to address specific failures is not adequately explored.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"ambiguity\",\n        \"note\": \"Assertion of international coordination to minimize avoidance lacks analysis of enforcement feasibility, compliance costs, and realistic risk of cross-border loopholes.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"No concrete guidance on piloting design (metrics, duration, sample size) or evaluation frameworks; leaves policy prescriptions without actionable implementation detail.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"overconfidence\",\n        \"note\": \"Treatment of evidence as mixed and policy outcomes as relatively predictable overlooks substantial uncertainty and context-dependence in automation impacts.\"\n      },\n      {\n        \"severity\": 2,\n        \"type\": \"missing\",\n        \"note\": \"No consideration of regional development disparities or developing-country implications; no explicit equity or transition-support analysis.\"\n      }\n    ]\n  }\n]"
+            }
+          ],
+          "schemaName": "Judgement",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "rubricScores": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "coherence": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "completeness": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "factualRisk": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "uncertaintyHandling": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  }
+                },
+                "required": [
+                  "coherence",
+                  "completeness",
+                  "factualRisk",
+                  "uncertaintyHandling"
+                ]
+              },
+              "strengths": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "weaknesses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "summary": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "rubricScores",
+              "strengths",
+              "weaknesses",
+              "summary"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "rubricScores": {
+              "coherence": 4,
+              "completeness": 3,
+              "factualRisk": 2,
+              "uncertaintyHandling": 3
+            },
+            "strengths": [
+              "Balanced, policy-relevant stance that cautions against a blanket automation tax.",
+              "Advocates a narrowly targeted, time-bound instrument with explicit governance and evaluation.",
+              "Emphasizes pilot programs with credible counterfactual evaluations (differences-in-differences, synthetic controls).",
+              "Proposes revenue recycling to worker retraining, wage subsidies, portable benefits, and productivity-enhancing investments.",
+              "Recognizes international coordination and complementary policies as important context."
+            ],
+            "weaknesses": [
+              "Vague definitions of automation and measurement of automation intensity, leading to potential base definitional ambiguities.",
+              "Lacks concrete plans for measuring the tax base, data collection, auditing, and enforcement against gaming.",
+              "Insufficient discussion of tax incidence, distributional impacts, and effects on SMEs.",
+              "No detailed pilot-design framework (metrics, sample sizes, duration, evaluation metrics).",
+              "Limited treatment of implementation challenges for exemptions, sunset clauses, and governance; risk of loopholes and creeping expansion.",
+              "Insufficient consideration of regional/developing-country implications and equity considerations."
+            ],
+            "summary": "The proposal presents a coherent, cautious view against a broad automation tax and advocates a targeted, evaluable approach with revenue recycling and complementary policies. It is methodologically sound in its call for pilots and robust evaluation but falls short on concrete definitions, measurement plans, data governance, incidence analysis, and implementation detail. These gaps introduce ambiguity and risk of inconsistent application across jurisdictions. Overall, it is a thoughtful starting point that would benefit from more precise operationalization and explicit equity/transition analyses."
+          }
+        ],
+        "output": {
+          "kind": "judgement",
+          "data": {
+            "rubricScores": {
+              "coherence": 4,
+              "completeness": 3,
+              "factualRisk": 2,
+              "uncertaintyHandling": 3
+            },
+            "strengths": [
+              "Balanced, policy-relevant stance that cautions against a blanket automation tax.",
+              "Advocates a narrowly targeted, time-bound instrument with explicit governance and evaluation.",
+              "Emphasizes pilot programs with credible counterfactual evaluations (differences-in-differences, synthetic controls).",
+              "Proposes revenue recycling to worker retraining, wage subsidies, portable benefits, and productivity-enhancing investments.",
+              "Recognizes international coordination and complementary policies as important context."
+            ],
+            "weaknesses": [
+              "Vague definitions of automation and measurement of automation intensity, leading to potential base definitional ambiguities.",
+              "Lacks concrete plans for measuring the tax base, data collection, auditing, and enforcement against gaming.",
+              "Insufficient discussion of tax incidence, distributional impacts, and effects on SMEs.",
+              "No detailed pilot-design framework (metrics, sample sizes, duration, evaluation metrics).",
+              "Limited treatment of implementation challenges for exemptions, sunset clauses, and governance; risk of loopholes and creeping expansion.",
+              "Insufficient consideration of regional/developing-country implications and equity considerations."
+            ],
+            "summary": "The proposal presents a coherent, cautious view against a broad automation tax and advocates a targeted, evaluable approach with revenue recycling and complementary policies. It is methodologically sound in its call for pilots and robust evaluation but falls short on concrete definitions, measurement plans, data governance, incidence analysis, and implementation detail. These gaps introduce ambiguity and risk of inconsistent application across jurisdictions. Overall, it is a thoughtful starting point that would benefit from more precise operationalization and explicit equity/transition analyses."
+          }
+        },
+        "completedAt": "2026-02-17T14:31:06.300Z"
+      }
+    ],
+    "finalAnswer": "Not a blanket yes or no. A broad tax on automation that displaces workers risks reducing investment and innovation, and the net employment effects are uncertain and highly context-specific. If policymakers consider an automation instrument, it should be narrowly targeted, time-limited, and paired with rigorous evaluation to avoid chilling productivity. A robust framework would: clearly define automation and measure its intensity with standardized metrics; design the base with transparent depreciation rules and rate bands to reduce gaming; include explicit, time-bound exemptions and governance to prevent loopholes; and ensure revenue is recycled to worker retraining, wage subsidies, portable benefits, and productivity-enhancing public investments. Before any scale-up, run pilots with credible counterfactual evaluations (differences-in-differences or synthetic controls) and publish results. International coordination should be pursued to minimize avoidance, but not at the expense of clear measurement and enforcement. Across contexts, complementary policies—high-quality retraining, wage subsidies, portable benefits, and policies that foster human–robot collaboration—generally have stronger, more reliable evidence for reducing displacement without harming productivity than a broad automation tax. A narrowly designed instrument could be considered only as part of a broader policy mix, not as a stand-alone solution.",
+    "metrics": {
+      "confidence": {
+        "solver": 0.6,
+        "revision": 0.42,
+        "synthesizer": 0.83,
+        "calibratedAdjusted": 0.83,
+        "solverToRevisionDelta": -0.18,
+        "revisionToSynthesizerDelta": 0.41
+      },
+      "critique": {
+        "maxSeverity": 5,
+        "avgSeverity": 3.45,
+        "byType": {
+          "factual": 3,
+          "logic": 4,
+          "ambiguity": 4,
+          "missing": 7,
+          "overconfidence": 2
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 3,
+        "factualRisk": 2,
+        "uncertaintyHandling": 3
+      },
+      "research": {
+        "evidenceRiskLevel": 4,
+        "counterfactualFailureModeCount": 8,
+        "topCounterfactualFailureMode": "Ambiguity in defining and measuring automation/intensity leads to inconsistent tax bases and disputes over eligibility."
+      },
+      "consensus": {
+        "included": [
+          "solver",
+          "revision",
+          "synthesizer"
+        ],
+        "pairs": [
+          {
+            "a": "solver",
+            "b": "revision",
+            "similarity": 0.795
+          },
+          {
+            "a": "solver",
+            "b": "synthesizer",
+            "similarity": 0.889
+          },
+          {
+            "a": "revision",
+            "b": "synthesizer",
+            "similarity": 0.866
+          }
+        ],
+        "strength": 0.85
+      }
+    }
+  },
+  "metadata": {
+    "schemaVersion": 1,
+    "createdAt": "2026-02-17T14:31:06.300Z",
+    "model": "gpt-5-nano-2025-08-07",
+    "fastMode": false,
+    "pipelinePreset": "research_deep",
+    "pipelineVersion": "1.0.0",
+    "source": "cli"
+  }
+}

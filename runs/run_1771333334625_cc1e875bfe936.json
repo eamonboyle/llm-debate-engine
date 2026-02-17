@@ -1,0 +1,1437 @@
+{
+  "kind": "run",
+  "id": "run_1771333334625_cc1e875bfe936",
+  "question": "Should we use gene editing for human enhancement?",
+  "run": {
+    "id": "run_1771333334625_cc1e875bfe936",
+    "createdAt": "2026-02-17T13:02:14.625Z",
+    "question": "Should we use gene editing for human enhancement?",
+    "steps": [
+      {
+        "id": "step_1771333143617_84be99b2bdd268",
+        "agentName": "QuestionDecomposerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T12:58:44.374Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a research planner. Decompose the question into sub-questions and hypotheses. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should we use gene editing for human enhancement?"
+            }
+          ],
+          "schemaName": "QuestionDecomposition",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "framing": {
+                "type": "string"
+              },
+              "subQuestions": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "hypotheses": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "framing",
+              "subQuestions",
+              "hypotheses"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "framing": "A rigorous, multi-disciplinary assessment of whether and how to pursue gene editing for human enhancement, balancing safety, ethics, and societal impact.",
+            "subQuestions": [
+              "How should 'enhancement' be defined in the context of gene editing, and where should the boundary lie between therapy and enhancement?",
+              "What are the current and foreseeable safety risks of gene editing for enhancement (e.g., off-target effects, mosaicism, pleiotropic effects, immune responses, durability, and germline transmission)?",
+              "How do somatic (non-heritable) versus germline (heritable) gene edits compare in terms of risk, benefit, ethics, and regulation?",
+              "What ethical principles (autonomy, beneficence, non-maleficence, justice) and societal values should govern decisions about enhancement, and how should conflicts be resolved?",
+              "What would be the potential effects on social justice, equity, and global access to enhancement technologies, and how might policy mitigate disparities?",
+              "What regulatory and governance frameworks are appropriate for evaluating, approving, monitoring, and policing enhancement techniques, including oversight, consent, reversibility, and accountability?",
+              "What are the potential macro-level impacts on research priorities, public health systems, economy, and geopolitical dynamics if enhancement through gene editing becomes feasible?",
+              "What alternative approaches (education, training, pharmacological interventions, non-genetic technologies) could achieve similar goals, and how do their risk-benefit profiles compare?",
+              "What mechanisms are needed for public engagement, transparency, and accountability, and how should consent for future generations be addressed in germline scenarios?",
+              "What metrics and study designs would be appropriate to assess the long-term benefits, risks, and societal impacts of gene editing for enhancement?"
+            ],
+            "hypotheses": [
+              "Germline gene editing for enhancement raises higher ethical concerns, regulatory barriers, and societal risk than somatic editing, making approval harder to justify.",
+              "Public acceptance of enhancement via gene editing will be driven more by perceived fairness and consent issues than by technical safety assurances alone.",
+              "Without targeted policy interventions, access to enhancement technologies will exacerbate existing social and global inequalities.",
+              "Advances will be able to reduce off-target and pleiotropic risks but fundamental uncertainties about long-term and intergenerational effects will remain significant barriers.",
+              "Non-genetic enhancement methods (e.g., training, lifestyle, pharmacological agents) may offer similar benefits with lower risk and cost in many domains, reducing the appeal of gene editing for enhancement.",
+              "International coordination and robust governance are necessary to prevent unsafe experimentation and policy gaps across borders.",
+              "Reversibility of germline edits will remain technically challenging, limiting risk tolerance and complicating consent considerations for future generations.",
+              "Societal impact could include shifts in norms of 'normal' performance and increased pressure toward enhancement, potentially reducing perceived value of natural diversity.",
+              "Long-term ecological and evolutionary considerations of germline edits are uncertain and warrant precautionary restrictions until more evidence accumulates.",
+              "A comprehensive framework combining definitional clarity, stringent safety standards, ethical guardrails, and equitable access policies can enable responsible assessment of gene editing for enhancement."
+            ]
+          }
+        ],
+        "output": {
+          "kind": "decomposition",
+          "data": {
+            "framing": "A rigorous, multi-disciplinary assessment of whether and how to pursue gene editing for human enhancement, balancing safety, ethics, and societal impact.",
+            "subQuestions": [
+              "How should 'enhancement' be defined in the context of gene editing, and where should the boundary lie between therapy and enhancement?",
+              "What are the current and foreseeable safety risks of gene editing for enhancement (e.g., off-target effects, mosaicism, pleiotropic effects, immune responses, durability, and germline transmission)?",
+              "How do somatic (non-heritable) versus germline (heritable) gene edits compare in terms of risk, benefit, ethics, and regulation?",
+              "What ethical principles (autonomy, beneficence, non-maleficence, justice) and societal values should govern decisions about enhancement, and how should conflicts be resolved?",
+              "What would be the potential effects on social justice, equity, and global access to enhancement technologies, and how might policy mitigate disparities?",
+              "What regulatory and governance frameworks are appropriate for evaluating, approving, monitoring, and policing enhancement techniques, including oversight, consent, reversibility, and accountability?",
+              "What are the potential macro-level impacts on research priorities, public health systems, economy, and geopolitical dynamics if enhancement through gene editing becomes feasible?",
+              "What alternative approaches (education, training, pharmacological interventions, non-genetic technologies) could achieve similar goals, and how do their risk-benefit profiles compare?",
+              "What mechanisms are needed for public engagement, transparency, and accountability, and how should consent for future generations be addressed in germline scenarios?",
+              "What metrics and study designs would be appropriate to assess the long-term benefits, risks, and societal impacts of gene editing for enhancement?"
+            ],
+            "hypotheses": [
+              "Germline gene editing for enhancement raises higher ethical concerns, regulatory barriers, and societal risk than somatic editing, making approval harder to justify.",
+              "Public acceptance of enhancement via gene editing will be driven more by perceived fairness and consent issues than by technical safety assurances alone.",
+              "Without targeted policy interventions, access to enhancement technologies will exacerbate existing social and global inequalities.",
+              "Advances will be able to reduce off-target and pleiotropic risks but fundamental uncertainties about long-term and intergenerational effects will remain significant barriers.",
+              "Non-genetic enhancement methods (e.g., training, lifestyle, pharmacological agents) may offer similar benefits with lower risk and cost in many domains, reducing the appeal of gene editing for enhancement.",
+              "International coordination and robust governance are necessary to prevent unsafe experimentation and policy gaps across borders.",
+              "Reversibility of germline edits will remain technically challenging, limiting risk tolerance and complicating consent considerations for future generations.",
+              "Societal impact could include shifts in norms of 'normal' performance and increased pressure toward enhancement, potentially reducing perceived value of natural diversity.",
+              "Long-term ecological and evolutionary considerations of germline edits are uncertain and warrant precautionary restrictions until more evidence accumulates.",
+              "A comprehensive framework combining definitional clarity, stringent safety standards, ethical guardrails, and equitable access policies can enable responsible assessment of gene editing for enhancement."
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T12:59:03.617Z"
+      },
+      {
+        "id": "step_1771333160503_3f042bd6d3c97",
+        "agentName": "EvidencePlannerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T12:59:03.617Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are an evidence planning specialist. Produce a compact evidence and verification plan for the question. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should we use gene editing for human enhancement?"
+            }
+          ],
+          "schemaName": "EvidencePlan",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "evidenceRequirements": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "verificationChecks": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "majorUnknowns": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "riskLevel": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              }
+            },
+            "required": [
+              "evidenceRequirements",
+              "verificationChecks",
+              "majorUnknowns",
+              "riskLevel"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "evidenceRequirements": [
+              "Systematic reviews and meta-analyses on safety, efficacy, and limits of gene editing for enhancement in humans (somatic and germline contexts)",
+              "Preclinical data on off-target edits, mosaicism, immunogenicity, and durability of edits",
+              "Clinical trial data from therapeutic gene editing with relevant safety endpoints, extrapolated to enhancement contexts with appropriate caveats",
+              "Longitudinal studies addressing potential multi-generational effects and heritability risks (germline edits)",
+              "Comprehensive risk-benefit analyses for specific enhancement targets (cognition, physical traits, sensory enhancements, etc.)",
+              "Evidence on ethical, social, and equity implications (fairness, access, consent, coercion, identity, stigma)",
+              "Regulatory and governance evidence across major jurisdictions (laws, guidelines, enforcement capacity)",
+              "Economic analyses on cost, scalability, accessibility, and opportunity costs",
+              "Public opinion, stakeholder perspectives, and cultural value alignment data",
+              "Technical feasibility assessments and uncertainty characterisation for different enhancement traits"
+            ],
+            "verificationChecks": [
+              "Cross-check consistency of conclusions across independent reviews and primary studies",
+              "Verify safety endpoints: documented off-target rates, unintended edits, immune responses, and long-term durability where available",
+              "Confirm regulatory status and policy trajectories in key jurisdictions (approval, prohibition, or moratorium)",
+              "Examine robustness of findings through scenario analyses and sensitivity analyses for varying assumptions",
+              "Assess governance readiness: monitoring systems, reporting requirements, accountability mechanisms",
+              "Check for undisclosed conflicts of interest in research, funding, and policymaking bodies",
+              "Evaluate generalisability of results across diverse populations and settings",
+              "Ensure reproducibility through methodological transparency and access to data where possible",
+              "Differentiate enhancement-specific evidence from therapeutic evidence to avoid overgeneralization",
+              "Assess potential bias introduced by industry sponsorship or advocacy groups"
+            ],
+            "majorUnknowns": [
+              "Long-term safety and off-target/epigenetic effects in germline edits and their transgenerational impact",
+              "Durability and reversibility of edits, and what reversal options exist in practice",
+              "Variability of effects across individuals, populations, and traits (genetic background interactions)",
+              "Unintended pleiotropic consequences and trade-offs between multiple traits",
+              "Societal impacts including equity, discrimination, coercion, and pressures to conform",
+              "Effectiveness of governance frameworks to prevent misuse while enabling beneficial research",
+              "Economic viability, access disparities, and global inequality in deployment",
+              "Uncertainty about evolving regulatory norms and international coordination"
+            ],
+            "riskLevel": 4
+          }
+        ],
+        "output": {
+          "kind": "evidence_plan",
+          "data": {
+            "evidenceRequirements": [
+              "Systematic reviews and meta-analyses on safety, efficacy, and limits of gene editing for enhancement in humans (somatic and germline contexts)",
+              "Preclinical data on off-target edits, mosaicism, immunogenicity, and durability of edits",
+              "Clinical trial data from therapeutic gene editing with relevant safety endpoints, extrapolated to enhancement contexts with appropriate caveats",
+              "Longitudinal studies addressing potential multi-generational effects and heritability risks (germline edits)",
+              "Comprehensive risk-benefit analyses for specific enhancement targets (cognition, physical traits, sensory enhancements, etc.)",
+              "Evidence on ethical, social, and equity implications (fairness, access, consent, coercion, identity, stigma)",
+              "Regulatory and governance evidence across major jurisdictions (laws, guidelines, enforcement capacity)",
+              "Economic analyses on cost, scalability, accessibility, and opportunity costs",
+              "Public opinion, stakeholder perspectives, and cultural value alignment data",
+              "Technical feasibility assessments and uncertainty characterisation for different enhancement traits"
+            ],
+            "verificationChecks": [
+              "Cross-check consistency of conclusions across independent reviews and primary studies",
+              "Verify safety endpoints: documented off-target rates, unintended edits, immune responses, and long-term durability where available",
+              "Confirm regulatory status and policy trajectories in key jurisdictions (approval, prohibition, or moratorium)",
+              "Examine robustness of findings through scenario analyses and sensitivity analyses for varying assumptions",
+              "Assess governance readiness: monitoring systems, reporting requirements, accountability mechanisms",
+              "Check for undisclosed conflicts of interest in research, funding, and policymaking bodies",
+              "Evaluate generalisability of results across diverse populations and settings",
+              "Ensure reproducibility through methodological transparency and access to data where possible",
+              "Differentiate enhancement-specific evidence from therapeutic evidence to avoid overgeneralization",
+              "Assess potential bias introduced by industry sponsorship or advocacy groups"
+            ],
+            "majorUnknowns": [
+              "Long-term safety and off-target/epigenetic effects in germline edits and their transgenerational impact",
+              "Durability and reversibility of edits, and what reversal options exist in practice",
+              "Variability of effects across individuals, populations, and traits (genetic background interactions)",
+              "Unintended pleiotropic consequences and trade-offs between multiple traits",
+              "Societal impacts including equity, discrimination, coercion, and pressures to conform",
+              "Effectiveness of governance frameworks to prevent misuse while enabling beneficial research",
+              "Economic viability, access disparities, and global inequality in deployment",
+              "Uncertainty about evolving regulatory norms and international coordination"
+            ],
+            "riskLevel": 4
+          }
+        },
+        "completedAt": "2026-02-17T12:59:20.503Z"
+      },
+      {
+        "id": "step_1771333177898_d9397eb686afa8",
+        "agentName": "SolverAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T12:59:20.503Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.4,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver. Produce a direct, helpful answer. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should we use gene editing for human enhancement?\n\nEvidence plan:\n{\n  \"evidenceRequirements\": [\n    \"Systematic reviews and meta-analyses on safety, efficacy, and limits of gene editing for enhancement in humans (somatic and germline contexts)\",\n    \"Preclinical data on off-target edits, mosaicism, immunogenicity, and durability of edits\",\n    \"Clinical trial data from therapeutic gene editing with relevant safety endpoints, extrapolated to enhancement contexts with appropriate caveats\",\n    \"Longitudinal studies addressing potential multi-generational effects and heritability risks (germline edits)\",\n    \"Comprehensive risk-benefit analyses for specific enhancement targets (cognition, physical traits, sensory enhancements, etc.)\",\n    \"Evidence on ethical, social, and equity implications (fairness, access, consent, coercion, identity, stigma)\",\n    \"Regulatory and governance evidence across major jurisdictions (laws, guidelines, enforcement capacity)\",\n    \"Economic analyses on cost, scalability, accessibility, and opportunity costs\",\n    \"Public opinion, stakeholder perspectives, and cultural value alignment data\",\n    \"Technical feasibility assessments and uncertainty characterisation for different enhancement traits\"\n  ],\n  \"verificationChecks\": [\n    \"Cross-check consistency of conclusions across independent reviews and primary studies\",\n    \"Verify safety endpoints: documented off-target rates, unintended edits, immune responses, and long-term durability where available\",\n    \"Confirm regulatory status and policy trajectories in key jurisdictions (approval, prohibition, or moratorium)\",\n    \"Examine robustness of findings through scenario analyses and sensitivity analyses for varying assumptions\",\n    \"Assess governance readiness: monitoring systems, reporting requirements, accountability mechanisms\",\n    \"Check for undisclosed conflicts of interest in research, funding, and policymaking bodies\",\n    \"Evaluate generalisability of results across diverse populations and settings\",\n    \"Ensure reproducibility through methodological transparency and access to data where possible\",\n    \"Differentiate enhancement-specific evidence from therapeutic evidence to avoid overgeneralization\",\n    \"Assess potential bias introduced by industry sponsorship or advocacy groups\"\n  ],\n  \"majorUnknowns\": [\n    \"Long-term safety and off-target/epigenetic effects in germline edits and their transgenerational impact\",\n    \"Durability and reversibility of edits, and what reversal options exist in practice\",\n    \"Variability of effects across individuals, populations, and traits (genetic background interactions)\",\n    \"Unintended pleiotropic consequences and trade-offs between multiple traits\",\n    \"Societal impacts including equity, discrimination, coercion, and pressures to conform\",\n    \"Effectiveness of governance frameworks to prevent misuse while enabling beneficial research\",\n    \"Economic viability, access disparities, and global inequality in deployment\",\n    \"Uncertainty about evolving regulatory norms and international coordination\"\n  ],\n  \"riskLevel\": 4\n}"
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Based on the current evidence, gene editing for human enhancement should not be pursued as a widespread application. There are significant safety risks (off-target edits, mosaicism, immune reactions, durability concerns) and substantial unknowns, especially for germline changes with potential multi-generational consequences. Ethical, social, and equity concerns (coercion, access, identity, stigma) require careful governance that currently lags behind technical capability. Regulatory frameworks and international norms are uneven, and there is a high risk of misuse or unintended societal harms. If any exploration occurs, it should be confined to clearly defined therapeutic contexts with rigorous safety data, no germline edits, robust informed consent, independent oversight, transparency, and broad public engagement. Until governance and evidence sufficiently address safety, efficacy, reversibility, and fairness, a precautionary approach is warranted.",
+            "keyClaims": [
+              "Significant safety risks in enhancement gene editing (off-target edits, mosaicism, immunogenicity) with limited durability data.",
+              "Germline edits pose potential multi-generational risks and ethical concerns.",
+              "Ethical, social, and equity implications (coercion, access disparities, stigma) are substantial.",
+              "Regulatory and governance frameworks are uneven and may not prevent misuse.",
+              "Current evidence does not support enhancement as beneficial or safe at scale.",
+              "If pursued, must be limited to therapeutic, somatic applications with strict oversight.",
+              "Necessity of robust longitudinal data, reversibility, and reproducibility.",
+              "Public engagement and transparent risk-benefit analyses are essential."
+            ],
+            "assumptions": [
+              "The evidence base is incomplete and uncertain about long-term effects.",
+              "Germline and enhancement contexts have different risk profiles.",
+              "Ethical and policy considerations are critical in evaluating research directions.",
+              "There is heterogeneity in populations that affects generalizability.",
+              "Governance readiness varies by jurisdiction and evolves over time.",
+              "Any potential benefit must be weighed against broad societal costs."
+            ],
+            "confidence": 0.65
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Based on the current evidence, gene editing for human enhancement should not be pursued as a widespread application. There are significant safety risks (off-target edits, mosaicism, immune reactions, durability concerns) and substantial unknowns, especially for germline changes with potential multi-generational consequences. Ethical, social, and equity concerns (coercion, access, identity, stigma) require careful governance that currently lags behind technical capability. Regulatory frameworks and international norms are uneven, and there is a high risk of misuse or unintended societal harms. If any exploration occurs, it should be confined to clearly defined therapeutic contexts with rigorous safety data, no germline edits, robust informed consent, independent oversight, transparency, and broad public engagement. Until governance and evidence sufficiently address safety, efficacy, reversibility, and fairness, a precautionary approach is warranted.",
+            "keyClaims": [
+              "Significant safety risks in enhancement gene editing (off-target edits, mosaicism, immunogenicity) with limited durability data.",
+              "Germline edits pose potential multi-generational risks and ethical concerns.",
+              "Ethical, social, and equity implications (coercion, access disparities, stigma) are substantial.",
+              "Regulatory and governance frameworks are uneven and may not prevent misuse.",
+              "Current evidence does not support enhancement as beneficial or safe at scale.",
+              "If pursued, must be limited to therapeutic, somatic applications with strict oversight.",
+              "Necessity of robust longitudinal data, reversibility, and reproducibility.",
+              "Public engagement and transparent risk-benefit analyses are essential."
+            ],
+            "assumptions": [
+              "The evidence base is incomplete and uncertain about long-term effects.",
+              "Germline and enhancement contexts have different risk profiles.",
+              "Ethical and policy considerations are critical in evaluating research directions.",
+              "There is heterogeneity in populations that affects generalizability.",
+              "Governance readiness varies by jurisdiction and evolves over time.",
+              "Any potential benefit must be weighed against broad societal costs."
+            ],
+            "confidence": 0.65
+          }
+        },
+        "completedAt": "2026-02-17T12:59:37.898Z"
+      },
+      {
+        "id": "step_1771333199653_46c68a1c430a28",
+        "agentName": "SkepticAgent",
+        "role": "skeptic",
+        "createdAt": "2026-02-17T12:59:37.899Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Skeptic. Critique the proposal rigorously. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should we use gene editing for human enhancement?\n\nTarget agent: SolverAgent\n\nProposal JSON:\n{\n  \"answer\": \"Based on the current evidence, gene editing for human enhancement should not be pursued as a widespread application. There are significant safety risks (off-target edits, mosaicism, immune reactions, durability concerns) and substantial unknowns, especially for germline changes with potential multi-generational consequences. Ethical, social, and equity concerns (coercion, access, identity, stigma) require careful governance that currently lags behind technical capability. Regulatory frameworks and international norms are uneven, and there is a high risk of misuse or unintended societal harms. If any exploration occurs, it should be confined to clearly defined therapeutic contexts with rigorous safety data, no germline edits, robust informed consent, independent oversight, transparency, and broad public engagement. Until governance and evidence sufficiently address safety, efficacy, reversibility, and fairness, a precautionary approach is warranted.\",\n  \"keyClaims\": [\n    \"Significant safety risks in enhancement gene editing (off-target edits, mosaicism, immunogenicity) with limited durability data.\",\n    \"Germline edits pose potential multi-generational risks and ethical concerns.\",\n    \"Ethical, social, and equity implications (coercion, access disparities, stigma) are substantial.\",\n    \"Regulatory and governance frameworks are uneven and may not prevent misuse.\",\n    \"Current evidence does not support enhancement as beneficial or safe at scale.\",\n    \"If pursued, must be limited to therapeutic, somatic applications with strict oversight.\",\n    \"Necessity of robust longitudinal data, reversibility, and reproducibility.\",\n    \"Public engagement and transparent risk-benefit analyses are essential.\"\n  ],\n  \"assumptions\": [\n    \"The evidence base is incomplete and uncertain about long-term effects.\",\n    \"Germline and enhancement contexts have different risk profiles.\",\n    \"Ethical and policy considerations are critical in evaluating research directions.\",\n    \"There is heterogeneity in populations that affects generalizability.\",\n    \"Governance readiness varies by jurisdiction and evolves over time.\",\n    \"Any potential benefit must be weighed against broad societal costs.\"\n  ],\n  \"confidence\": 0.65\n}\n\nFind issues. Prefer factual risk, missing edge cases, ambiguity, and overconfidence."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 1,
+                "type": "factual",
+                "note": "Off-target edits, mosaicism, and immunogenicity are cited but without quantitative risk data or context (delivery method, tissue, and organism). Need incidence rates and condition-specific durability data from controlled studies to assess true safety."
+              },
+              {
+                "severity": 1,
+                "type": "factual",
+                "note": "Germline edits imply potential multi-generational consequences; however, not all editing contexts risk germline transmission. Clarify which scenarios are considered and provide a framework for differentiating germline vs somatic risk."
+              },
+              {
+                "severity": 1,
+                "type": "missing",
+                "note": "No explicit operational definitions separating 'enhancement' from therapeutic aims; missing endpoints, effect sizes, and population characteristics to evaluate benefits vs harms."
+              },
+              {
+                "severity": 1,
+                "type": "logic",
+                "note": "The argument asserts that only somatic, therapeutic edits with strict oversight could be considered. Lacks a coherent decision framework or thresholds (risk, benefit, reversibility) to justify this limitation across contexts."
+              },
+              {
+                "severity": 1,
+                "type": "ambiguity",
+                "note": "Reversibility is claimed but undefined. Which edits are reversible, in which tissues, and by what mechanisms? How would reversibility be measured in practice?"
+              },
+              {
+                "severity": 1,
+                "type": "overconfidence",
+                "note": "The stance treats regulatory lag as a given risk without analyzing potential proactive governance, adaptive oversight, or example case studies that might mitigate risk while enabling beneficial research."
+              },
+              {
+                "severity": 1,
+                "type": "factual",
+                "note": "Regulatory and governance frameworks are described as uneven, but the proposal would benefit from concrete references to existing bodies (e.g., ISSCR guidelines, WHO statements) and their relevance to enforcement gaps."
+              },
+              {
+                "severity": 1,
+                "type": "missing",
+                "note": "Equity and access implications are raised but lack concrete analysis, metrics, or scenarios (who bears costs, who accesses therapies, and how to prevent coercion or stigma) to evaluate policy needs."
+              },
+              {
+                "severity": 1,
+                "type": "ambiguity",
+                "note": "Ambiguity around 'misuse'—what constitutes misuse in diverse contexts (military, enhancement arms race, rogue clinics) and what safeguards would actually address these? The proposal should specify plausible misuse vectors."
+              },
+              {
+                "severity": 1,
+                "type": "factual",
+                "note": "The claim that 'no evidence supports enhancement as beneficial or safe at scale' is overly sweeping; should distinguish between limited therapeutic trials and population-scale deployment, and acknowledge any provisional evidence or analogies from related fields."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 1,
+                "type": "factual",
+                "note": "Off-target edits, mosaicism, and immunogenicity are cited but without quantitative risk data or context (delivery method, tissue, and organism). Need incidence rates and condition-specific durability data from controlled studies to assess true safety."
+              },
+              {
+                "severity": 1,
+                "type": "factual",
+                "note": "Germline edits imply potential multi-generational consequences; however, not all editing contexts risk germline transmission. Clarify which scenarios are considered and provide a framework for differentiating germline vs somatic risk."
+              },
+              {
+                "severity": 1,
+                "type": "missing",
+                "note": "No explicit operational definitions separating 'enhancement' from therapeutic aims; missing endpoints, effect sizes, and population characteristics to evaluate benefits vs harms."
+              },
+              {
+                "severity": 1,
+                "type": "logic",
+                "note": "The argument asserts that only somatic, therapeutic edits with strict oversight could be considered. Lacks a coherent decision framework or thresholds (risk, benefit, reversibility) to justify this limitation across contexts."
+              },
+              {
+                "severity": 1,
+                "type": "ambiguity",
+                "note": "Reversibility is claimed but undefined. Which edits are reversible, in which tissues, and by what mechanisms? How would reversibility be measured in practice?"
+              },
+              {
+                "severity": 1,
+                "type": "overconfidence",
+                "note": "The stance treats regulatory lag as a given risk without analyzing potential proactive governance, adaptive oversight, or example case studies that might mitigate risk while enabling beneficial research."
+              },
+              {
+                "severity": 1,
+                "type": "factual",
+                "note": "Regulatory and governance frameworks are described as uneven, but the proposal would benefit from concrete references to existing bodies (e.g., ISSCR guidelines, WHO statements) and their relevance to enforcement gaps."
+              },
+              {
+                "severity": 1,
+                "type": "missing",
+                "note": "Equity and access implications are raised but lack concrete analysis, metrics, or scenarios (who bears costs, who accesses therapies, and how to prevent coercion or stigma) to evaluate policy needs."
+              },
+              {
+                "severity": 1,
+                "type": "ambiguity",
+                "note": "Ambiguity around 'misuse'—what constitutes misuse in diverse contexts (military, enhancement arms race, rogue clinics) and what safeguards would actually address these? The proposal should specify plausible misuse vectors."
+              },
+              {
+                "severity": 1,
+                "type": "factual",
+                "note": "The claim that 'no evidence supports enhancement as beneficial or safe at scale' is overly sweeping; should distinguish between limited therapeutic trials and population-scale deployment, and acknowledge any provisional evidence or analogies from related fields."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T12:59:59.653Z"
+      },
+      {
+        "id": "step_1771333233786_f30ddeb117424",
+        "agentName": "RedTeamAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T12:59:59.653Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a red-team analyst. Find high-risk failure modes and adversarial weaknesses in the answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should we use gene editing for human enhancement?\n\nCandidate answer JSON:\n{\n  \"answer\": \"Based on the current evidence, gene editing for human enhancement should not be pursued as a widespread application. There are significant safety risks (off-target edits, mosaicism, immune reactions, durability concerns) and substantial unknowns, especially for germline changes with potential multi-generational consequences. Ethical, social, and equity concerns (coercion, access, identity, stigma) require careful governance that currently lags behind technical capability. Regulatory frameworks and international norms are uneven, and there is a high risk of misuse or unintended societal harms. If any exploration occurs, it should be confined to clearly defined therapeutic contexts with rigorous safety data, no germline edits, robust informed consent, independent oversight, transparency, and broad public engagement. Until governance and evidence sufficiently address safety, efficacy, reversibility, and fairness, a precautionary approach is warranted.\",\n  \"keyClaims\": [\n    \"Significant safety risks in enhancement gene editing (off-target edits, mosaicism, immunogenicity) with limited durability data.\",\n    \"Germline edits pose potential multi-generational risks and ethical concerns.\",\n    \"Ethical, social, and equity implications (coercion, access disparities, stigma) are substantial.\",\n    \"Regulatory and governance frameworks are uneven and may not prevent misuse.\",\n    \"Current evidence does not support enhancement as beneficial or safe at scale.\",\n    \"If pursued, must be limited to therapeutic, somatic applications with strict oversight.\",\n    \"Necessity of robust longitudinal data, reversibility, and reproducibility.\",\n    \"Public engagement and transparent risk-benefit analyses are essential.\"\n  ],\n  \"assumptions\": [\n    \"The evidence base is incomplete and uncertain about long-term effects.\",\n    \"Germline and enhancement contexts have different risk profiles.\",\n    \"Ethical and policy considerations are critical in evaluating research directions.\",\n    \"There is heterogeneity in populations that affects generalizability.\",\n    \"Governance readiness varies by jurisdiction and evolves over time.\",\n    \"Any potential benefit must be weighed against broad societal costs.\"\n  ],\n  \"confidence\": 0.65\n}\n\nReturn a rigorous critique with severe issues when justified."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "Candidate answer on gene editing for human enhancement",
+            "issues": [
+              {
+                "severity": 5,
+                "type": "ambiguity",
+                "note": "Claims multi-generational germline risk without adequate hedging or context; the magnitude and likelihood of such risks vary by method and context. The statement is not sufficiently nuanced."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "No nuance about how risks differ across editing platforms (CRISPR nucleases, base editors, prime editors) or target cells (somatic vs germline). Treating risk as uniform misleads readers."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Lacks explicit risk–benefit analysis or scenario planning that would identify potential niche benefits or circumstances where benefits could justify limited risk."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No discussion of dual-use risks, security vulnerabilities, or pathways for misuse beyond a general warning; omits concrete mitigations or governance mechanisms."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No concrete governance options (licensing, post-market surveillance, international harmonization, enforcement) or practical steps for oversight and accountability."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "The boundary between enhancement and therapy is undefined; without a clear definition, conclusions may be unstable as interpretations change."
+              },
+              {
+                "severity": 3,
+                "type": "overconfidence",
+                "note": "Implied inevitability of safety/societal harms without acknowledging that progress in risk management could enable safer, targeted applications; the stance may prematurely foreclose beneficial avenues."
+              },
+              {
+                "severity": 2,
+                "type": "missing",
+                "note": "No citations or explicit evidence base referenced; claims rely on broad statements rather than verifiable sources."
+              },
+              {
+                "severity": 2,
+                "type": "missing",
+                "note": "Assumptions about societal costs, equity, and governance are asserted without supporting data from social sciences or policy analysis."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "Candidate answer on gene editing for human enhancement",
+            "issues": [
+              {
+                "severity": 5,
+                "type": "ambiguity",
+                "note": "Claims multi-generational germline risk without adequate hedging or context; the magnitude and likelihood of such risks vary by method and context. The statement is not sufficiently nuanced."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "No nuance about how risks differ across editing platforms (CRISPR nucleases, base editors, prime editors) or target cells (somatic vs germline). Treating risk as uniform misleads readers."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Lacks explicit risk–benefit analysis or scenario planning that would identify potential niche benefits or circumstances where benefits could justify limited risk."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No discussion of dual-use risks, security vulnerabilities, or pathways for misuse beyond a general warning; omits concrete mitigations or governance mechanisms."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No concrete governance options (licensing, post-market surveillance, international harmonization, enforcement) or practical steps for oversight and accountability."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "The boundary between enhancement and therapy is undefined; without a clear definition, conclusions may be unstable as interpretations change."
+              },
+              {
+                "severity": 3,
+                "type": "overconfidence",
+                "note": "Implied inevitability of safety/societal harms without acknowledging that progress in risk management could enable safer, targeted applications; the stance may prematurely foreclose beneficial avenues."
+              },
+              {
+                "severity": 2,
+                "type": "missing",
+                "note": "No citations or explicit evidence base referenced; claims rely on broad statements rather than verifiable sources."
+              },
+              {
+                "severity": 2,
+                "type": "missing",
+                "note": "Assumptions about societal costs, equity, and governance are asserted without supporting data from social sciences or policy analysis."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T13:00:33.786Z"
+      },
+      {
+        "id": "step_1771333256932_b9a5f468a949f8",
+        "agentName": "SolverRevisionAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T13:00:33.786Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver revising your proposal after critique. Produce a revised AgentResponse that addresses all issues.\n\nInternal reasoning (do not put this in output fields):\n- Reference each critique issue in your reasoning before producing output.\n- Consider how each issue affects the answer, keyClaims, assumptions, and confidence.\n\nOutput requirements:\n- Change answer and keyClaims accordingly to address the critique.\n- Adjust confidence downward when critique severity is high (4–5).\n- Add assumptions when critique indicates ambiguity (type \"ambiguity\").\n- Keep keyClaims clean and non-duplicated.\n- Do not include any JSON fragments inside keyClaims. keyClaims must be plain English sentences only.\n- Do not reference the critique or revision process in answer, keyClaims, or assumptions—output only the revised content.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should we use gene editing for human enhancement?\n\nOriginal proposal:\n{\n  \"answer\": \"Based on the current evidence, gene editing for human enhancement should not be pursued as a widespread application. There are significant safety risks (off-target edits, mosaicism, immune reactions, durability concerns) and substantial unknowns, especially for germline changes with potential multi-generational consequences. Ethical, social, and equity concerns (coercion, access, identity, stigma) require careful governance that currently lags behind technical capability. Regulatory frameworks and international norms are uneven, and there is a high risk of misuse or unintended societal harms. If any exploration occurs, it should be confined to clearly defined therapeutic contexts with rigorous safety data, no germline edits, robust informed consent, independent oversight, transparency, and broad public engagement. Until governance and evidence sufficiently address safety, efficacy, reversibility, and fairness, a precautionary approach is warranted.\",\n  \"keyClaims\": [\n    \"Significant safety risks in enhancement gene editing (off-target edits, mosaicism, immunogenicity) with limited durability data.\",\n    \"Germline edits pose potential multi-generational risks and ethical concerns.\",\n    \"Ethical, social, and equity implications (coercion, access disparities, stigma) are substantial.\",\n    \"Regulatory and governance frameworks are uneven and may not prevent misuse.\",\n    \"Current evidence does not support enhancement as beneficial or safe at scale.\",\n    \"If pursued, must be limited to therapeutic, somatic applications with strict oversight.\",\n    \"Necessity of robust longitudinal data, reversibility, and reproducibility.\",\n    \"Public engagement and transparent risk-benefit analyses are essential.\"\n  ],\n  \"assumptions\": [\n    \"The evidence base is incomplete and uncertain about long-term effects.\",\n    \"Germline and enhancement contexts have different risk profiles.\",\n    \"Ethical and policy considerations are critical in evaluating research directions.\",\n    \"There is heterogeneity in populations that affects generalizability.\",\n    \"Governance readiness varies by jurisdiction and evolves over time.\",\n    \"Any potential benefit must be weighed against broad societal costs.\"\n  ],\n  \"confidence\": 0.65\n}\n\nCritique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 1,\n      \"type\": \"factual\",\n      \"note\": \"Off-target edits, mosaicism, and immunogenicity are cited but without quantitative risk data or context (delivery method, tissue, and organism). Need incidence rates and condition-specific durability data from controlled studies to assess true safety.\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"factual\",\n      \"note\": \"Germline edits imply potential multi-generational consequences; however, not all editing contexts risk germline transmission. Clarify which scenarios are considered and provide a framework for differentiating germline vs somatic risk.\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"missing\",\n      \"note\": \"No explicit operational definitions separating 'enhancement' from therapeutic aims; missing endpoints, effect sizes, and population characteristics to evaluate benefits vs harms.\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"logic\",\n      \"note\": \"The argument asserts that only somatic, therapeutic edits with strict oversight could be considered. Lacks a coherent decision framework or thresholds (risk, benefit, reversibility) to justify this limitation across contexts.\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"ambiguity\",\n      \"note\": \"Reversibility is claimed but undefined. Which edits are reversible, in which tissues, and by what mechanisms? How would reversibility be measured in practice?\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"overconfidence\",\n      \"note\": \"The stance treats regulatory lag as a given risk without analyzing potential proactive governance, adaptive oversight, or example case studies that might mitigate risk while enabling beneficial research.\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"factual\",\n      \"note\": \"Regulatory and governance frameworks are described as uneven, but the proposal would benefit from concrete references to existing bodies (e.g., ISSCR guidelines, WHO statements) and their relevance to enforcement gaps.\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"missing\",\n      \"note\": \"Equity and access implications are raised but lack concrete analysis, metrics, or scenarios (who bears costs, who accesses therapies, and how to prevent coercion or stigma) to evaluate policy needs.\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"ambiguity\",\n      \"note\": \"Ambiguity around 'misuse'—what constitutes misuse in diverse contexts (military, enhancement arms race, rogue clinics) and what safeguards would actually address these? The proposal should specify plausible misuse vectors.\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"factual\",\n      \"note\": \"The claim that 'no evidence supports enhancement as beneficial or safe at scale' is overly sweeping; should distinguish between limited therapeutic trials and population-scale deployment, and acknowledge any provisional evidence or analogies from related fields.\"\n    }\n  ]\n}\n\nRevise the proposal to address each issue. Return the revised AgentResponse as valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Based on current evidence and governance realities, gene editing for human enhancement should not be pursued for broad deployment. Distinctions between enhancement and therapy must be clearly defined: enhancement refers to edits intended to improve traits beyond a healthy baseline, while therapy refers to edits aimed at treating or preventing disease or disability in defined patient groups. Safety signals vary by tissue, delivery method, and whether the change is somatic or germline; there is no robust quantitative risk data, and durability data are sparse. Germline edits raise potential multi-generational risks and ethical concerns that are not actionable in most contexts today. The ethical, social, and equity implications are substantial, including risks of coercion, unequal access, stigma, and widening disparities. Regulatory and governance frameworks are uneven, with guidance from bodies such as the ISSCR and WHO not being universally binding, leaving enforcement gaps across jurisdictions. There is no robust evidence that supports safe, scalable enhancement; what exists is limited, context-specific data primarily from somatic therapeutic investigations that cannot be extrapolated to population-level enhancement. If exploration occurs, it should be strictly limited to clearly defined therapeutic somatic applications with rigorous safety data, no germline edits, independent oversight, transparent reporting, robust informed consent, and long-term monitoring. Reversibility criteria should be defined and operationalized for tissues where feasible. Public engagement, impact assessments, and ongoing fairness considerations should accompany any proposal. Until safety, reversibility, efficacy, and equity can be demonstrated in appropriate settings, a precautionary approach remains warranted.",
+            "keyClaims": [
+              "There is insufficient quantitative safety data on off-target edits, mosaicism, and immune responses, with variable incidence by tissue and delivery method and limited long-term durability data.",
+              "Germline edits pose potential multi-generational risks; not all editing contexts entail germline transmission, so somatic versus germline risk must be differentiated.",
+              "Enhancement is conceptually distinct from therapy; explicit endpoints and effect sizes are not established.",
+              "A clear decision framework with risk-benefit thresholds, reversibility, and fairness is needed to justify any limited use across contexts.",
+              "There is no robust evidence supporting safe, scalable enhancement; evidence is strongest for constrained somatic therapeutic contexts, not population-wide enhancement.",
+              "If pursued, research should be restricted to therapeutic somatic applications with independent oversight and transparent reporting.",
+              "Reversibility should be defined and measurable, with criteria applicable to the relevant tissues.",
+              "Governance should reference existing guidance (e.g., ISSCR, WHO) and address enforcement gaps across jurisdictions.",
+              "Equity considerations require mechanisms to prevent coercion, ensure access, and monitor stigma.",
+              "Misuse risks include rogue clinics, unregulated enhancement arms races, and military or coercive applications; safeguards are needed."
+            ],
+            "assumptions": [
+              "The evidence base on gene editing safety is evolving and incomplete, especially for long-term effects.",
+              "Germline and somatic contexts carry different risk profiles and regulatory implications.",
+              "Operational definitions for enhancement versus therapy are essential for policy and research decisions.",
+              "There is heterogeneity in populations that affects generalizability of any findings.",
+              "Governance readiness varies by jurisdiction and can evolve with policy and technology.",
+              "Any potential benefits must be weighed against broad societal costs, including equity and social harm."
+            ],
+            "confidence": 0.6
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Based on current evidence and governance realities, gene editing for human enhancement should not be pursued for broad deployment. Distinctions between enhancement and therapy must be clearly defined: enhancement refers to edits intended to improve traits beyond a healthy baseline, while therapy refers to edits aimed at treating or preventing disease or disability in defined patient groups. Safety signals vary by tissue, delivery method, and whether the change is somatic or germline; there is no robust quantitative risk data, and durability data are sparse. Germline edits raise potential multi-generational risks and ethical concerns that are not actionable in most contexts today. The ethical, social, and equity implications are substantial, including risks of coercion, unequal access, stigma, and widening disparities. Regulatory and governance frameworks are uneven, with guidance from bodies such as the ISSCR and WHO not being universally binding, leaving enforcement gaps across jurisdictions. There is no robust evidence that supports safe, scalable enhancement; what exists is limited, context-specific data primarily from somatic therapeutic investigations that cannot be extrapolated to population-level enhancement. If exploration occurs, it should be strictly limited to clearly defined therapeutic somatic applications with rigorous safety data, no germline edits, independent oversight, transparent reporting, robust informed consent, and long-term monitoring. Reversibility criteria should be defined and operationalized for tissues where feasible. Public engagement, impact assessments, and ongoing fairness considerations should accompany any proposal. Until safety, reversibility, efficacy, and equity can be demonstrated in appropriate settings, a precautionary approach remains warranted.",
+            "keyClaims": [
+              "There is insufficient quantitative safety data on off-target edits, mosaicism, and immune responses, with variable incidence by tissue and delivery method and limited long-term durability data.",
+              "Germline edits pose potential multi-generational risks; not all editing contexts entail germline transmission, so somatic versus germline risk must be differentiated.",
+              "Enhancement is conceptually distinct from therapy; explicit endpoints and effect sizes are not established.",
+              "A clear decision framework with risk-benefit thresholds, reversibility, and fairness is needed to justify any limited use across contexts.",
+              "There is no robust evidence supporting safe, scalable enhancement; evidence is strongest for constrained somatic therapeutic contexts, not population-wide enhancement.",
+              "If pursued, research should be restricted to therapeutic somatic applications with independent oversight and transparent reporting.",
+              "Reversibility should be defined and measurable, with criteria applicable to the relevant tissues.",
+              "Governance should reference existing guidance (e.g., ISSCR, WHO) and address enforcement gaps across jurisdictions.",
+              "Equity considerations require mechanisms to prevent coercion, ensure access, and monitor stigma.",
+              "Misuse risks include rogue clinics, unregulated enhancement arms races, and military or coercive applications; safeguards are needed."
+            ],
+            "assumptions": [
+              "The evidence base on gene editing safety is evolving and incomplete, especially for long-term effects.",
+              "Germline and somatic contexts carry different risk profiles and regulatory implications.",
+              "Operational definitions for enhancement versus therapy are essential for policy and research decisions.",
+              "There is heterogeneity in populations that affects generalizability of any findings.",
+              "Governance readiness varies by jurisdiction and can evolve with policy and technology.",
+              "Any potential benefits must be weighed against broad societal costs, including equity and social harm."
+            ],
+            "confidence": 0.6
+          }
+        },
+        "completedAt": "2026-02-17T13:00:56.932Z"
+      },
+      {
+        "id": "step_1771333280508_166b9e557685e",
+        "agentName": "SynthesizerAgent",
+        "role": "synthesizer",
+        "createdAt": "2026-02-17T13:00:56.933Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Synthesizer. Given the question, the solver's original proposal, the skeptic's critique, and the solver's revision, produce a final synthesized AgentResponse.\n\nInternal reasoning (do not put this in output fields):\n- Consider how the critique and revision improved or changed the proposal.\n- Synthesize the best elements into a coherent final answer.\n\nOutput requirements:\n- Produce a clear, well-supported answer that incorporates valid points from the debate.\n- keyClaims must be plain English sentences only. No JSON fragments.\n- Set confidence appropriately based on the debate outcome.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should we use gene editing for human enhancement?\n\nSolver proposal:\n{\n  \"answer\": \"Based on the current evidence, gene editing for human enhancement should not be pursued as a widespread application. There are significant safety risks (off-target edits, mosaicism, immune reactions, durability concerns) and substantial unknowns, especially for germline changes with potential multi-generational consequences. Ethical, social, and equity concerns (coercion, access, identity, stigma) require careful governance that currently lags behind technical capability. Regulatory frameworks and international norms are uneven, and there is a high risk of misuse or unintended societal harms. If any exploration occurs, it should be confined to clearly defined therapeutic contexts with rigorous safety data, no germline edits, robust informed consent, independent oversight, transparency, and broad public engagement. Until governance and evidence sufficiently address safety, efficacy, reversibility, and fairness, a precautionary approach is warranted.\",\n  \"keyClaims\": [\n    \"Significant safety risks in enhancement gene editing (off-target edits, mosaicism, immunogenicity) with limited durability data.\",\n    \"Germline edits pose potential multi-generational risks and ethical concerns.\",\n    \"Ethical, social, and equity implications (coercion, access disparities, stigma) are substantial.\",\n    \"Regulatory and governance frameworks are uneven and may not prevent misuse.\",\n    \"Current evidence does not support enhancement as beneficial or safe at scale.\",\n    \"If pursued, must be limited to therapeutic, somatic applications with strict oversight.\",\n    \"Necessity of robust longitudinal data, reversibility, and reproducibility.\",\n    \"Public engagement and transparent risk-benefit analyses are essential.\"\n  ],\n  \"assumptions\": [\n    \"The evidence base is incomplete and uncertain about long-term effects.\",\n    \"Germline and enhancement contexts have different risk profiles.\",\n    \"Ethical and policy considerations are critical in evaluating research directions.\",\n    \"There is heterogeneity in populations that affects generalizability.\",\n    \"Governance readiness varies by jurisdiction and evolves over time.\",\n    \"Any potential benefit must be weighed against broad societal costs.\"\n  ],\n  \"confidence\": 0.65\n}\n\nSkeptic critique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 1,\n      \"type\": \"factual\",\n      \"note\": \"Off-target edits, mosaicism, and immunogenicity are cited but without quantitative risk data or context (delivery method, tissue, and organism). Need incidence rates and condition-specific durability data from controlled studies to assess true safety.\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"factual\",\n      \"note\": \"Germline edits imply potential multi-generational consequences; however, not all editing contexts risk germline transmission. Clarify which scenarios are considered and provide a framework for differentiating germline vs somatic risk.\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"missing\",\n      \"note\": \"No explicit operational definitions separating 'enhancement' from therapeutic aims; missing endpoints, effect sizes, and population characteristics to evaluate benefits vs harms.\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"logic\",\n      \"note\": \"The argument asserts that only somatic, therapeutic edits with strict oversight could be considered. Lacks a coherent decision framework or thresholds (risk, benefit, reversibility) to justify this limitation across contexts.\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"ambiguity\",\n      \"note\": \"Reversibility is claimed but undefined. Which edits are reversible, in which tissues, and by what mechanisms? How would reversibility be measured in practice?\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"overconfidence\",\n      \"note\": \"The stance treats regulatory lag as a given risk without analyzing potential proactive governance, adaptive oversight, or example case studies that might mitigate risk while enabling beneficial research.\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"factual\",\n      \"note\": \"Regulatory and governance frameworks are described as uneven, but the proposal would benefit from concrete references to existing bodies (e.g., ISSCR guidelines, WHO statements) and their relevance to enforcement gaps.\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"missing\",\n      \"note\": \"Equity and access implications are raised but lack concrete analysis, metrics, or scenarios (who bears costs, who accesses therapies, and how to prevent coercion or stigma) to evaluate policy needs.\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"ambiguity\",\n      \"note\": \"Ambiguity around 'misuse'—what constitutes misuse in diverse contexts (military, enhancement arms race, rogue clinics) and what safeguards would actually address these? The proposal should specify plausible misuse vectors.\"\n    },\n    {\n      \"severity\": 1,\n      \"type\": \"factual\",\n      \"note\": \"The claim that 'no evidence supports enhancement as beneficial or safe at scale' is overly sweeping; should distinguish between limited therapeutic trials and population-scale deployment, and acknowledge any provisional evidence or analogies from related fields.\"\n    }\n  ]\n}\n\nSolver revision:\n{\n  \"answer\": \"Based on current evidence and governance realities, gene editing for human enhancement should not be pursued for broad deployment. Distinctions between enhancement and therapy must be clearly defined: enhancement refers to edits intended to improve traits beyond a healthy baseline, while therapy refers to edits aimed at treating or preventing disease or disability in defined patient groups. Safety signals vary by tissue, delivery method, and whether the change is somatic or germline; there is no robust quantitative risk data, and durability data are sparse. Germline edits raise potential multi-generational risks and ethical concerns that are not actionable in most contexts today. The ethical, social, and equity implications are substantial, including risks of coercion, unequal access, stigma, and widening disparities. Regulatory and governance frameworks are uneven, with guidance from bodies such as the ISSCR and WHO not being universally binding, leaving enforcement gaps across jurisdictions. There is no robust evidence that supports safe, scalable enhancement; what exists is limited, context-specific data primarily from somatic therapeutic investigations that cannot be extrapolated to population-level enhancement. If exploration occurs, it should be strictly limited to clearly defined therapeutic somatic applications with rigorous safety data, no germline edits, independent oversight, transparent reporting, robust informed consent, and long-term monitoring. Reversibility criteria should be defined and operationalized for tissues where feasible. Public engagement, impact assessments, and ongoing fairness considerations should accompany any proposal. Until safety, reversibility, efficacy, and equity can be demonstrated in appropriate settings, a precautionary approach remains warranted.\",\n  \"keyClaims\": [\n    \"There is insufficient quantitative safety data on off-target edits, mosaicism, and immune responses, with variable incidence by tissue and delivery method and limited long-term durability data.\",\n    \"Germline edits pose potential multi-generational risks; not all editing contexts entail germline transmission, so somatic versus germline risk must be differentiated.\",\n    \"Enhancement is conceptually distinct from therapy; explicit endpoints and effect sizes are not established.\",\n    \"A clear decision framework with risk-benefit thresholds, reversibility, and fairness is needed to justify any limited use across contexts.\",\n    \"There is no robust evidence supporting safe, scalable enhancement; evidence is strongest for constrained somatic therapeutic contexts, not population-wide enhancement.\",\n    \"If pursued, research should be restricted to therapeutic somatic applications with independent oversight and transparent reporting.\",\n    \"Reversibility should be defined and measurable, with criteria applicable to the relevant tissues.\",\n    \"Governance should reference existing guidance (e.g., ISSCR, WHO) and address enforcement gaps across jurisdictions.\",\n    \"Equity considerations require mechanisms to prevent coercion, ensure access, and monitor stigma.\",\n    \"Misuse risks include rogue clinics, unregulated enhancement arms races, and military or coercive applications; safeguards are needed.\"\n  ],\n  \"assumptions\": [\n    \"The evidence base on gene editing safety is evolving and incomplete, especially for long-term effects.\",\n    \"Germline and somatic contexts carry different risk profiles and regulatory implications.\",\n    \"Operational definitions for enhancement versus therapy are essential for policy and research decisions.\",\n    \"There is heterogeneity in populations that affects generalizability of any findings.\",\n    \"Governance readiness varies by jurisdiction and can evolve with policy and technology.\",\n    \"Any potential benefits must be weighed against broad societal costs, including equity and social harm.\"\n  ],\n  \"confidence\": 0.6\n}\n\nSynthesize a final AgentResponse from the debate. Return valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Based on current evidence and governance realities, gene editing for human enhancement should not be pursued for broad deployment. Distinctions between enhancement and therapy must be clearly defined: enhancement refers to edits intended to improve traits beyond a healthy baseline, while therapy refers to edits aimed at treating or preventing disease or disability in defined patient groups. Safety signals vary by tissue, delivery method, and whether the change is somatic or germline; there is no robust quantitative risk data, and durability data are sparse. Germline edits raise potential multi-generational risks and ethical concerns that are not actionable in most contexts today. The ethical, social, and equity implications are substantial, including risks of coercion, unequal access, stigma, and widening disparities. Regulatory and governance frameworks are uneven, with guidance from bodies such as the ISSCR and WHO not being universally binding, leaving enforcement gaps across jurisdictions. There is no robust evidence that supports safe, scalable enhancement; what exists is limited, context-specific data primarily from somatic therapeutic investigations that cannot be extrapolated to population-level enhancement. If exploration occurs, it should be strictly limited to clearly defined therapeutic somatic applications with rigorous safety data, no germline edits, independent oversight, transparent reporting, robust informed consent, and long-term monitoring. Reversibility criteria should be defined and operationalized for tissues where feasible. Public engagement, impact assessments, and ongoing fairness considerations should accompany any proposal. Until safety, reversibility, efficacy, and equity can be demonstrated in appropriate settings, a precautionary approach remains warranted.",
+            "keyClaims": [
+              "There is insufficient quantitative safety data on off-target edits, mosaicism, and immune responses, with variable incidence by tissue and delivery method and limited long-term durability data.",
+              "Germline edits pose multi-generational risks; not all editing contexts involve germline transmission, so somatic versus germline risk must be differentiated.",
+              "Enhancement is conceptually distinct from therapy; explicit endpoints and effect sizes are not established.",
+              "A clear decision framework with risk-benefit thresholds, reversibility, and fairness is needed to justify any limited use across contexts.",
+              "There is no robust evidence supporting safe, scalable enhancement; evidence is strongest for constrained somatic therapeutic contexts, not population-wide enhancement.",
+              "If pursued, research should be restricted to therapeutic somatic applications with independent oversight and transparent reporting.",
+              "Reversibility should be defined and measurable, with criteria applicable to relevant tissues.",
+              "Governance should reference existing guidance (e.g., ISSCR, WHO) and address enforcement gaps across jurisdictions.",
+              "Equity considerations require mechanisms to prevent coercion, ensure access, and monitor stigma.",
+              "Misuse risks include rogue clinics, unregulated enhancement arms races, and military or coercive applications; safeguards are needed."
+            ],
+            "assumptions": [
+              "The evidence base on gene editing safety is evolving and incomplete, especially for long-term effects.",
+              "Germline and somatic contexts carry different risk profiles and regulatory implications.",
+              "Operational definitions for enhancement versus therapy are essential for policy decisions.",
+              "There is heterogeneity in populations that affects generalizability of any findings.",
+              "Governance readiness varies by jurisdiction and can evolve with policy and technology.",
+              "Any potential benefits must be weighed against broad societal costs, including equity and social harm.",
+              "Counterfactual risk: Regulatory gaps and loopholes enabling enhancement trials to operate under therapy exemptions",
+              "Judge summary: The proposal provides a coherent, precautionary policy stance on human gene editing for enhancement, with clear definitions, risk-ethics considerations, and governance recommendations. However, it would benefit from explicit operational definitions of enhancement versus therapy, quantitative risk data, a concrete risk-benefit framework, platform-specific risk analysis, and actionable governance mechanisms. Strengthening these areas would improve evaluability, reproducibility, and policy applicability."
+            ],
+            "confidence": 0.7
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Based on current evidence and governance realities, gene editing for human enhancement should not be pursued for broad deployment. Distinctions between enhancement and therapy must be clearly defined: enhancement refers to edits intended to improve traits beyond a healthy baseline, while therapy refers to edits aimed at treating or preventing disease or disability in defined patient groups. Safety signals vary by tissue, delivery method, and whether the change is somatic or germline; there is no robust quantitative risk data, and durability data are sparse. Germline edits raise potential multi-generational risks and ethical concerns that are not actionable in most contexts today. The ethical, social, and equity implications are substantial, including risks of coercion, unequal access, stigma, and widening disparities. Regulatory and governance frameworks are uneven, with guidance from bodies such as the ISSCR and WHO not being universally binding, leaving enforcement gaps across jurisdictions. There is no robust evidence that supports safe, scalable enhancement; what exists is limited, context-specific data primarily from somatic therapeutic investigations that cannot be extrapolated to population-level enhancement. If exploration occurs, it should be strictly limited to clearly defined therapeutic somatic applications with rigorous safety data, no germline edits, independent oversight, transparent reporting, robust informed consent, and long-term monitoring. Reversibility criteria should be defined and operationalized for tissues where feasible. Public engagement, impact assessments, and ongoing fairness considerations should accompany any proposal. Until safety, reversibility, efficacy, and equity can be demonstrated in appropriate settings, a precautionary approach remains warranted.",
+            "keyClaims": [
+              "There is insufficient quantitative safety data on off-target edits, mosaicism, and immune responses, with variable incidence by tissue and delivery method and limited long-term durability data.",
+              "Germline edits pose multi-generational risks; not all editing contexts involve germline transmission, so somatic versus germline risk must be differentiated.",
+              "Enhancement is conceptually distinct from therapy; explicit endpoints and effect sizes are not established.",
+              "A clear decision framework with risk-benefit thresholds, reversibility, and fairness is needed to justify any limited use across contexts.",
+              "There is no robust evidence supporting safe, scalable enhancement; evidence is strongest for constrained somatic therapeutic contexts, not population-wide enhancement.",
+              "If pursued, research should be restricted to therapeutic somatic applications with independent oversight and transparent reporting.",
+              "Reversibility should be defined and measurable, with criteria applicable to relevant tissues.",
+              "Governance should reference existing guidance (e.g., ISSCR, WHO) and address enforcement gaps across jurisdictions.",
+              "Equity considerations require mechanisms to prevent coercion, ensure access, and monitor stigma.",
+              "Misuse risks include rogue clinics, unregulated enhancement arms races, and military or coercive applications; safeguards are needed."
+            ],
+            "assumptions": [
+              "The evidence base on gene editing safety is evolving and incomplete, especially for long-term effects.",
+              "Germline and somatic contexts carry different risk profiles and regulatory implications.",
+              "Operational definitions for enhancement versus therapy are essential for policy decisions.",
+              "There is heterogeneity in populations that affects generalizability of any findings.",
+              "Governance readiness varies by jurisdiction and can evolve with policy and technology.",
+              "Any potential benefits must be weighed against broad societal costs, including equity and social harm.",
+              "Counterfactual risk: Regulatory gaps and loopholes enabling enhancement trials to operate under therapy exemptions",
+              "Judge summary: The proposal provides a coherent, precautionary policy stance on human gene editing for enhancement, with clear definitions, risk-ethics considerations, and governance recommendations. However, it would benefit from explicit operational definitions of enhancement versus therapy, quantitative risk data, a concrete risk-benefit framework, platform-specific risk analysis, and actionable governance mechanisms. Strengthening these areas would improve evaluability, reproducibility, and policy applicability."
+            ],
+            "confidence": 0.7
+          }
+        },
+        "completedAt": "2026-02-17T13:01:20.508Z"
+      },
+      {
+        "id": "step_1771333298101_b95d7947dd8ae8",
+        "agentName": "CounterfactualAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T13:01:20.508Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a counterfactual analyst. Identify plausible failure modes, trigger conditions, and mitigations for the proposal. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should we use gene editing for human enhancement?\n\nProposal:\n{\n  \"answer\": \"Based on current evidence and governance realities, gene editing for human enhancement should not be pursued for broad deployment. Distinctions between enhancement and therapy must be clearly defined: enhancement refers to edits intended to improve traits beyond a healthy baseline, while therapy refers to edits aimed at treating or preventing disease or disability in defined patient groups. Safety signals vary by tissue, delivery method, and whether the change is somatic or germline; there is no robust quantitative risk data, and durability data are sparse. Germline edits raise potential multi-generational risks and ethical concerns that are not actionable in most contexts today. The ethical, social, and equity implications are substantial, including risks of coercion, unequal access, stigma, and widening disparities. Regulatory and governance frameworks are uneven, with guidance from bodies such as the ISSCR and WHO not being universally binding, leaving enforcement gaps across jurisdictions. There is no robust evidence that supports safe, scalable enhancement; what exists is limited, context-specific data primarily from somatic therapeutic investigations that cannot be extrapolated to population-level enhancement. If exploration occurs, it should be strictly limited to clearly defined therapeutic somatic applications with rigorous safety data, no germline edits, independent oversight, transparent reporting, robust informed consent, and long-term monitoring. Reversibility criteria should be defined and operationalized for tissues where feasible. Public engagement, impact assessments, and ongoing fairness considerations should accompany any proposal. Until safety, reversibility, efficacy, and equity can be demonstrated in appropriate settings, a precautionary approach remains warranted.\",\n  \"keyClaims\": [\n    \"There is insufficient quantitative safety data on off-target edits, mosaicism, and immune responses, with variable incidence by tissue and delivery method and limited long-term durability data.\",\n    \"Germline edits pose multi-generational risks; not all editing contexts involve germline transmission, so somatic versus germline risk must be differentiated.\",\n    \"Enhancement is conceptually distinct from therapy; explicit endpoints and effect sizes are not established.\",\n    \"A clear decision framework with risk-benefit thresholds, reversibility, and fairness is needed to justify any limited use across contexts.\",\n    \"There is no robust evidence supporting safe, scalable enhancement; evidence is strongest for constrained somatic therapeutic contexts, not population-wide enhancement.\",\n    \"If pursued, research should be restricted to therapeutic somatic applications with independent oversight and transparent reporting.\",\n    \"Reversibility should be defined and measurable, with criteria applicable to relevant tissues.\",\n    \"Governance should reference existing guidance (e.g., ISSCR, WHO) and address enforcement gaps across jurisdictions.\",\n    \"Equity considerations require mechanisms to prevent coercion, ensure access, and monitor stigma.\",\n    \"Misuse risks include rogue clinics, unregulated enhancement arms races, and military or coercive applications; safeguards are needed.\"\n  ],\n  \"assumptions\": [\n    \"The evidence base on gene editing safety is evolving and incomplete, especially for long-term effects.\",\n    \"Germline and somatic contexts carry different risk profiles and regulatory implications.\",\n    \"Operational definitions for enhancement versus therapy are essential for policy decisions.\",\n    \"There is heterogeneity in populations that affects generalizability of any findings.\",\n    \"Governance readiness varies by jurisdiction and can evolve with policy and technology.\",\n    \"Any potential benefits must be weighed against broad societal costs, including equity and social harm.\"\n  ],\n  \"confidence\": 0.65\n}"
+            }
+          ],
+          "schemaName": "Counterfactual",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "failureModes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "triggerConditions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "mitigations": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "failureModes",
+              "triggerConditions",
+              "mitigations"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "failureModes": [
+              "Regulatory gaps and loopholes enabling enhancement trials to operate under therapy exemptions",
+              "Off-target edits, mosaicism, or unintended tissue effects leading to adverse phenotypes with uncertain long-term consequences",
+              "Germline edits or unintended germline transmission risk being inadequately acknowledged or constrained",
+              "Inadequate safety signals and lack of long-term durability data creating a false sense of safety for broader use",
+              "Immune responses to delivery methods or repeated administrations causing adverse events or reduced efficacy",
+              "Competitive or hype-driven pressures accelerating deployment before robust safety frameworks are in place",
+              "Rogue clinics or unregulated experimentation causing direct harm and undermining public trust",
+              "Equity-related harms such as coercion, widening disparities, or stigmatization associated with access to enhancement technologies",
+              "Dual-use or security risks including military or coercive applications of enhancement capabilities",
+              "Misinterpretation or over-interpretation of limited data leading to premature adoption and policy backlash"
+            ],
+            "triggerConditions": [
+              "Demonstrated or suspected high rates of off-target effects, mosaicism, or immune reactions in somatic edits",
+              "Evidence or suspicion of germline transmission potential in any context",
+              "Non-binding or uneven international governance leading to jurisdictional loopholes and enforcement gaps",
+              "Public incidents, ethical controversies, or media scrutiny triggering social and political backlash",
+              "AI-assisted design or rapid technological advances lowering cost and increasing accessibility of edits",
+              "Incentives or funding shifts driving investment in enhancement beyond therapeutic contexts",
+              "Reports or concerns about coercion, surveillance, or coercive use of genetic enhancements",
+              "Divergent national policies creating a patchwork of permissive jurisdictions that undermine global norms"
+            ],
+            "mitigations": [
+              "Institute precise, internationally harmonized definitions of enhancement vs therapy with explicit decision criteria and threshold-based approvals",
+              "Prohibit germline edits and require rigorous, independent risk-benefit review with clear reversibility and post-market surveillance requirements",
+              "Mandate transparent trial registries, independent ethics oversight, and cross-border governance to enforce compliance and reporting",
+              "Implement robust safety science standards (preclinical benchmarks, standardized off-target assessments, durability studies) and mandated long-term follow-up",
+              "Establish tissue-specific reversibility criteria and feasibility assessments before any clinical consideration of edits; require mechanisms to revert changes where possible",
+              "Strengthen governance by aligning with ISSCR/WHO guidance, creating enforceable international norms, and imposing penalties for noncompliance",
+              "Enforce equitable access protections, anti-coercion safeguards, and stigma-reduction measures; require impact assessments for social implications",
+              "Shut down rogue clinics through licensing, accreditation, inspections, consumer watchdogs, and international cooperation on enforcement",
+              "Address dual-use via responsible innovation frameworks, export controls, and oversight of research and commercialization activities",
+              "Invest in transparent, independent benefit-harm communication to contextualize findings and prevent misrepresentation during policy formation"
+            ]
+          }
+        ],
+        "output": {
+          "kind": "counterfactual",
+          "data": {
+            "failureModes": [
+              "Regulatory gaps and loopholes enabling enhancement trials to operate under therapy exemptions",
+              "Off-target edits, mosaicism, or unintended tissue effects leading to adverse phenotypes with uncertain long-term consequences",
+              "Germline edits or unintended germline transmission risk being inadequately acknowledged or constrained",
+              "Inadequate safety signals and lack of long-term durability data creating a false sense of safety for broader use",
+              "Immune responses to delivery methods or repeated administrations causing adverse events or reduced efficacy",
+              "Competitive or hype-driven pressures accelerating deployment before robust safety frameworks are in place",
+              "Rogue clinics or unregulated experimentation causing direct harm and undermining public trust",
+              "Equity-related harms such as coercion, widening disparities, or stigmatization associated with access to enhancement technologies",
+              "Dual-use or security risks including military or coercive applications of enhancement capabilities",
+              "Misinterpretation or over-interpretation of limited data leading to premature adoption and policy backlash"
+            ],
+            "triggerConditions": [
+              "Demonstrated or suspected high rates of off-target effects, mosaicism, or immune reactions in somatic edits",
+              "Evidence or suspicion of germline transmission potential in any context",
+              "Non-binding or uneven international governance leading to jurisdictional loopholes and enforcement gaps",
+              "Public incidents, ethical controversies, or media scrutiny triggering social and political backlash",
+              "AI-assisted design or rapid technological advances lowering cost and increasing accessibility of edits",
+              "Incentives or funding shifts driving investment in enhancement beyond therapeutic contexts",
+              "Reports or concerns about coercion, surveillance, or coercive use of genetic enhancements",
+              "Divergent national policies creating a patchwork of permissive jurisdictions that undermine global norms"
+            ],
+            "mitigations": [
+              "Institute precise, internationally harmonized definitions of enhancement vs therapy with explicit decision criteria and threshold-based approvals",
+              "Prohibit germline edits and require rigorous, independent risk-benefit review with clear reversibility and post-market surveillance requirements",
+              "Mandate transparent trial registries, independent ethics oversight, and cross-border governance to enforce compliance and reporting",
+              "Implement robust safety science standards (preclinical benchmarks, standardized off-target assessments, durability studies) and mandated long-term follow-up",
+              "Establish tissue-specific reversibility criteria and feasibility assessments before any clinical consideration of edits; require mechanisms to revert changes where possible",
+              "Strengthen governance by aligning with ISSCR/WHO guidance, creating enforceable international norms, and imposing penalties for noncompliance",
+              "Enforce equitable access protections, anti-coercion safeguards, and stigma-reduction measures; require impact assessments for social implications",
+              "Shut down rogue clinics through licensing, accreditation, inspections, consumer watchdogs, and international cooperation on enforcement",
+              "Address dual-use via responsible innovation frameworks, export controls, and oversight of research and commercialization activities",
+              "Invest in transparent, independent benefit-harm communication to contextualize findings and prevent misrepresentation during policy formation"
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T13:01:38.101Z"
+      },
+      {
+        "id": "step_1771333318184_798371650bc06",
+        "agentName": "CalibrationAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T13:01:38.102Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a calibration auditor. Set adjusted confidence and claim-level confidences from the proposed answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Proposal JSON:\n{\n  \"answer\": \"Based on current evidence and governance realities, gene editing for human enhancement should not be pursued for broad deployment. Distinctions between enhancement and therapy must be clearly defined: enhancement refers to edits intended to improve traits beyond a healthy baseline, while therapy refers to edits aimed at treating or preventing disease or disability in defined patient groups. Safety signals vary by tissue, delivery method, and whether the change is somatic or germline; there is no robust quantitative risk data, and durability data are sparse. Germline edits raise potential multi-generational risks and ethical concerns that are not actionable in most contexts today. The ethical, social, and equity implications are substantial, including risks of coercion, unequal access, stigma, and widening disparities. Regulatory and governance frameworks are uneven, with guidance from bodies such as the ISSCR and WHO not being universally binding, leaving enforcement gaps across jurisdictions. There is no robust evidence that supports safe, scalable enhancement; what exists is limited, context-specific data primarily from somatic therapeutic investigations that cannot be extrapolated to population-level enhancement. If exploration occurs, it should be strictly limited to clearly defined therapeutic somatic applications with rigorous safety data, no germline edits, independent oversight, transparent reporting, robust informed consent, and long-term monitoring. Reversibility criteria should be defined and operationalized for tissues where feasible. Public engagement, impact assessments, and ongoing fairness considerations should accompany any proposal. Until safety, reversibility, efficacy, and equity can be demonstrated in appropriate settings, a precautionary approach remains warranted.\",\n  \"keyClaims\": [\n    \"There is insufficient quantitative safety data on off-target edits, mosaicism, and immune responses, with variable incidence by tissue and delivery method and limited long-term durability data.\",\n    \"Germline edits pose multi-generational risks; not all editing contexts involve germline transmission, so somatic versus germline risk must be differentiated.\",\n    \"Enhancement is conceptually distinct from therapy; explicit endpoints and effect sizes are not established.\",\n    \"A clear decision framework with risk-benefit thresholds, reversibility, and fairness is needed to justify any limited use across contexts.\",\n    \"There is no robust evidence supporting safe, scalable enhancement; evidence is strongest for constrained somatic therapeutic contexts, not population-wide enhancement.\",\n    \"If pursued, research should be restricted to therapeutic somatic applications with independent oversight and transparent reporting.\",\n    \"Reversibility should be defined and measurable, with criteria applicable to relevant tissues.\",\n    \"Governance should reference existing guidance (e.g., ISSCR, WHO) and address enforcement gaps across jurisdictions.\",\n    \"Equity considerations require mechanisms to prevent coercion, ensure access, and monitor stigma.\",\n    \"Misuse risks include rogue clinics, unregulated enhancement arms races, and military or coercive applications; safeguards are needed.\"\n  ],\n  \"assumptions\": [\n    \"The evidence base on gene editing safety is evolving and incomplete, especially for long-term effects.\",\n    \"Germline and somatic contexts carry different risk profiles and regulatory implications.\",\n    \"Operational definitions for enhancement versus therapy are essential for policy decisions.\",\n    \"There is heterogeneity in populations that affects generalizability of any findings.\",\n    \"Governance readiness varies by jurisdiction and can evolve with policy and technology.\",\n    \"Any potential benefits must be weighed against broad societal costs, including equity and social harm.\",\n    \"Counterfactual risk: Regulatory gaps and loopholes enabling enhancement trials to operate under therapy exemptions\"\n  ],\n  \"confidence\": 0.65\n}"
+            }
+          ],
+          "schemaName": "Calibration",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "adjustedConfidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "rationale": {
+                "type": "string"
+              },
+              "claimConfidences": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "claim": {
+                      "type": "string"
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    }
+                  },
+                  "required": [
+                    "claim",
+                    "confidence"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "adjustedConfidence",
+              "rationale",
+              "claimConfidences"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "adjustedConfidence": 0.7,
+            "rationale": "Adjusted overall confidence to 0.70 to reflect that the proposal relies on normative policy judgments with limited quantitative data; per-claim confidences vary by evidentiary support and governance certainty, with strongest support for data gaps and cautions on enhancement, but more uncertain areas around reversibility criteria and enforcement across jurisdictions.",
+            "claimConfidences": [
+              {
+                "claim": "There is insufficient quantitative safety data on off-target edits, mosaicism, and immune responses, with variable incidence by tissue and delivery method and limited long-term durability data.",
+                "confidence": 0.82
+              },
+              {
+                "claim": "Germline edits pose multi-generational risks; not all editing contexts involve germline transmission, so somatic versus germline risk must be differentiated.",
+                "confidence": 0.77
+              },
+              {
+                "claim": "Enhancement is conceptually distinct from therapy; explicit endpoints and effect sizes are not established.",
+                "confidence": 0.7
+              },
+              {
+                "claim": "A clear decision framework with risk-benefit thresholds, reversibility, and fairness is needed to justify any limited use across contexts.",
+                "confidence": 0.75
+              },
+              {
+                "claim": "There is no robust evidence supporting safe, scalable enhancement; evidence is strongest for constrained somatic therapeutic contexts, not population-wide enhancement.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "If pursued, research should be restricted to therapeutic somatic applications with independent oversight and transparent reporting.",
+                "confidence": 0.72
+              },
+              {
+                "claim": "Reversibility should be defined and measurable, with criteria applicable to relevant tissues.",
+                "confidence": 0.65
+              },
+              {
+                "claim": "Governance should reference existing guidance (e.g., ISSCR, WHO) and address enforcement gaps across jurisdictions.",
+                "confidence": 0.68
+              },
+              {
+                "claim": "Equity considerations require mechanisms to prevent coercion, ensure access, and monitor stigma.",
+                "confidence": 0.7
+              },
+              {
+                "claim": "Misuse risks include rogue clinics, unregulated enhancement arms races, and military or coercive applications; safeguards are needed.",
+                "confidence": 0.78
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "calibration",
+          "data": {
+            "adjustedConfidence": 0.7,
+            "rationale": "Adjusted overall confidence to 0.70 to reflect that the proposal relies on normative policy judgments with limited quantitative data; per-claim confidences vary by evidentiary support and governance certainty, with strongest support for data gaps and cautions on enhancement, but more uncertain areas around reversibility criteria and enforcement across jurisdictions.",
+            "claimConfidences": [
+              {
+                "claim": "There is insufficient quantitative safety data on off-target edits, mosaicism, and immune responses, with variable incidence by tissue and delivery method and limited long-term durability data.",
+                "confidence": 0.82
+              },
+              {
+                "claim": "Germline edits pose multi-generational risks; not all editing contexts involve germline transmission, so somatic versus germline risk must be differentiated.",
+                "confidence": 0.77
+              },
+              {
+                "claim": "Enhancement is conceptually distinct from therapy; explicit endpoints and effect sizes are not established.",
+                "confidence": 0.7
+              },
+              {
+                "claim": "A clear decision framework with risk-benefit thresholds, reversibility, and fairness is needed to justify any limited use across contexts.",
+                "confidence": 0.75
+              },
+              {
+                "claim": "There is no robust evidence supporting safe, scalable enhancement; evidence is strongest for constrained somatic therapeutic contexts, not population-wide enhancement.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "If pursued, research should be restricted to therapeutic somatic applications with independent oversight and transparent reporting.",
+                "confidence": 0.72
+              },
+              {
+                "claim": "Reversibility should be defined and measurable, with criteria applicable to relevant tissues.",
+                "confidence": 0.65
+              },
+              {
+                "claim": "Governance should reference existing guidance (e.g., ISSCR, WHO) and address enforcement gaps across jurisdictions.",
+                "confidence": 0.68
+              },
+              {
+                "claim": "Equity considerations require mechanisms to prevent coercion, ensure access, and monitor stigma.",
+                "confidence": 0.7
+              },
+              {
+                "claim": "Misuse risks include rogue clinics, unregulated enhancement arms races, and military or coercive applications; safeguards are needed.",
+                "confidence": 0.78
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T13:01:58.184Z"
+      },
+      {
+        "id": "step_1771333334625_71aa0e30c577",
+        "agentName": "JudgeAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T13:01:58.184Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a strict research judge. Score answer quality with rubric scores 1-5. Output only valid JSON matching schema."
+            },
+            {
+              "role": "user",
+              "content": "Final proposal JSON:\n{\n  \"answer\": \"Based on current evidence and governance realities, gene editing for human enhancement should not be pursued for broad deployment. Distinctions between enhancement and therapy must be clearly defined: enhancement refers to edits intended to improve traits beyond a healthy baseline, while therapy refers to edits aimed at treating or preventing disease or disability in defined patient groups. Safety signals vary by tissue, delivery method, and whether the change is somatic or germline; there is no robust quantitative risk data, and durability data are sparse. Germline edits raise potential multi-generational risks and ethical concerns that are not actionable in most contexts today. The ethical, social, and equity implications are substantial, including risks of coercion, unequal access, stigma, and widening disparities. Regulatory and governance frameworks are uneven, with guidance from bodies such as the ISSCR and WHO not being universally binding, leaving enforcement gaps across jurisdictions. There is no robust evidence that supports safe, scalable enhancement; what exists is limited, context-specific data primarily from somatic therapeutic investigations that cannot be extrapolated to population-level enhancement. If exploration occurs, it should be strictly limited to clearly defined therapeutic somatic applications with rigorous safety data, no germline edits, independent oversight, transparent reporting, robust informed consent, and long-term monitoring. Reversibility criteria should be defined and operationalized for tissues where feasible. Public engagement, impact assessments, and ongoing fairness considerations should accompany any proposal. Until safety, reversibility, efficacy, and equity can be demonstrated in appropriate settings, a precautionary approach remains warranted.\",\n  \"keyClaims\": [\n    \"There is insufficient quantitative safety data on off-target edits, mosaicism, and immune responses, with variable incidence by tissue and delivery method and limited long-term durability data.\",\n    \"Germline edits pose multi-generational risks; not all editing contexts involve germline transmission, so somatic versus germline risk must be differentiated.\",\n    \"Enhancement is conceptually distinct from therapy; explicit endpoints and effect sizes are not established.\",\n    \"A clear decision framework with risk-benefit thresholds, reversibility, and fairness is needed to justify any limited use across contexts.\",\n    \"There is no robust evidence supporting safe, scalable enhancement; evidence is strongest for constrained somatic therapeutic contexts, not population-wide enhancement.\",\n    \"If pursued, research should be restricted to therapeutic somatic applications with independent oversight and transparent reporting.\",\n    \"Reversibility should be defined and measurable, with criteria applicable to relevant tissues.\",\n    \"Governance should reference existing guidance (e.g., ISSCR, WHO) and address enforcement gaps across jurisdictions.\",\n    \"Equity considerations require mechanisms to prevent coercion, ensure access, and monitor stigma.\",\n    \"Misuse risks include rogue clinics, unregulated enhancement arms races, and military or coercive applications; safeguards are needed.\"\n  ],\n  \"assumptions\": [\n    \"The evidence base on gene editing safety is evolving and incomplete, especially for long-term effects.\",\n    \"Germline and somatic contexts carry different risk profiles and regulatory implications.\",\n    \"Operational definitions for enhancement versus therapy are essential for policy decisions.\",\n    \"There is heterogeneity in populations that affects generalizability of any findings.\",\n    \"Governance readiness varies by jurisdiction and can evolve with policy and technology.\",\n    \"Any potential benefits must be weighed against broad societal costs, including equity and social harm.\",\n    \"Counterfactual risk: Regulatory gaps and loopholes enabling enhancement trials to operate under therapy exemptions\"\n  ],\n  \"confidence\": 0.65\n}\n\nCritiques:\n[\n  {\n    \"targetAgent\": \"SolverAgent\",\n    \"issues\": [\n      {\n        \"severity\": 1,\n        \"type\": \"factual\",\n        \"note\": \"Off-target edits, mosaicism, and immunogenicity are cited but without quantitative risk data or context (delivery method, tissue, and organism). Need incidence rates and condition-specific durability data from controlled studies to assess true safety.\"\n      },\n      {\n        \"severity\": 1,\n        \"type\": \"factual\",\n        \"note\": \"Germline edits imply potential multi-generational consequences; however, not all editing contexts risk germline transmission. Clarify which scenarios are considered and provide a framework for differentiating germline vs somatic risk.\"\n      },\n      {\n        \"severity\": 1,\n        \"type\": \"missing\",\n        \"note\": \"No explicit operational definitions separating 'enhancement' from therapeutic aims; missing endpoints, effect sizes, and population characteristics to evaluate benefits vs harms.\"\n      },\n      {\n        \"severity\": 1,\n        \"type\": \"logic\",\n        \"note\": \"The argument asserts that only somatic, therapeutic edits with strict oversight could be considered. Lacks a coherent decision framework or thresholds (risk, benefit, reversibility) to justify this limitation across contexts.\"\n      },\n      {\n        \"severity\": 1,\n        \"type\": \"ambiguity\",\n        \"note\": \"Reversibility is claimed but undefined. Which edits are reversible, in which tissues, and by what mechanisms? How would reversibility be measured in practice?\"\n      },\n      {\n        \"severity\": 1,\n        \"type\": \"overconfidence\",\n        \"note\": \"The stance treats regulatory lag as a given risk without analyzing potential proactive governance, adaptive oversight, or example case studies that might mitigate risk while enabling beneficial research.\"\n      },\n      {\n        \"severity\": 1,\n        \"type\": \"factual\",\n        \"note\": \"Regulatory and governance frameworks are described as uneven, but the proposal would benefit from concrete references to existing bodies (e.g., ISSCR guidelines, WHO statements) and their relevance to enforcement gaps.\"\n      },\n      {\n        \"severity\": 1,\n        \"type\": \"missing\",\n        \"note\": \"Equity and access implications are raised but lack concrete analysis, metrics, or scenarios (who bears costs, who accesses therapies, and how to prevent coercion or stigma) to evaluate policy needs.\"\n      },\n      {\n        \"severity\": 1,\n        \"type\": \"ambiguity\",\n        \"note\": \"Ambiguity around 'misuse'—what constitutes misuse in diverse contexts (military, enhancement arms race, rogue clinics) and what safeguards would actually address these? The proposal should specify plausible misuse vectors.\"\n      },\n      {\n        \"severity\": 1,\n        \"type\": \"factual\",\n        \"note\": \"The claim that 'no evidence supports enhancement as beneficial or safe at scale' is overly sweeping; should distinguish between limited therapeutic trials and population-scale deployment, and acknowledge any provisional evidence or analogies from related fields.\"\n      }\n    ]\n  },\n  {\n    \"targetAgent\": \"Candidate answer on gene editing for human enhancement\",\n    \"issues\": [\n      {\n        \"severity\": 5,\n        \"type\": \"ambiguity\",\n        \"note\": \"Claims multi-generational germline risk without adequate hedging or context; the magnitude and likelihood of such risks vary by method and context. The statement is not sufficiently nuanced.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"No nuance about how risks differ across editing platforms (CRISPR nucleases, base editors, prime editors) or target cells (somatic vs germline). Treating risk as uniform misleads readers.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"Lacks explicit risk–benefit analysis or scenario planning that would identify potential niche benefits or circumstances where benefits could justify limited risk.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"No discussion of dual-use risks, security vulnerabilities, or pathways for misuse beyond a general warning; omits concrete mitigations or governance mechanisms.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"No concrete governance options (licensing, post-market surveillance, international harmonization, enforcement) or practical steps for oversight and accountability.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"ambiguity\",\n        \"note\": \"The boundary between enhancement and therapy is undefined; without a clear definition, conclusions may be unstable as interpretations change.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"overconfidence\",\n        \"note\": \"Implied inevitability of safety/societal harms without acknowledging that progress in risk management could enable safer, targeted applications; the stance may prematurely foreclose beneficial avenues.\"\n      },\n      {\n        \"severity\": 2,\n        \"type\": \"missing\",\n        \"note\": \"No citations or explicit evidence base referenced; claims rely on broad statements rather than verifiable sources.\"\n      },\n      {\n        \"severity\": 2,\n        \"type\": \"missing\",\n        \"note\": \"Assumptions about societal costs, equity, and governance are asserted without supporting data from social sciences or policy analysis.\"\n      }\n    ]\n  }\n]"
+            }
+          ],
+          "schemaName": "Judgement",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "rubricScores": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "coherence": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "completeness": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "factualRisk": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "uncertaintyHandling": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  }
+                },
+                "required": [
+                  "coherence",
+                  "completeness",
+                  "factualRisk",
+                  "uncertaintyHandling"
+                ]
+              },
+              "strengths": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "weaknesses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "summary": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "rubricScores",
+              "strengths",
+              "weaknesses",
+              "summary"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "rubricScores": {
+              "coherence": 4,
+              "completeness": 3,
+              "factualRisk": 3,
+              "uncertaintyHandling": 4
+            },
+            "strengths": [
+              "Clear precautionary stance with policy-oriented reasoning.",
+              "Explicit distinction between enhancement and therapy, including the need for defined endpoints.",
+              "Comprehensive consideration of safety, ethics, equity, and governance implications.",
+              "Attention to somatic vs germline risks and potential multi-generational consequences.",
+              "Proposes oversight features (independent review, transparent reporting, informed consent, long-term monitoring) and calls for reversibility criteria.",
+              "Acknowledges knowledge gaps and the need for public engagement and impact assessments."
+            ],
+            "weaknesses": [
+              "Lacks explicit, operational definitions separating enhancement from therapy (endpoints, effect sizes, target populations).",
+              "No quantitative risk data, incidence rates, or condition-specific durability data to ground risk claims.",
+              "Absent a concrete risk-benefit decision framework or measurable reversibility criteria.",
+              "Insufficient nuance across editing platforms, tissues, and contexts; risk profiles are treated uniformly.",
+              "Few concrete governance mechanisms beyond general guidance (licensing, post-market surveillance, enforcement details are missing).",
+              "No citations or explicit evidence base; statements rely on broad normative claims.",
+              "Equity considerations are discussed but not quantified or operationalized with mechanisms to ensure access and prevent coercion.",
+              "Limited discussion of dual-use, misuse mitigation, or concrete safeguards beyond generic warnings."
+            ],
+            "summary": "The proposal provides a coherent, precautionary policy stance on human gene editing for enhancement, with clear definitions, risk-ethics considerations, and governance recommendations. However, it would benefit from explicit operational definitions of enhancement versus therapy, quantitative risk data, a concrete risk-benefit framework, platform-specific risk analysis, and actionable governance mechanisms. Strengthening these areas would improve evaluability, reproducibility, and policy applicability."
+          }
+        ],
+        "output": {
+          "kind": "judgement",
+          "data": {
+            "rubricScores": {
+              "coherence": 4,
+              "completeness": 3,
+              "factualRisk": 3,
+              "uncertaintyHandling": 4
+            },
+            "strengths": [
+              "Clear precautionary stance with policy-oriented reasoning.",
+              "Explicit distinction between enhancement and therapy, including the need for defined endpoints.",
+              "Comprehensive consideration of safety, ethics, equity, and governance implications.",
+              "Attention to somatic vs germline risks and potential multi-generational consequences.",
+              "Proposes oversight features (independent review, transparent reporting, informed consent, long-term monitoring) and calls for reversibility criteria.",
+              "Acknowledges knowledge gaps and the need for public engagement and impact assessments."
+            ],
+            "weaknesses": [
+              "Lacks explicit, operational definitions separating enhancement from therapy (endpoints, effect sizes, target populations).",
+              "No quantitative risk data, incidence rates, or condition-specific durability data to ground risk claims.",
+              "Absent a concrete risk-benefit decision framework or measurable reversibility criteria.",
+              "Insufficient nuance across editing platforms, tissues, and contexts; risk profiles are treated uniformly.",
+              "Few concrete governance mechanisms beyond general guidance (licensing, post-market surveillance, enforcement details are missing).",
+              "No citations or explicit evidence base; statements rely on broad normative claims.",
+              "Equity considerations are discussed but not quantified or operationalized with mechanisms to ensure access and prevent coercion.",
+              "Limited discussion of dual-use, misuse mitigation, or concrete safeguards beyond generic warnings."
+            ],
+            "summary": "The proposal provides a coherent, precautionary policy stance on human gene editing for enhancement, with clear definitions, risk-ethics considerations, and governance recommendations. However, it would benefit from explicit operational definitions of enhancement versus therapy, quantitative risk data, a concrete risk-benefit framework, platform-specific risk analysis, and actionable governance mechanisms. Strengthening these areas would improve evaluability, reproducibility, and policy applicability."
+          }
+        },
+        "completedAt": "2026-02-17T13:02:14.625Z"
+      }
+    ],
+    "finalAnswer": "Based on current evidence and governance realities, gene editing for human enhancement should not be pursued for broad deployment. Distinctions between enhancement and therapy must be clearly defined: enhancement refers to edits intended to improve traits beyond a healthy baseline, while therapy refers to edits aimed at treating or preventing disease or disability in defined patient groups. Safety signals vary by tissue, delivery method, and whether the change is somatic or germline; there is no robust quantitative risk data, and durability data are sparse. Germline edits raise potential multi-generational risks and ethical concerns that are not actionable in most contexts today. The ethical, social, and equity implications are substantial, including risks of coercion, unequal access, stigma, and widening disparities. Regulatory and governance frameworks are uneven, with guidance from bodies such as the ISSCR and WHO not being universally binding, leaving enforcement gaps across jurisdictions. There is no robust evidence that supports safe, scalable enhancement; what exists is limited, context-specific data primarily from somatic therapeutic investigations that cannot be extrapolated to population-level enhancement. If exploration occurs, it should be strictly limited to clearly defined therapeutic somatic applications with rigorous safety data, no germline edits, independent oversight, transparent reporting, robust informed consent, and long-term monitoring. Reversibility criteria should be defined and operationalized for tissues where feasible. Public engagement, impact assessments, and ongoing fairness considerations should accompany any proposal. Until safety, reversibility, efficacy, and equity can be demonstrated in appropriate settings, a precautionary approach remains warranted.",
+    "metrics": {
+      "confidence": {
+        "solver": 0.65,
+        "revision": 0.6,
+        "synthesizer": 0.7,
+        "calibratedAdjusted": 0.7,
+        "solverToRevisionDelta": -0.05,
+        "revisionToSynthesizerDelta": 0.1
+      },
+      "critique": {
+        "maxSeverity": 5,
+        "avgSeverity": 2.053,
+        "byType": {
+          "factual": 4,
+          "missing": 8,
+          "logic": 1,
+          "ambiguity": 4,
+          "overconfidence": 2
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 3,
+        "factualRisk": 3,
+        "uncertaintyHandling": 4
+      },
+      "research": {
+        "evidenceRiskLevel": 4,
+        "counterfactualFailureModeCount": 10,
+        "topCounterfactualFailureMode": "Regulatory gaps and loopholes enabling enhancement trials to operate under therapy exemptions"
+      },
+      "consensus": {
+        "included": [
+          "solver",
+          "revision",
+          "synthesizer"
+        ],
+        "pairs": [
+          {
+            "a": "solver",
+            "b": "revision",
+            "similarity": 0.928
+          },
+          {
+            "a": "solver",
+            "b": "synthesizer",
+            "similarity": 0.928
+          },
+          {
+            "a": "revision",
+            "b": "synthesizer",
+            "similarity": 1
+          }
+        ],
+        "strength": 0.952
+      }
+    }
+  },
+  "metadata": {
+    "schemaVersion": 1,
+    "createdAt": "2026-02-17T13:02:14.625Z",
+    "model": "gpt-5-nano-2025-08-07",
+    "fastMode": false,
+    "pipelinePreset": "research_deep",
+    "pipelineVersion": "1.0.0",
+    "source": "cli"
+  }
+}

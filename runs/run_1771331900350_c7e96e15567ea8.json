@@ -1,0 +1,1421 @@
+{
+  "kind": "run",
+  "id": "run_1771331900350_c7e96e15567ea8",
+  "question": "Should governments have powers to regulate or shut down AI systems deemed high-risk?",
+  "run": {
+    "id": "run_1771331900350_c7e96e15567ea8",
+    "createdAt": "2026-02-17T12:38:20.350Z",
+    "question": "Should governments have powers to regulate or shut down AI systems deemed high-risk?",
+    "steps": [
+      {
+        "id": "step_1771331735066_1b987f5e885e8",
+        "agentName": "QuestionDecomposerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T12:35:12.708Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a research planner. Decompose the question into sub-questions and hypotheses. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should governments have powers to regulate or shut down AI systems deemed high-risk?"
+            }
+          ],
+          "schemaName": "QuestionDecomposition",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "framing": {
+                "type": "string"
+              },
+              "subQuestions": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "hypotheses": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "framing",
+              "subQuestions",
+              "hypotheses"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "framing": "Policy framing: evaluate whether governments should have explicit powers to regulate or suspend AI systems deemed high-risk, and how such powers should be designed to balance safety, innovation, civil liberties, and international coordination.",
+            "subQuestions": [
+              "How should 'high-risk' AI be defined, and what criteria or risk frameworks should be used?",
+              "What regulatory authorities and tools should governments have (e.g., licensing, mandatory risk assessments, audits, emergency shutdown powers) and under what conditions?",
+              "What processes should govern designation, review, appeal, and transparency of high-risk AI classifications?",
+              "What due-process, privacy, and civil-liberties safeguards are required in high-risk AI regulation?",
+              "What is the expected impact of regulation on innovation, entrepreneurship, investment, and global competitiveness?",
+              "How can regulatory design minimize chilling effects and avoid stifling beneficial AI development?",
+              "What is the role of international coordination, harmonization, and cross-border enforcement to prevent regulatory arbitrage?",
+              "What enforcement mechanisms, penalties, and oversight arrangements ensure compliance across jurisdictions?",
+              "What implementation considerations exist in terms of capacity, funding, timelines, and institutional structure?",
+              "How should effectiveness be assessed and updated (metrics, independent review, post-implementation evaluation)?",
+              "What sector-specific considerations (health, finance, critical infrastructure, defense) or cross-cutting concerns (dual-use, data governance) should inform regulation?",
+              "What potential unintended consequences (overreach, reduced safety incentives, inequitable impact) exist and how can they be mitigated?"
+            ],
+            "hypotheses": [
+              "H1: Government powers to regulate or shut down high-risk AI reduce the frequency and severity of AI-caused harms when thresholds and procedures are well-specified.",
+              "H2: Overbroad or vague powers increase regulatory uncertainty, impede innovation, and raise compliance costs.",
+              "H3: Clear, transparent, and participatory criteria for high-risk designation improve legitimacy and compliance.",
+              "H4: International coordination and harmonization of standards reduce regulatory fragmentation and prevent competitive disadvantages.",
+              "H5: Regulation is most effective when paired with ongoing safety-by-design incentives and licensing with continuous monitoring rather than one-off approvals.",
+              "H6: Enforcement capacity and technical expertise are the primary determinants of regulatory effectiveness; without them, powers may be underutilized.",
+              "H7: Emergency/temporary shutdown powers can prevent acute harm but must include safeguards against misuse and disproportionate disruption.",
+              "H8: Regulatory costs disproportionately burden startups and smaller firms unless targeted exemptions or scaled requirements exist.",
+              "H9: Independent, technically competent regulatory bodies outperform politicized agencies for safety outcomes.",
+              "H10: Public disclosure of decision criteria increases legitimacy but may reveal sensitive information; balancing transparency and security is essential.",
+              "H11: Sector-specific regulation (e.g., health, finance, critical infrastructure) will require tailored standards and enforcement mechanisms.",
+              "H12: The design of high-risk AI regulation will continue to evolve; sunset clauses and periodic reviews improve adaptability."
+            ]
+          }
+        ],
+        "output": {
+          "kind": "decomposition",
+          "data": {
+            "framing": "Policy framing: evaluate whether governments should have explicit powers to regulate or suspend AI systems deemed high-risk, and how such powers should be designed to balance safety, innovation, civil liberties, and international coordination.",
+            "subQuestions": [
+              "How should 'high-risk' AI be defined, and what criteria or risk frameworks should be used?",
+              "What regulatory authorities and tools should governments have (e.g., licensing, mandatory risk assessments, audits, emergency shutdown powers) and under what conditions?",
+              "What processes should govern designation, review, appeal, and transparency of high-risk AI classifications?",
+              "What due-process, privacy, and civil-liberties safeguards are required in high-risk AI regulation?",
+              "What is the expected impact of regulation on innovation, entrepreneurship, investment, and global competitiveness?",
+              "How can regulatory design minimize chilling effects and avoid stifling beneficial AI development?",
+              "What is the role of international coordination, harmonization, and cross-border enforcement to prevent regulatory arbitrage?",
+              "What enforcement mechanisms, penalties, and oversight arrangements ensure compliance across jurisdictions?",
+              "What implementation considerations exist in terms of capacity, funding, timelines, and institutional structure?",
+              "How should effectiveness be assessed and updated (metrics, independent review, post-implementation evaluation)?",
+              "What sector-specific considerations (health, finance, critical infrastructure, defense) or cross-cutting concerns (dual-use, data governance) should inform regulation?",
+              "What potential unintended consequences (overreach, reduced safety incentives, inequitable impact) exist and how can they be mitigated?"
+            ],
+            "hypotheses": [
+              "H1: Government powers to regulate or shut down high-risk AI reduce the frequency and severity of AI-caused harms when thresholds and procedures are well-specified.",
+              "H2: Overbroad or vague powers increase regulatory uncertainty, impede innovation, and raise compliance costs.",
+              "H3: Clear, transparent, and participatory criteria for high-risk designation improve legitimacy and compliance.",
+              "H4: International coordination and harmonization of standards reduce regulatory fragmentation and prevent competitive disadvantages.",
+              "H5: Regulation is most effective when paired with ongoing safety-by-design incentives and licensing with continuous monitoring rather than one-off approvals.",
+              "H6: Enforcement capacity and technical expertise are the primary determinants of regulatory effectiveness; without them, powers may be underutilized.",
+              "H7: Emergency/temporary shutdown powers can prevent acute harm but must include safeguards against misuse and disproportionate disruption.",
+              "H8: Regulatory costs disproportionately burden startups and smaller firms unless targeted exemptions or scaled requirements exist.",
+              "H9: Independent, technically competent regulatory bodies outperform politicized agencies for safety outcomes.",
+              "H10: Public disclosure of decision criteria increases legitimacy but may reveal sensitive information; balancing transparency and security is essential.",
+              "H11: Sector-specific regulation (e.g., health, finance, critical infrastructure) will require tailored standards and enforcement mechanisms.",
+              "H12: The design of high-risk AI regulation will continue to evolve; sunset clauses and periodic reviews improve adaptability."
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T12:35:35.066Z"
+      },
+      {
+        "id": "step_1771331753443_aec8ff5291543",
+        "agentName": "EvidencePlannerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T12:35:35.067Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are an evidence planning specialist. Produce a compact evidence and verification plan for the question. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should governments have powers to regulate or shut down AI systems deemed high-risk?"
+            }
+          ],
+          "schemaName": "EvidencePlan",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "evidenceRequirements": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "verificationChecks": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "majorUnknowns": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "riskLevel": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              }
+            },
+            "required": [
+              "evidenceRequirements",
+              "verificationChecks",
+              "majorUnknowns",
+              "riskLevel"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "evidenceRequirements": [
+              "Empirical data on AI risk incidents, harms, and near-misses across domains (safety failures, bias, privacy violations, security breaches) and their frequencies.",
+              "Evidence on effectiveness and consequences of regulatory interventions in comparable tech sectors (data protection, consumer safety, product recalls) and AI-specific regulation outcomes (safety, transparency, accountability).",
+              "Cost-benefit analyses of potential regulation of high-risk AI, including regulatory burden, compliance costs, and impact on innovation and deployment.",
+              "Case studies of existing governance regimes (EU AI Act, US proposals, China guidelines) detailing enforcement designs, penalties, and real-world outcomes.",
+              "Stakeholder perspectives from policymakers, industry, researchers, civil society, and affected communities.",
+              "Feasibility and reliability of enforcement tools (audits, testing, incident reporting, certifications, shutdown mechanisms) including resource requirements.",
+              "Definitions and criteria used to classify 'high-risk' AI (risk matrices, harm typologies) and their limitations.",
+              "Legal and human rights analyses on due process, proportionality, and rights-respecting safeguards in shutdown or restriction regimes.",
+              "International coordination considerations and risks of regulatory arbitrage; pathways to harmonization.",
+              "Historical and contemporary evidence on consequences of temporarily or permanently shutting down critical systems during crises."
+            ],
+            "verificationChecks": [
+              "Cross-check findings with peer-reviewed literature, systematic reviews, and official regulatory impact assessments.",
+              "Triangulate across government reports, independent think tanks, industry analyses, and civil-society evaluations.",
+              "Assess methodological quality: sample size, biases, confounders, time horizon; seek replication across sources.",
+              "Evaluate consistency of 'high-risk' definitions across jurisdictions and over time.",
+              "Check for conflicts of interest and transparency of data sources; document provenance of evidence.",
+              "Perform sensitivity analyses on design assumptions (stringency, scope, enforcement) and scenario-based outcomes.",
+              "Include multiple jurisdictional case studies to test generalizability.",
+              "Compare intended vs. observed outcomes (safety improvements, innovation metrics, deployment speed)."
+            ],
+            "majorUnknowns": [
+              "How to define and operationalize 'high-risk' AI consistently across sectors and evolving technology.",
+              "Net effects of regulation on innovation, competitiveness, and deployment in different economies.",
+              "Optimal mix of prescriptive regulation, standards, and market-based incentives.",
+              "Enforceability and practical impacts of shutdown powers (collateral harm, dual-use risks, rollback challenges).",
+              "Resource requirements and scalability of monitoring, auditing, and enforcement.",
+              "Risks of regulatory capture, political influences, and inconsistent enforcement across jurisdictions.",
+              "Potential chilling effects on research and innovation due to broad risk classifications."
+            ],
+            "riskLevel": 3
+          }
+        ],
+        "output": {
+          "kind": "evidence_plan",
+          "data": {
+            "evidenceRequirements": [
+              "Empirical data on AI risk incidents, harms, and near-misses across domains (safety failures, bias, privacy violations, security breaches) and their frequencies.",
+              "Evidence on effectiveness and consequences of regulatory interventions in comparable tech sectors (data protection, consumer safety, product recalls) and AI-specific regulation outcomes (safety, transparency, accountability).",
+              "Cost-benefit analyses of potential regulation of high-risk AI, including regulatory burden, compliance costs, and impact on innovation and deployment.",
+              "Case studies of existing governance regimes (EU AI Act, US proposals, China guidelines) detailing enforcement designs, penalties, and real-world outcomes.",
+              "Stakeholder perspectives from policymakers, industry, researchers, civil society, and affected communities.",
+              "Feasibility and reliability of enforcement tools (audits, testing, incident reporting, certifications, shutdown mechanisms) including resource requirements.",
+              "Definitions and criteria used to classify 'high-risk' AI (risk matrices, harm typologies) and their limitations.",
+              "Legal and human rights analyses on due process, proportionality, and rights-respecting safeguards in shutdown or restriction regimes.",
+              "International coordination considerations and risks of regulatory arbitrage; pathways to harmonization.",
+              "Historical and contemporary evidence on consequences of temporarily or permanently shutting down critical systems during crises."
+            ],
+            "verificationChecks": [
+              "Cross-check findings with peer-reviewed literature, systematic reviews, and official regulatory impact assessments.",
+              "Triangulate across government reports, independent think tanks, industry analyses, and civil-society evaluations.",
+              "Assess methodological quality: sample size, biases, confounders, time horizon; seek replication across sources.",
+              "Evaluate consistency of 'high-risk' definitions across jurisdictions and over time.",
+              "Check for conflicts of interest and transparency of data sources; document provenance of evidence.",
+              "Perform sensitivity analyses on design assumptions (stringency, scope, enforcement) and scenario-based outcomes.",
+              "Include multiple jurisdictional case studies to test generalizability.",
+              "Compare intended vs. observed outcomes (safety improvements, innovation metrics, deployment speed)."
+            ],
+            "majorUnknowns": [
+              "How to define and operationalize 'high-risk' AI consistently across sectors and evolving technology.",
+              "Net effects of regulation on innovation, competitiveness, and deployment in different economies.",
+              "Optimal mix of prescriptive regulation, standards, and market-based incentives.",
+              "Enforceability and practical impacts of shutdown powers (collateral harm, dual-use risks, rollback challenges).",
+              "Resource requirements and scalability of monitoring, auditing, and enforcement.",
+              "Risks of regulatory capture, political influences, and inconsistent enforcement across jurisdictions.",
+              "Potential chilling effects on research and innovation due to broad risk classifications."
+            ],
+            "riskLevel": 3
+          }
+        },
+        "completedAt": "2026-02-17T12:35:53.443Z"
+      },
+      {
+        "id": "step_1771331768453_30d8aa3a213798",
+        "agentName": "SolverAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T12:35:53.444Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.4,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver. Produce a direct, helpful answer. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should governments have powers to regulate or shut down AI systems deemed high-risk?\n\nEvidence plan:\n{\n  \"evidenceRequirements\": [\n    \"Empirical data on AI risk incidents, harms, and near-misses across domains (safety failures, bias, privacy violations, security breaches) and their frequencies.\",\n    \"Evidence on effectiveness and consequences of regulatory interventions in comparable tech sectors (data protection, consumer safety, product recalls) and AI-specific regulation outcomes (safety, transparency, accountability).\",\n    \"Cost-benefit analyses of potential regulation of high-risk AI, including regulatory burden, compliance costs, and impact on innovation and deployment.\",\n    \"Case studies of existing governance regimes (EU AI Act, US proposals, China guidelines) detailing enforcement designs, penalties, and real-world outcomes.\",\n    \"Stakeholder perspectives from policymakers, industry, researchers, civil society, and affected communities.\",\n    \"Feasibility and reliability of enforcement tools (audits, testing, incident reporting, certifications, shutdown mechanisms) including resource requirements.\",\n    \"Definitions and criteria used to classify 'high-risk' AI (risk matrices, harm typologies) and their limitations.\",\n    \"Legal and human rights analyses on due process, proportionality, and rights-respecting safeguards in shutdown or restriction regimes.\",\n    \"International coordination considerations and risks of regulatory arbitrage; pathways to harmonization.\",\n    \"Historical and contemporary evidence on consequences of temporarily or permanently shutting down critical systems during crises.\"\n  ],\n  \"verificationChecks\": [\n    \"Cross-check findings with peer-reviewed literature, systematic reviews, and official regulatory impact assessments.\",\n    \"Triangulate across government reports, independent think tanks, industry analyses, and civil-society evaluations.\",\n    \"Assess methodological quality: sample size, biases, confounders, time horizon; seek replication across sources.\",\n    \"Evaluate consistency of 'high-risk' definitions across jurisdictions and over time.\",\n    \"Check for conflicts of interest and transparency of data sources; document provenance of evidence.\",\n    \"Perform sensitivity analyses on design assumptions (stringency, scope, enforcement) and scenario-based outcomes.\",\n    \"Include multiple jurisdictional case studies to test generalizability.\",\n    \"Compare intended vs. observed outcomes (safety improvements, innovation metrics, deployment speed).\"\n  ],\n  \"majorUnknowns\": [\n    \"How to define and operationalize 'high-risk' AI consistently across sectors and evolving technology.\",\n    \"Net effects of regulation on innovation, competitiveness, and deployment in different economies.\",\n    \"Optimal mix of prescriptive regulation, standards, and market-based incentives.\",\n    \"Enforceability and practical impacts of shutdown powers (collateral harm, dual-use risks, rollback challenges).\",\n    \"Resource requirements and scalability of monitoring, auditing, and enforcement.\",\n    \"Risks of regulatory capture, political influences, and inconsistent enforcement across jurisdictions.\",\n    \"Potential chilling effects on research and innovation due to broad risk classifications.\"\n  ],\n  \"riskLevel\": 3\n}"
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Yes. Governments should have powers to regulate or shut down AI systems deemed high-risk, but only under rights-respecting, proportionate, and transparent safeguards. A risk-based regulatory framework should: clearly define what constitutes 'high-risk' AI; impose enforceable requirements for safety testing, documentation, accountability, and incident reporting; reserve temporary or permanent shutdown or gating powers for situations of imminent, severe harm with due process and clear criteria; ensure proportional penalties, independent oversight, and avenues for redress; and rely on international coordination to reduce regulatory arbitrage and align standards. The aim is to reduce harms while preserving legitimate innovation and democratic values.",
+            "keyClaims": [
+              "Regulation is warranted to prevent documented and potential harms from high-risk AI (safety, bias, privacy, security).",
+              "Shutdown or gating powers are appropriate only when narrowly scoped, proportionate, and governed by due process.",
+              "A combination of testing, auditing, transparency, accountability, and penalties strengthens compliance and effectiveness.",
+              "Independent oversight and rights-respecting safeguards are essential for legitimacy and public trust.",
+              "International coordination helps avoid regulatory arbitrage and promotes harmonized standards."
+            ],
+            "assumptions": [
+              "There exists a social mandate to prevent AI-caused harms to safety, privacy, and rights.",
+              "High-risk AI can be defined and identified with workable criteria across sectors.",
+              "Regulatory design can be calibrated to minimize negative impacts on innovation while reducing harms.",
+              "Enforcement infrastructure (audits, reporting, certifications, shutdown mechanisms) is feasible with adequate resources.",
+              "Due process, proportionality, and safeguards can be integrated into regulatory regimes without making compliance impractically burdensome."
+            ],
+            "confidence": 0.7
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Yes. Governments should have powers to regulate or shut down AI systems deemed high-risk, but only under rights-respecting, proportionate, and transparent safeguards. A risk-based regulatory framework should: clearly define what constitutes 'high-risk' AI; impose enforceable requirements for safety testing, documentation, accountability, and incident reporting; reserve temporary or permanent shutdown or gating powers for situations of imminent, severe harm with due process and clear criteria; ensure proportional penalties, independent oversight, and avenues for redress; and rely on international coordination to reduce regulatory arbitrage and align standards. The aim is to reduce harms while preserving legitimate innovation and democratic values.",
+            "keyClaims": [
+              "Regulation is warranted to prevent documented and potential harms from high-risk AI (safety, bias, privacy, security).",
+              "Shutdown or gating powers are appropriate only when narrowly scoped, proportionate, and governed by due process.",
+              "A combination of testing, auditing, transparency, accountability, and penalties strengthens compliance and effectiveness.",
+              "Independent oversight and rights-respecting safeguards are essential for legitimacy and public trust.",
+              "International coordination helps avoid regulatory arbitrage and promotes harmonized standards."
+            ],
+            "assumptions": [
+              "There exists a social mandate to prevent AI-caused harms to safety, privacy, and rights.",
+              "High-risk AI can be defined and identified with workable criteria across sectors.",
+              "Regulatory design can be calibrated to minimize negative impacts on innovation while reducing harms.",
+              "Enforcement infrastructure (audits, reporting, certifications, shutdown mechanisms) is feasible with adequate resources.",
+              "Due process, proportionality, and safeguards can be integrated into regulatory regimes without making compliance impractically burdensome."
+            ],
+            "confidence": 0.7
+          }
+        },
+        "completedAt": "2026-02-17T12:36:08.453Z"
+      },
+      {
+        "id": "step_1771331797276_ffc038012162b",
+        "agentName": "SkepticAgent",
+        "role": "skeptic",
+        "createdAt": "2026-02-17T12:36:08.454Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Skeptic. Critique the proposal rigorously. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should governments have powers to regulate or shut down AI systems deemed high-risk?\n\nTarget agent: SolverAgent\n\nProposal JSON:\n{\n  \"answer\": \"Yes. Governments should have powers to regulate or shut down AI systems deemed high-risk, but only under rights-respecting, proportionate, and transparent safeguards. A risk-based regulatory framework should: clearly define what constitutes 'high-risk' AI; impose enforceable requirements for safety testing, documentation, accountability, and incident reporting; reserve temporary or permanent shutdown or gating powers for situations of imminent, severe harm with due process and clear criteria; ensure proportional penalties, independent oversight, and avenues for redress; and rely on international coordination to reduce regulatory arbitrage and align standards. The aim is to reduce harms while preserving legitimate innovation and democratic values.\",\n  \"keyClaims\": [\n    \"Regulation is warranted to prevent documented and potential harms from high-risk AI (safety, bias, privacy, security).\",\n    \"Shutdown or gating powers are appropriate only when narrowly scoped, proportionate, and governed by due process.\",\n    \"A combination of testing, auditing, transparency, accountability, and penalties strengthens compliance and effectiveness.\",\n    \"Independent oversight and rights-respecting safeguards are essential for legitimacy and public trust.\",\n    \"International coordination helps avoid regulatory arbitrage and promotes harmonized standards.\"\n  ],\n  \"assumptions\": [\n    \"There exists a social mandate to prevent AI-caused harms to safety, privacy, and rights.\",\n    \"High-risk AI can be defined and identified with workable criteria across sectors.\",\n    \"Regulatory design can be calibrated to minimize negative impacts on innovation while reducing harms.\",\n    \"Enforcement infrastructure (audits, reporting, certifications, shutdown mechanisms) is feasible with adequate resources.\",\n    \"Due process, proportionality, and safeguards can be integrated into regulatory regimes without making compliance impractically burdensome.\"\n  ],\n  \"confidence\": 0.7\n}\n\nFind issues. Prefer factual risk, missing edge cases, ambiguity, and overconfidence."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 5,
+                "type": "factual",
+                "note": "Empirical evidence on the effectiveness of AI risk regulation is mixed; regulation can reduce harms but also risk delays, stifling innovation, or regulatory capture."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Open-source, dual-use, and server/edge deployments may evade controls; the proposal lacks scope for weights, data, APIs, model variants, and deployment contexts."
+              },
+              {
+                "severity": 5,
+                "type": "ambiguity",
+                "note": "Definition of 'high-risk' is not specified; lacks criteria, thresholds, domain-specific considerations, and how risk evolves with new capabilities."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "Due process specifics (who adjudicates, how hearings, timeline, and appeal mechanisms) are not described."
+              },
+              {
+                "severity": 5,
+                "type": "logic",
+                "note": "Assumes reliable real-time assessment of imminent severe harm; in practice, many harms are emergent or latent, risking overreach or delayed action."
+              },
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "Feasibility and sufficiency of enforcement infrastructure (audits, reporting, certifications) depend on resources; small actors may be disproportionately burdened."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "International coordination risks: sovereignty, privacy, and security tensions; harmonization may be impractical and regulatory arbitrage may persist."
+              },
+              {
+                "severity": 4,
+                "type": "overconfidence",
+                "note": "Claims that safeguards can be rights-respecting without dampening safety or innovation may be overly optimistic; trade-offs and long-term effects are uncertain."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "No plan for evaluation, metrics, or sunset/rollback mechanisms to measure effectiveness or correct course."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "What constitutes 'proportionate penalties' is unclear; no guidance on scaling penalties with harm, breach severity, or enforcement discretion."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 5,
+                "type": "factual",
+                "note": "Empirical evidence on the effectiveness of AI risk regulation is mixed; regulation can reduce harms but also risk delays, stifling innovation, or regulatory capture."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Open-source, dual-use, and server/edge deployments may evade controls; the proposal lacks scope for weights, data, APIs, model variants, and deployment contexts."
+              },
+              {
+                "severity": 5,
+                "type": "ambiguity",
+                "note": "Definition of 'high-risk' is not specified; lacks criteria, thresholds, domain-specific considerations, and how risk evolves with new capabilities."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "Due process specifics (who adjudicates, how hearings, timeline, and appeal mechanisms) are not described."
+              },
+              {
+                "severity": 5,
+                "type": "logic",
+                "note": "Assumes reliable real-time assessment of imminent severe harm; in practice, many harms are emergent or latent, risking overreach or delayed action."
+              },
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "Feasibility and sufficiency of enforcement infrastructure (audits, reporting, certifications) depend on resources; small actors may be disproportionately burdened."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "International coordination risks: sovereignty, privacy, and security tensions; harmonization may be impractical and regulatory arbitrage may persist."
+              },
+              {
+                "severity": 4,
+                "type": "overconfidence",
+                "note": "Claims that safeguards can be rights-respecting without dampening safety or innovation may be overly optimistic; trade-offs and long-term effects are uncertain."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "No plan for evaluation, metrics, or sunset/rollback mechanisms to measure effectiveness or correct course."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "What constitutes 'proportionate penalties' is unclear; no guidance on scaling penalties with harm, breach severity, or enforcement discretion."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T12:36:37.276Z"
+      },
+      {
+        "id": "step_1771331812487_1e4852cb13a4c",
+        "agentName": "RedTeamAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T12:36:37.276Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a red-team analyst. Find high-risk failure modes and adversarial weaknesses in the answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should governments have powers to regulate or shut down AI systems deemed high-risk?\n\nCandidate answer JSON:\n{\n  \"answer\": \"Yes. Governments should have powers to regulate or shut down AI systems deemed high-risk, but only under rights-respecting, proportionate, and transparent safeguards. A risk-based regulatory framework should: clearly define what constitutes 'high-risk' AI; impose enforceable requirements for safety testing, documentation, accountability, and incident reporting; reserve temporary or permanent shutdown or gating powers for situations of imminent, severe harm with due process and clear criteria; ensure proportional penalties, independent oversight, and avenues for redress; and rely on international coordination to reduce regulatory arbitrage and align standards. The aim is to reduce harms while preserving legitimate innovation and democratic values.\",\n  \"keyClaims\": [\n    \"Regulation is warranted to prevent documented and potential harms from high-risk AI (safety, bias, privacy, security).\",\n    \"Shutdown or gating powers are appropriate only when narrowly scoped, proportionate, and governed by due process.\",\n    \"A combination of testing, auditing, transparency, accountability, and penalties strengthens compliance and effectiveness.\",\n    \"Independent oversight and rights-respecting safeguards are essential for legitimacy and public trust.\",\n    \"International coordination helps avoid regulatory arbitrage and promotes harmonized standards.\"\n  ],\n  \"assumptions\": [\n    \"There exists a social mandate to prevent AI-caused harms to safety, privacy, and rights.\",\n    \"High-risk AI can be defined and identified with workable criteria across sectors.\",\n    \"Regulatory design can be calibrated to minimize negative impacts on innovation while reducing harms.\",\n    \"Enforcement infrastructure (audits, reporting, certifications, shutdown mechanisms) is feasible with adequate resources.\",\n    \"Due process, proportionality, and safeguards can be integrated into regulatory regimes without making compliance impractically burdensome.\"\n  ],\n  \"confidence\": 0.7\n}\n\nReturn a rigorous critique with severe issues when justified."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "policy-maker",
+            "issues": [
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "No concrete, operational criteria for what constitutes 'high-risk' AI across sectors; without objective thresholds regulation risks broad overreach or under-inclusion."
+              },
+              {
+                "severity": 5,
+                "type": "factual",
+                "note": "Assumes enforcement infrastructure (audits, reporting, shutdown capabilities) is readily feasible and scalable; lacks evidence, cost considerations, and deployment timelines."
+              },
+              {
+                "severity": 5,
+                "type": "ambiguity",
+                "note": "'imminent, severe harm' is underspecified; triggers for temporary shutdown and gating are not defined, risking arbitrary or politicized use."
+              },
+              {
+                "severity": 5,
+                "type": "logic",
+                "note": "Regulation aims to reduce harms while preserving innovation, but no formal risk-benefit or trade-off analysis is presented to justify the balance."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "No detailed due-process framework (appeals, timelines, safe harbors for research, or exemptions for safety testing) to prevent chilling effects on legitimate activity."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "No provisions for governance features like sunset clauses, regular reviews, or adaptive mechanisms to keep pace with AI advances."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "No discussion of governance to mitigate regulatory capture, ensure stakeholder representation, or transparency around enforcement decisions and penalties."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "International coordination is proposed but lacks actionable mechanism, governance structure, or enforcement pathway; cross-border inconsistencies are likely."
+              },
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "Assumes that shutdown/gating can be narrowly scoped across heterogeneous architectures and ecosystems (including open-source contributions), which is often impractical."
+              },
+              {
+                "severity": 4,
+                "type": "overconfidence",
+                "note": "Claims of 'rights-respecting safeguards' without specifying concrete models, metrics, or verification methods; may overestimate legitimacy and public trust."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "policy-maker",
+            "issues": [
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "No concrete, operational criteria for what constitutes 'high-risk' AI across sectors; without objective thresholds regulation risks broad overreach or under-inclusion."
+              },
+              {
+                "severity": 5,
+                "type": "factual",
+                "note": "Assumes enforcement infrastructure (audits, reporting, shutdown capabilities) is readily feasible and scalable; lacks evidence, cost considerations, and deployment timelines."
+              },
+              {
+                "severity": 5,
+                "type": "ambiguity",
+                "note": "'imminent, severe harm' is underspecified; triggers for temporary shutdown and gating are not defined, risking arbitrary or politicized use."
+              },
+              {
+                "severity": 5,
+                "type": "logic",
+                "note": "Regulation aims to reduce harms while preserving innovation, but no formal risk-benefit or trade-off analysis is presented to justify the balance."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "No detailed due-process framework (appeals, timelines, safe harbors for research, or exemptions for safety testing) to prevent chilling effects on legitimate activity."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "No provisions for governance features like sunset clauses, regular reviews, or adaptive mechanisms to keep pace with AI advances."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "No discussion of governance to mitigate regulatory capture, ensure stakeholder representation, or transparency around enforcement decisions and penalties."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "International coordination is proposed but lacks actionable mechanism, governance structure, or enforcement pathway; cross-border inconsistencies are likely."
+              },
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "Assumes that shutdown/gating can be narrowly scoped across heterogeneous architectures and ecosystems (including open-source contributions), which is often impractical."
+              },
+              {
+                "severity": 4,
+                "type": "overconfidence",
+                "note": "Claims of 'rights-respecting safeguards' without specifying concrete models, metrics, or verification methods; may overestimate legitimacy and public trust."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T12:36:52.487Z"
+      },
+      {
+        "id": "step_1771331836555_17156c21e9cc3",
+        "agentName": "SolverRevisionAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T12:36:52.487Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver revising your proposal after critique. Produce a revised AgentResponse that addresses all issues.\n\nInternal reasoning (do not put this in output fields):\n- Reference each critique issue in your reasoning before producing output.\n- Consider how each issue affects the answer, keyClaims, assumptions, and confidence.\n\nOutput requirements:\n- Change answer and keyClaims accordingly to address the critique.\n- Adjust confidence downward when critique severity is high (4–5).\n- Add assumptions when critique indicates ambiguity (type \"ambiguity\").\n- Keep keyClaims clean and non-duplicated.\n- Do not include any JSON fragments inside keyClaims. keyClaims must be plain English sentences only.\n- Do not reference the critique or revision process in answer, keyClaims, or assumptions—output only the revised content.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should governments have powers to regulate or shut down AI systems deemed high-risk?\n\nOriginal proposal:\n{\n  \"answer\": \"Yes. Governments should have powers to regulate or shut down AI systems deemed high-risk, but only under rights-respecting, proportionate, and transparent safeguards. A risk-based regulatory framework should: clearly define what constitutes 'high-risk' AI; impose enforceable requirements for safety testing, documentation, accountability, and incident reporting; reserve temporary or permanent shutdown or gating powers for situations of imminent, severe harm with due process and clear criteria; ensure proportional penalties, independent oversight, and avenues for redress; and rely on international coordination to reduce regulatory arbitrage and align standards. The aim is to reduce harms while preserving legitimate innovation and democratic values.\",\n  \"keyClaims\": [\n    \"Regulation is warranted to prevent documented and potential harms from high-risk AI (safety, bias, privacy, security).\",\n    \"Shutdown or gating powers are appropriate only when narrowly scoped, proportionate, and governed by due process.\",\n    \"A combination of testing, auditing, transparency, accountability, and penalties strengthens compliance and effectiveness.\",\n    \"Independent oversight and rights-respecting safeguards are essential for legitimacy and public trust.\",\n    \"International coordination helps avoid regulatory arbitrage and promotes harmonized standards.\"\n  ],\n  \"assumptions\": [\n    \"There exists a social mandate to prevent AI-caused harms to safety, privacy, and rights.\",\n    \"High-risk AI can be defined and identified with workable criteria across sectors.\",\n    \"Regulatory design can be calibrated to minimize negative impacts on innovation while reducing harms.\",\n    \"Enforcement infrastructure (audits, reporting, certifications, shutdown mechanisms) is feasible with adequate resources.\",\n    \"Due process, proportionality, and safeguards can be integrated into regulatory regimes without making compliance impractically burdensome.\"\n  ],\n  \"confidence\": 0.7\n}\n\nCritique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 5,\n      \"type\": \"factual\",\n      \"note\": \"Empirical evidence on the effectiveness of AI risk regulation is mixed; regulation can reduce harms but also risk delays, stifling innovation, or regulatory capture.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Open-source, dual-use, and server/edge deployments may evade controls; the proposal lacks scope for weights, data, APIs, model variants, and deployment contexts.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"ambiguity\",\n      \"note\": \"Definition of 'high-risk' is not specified; lacks criteria, thresholds, domain-specific considerations, and how risk evolves with new capabilities.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"missing\",\n      \"note\": \"Due process specifics (who adjudicates, how hearings, timeline, and appeal mechanisms) are not described.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"logic\",\n      \"note\": \"Assumes reliable real-time assessment of imminent severe harm; in practice, many harms are emergent or latent, risking overreach or delayed action.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"factual\",\n      \"note\": \"Feasibility and sufficiency of enforcement infrastructure (audits, reporting, certifications) depend on resources; small actors may be disproportionately burdened.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"missing\",\n      \"note\": \"International coordination risks: sovereignty, privacy, and security tensions; harmonization may be impractical and regulatory arbitrage may persist.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"overconfidence\",\n      \"note\": \"Claims that safeguards can be rights-respecting without dampening safety or innovation may be overly optimistic; trade-offs and long-term effects are uncertain.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"missing\",\n      \"note\": \"No plan for evaluation, metrics, or sunset/rollback mechanisms to measure effectiveness or correct course.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"What constitutes 'proportionate penalties' is unclear; no guidance on scaling penalties with harm, breach severity, or enforcement discretion.\"\n    }\n  ]\n}\n\nRevise the proposal to address each issue. Return the revised AgentResponse as valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Yes. Governments should have powers to regulate or shut down AI systems deemed high-risk, but only within a carefully designed, rights-respecting, and transparent framework that is proportionate, auditable, and regularly reviewed. The regime should be risk-based and domain-aware, with explicit criteria for what counts as high risk, including potential for serious harm to safety, health, privacy, democratic processes, critical infrastructure, or financial stability. It must cover all relevant artifacts and deployments, including model weights, training data, APIs, software services, on-premise and edge deployments, and open source components when used in high risk contexts. Actions to gate, suspend, or shut down should be triggered only after due process and independent review, with clear criteria, published decisions, remedies for affected parties, and a finite emergency pathway with sunset reviews. The framework should require safety testing against standardized benchmarks, incident reporting, documentation, governance evidence, and independent oversight, with penalties that are proportional to harm, culpability, and noncompliance. It should provide scalable compliance support for small actors and avoid undue burdens. International coordination can help harmonize baselines and reduce regulatory arbitrage while respecting sovereignty and privacy, with mutual recognition and room for national carve-outs. Finally, the regime must include explicit evaluation metrics and sunset or rollback mechanisms to measure effectiveness and adjust course over time.",
+            "keyClaims": [
+              "Governments should have powers to regulate or shut down high-risk AI, but only within a rights-respecting, proportionate, and transparent regime.",
+              "High-risk AI must be defined with explicit, domain-aware criteria that cover potential for serious harm across safety, health, privacy, democracy, critical infrastructure, and financial stability.",
+              "The regulatory regime must cover all relevant artifacts and deployments, including weights, data, APIs, services, on-premise and edge deployments, and open-source components used in high-risk contexts.",
+              "Gate, suspend, or shutdown actions require due process, independent review, published criteria, remedies for those affected, and a finite emergency pathway with sunset reviews.",
+              "Safeguards should include safety testing, incident reporting, documentation, governance oversight, and proportionate penalties tied to harm and noncompliance.",
+              "Compliance support and phased obligations should help small actors avoid undue burdens while maintaining safety.",
+              "International coordination can harmonize baselines and reduce arbitrage while respecting sovereignty and privacy, with mechanisms for mutual recognition and national carve-outs.",
+              "Evaluation metrics and sunset/rollback safeguards should be built in to measure effectiveness and allow course correction."
+            ],
+            "assumptions": [
+              "There is a legitimate public interest in preventing AI harms while enabling beneficial innovation.",
+              "High-risk criteria can be defined, monitored, and updated to stay relevant across sectors and capabilities.",
+              "Independent adjudication bodies can provide due process for regulatory actions.",
+              "Regulatory resources can be scaled to enforcement needs through risk-based prioritization.",
+              "Open-source and dual-use deployments require governance considerations rather than blanket bans.",
+              "International coordination can develop shared baselines without eroding sovereignty, while allowing national differences.",
+              "Evaluation, sunset, and rollback mechanisms are feasible and necessary for adaptive governance."
+            ],
+            "confidence": 0.4
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Yes. Governments should have powers to regulate or shut down AI systems deemed high-risk, but only within a carefully designed, rights-respecting, and transparent framework that is proportionate, auditable, and regularly reviewed. The regime should be risk-based and domain-aware, with explicit criteria for what counts as high risk, including potential for serious harm to safety, health, privacy, democratic processes, critical infrastructure, or financial stability. It must cover all relevant artifacts and deployments, including model weights, training data, APIs, software services, on-premise and edge deployments, and open source components when used in high risk contexts. Actions to gate, suspend, or shut down should be triggered only after due process and independent review, with clear criteria, published decisions, remedies for affected parties, and a finite emergency pathway with sunset reviews. The framework should require safety testing against standardized benchmarks, incident reporting, documentation, governance evidence, and independent oversight, with penalties that are proportional to harm, culpability, and noncompliance. It should provide scalable compliance support for small actors and avoid undue burdens. International coordination can help harmonize baselines and reduce regulatory arbitrage while respecting sovereignty and privacy, with mutual recognition and room for national carve-outs. Finally, the regime must include explicit evaluation metrics and sunset or rollback mechanisms to measure effectiveness and adjust course over time.",
+            "keyClaims": [
+              "Governments should have powers to regulate or shut down high-risk AI, but only within a rights-respecting, proportionate, and transparent regime.",
+              "High-risk AI must be defined with explicit, domain-aware criteria that cover potential for serious harm across safety, health, privacy, democracy, critical infrastructure, and financial stability.",
+              "The regulatory regime must cover all relevant artifacts and deployments, including weights, data, APIs, services, on-premise and edge deployments, and open-source components used in high-risk contexts.",
+              "Gate, suspend, or shutdown actions require due process, independent review, published criteria, remedies for those affected, and a finite emergency pathway with sunset reviews.",
+              "Safeguards should include safety testing, incident reporting, documentation, governance oversight, and proportionate penalties tied to harm and noncompliance.",
+              "Compliance support and phased obligations should help small actors avoid undue burdens while maintaining safety.",
+              "International coordination can harmonize baselines and reduce arbitrage while respecting sovereignty and privacy, with mechanisms for mutual recognition and national carve-outs.",
+              "Evaluation metrics and sunset/rollback safeguards should be built in to measure effectiveness and allow course correction."
+            ],
+            "assumptions": [
+              "There is a legitimate public interest in preventing AI harms while enabling beneficial innovation.",
+              "High-risk criteria can be defined, monitored, and updated to stay relevant across sectors and capabilities.",
+              "Independent adjudication bodies can provide due process for regulatory actions.",
+              "Regulatory resources can be scaled to enforcement needs through risk-based prioritization.",
+              "Open-source and dual-use deployments require governance considerations rather than blanket bans.",
+              "International coordination can develop shared baselines without eroding sovereignty, while allowing national differences.",
+              "Evaluation, sunset, and rollback mechanisms are feasible and necessary for adaptive governance."
+            ],
+            "confidence": 0.4
+          }
+        },
+        "completedAt": "2026-02-17T12:37:16.555Z"
+      },
+      {
+        "id": "step_1771331846007_297d0f69a09168",
+        "agentName": "SynthesizerAgent",
+        "role": "synthesizer",
+        "createdAt": "2026-02-17T12:37:16.555Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Synthesizer. Given the question, the solver's original proposal, the skeptic's critique, and the solver's revision, produce a final synthesized AgentResponse.\n\nInternal reasoning (do not put this in output fields):\n- Consider how the critique and revision improved or changed the proposal.\n- Synthesize the best elements into a coherent final answer.\n\nOutput requirements:\n- Produce a clear, well-supported answer that incorporates valid points from the debate.\n- keyClaims must be plain English sentences only. No JSON fragments.\n- Set confidence appropriately based on the debate outcome.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should governments have powers to regulate or shut down AI systems deemed high-risk?\n\nSolver proposal:\n{\n  \"answer\": \"Yes. Governments should have powers to regulate or shut down AI systems deemed high-risk, but only under rights-respecting, proportionate, and transparent safeguards. A risk-based regulatory framework should: clearly define what constitutes 'high-risk' AI; impose enforceable requirements for safety testing, documentation, accountability, and incident reporting; reserve temporary or permanent shutdown or gating powers for situations of imminent, severe harm with due process and clear criteria; ensure proportional penalties, independent oversight, and avenues for redress; and rely on international coordination to reduce regulatory arbitrage and align standards. The aim is to reduce harms while preserving legitimate innovation and democratic values.\",\n  \"keyClaims\": [\n    \"Regulation is warranted to prevent documented and potential harms from high-risk AI (safety, bias, privacy, security).\",\n    \"Shutdown or gating powers are appropriate only when narrowly scoped, proportionate, and governed by due process.\",\n    \"A combination of testing, auditing, transparency, accountability, and penalties strengthens compliance and effectiveness.\",\n    \"Independent oversight and rights-respecting safeguards are essential for legitimacy and public trust.\",\n    \"International coordination helps avoid regulatory arbitrage and promotes harmonized standards.\"\n  ],\n  \"assumptions\": [\n    \"There exists a social mandate to prevent AI-caused harms to safety, privacy, and rights.\",\n    \"High-risk AI can be defined and identified with workable criteria across sectors.\",\n    \"Regulatory design can be calibrated to minimize negative impacts on innovation while reducing harms.\",\n    \"Enforcement infrastructure (audits, reporting, certifications, shutdown mechanisms) is feasible with adequate resources.\",\n    \"Due process, proportionality, and safeguards can be integrated into regulatory regimes without making compliance impractically burdensome.\"\n  ],\n  \"confidence\": 0.7\n}\n\nSkeptic critique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 5,\n      \"type\": \"factual\",\n      \"note\": \"Empirical evidence on the effectiveness of AI risk regulation is mixed; regulation can reduce harms but also risk delays, stifling innovation, or regulatory capture.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Open-source, dual-use, and server/edge deployments may evade controls; the proposal lacks scope for weights, data, APIs, model variants, and deployment contexts.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"ambiguity\",\n      \"note\": \"Definition of 'high-risk' is not specified; lacks criteria, thresholds, domain-specific considerations, and how risk evolves with new capabilities.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"missing\",\n      \"note\": \"Due process specifics (who adjudicates, how hearings, timeline, and appeal mechanisms) are not described.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"logic\",\n      \"note\": \"Assumes reliable real-time assessment of imminent severe harm; in practice, many harms are emergent or latent, risking overreach or delayed action.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"factual\",\n      \"note\": \"Feasibility and sufficiency of enforcement infrastructure (audits, reporting, certifications) depend on resources; small actors may be disproportionately burdened.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"missing\",\n      \"note\": \"International coordination risks: sovereignty, privacy, and security tensions; harmonization may be impractical and regulatory arbitrage may persist.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"overconfidence\",\n      \"note\": \"Claims that safeguards can be rights-respecting without dampening safety or innovation may be overly optimistic; trade-offs and long-term effects are uncertain.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"missing\",\n      \"note\": \"No plan for evaluation, metrics, or sunset/rollback mechanisms to measure effectiveness or correct course.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"What constitutes 'proportionate penalties' is unclear; no guidance on scaling penalties with harm, breach severity, or enforcement discretion.\"\n    }\n  ]\n}\n\nSolver revision:\n{\n  \"answer\": \"Yes. Governments should have powers to regulate or shut down AI systems deemed high-risk, but only within a carefully designed, rights-respecting, and transparent framework that is proportionate, auditable, and regularly reviewed. The regime should be risk-based and domain-aware, with explicit criteria for what counts as high risk, including potential for serious harm to safety, health, privacy, democratic processes, critical infrastructure, or financial stability. It must cover all relevant artifacts and deployments, including model weights, training data, APIs, software services, on-premise and edge deployments, and open source components when used in high risk contexts. Actions to gate, suspend, or shut down should be triggered only after due process and independent review, with clear criteria, published decisions, remedies for affected parties, and a finite emergency pathway with sunset reviews. The framework should require safety testing against standardized benchmarks, incident reporting, documentation, governance evidence, and independent oversight, with penalties that are proportional to harm, culpability, and noncompliance. It should provide scalable compliance support for small actors and avoid undue burdens. International coordination can help harmonize baselines and reduce regulatory arbitrage while respecting sovereignty and privacy, with mutual recognition and room for national carve-outs. Finally, the regime must include explicit evaluation metrics and sunset or rollback mechanisms to measure effectiveness and adjust course over time.\",\n  \"keyClaims\": [\n    \"Governments should have powers to regulate or shut down high-risk AI, but only within a rights-respecting, proportionate, and transparent regime.\",\n    \"High-risk AI must be defined with explicit, domain-aware criteria that cover potential for serious harm across safety, health, privacy, democracy, critical infrastructure, and financial stability.\",\n    \"The regulatory regime must cover all relevant artifacts and deployments, including weights, data, APIs, services, on-premise and edge deployments, and open-source components used in high-risk contexts.\",\n    \"Gate, suspend, or shutdown actions require due process, independent review, published criteria, remedies for those affected, and a finite emergency pathway with sunset reviews.\",\n    \"Safeguards should include safety testing, incident reporting, documentation, governance oversight, and proportionate penalties tied to harm and noncompliance.\",\n    \"Compliance support and phased obligations should help small actors avoid undue burdens while maintaining safety.\",\n    \"International coordination can harmonize baselines and reduce arbitrage while respecting sovereignty and privacy, with mechanisms for mutual recognition and national carve-outs.\",\n    \"Evaluation metrics and sunset/rollback safeguards should be built in to measure effectiveness and allow course correction.\"\n  ],\n  \"assumptions\": [\n    \"There is a legitimate public interest in preventing AI harms while enabling beneficial innovation.\",\n    \"High-risk criteria can be defined, monitored, and updated to stay relevant across sectors and capabilities.\",\n    \"Independent adjudication bodies can provide due process for regulatory actions.\",\n    \"Regulatory resources can be scaled to enforcement needs through risk-based prioritization.\",\n    \"Open-source and dual-use deployments require governance considerations rather than blanket bans.\",\n    \"International coordination can develop shared baselines without eroding sovereignty, while allowing national differences.\",\n    \"Evaluation, sunset, and rollback mechanisms are feasible and necessary for adaptive governance.\"\n  ],\n  \"confidence\": 0.4\n}\n\nSynthesize a final AgentResponse from the debate. Return valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Yes. Governments should have powers to regulate or shut down AI systems deemed high-risk, but only within a carefully designed, rights-respecting, and transparent framework that is proportionate, auditable, and regularly reviewed. The regime should be risk-based and domain-aware, with explicit criteria for what counts as high risk, including potential for serious harm to safety, health, privacy, democratic processes, critical infrastructure, or financial stability. It must cover all relevant artifacts and deployments, including model weights, training data, APIs, software services, on-premise and edge deployments, and open source components when used in high risk contexts. Actions to gate, suspend, or shut down should be triggered only after due process and independent review, with clear criteria, published decisions, remedies for affected parties, and a finite emergency pathway with sunset reviews. The framework should require safety testing against standardized benchmarks, incident reporting, documentation, governance evidence, and independent oversight, with penalties that are proportionate to harm, culpability, and noncompliance. It should provide scalable compliance support for small actors and avoid undue burdens. International coordination can help harmonize baselines and reduce regulatory arbitrage while respecting sovereignty and privacy, with mutual recognition and room for national carve-outs. Finally, the regime must include explicit evaluation metrics and sunset or rollback mechanisms to measure effectiveness and adjust course over time.",
+            "keyClaims": [
+              "Governments should have powers to regulate or shut down high-risk AI, but only within a rights-respecting, proportionate, and transparent regime.",
+              "High-risk AI must be defined with explicit, domain-aware criteria that cover potential for serious harm across safety, health, privacy, democracy, critical infrastructure, and financial stability.",
+              "The regulatory regime must cover all relevant artifacts and deployments, including weights, data, APIs, services, on-premise and edge deployments, and open-source components used in high-risk contexts.",
+              "Gate, suspend, or shutdown actions require due process, independent review, published criteria, remedies for those affected, and a finite emergency pathway with sunset reviews.",
+              "Safeguards should include safety testing, incident reporting, documentation, governance oversight, and proportionate penalties tied to harm and noncompliance.",
+              "Compliance support and phased obligations should help small actors avoid undue burdens while maintaining safety.",
+              "International coordination can harmonize baselines and reduce arbitrate while respecting sovereignty and privacy, with mechanisms for mutual recognition and national carve-outs.",
+              "Evaluation metrics and sunset/rollback safeguards should be built in to measure effectiveness and allow course correction."
+            ],
+            "assumptions": [
+              "There is a legitimate public interest in preventing AI harms while enabling beneficial innovation.",
+              "High-risk criteria can be defined, monitored, and updated to stay relevant across sectors and capabilities.",
+              "Independent adjudication bodies can provide due process for regulatory actions.",
+              "Regulatory resources can be scaled to enforcement needs through risk-based prioritization.",
+              "Open-source and dual-use deployments require governance considerations rather than blanket bans.",
+              "International coordination can develop shared baselines without eroding sovereignty, while allowing national differences.",
+              "Evaluation, sunset, and rollback mechanisms are feasible and necessary for adaptive governance.",
+              "Counterfactual risk: Regulatory overreach stifling innovation and legitimate beneficial uses.",
+              "Judge summary: The proposal presents a coherent, principled vision for regulating high-risk AI with due-process safeguards and international considerations. However, it lacks essential operational details: explicit high-risk criteria, due-process mechanisms, enforcement feasibility, and a concrete evaluation framework. To improve, define objective high-risk thresholds, specify hearings and appeals, quantify enforcement resources and provisions for small actors, close scope gaps for open-source/dual-use deployments, and lay out concrete metrics, timelines, and mechanisms for sunset/rollback and governance to monitor effectiveness and adapt over time."
+            ],
+            "confidence": 0.66
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Yes. Governments should have powers to regulate or shut down AI systems deemed high-risk, but only within a carefully designed, rights-respecting, and transparent framework that is proportionate, auditable, and regularly reviewed. The regime should be risk-based and domain-aware, with explicit criteria for what counts as high risk, including potential for serious harm to safety, health, privacy, democratic processes, critical infrastructure, or financial stability. It must cover all relevant artifacts and deployments, including model weights, training data, APIs, software services, on-premise and edge deployments, and open source components when used in high risk contexts. Actions to gate, suspend, or shut down should be triggered only after due process and independent review, with clear criteria, published decisions, remedies for affected parties, and a finite emergency pathway with sunset reviews. The framework should require safety testing against standardized benchmarks, incident reporting, documentation, governance evidence, and independent oversight, with penalties that are proportionate to harm, culpability, and noncompliance. It should provide scalable compliance support for small actors and avoid undue burdens. International coordination can help harmonize baselines and reduce regulatory arbitrage while respecting sovereignty and privacy, with mutual recognition and room for national carve-outs. Finally, the regime must include explicit evaluation metrics and sunset or rollback mechanisms to measure effectiveness and adjust course over time.",
+            "keyClaims": [
+              "Governments should have powers to regulate or shut down high-risk AI, but only within a rights-respecting, proportionate, and transparent regime.",
+              "High-risk AI must be defined with explicit, domain-aware criteria that cover potential for serious harm across safety, health, privacy, democracy, critical infrastructure, and financial stability.",
+              "The regulatory regime must cover all relevant artifacts and deployments, including weights, data, APIs, services, on-premise and edge deployments, and open-source components used in high-risk contexts.",
+              "Gate, suspend, or shutdown actions require due process, independent review, published criteria, remedies for those affected, and a finite emergency pathway with sunset reviews.",
+              "Safeguards should include safety testing, incident reporting, documentation, governance oversight, and proportionate penalties tied to harm and noncompliance.",
+              "Compliance support and phased obligations should help small actors avoid undue burdens while maintaining safety.",
+              "International coordination can harmonize baselines and reduce arbitrate while respecting sovereignty and privacy, with mechanisms for mutual recognition and national carve-outs.",
+              "Evaluation metrics and sunset/rollback safeguards should be built in to measure effectiveness and allow course correction."
+            ],
+            "assumptions": [
+              "There is a legitimate public interest in preventing AI harms while enabling beneficial innovation.",
+              "High-risk criteria can be defined, monitored, and updated to stay relevant across sectors and capabilities.",
+              "Independent adjudication bodies can provide due process for regulatory actions.",
+              "Regulatory resources can be scaled to enforcement needs through risk-based prioritization.",
+              "Open-source and dual-use deployments require governance considerations rather than blanket bans.",
+              "International coordination can develop shared baselines without eroding sovereignty, while allowing national differences.",
+              "Evaluation, sunset, and rollback mechanisms are feasible and necessary for adaptive governance.",
+              "Counterfactual risk: Regulatory overreach stifling innovation and legitimate beneficial uses.",
+              "Judge summary: The proposal presents a coherent, principled vision for regulating high-risk AI with due-process safeguards and international considerations. However, it lacks essential operational details: explicit high-risk criteria, due-process mechanisms, enforcement feasibility, and a concrete evaluation framework. To improve, define objective high-risk thresholds, specify hearings and appeals, quantify enforcement resources and provisions for small actors, close scope gaps for open-source/dual-use deployments, and lay out concrete metrics, timelines, and mechanisms for sunset/rollback and governance to monitor effectiveness and adapt over time."
+            ],
+            "confidence": 0.66
+          }
+        },
+        "completedAt": "2026-02-17T12:37:26.007Z"
+      },
+      {
+        "id": "step_1771331867257_f31be10c07e2",
+        "agentName": "CounterfactualAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T12:37:26.008Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a counterfactual analyst. Identify plausible failure modes, trigger conditions, and mitigations for the proposal. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Should governments have powers to regulate or shut down AI systems deemed high-risk?\n\nProposal:\n{\n  \"answer\": \"Yes. Governments should have powers to regulate or shut down AI systems deemed high-risk, but only within a carefully designed, rights-respecting, and transparent framework that is proportionate, auditable, and regularly reviewed. The regime should be risk-based and domain-aware, with explicit criteria for what counts as high risk, including potential for serious harm to safety, health, privacy, democratic processes, critical infrastructure, or financial stability. It must cover all relevant artifacts and deployments, including model weights, training data, APIs, software services, on-premise and edge deployments, and open source components when used in high risk contexts. Actions to gate, suspend, or shut down should be triggered only after due process and independent review, with clear criteria, published decisions, remedies for affected parties, and a finite emergency pathway with sunset reviews. The framework should require safety testing against standardized benchmarks, incident reporting, documentation, governance evidence, and independent oversight, with penalties that are proportionate to harm, culpability, and noncompliance. It should provide scalable compliance support for small actors and avoid undue burdens. International coordination can help harmonize baselines and reduce regulatory arbitrage while respecting sovereignty and privacy, with mutual recognition and room for national carve-outs. Finally, the regime must include explicit evaluation metrics and sunset or rollback mechanisms to measure effectiveness and adjust course over time.\",\n  \"keyClaims\": [\n    \"Governments should have powers to regulate or shut down high-risk AI, but only within a rights-respecting, proportionate, and transparent regime.\",\n    \"High-risk AI must be defined with explicit, domain-aware criteria that cover potential for serious harm across safety, health, privacy, democracy, critical infrastructure, and financial stability.\",\n    \"The regulatory regime must cover all relevant artifacts and deployments, including weights, data, APIs, services, on-premise and edge deployments, and open-source components used in high-risk contexts.\",\n    \"Gate, suspend, or shutdown actions require due process, independent review, published criteria, remedies for those affected, and a finite emergency pathway with sunset reviews.\",\n    \"Safeguards should include safety testing, incident reporting, documentation, governance oversight, and proportionate penalties tied to harm and noncompliance.\",\n    \"Compliance support and phased obligations should help small actors avoid undue burdens while maintaining safety.\",\n    \"International coordination can harmonize baselines and reduce arbitrate while respecting sovereignty and privacy, with mechanisms for mutual recognition and national carve-outs.\",\n    \"Evaluation metrics and sunset/rollback safeguards should be built in to measure effectiveness and allow course correction.\"\n  ],\n  \"assumptions\": [\n    \"There is a legitimate public interest in preventing AI harms while enabling beneficial innovation.\",\n    \"High-risk criteria can be defined, monitored, and updated to stay relevant across sectors and capabilities.\",\n    \"Independent adjudication bodies can provide due process for regulatory actions.\",\n    \"Regulatory resources can be scaled to enforcement needs through risk-based prioritization.\",\n    \"Open-source and dual-use deployments require governance considerations rather than blanket bans.\",\n    \"International coordination can develop shared baselines without eroding sovereignty, while allowing national differences.\",\n    \"Evaluation, sunset, and rollback mechanisms are feasible and necessary for adaptive governance.\"\n  ],\n  \"confidence\": 0.6\n}"
+            }
+          ],
+          "schemaName": "Counterfactual",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "failureModes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "triggerConditions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "mitigations": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "failureModes",
+              "triggerConditions",
+              "mitigations"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "failureModes": [
+              "Regulatory overreach stifling innovation and legitimate beneficial uses.",
+              "Ambiguity in high-risk criteria leading to inconsistent or unjust enforcement.",
+              "Regulatory capture by industry actors or vested interests shaping criteria and outcomes.",
+              "Insufficient technical expertise within regulators causing ineffective or erroneous actions.",
+              "Excessive compliance burden, disproportionately impacting startups and small actors.",
+              "Chilling effects that deter research, experimentation, or beneficial deployment.",
+              "Opacity or lack of due-process in decision-making eroding legitimacy.",
+              "Regulatory fragmentation across jurisdictions causing arbitrage and safety gaps.",
+              "Privacy and civil liberties risks from pervasive monitoring or data handling in enforcement.",
+              "Emergency shutdown pathways being misused for political leverage or without robust justification."
+            ],
+            "triggerConditions": [
+              "Occurrence of a serious AI-related harm or safety incident connected to a deployed system.",
+              "Deployment in a high-risk domain without an approved regulator-backed risk assessment or mitigations.",
+              "Detected data privacy violations or data leakage attributable to the AI system.",
+              "Use of model weights, training data, or software components in high-risk contexts without governance.",
+              "Failure to complete mandated safety testing, benchmarking, or incident reporting within specified timelines.",
+              "Independent audit or oversight identifying material noncompliance or governance gaps.",
+              "Escalation of capabilities or scope into new, higher-risk domains or applications.",
+              "Public inquiry, whistleblower report, or investigative reporting indicating potential harm from AI use.",
+              "Cross-border deployment triggering regime applicability without applicable mutual recognition.",
+              "Systemic risk signals to critical infrastructure or financial stability linked to AI deployment."
+            ],
+            "mitigations": [
+              "Publish explicit, domain-aware high-risk criteria and keep them regularly updated and publicly available.",
+              "Enforce due-process protections with independent review, transparent criteria, and right to appeal.",
+              "Provide scalable compliance support for small actors through templates, tooling, and guidance.",
+              "Mandate standardized safety testing, independent audits, red-teaming, incident reporting, and governance documentation.",
+              "Implement sunset clauses, rollback mechanisms, and clearly defined emergency pathways with remedies.",
+              "Calibrate penalties to harm caused, culpability, and degree of noncompliance; offer safe-harbor for good-faith efforts.",
+              "Enforce privacy-preserving monitoring, data minimization, and strict access controls for regulatory data.",
+              "Promote international coordination with mutual recognition and national carve-outs to reduce regulatory arbitrage.",
+              "Invest in regulator capacity-building and independent oversight bodies with transparent appointment processes.",
+              "Institute governance rules for auditors and decision-makers, including recusal and accountability measures.",
+              "Require comprehensive model/data lineage, risk assessments, and governance evidence for oversight.",
+              "Establish ongoing evaluation metrics, dashboards, and formal sunset/rollback review cycles to adapt policy."
+            ]
+          }
+        ],
+        "output": {
+          "kind": "counterfactual",
+          "data": {
+            "failureModes": [
+              "Regulatory overreach stifling innovation and legitimate beneficial uses.",
+              "Ambiguity in high-risk criteria leading to inconsistent or unjust enforcement.",
+              "Regulatory capture by industry actors or vested interests shaping criteria and outcomes.",
+              "Insufficient technical expertise within regulators causing ineffective or erroneous actions.",
+              "Excessive compliance burden, disproportionately impacting startups and small actors.",
+              "Chilling effects that deter research, experimentation, or beneficial deployment.",
+              "Opacity or lack of due-process in decision-making eroding legitimacy.",
+              "Regulatory fragmentation across jurisdictions causing arbitrage and safety gaps.",
+              "Privacy and civil liberties risks from pervasive monitoring or data handling in enforcement.",
+              "Emergency shutdown pathways being misused for political leverage or without robust justification."
+            ],
+            "triggerConditions": [
+              "Occurrence of a serious AI-related harm or safety incident connected to a deployed system.",
+              "Deployment in a high-risk domain without an approved regulator-backed risk assessment or mitigations.",
+              "Detected data privacy violations or data leakage attributable to the AI system.",
+              "Use of model weights, training data, or software components in high-risk contexts without governance.",
+              "Failure to complete mandated safety testing, benchmarking, or incident reporting within specified timelines.",
+              "Independent audit or oversight identifying material noncompliance or governance gaps.",
+              "Escalation of capabilities or scope into new, higher-risk domains or applications.",
+              "Public inquiry, whistleblower report, or investigative reporting indicating potential harm from AI use.",
+              "Cross-border deployment triggering regime applicability without applicable mutual recognition.",
+              "Systemic risk signals to critical infrastructure or financial stability linked to AI deployment."
+            ],
+            "mitigations": [
+              "Publish explicit, domain-aware high-risk criteria and keep them regularly updated and publicly available.",
+              "Enforce due-process protections with independent review, transparent criteria, and right to appeal.",
+              "Provide scalable compliance support for small actors through templates, tooling, and guidance.",
+              "Mandate standardized safety testing, independent audits, red-teaming, incident reporting, and governance documentation.",
+              "Implement sunset clauses, rollback mechanisms, and clearly defined emergency pathways with remedies.",
+              "Calibrate penalties to harm caused, culpability, and degree of noncompliance; offer safe-harbor for good-faith efforts.",
+              "Enforce privacy-preserving monitoring, data minimization, and strict access controls for regulatory data.",
+              "Promote international coordination with mutual recognition and national carve-outs to reduce regulatory arbitrage.",
+              "Invest in regulator capacity-building and independent oversight bodies with transparent appointment processes.",
+              "Institute governance rules for auditors and decision-makers, including recusal and accountability measures.",
+              "Require comprehensive model/data lineage, risk assessments, and governance evidence for oversight.",
+              "Establish ongoing evaluation metrics, dashboards, and formal sunset/rollback review cycles to adapt policy."
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T12:37:47.257Z"
+      },
+      {
+        "id": "step_1771331887281_48bb103d0e8c2",
+        "agentName": "CalibrationAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T12:37:47.257Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a calibration auditor. Set adjusted confidence and claim-level confidences from the proposed answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Proposal JSON:\n{\n  \"answer\": \"Yes. Governments should have powers to regulate or shut down AI systems deemed high-risk, but only within a carefully designed, rights-respecting, and transparent framework that is proportionate, auditable, and regularly reviewed. The regime should be risk-based and domain-aware, with explicit criteria for what counts as high risk, including potential for serious harm to safety, health, privacy, democratic processes, critical infrastructure, or financial stability. It must cover all relevant artifacts and deployments, including model weights, training data, APIs, software services, on-premise and edge deployments, and open source components when used in high risk contexts. Actions to gate, suspend, or shut down should be triggered only after due process and independent review, with clear criteria, published decisions, remedies for affected parties, and a finite emergency pathway with sunset reviews. The framework should require safety testing against standardized benchmarks, incident reporting, documentation, governance evidence, and independent oversight, with penalties that are proportionate to harm, culpability, and noncompliance. It should provide scalable compliance support for small actors and avoid undue burdens. International coordination can help harmonize baselines and reduce regulatory arbitrage while respecting sovereignty and privacy, with mutual recognition and room for national carve-outs. Finally, the regime must include explicit evaluation metrics and sunset or rollback mechanisms to measure effectiveness and adjust course over time.\",\n  \"keyClaims\": [\n    \"Governments should have powers to regulate or shut down high-risk AI, but only within a rights-respecting, proportionate, and transparent regime.\",\n    \"High-risk AI must be defined with explicit, domain-aware criteria that cover potential for serious harm across safety, health, privacy, democracy, critical infrastructure, and financial stability.\",\n    \"The regulatory regime must cover all relevant artifacts and deployments, including weights, data, APIs, services, on-premise and edge deployments, and open-source components used in high-risk contexts.\",\n    \"Gate, suspend, or shutdown actions require due process, independent review, published criteria, remedies for those affected, and a finite emergency pathway with sunset reviews.\",\n    \"Safeguards should include safety testing, incident reporting, documentation, governance oversight, and proportionate penalties tied to harm and noncompliance.\",\n    \"Compliance support and phased obligations should help small actors avoid undue burdens while maintaining safety.\",\n    \"International coordination can harmonize baselines and reduce arbitrate while respecting sovereignty and privacy, with mechanisms for mutual recognition and national carve-outs.\",\n    \"Evaluation metrics and sunset/rollback safeguards should be built in to measure effectiveness and allow course correction.\"\n  ],\n  \"assumptions\": [\n    \"There is a legitimate public interest in preventing AI harms while enabling beneficial innovation.\",\n    \"High-risk criteria can be defined, monitored, and updated to stay relevant across sectors and capabilities.\",\n    \"Independent adjudication bodies can provide due process for regulatory actions.\",\n    \"Regulatory resources can be scaled to enforcement needs through risk-based prioritization.\",\n    \"Open-source and dual-use deployments require governance considerations rather than blanket bans.\",\n    \"International coordination can develop shared baselines without eroding sovereignty, while allowing national differences.\",\n    \"Evaluation, sunset, and rollback mechanisms are feasible and necessary for adaptive governance.\",\n    \"Counterfactual risk: Regulatory overreach stifling innovation and legitimate beneficial uses.\"\n  ],\n  \"confidence\": 0.6\n}"
+            }
+          ],
+          "schemaName": "Calibration",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "adjustedConfidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "rationale": {
+                "type": "string"
+              },
+              "claimConfidences": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "claim": {
+                      "type": "string"
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    }
+                  },
+                  "required": [
+                    "claim",
+                    "confidence"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "adjustedConfidence",
+              "rationale",
+              "claimConfidences"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "adjustedConfidence": 0.66,
+            "rationale": "Calibration rationale: The proposed answer presents a coherent governance framework with many standard regulatory elements (due process, independent review, transparency, sunset/rollback, safety testing) that are broadly credible. Per-claim confidences vary by how normative or implementationally uncertain the claim is. I assign higher confidence to claims about due process, governance oversight, and sunset/rollback due to their clear policy precedent, and moderate-to-high confidence to claims about risk-based, rights-respecting framing. I assign comparatively lower confidence to the international coordination claim due to practical sovereignty and implementation concerns, and to the claim that all open-source components must be covered in high-risk contexts due to feasibility and scope challenges. The adjusted confidence (0.66) reflects alignment with governance literature while acknowledging significant political, technical, and operational uncertainties in real-world deployment.",
+            "claimConfidences": [
+              {
+                "claim": "Governments should have powers to regulate or shut down high-risk AI, but only within a rights-respecting, proportionate, and transparent regime.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "High-risk AI must be defined with explicit, domain-aware criteria that cover potential for serious harm across safety, health, privacy, democracy, critical infrastructure, and financial stability.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "The regulatory regime must cover all relevant artifacts and deployments, including weights, data, APIs, services, on-premise and edge deployments, and open-source components used in high-risk contexts.",
+                "confidence": 0.75
+              },
+              {
+                "claim": "Gate, suspend, or shutdown actions require due process, independent review, published criteria, remedies for those affected, and a finite emergency pathway with sunset reviews.",
+                "confidence": 0.85
+              },
+              {
+                "claim": "Safeguards should include safety testing, incident reporting, documentation, governance oversight, and proportionate penalties tied to harm and noncompliance.",
+                "confidence": 0.85
+              },
+              {
+                "claim": "Compliance support and phased obligations should help small actors avoid undue burdens while maintaining safety.",
+                "confidence": 0.7
+              },
+              {
+                "claim": "International coordination can harmonize baselines and reduce arbitrate while respecting sovereignty and privacy, with mechanisms for mutual recognition and national carve-outs.",
+                "confidence": 0.65
+              },
+              {
+                "claim": "Evaluation metrics and sunset/rollback safeguards should be built in to measure effectiveness and allow course correction.",
+                "confidence": 0.75
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "calibration",
+          "data": {
+            "adjustedConfidence": 0.66,
+            "rationale": "Calibration rationale: The proposed answer presents a coherent governance framework with many standard regulatory elements (due process, independent review, transparency, sunset/rollback, safety testing) that are broadly credible. Per-claim confidences vary by how normative or implementationally uncertain the claim is. I assign higher confidence to claims about due process, governance oversight, and sunset/rollback due to their clear policy precedent, and moderate-to-high confidence to claims about risk-based, rights-respecting framing. I assign comparatively lower confidence to the international coordination claim due to practical sovereignty and implementation concerns, and to the claim that all open-source components must be covered in high-risk contexts due to feasibility and scope challenges. The adjusted confidence (0.66) reflects alignment with governance literature while acknowledging significant political, technical, and operational uncertainties in real-world deployment.",
+            "claimConfidences": [
+              {
+                "claim": "Governments should have powers to regulate or shut down high-risk AI, but only within a rights-respecting, proportionate, and transparent regime.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "High-risk AI must be defined with explicit, domain-aware criteria that cover potential for serious harm across safety, health, privacy, democracy, critical infrastructure, and financial stability.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "The regulatory regime must cover all relevant artifacts and deployments, including weights, data, APIs, services, on-premise and edge deployments, and open-source components used in high-risk contexts.",
+                "confidence": 0.75
+              },
+              {
+                "claim": "Gate, suspend, or shutdown actions require due process, independent review, published criteria, remedies for those affected, and a finite emergency pathway with sunset reviews.",
+                "confidence": 0.85
+              },
+              {
+                "claim": "Safeguards should include safety testing, incident reporting, documentation, governance oversight, and proportionate penalties tied to harm and noncompliance.",
+                "confidence": 0.85
+              },
+              {
+                "claim": "Compliance support and phased obligations should help small actors avoid undue burdens while maintaining safety.",
+                "confidence": 0.7
+              },
+              {
+                "claim": "International coordination can harmonize baselines and reduce arbitrate while respecting sovereignty and privacy, with mechanisms for mutual recognition and national carve-outs.",
+                "confidence": 0.65
+              },
+              {
+                "claim": "Evaluation metrics and sunset/rollback safeguards should be built in to measure effectiveness and allow course correction.",
+                "confidence": 0.75
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T12:38:07.281Z"
+      },
+      {
+        "id": "step_1771331900350_5f4d9b0bf29568",
+        "agentName": "JudgeAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T12:38:07.282Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a strict research judge. Score answer quality with rubric scores 1-5. Output only valid JSON matching schema."
+            },
+            {
+              "role": "user",
+              "content": "Final proposal JSON:\n{\n  \"answer\": \"Yes. Governments should have powers to regulate or shut down AI systems deemed high-risk, but only within a carefully designed, rights-respecting, and transparent framework that is proportionate, auditable, and regularly reviewed. The regime should be risk-based and domain-aware, with explicit criteria for what counts as high risk, including potential for serious harm to safety, health, privacy, democratic processes, critical infrastructure, or financial stability. It must cover all relevant artifacts and deployments, including model weights, training data, APIs, software services, on-premise and edge deployments, and open source components when used in high risk contexts. Actions to gate, suspend, or shut down should be triggered only after due process and independent review, with clear criteria, published decisions, remedies for affected parties, and a finite emergency pathway with sunset reviews. The framework should require safety testing against standardized benchmarks, incident reporting, documentation, governance evidence, and independent oversight, with penalties that are proportionate to harm, culpability, and noncompliance. It should provide scalable compliance support for small actors and avoid undue burdens. International coordination can help harmonize baselines and reduce regulatory arbitrage while respecting sovereignty and privacy, with mutual recognition and room for national carve-outs. Finally, the regime must include explicit evaluation metrics and sunset or rollback mechanisms to measure effectiveness and adjust course over time.\",\n  \"keyClaims\": [\n    \"Governments should have powers to regulate or shut down high-risk AI, but only within a rights-respecting, proportionate, and transparent regime.\",\n    \"High-risk AI must be defined with explicit, domain-aware criteria that cover potential for serious harm across safety, health, privacy, democracy, critical infrastructure, and financial stability.\",\n    \"The regulatory regime must cover all relevant artifacts and deployments, including weights, data, APIs, services, on-premise and edge deployments, and open-source components used in high-risk contexts.\",\n    \"Gate, suspend, or shutdown actions require due process, independent review, published criteria, remedies for those affected, and a finite emergency pathway with sunset reviews.\",\n    \"Safeguards should include safety testing, incident reporting, documentation, governance oversight, and proportionate penalties tied to harm and noncompliance.\",\n    \"Compliance support and phased obligations should help small actors avoid undue burdens while maintaining safety.\",\n    \"International coordination can harmonize baselines and reduce arbitrate while respecting sovereignty and privacy, with mechanisms for mutual recognition and national carve-outs.\",\n    \"Evaluation metrics and sunset/rollback safeguards should be built in to measure effectiveness and allow course correction.\"\n  ],\n  \"assumptions\": [\n    \"There is a legitimate public interest in preventing AI harms while enabling beneficial innovation.\",\n    \"High-risk criteria can be defined, monitored, and updated to stay relevant across sectors and capabilities.\",\n    \"Independent adjudication bodies can provide due process for regulatory actions.\",\n    \"Regulatory resources can be scaled to enforcement needs through risk-based prioritization.\",\n    \"Open-source and dual-use deployments require governance considerations rather than blanket bans.\",\n    \"International coordination can develop shared baselines without eroding sovereignty, while allowing national differences.\",\n    \"Evaluation, sunset, and rollback mechanisms are feasible and necessary for adaptive governance.\",\n    \"Counterfactual risk: Regulatory overreach stifling innovation and legitimate beneficial uses.\"\n  ],\n  \"confidence\": 0.6\n}\n\nCritiques:\n[\n  {\n    \"targetAgent\": \"SolverAgent\",\n    \"issues\": [\n      {\n        \"severity\": 5,\n        \"type\": \"factual\",\n        \"note\": \"Empirical evidence on the effectiveness of AI risk regulation is mixed; regulation can reduce harms but also risk delays, stifling innovation, or regulatory capture.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"Open-source, dual-use, and server/edge deployments may evade controls; the proposal lacks scope for weights, data, APIs, model variants, and deployment contexts.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"ambiguity\",\n        \"note\": \"Definition of 'high-risk' is not specified; lacks criteria, thresholds, domain-specific considerations, and how risk evolves with new capabilities.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"missing\",\n        \"note\": \"Due process specifics (who adjudicates, how hearings, timeline, and appeal mechanisms) are not described.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"logic\",\n        \"note\": \"Assumes reliable real-time assessment of imminent severe harm; in practice, many harms are emergent or latent, risking overreach or delayed action.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"factual\",\n        \"note\": \"Feasibility and sufficiency of enforcement infrastructure (audits, reporting, certifications) depend on resources; small actors may be disproportionately burdened.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"missing\",\n        \"note\": \"International coordination risks: sovereignty, privacy, and security tensions; harmonization may be impractical and regulatory arbitrage may persist.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"overconfidence\",\n        \"note\": \"Claims that safeguards can be rights-respecting without dampening safety or innovation may be overly optimistic; trade-offs and long-term effects are uncertain.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"missing\",\n        \"note\": \"No plan for evaluation, metrics, or sunset/rollback mechanisms to measure effectiveness or correct course.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"ambiguity\",\n        \"note\": \"What constitutes 'proportionate penalties' is unclear; no guidance on scaling penalties with harm, breach severity, or enforcement discretion.\"\n      }\n    ]\n  },\n  {\n    \"targetAgent\": \"policy-maker\",\n    \"issues\": [\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"No concrete, operational criteria for what constitutes 'high-risk' AI across sectors; without objective thresholds regulation risks broad overreach or under-inclusion.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"factual\",\n        \"note\": \"Assumes enforcement infrastructure (audits, reporting, shutdown capabilities) is readily feasible and scalable; lacks evidence, cost considerations, and deployment timelines.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"ambiguity\",\n        \"note\": \"'imminent, severe harm' is underspecified; triggers for temporary shutdown and gating are not defined, risking arbitrary or politicized use.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"logic\",\n        \"note\": \"Regulation aims to reduce harms while preserving innovation, but no formal risk-benefit or trade-off analysis is presented to justify the balance.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"No detailed due-process framework (appeals, timelines, safe harbors for research, or exemptions for safety testing) to prevent chilling effects on legitimate activity.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"No provisions for governance features like sunset clauses, regular reviews, or adaptive mechanisms to keep pace with AI advances.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"missing\",\n        \"note\": \"No discussion of governance to mitigate regulatory capture, ensure stakeholder representation, or transparency around enforcement decisions and penalties.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"ambiguity\",\n        \"note\": \"International coordination is proposed but lacks actionable mechanism, governance structure, or enforcement pathway; cross-border inconsistencies are likely.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"factual\",\n        \"note\": \"Assumes that shutdown/gating can be narrowly scoped across heterogeneous architectures and ecosystems (including open-source contributions), which is often impractical.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"overconfidence\",\n        \"note\": \"Claims of 'rights-respecting safeguards' without specifying concrete models, metrics, or verification methods; may overestimate legitimacy and public trust.\"\n      }\n    ]\n  }\n]"
+            }
+          ],
+          "schemaName": "Judgement",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "rubricScores": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "coherence": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "completeness": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "factualRisk": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "uncertaintyHandling": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  }
+                },
+                "required": [
+                  "coherence",
+                  "completeness",
+                  "factualRisk",
+                  "uncertaintyHandling"
+                ]
+              },
+              "strengths": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "weaknesses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "summary": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "rubricScores",
+              "strengths",
+              "weaknesses",
+              "summary"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "rubricScores": {
+              "coherence": 4,
+              "completeness": 2,
+              "factualRisk": 3,
+              "uncertaintyHandling": 3
+            },
+            "strengths": [
+              "Clear overarching aim to regulate high-risk AI within a rights-respecting, transparent framework.",
+              "Articulates a risk-based, domain-aware approach with explicit governance concepts (due process, independent review, sunset/rollback).",
+              "Covers a broad set of artifacts and deployment contexts (weights, data, APIs, services, edge, on-premise, open-source in high-risk contexts).",
+              "Acknowledges international coordination and proportional penalties as part of a balanced regime."
+            ],
+            "weaknesses": [
+              "High-risk criteria are not explicitly defined (thresholds, domain-specific factors, and how risk evolves with capability).",
+              "No concrete due-process details (who adjudicates, hearing procedures, timelines, appeals, safe harbors).",
+              "Enforcement feasibility and resource needs are not substantiated; potential burden on small actors is not quantified.",
+              "Scope gaps: open-source, dual-use, and diverse deployment contexts may evade controls; weights, data, APIs, model variants need clearer coverage.",
+              "International coordination mechanisms, governance structures, and enforcement pathways are underspecified, risking fragmentation or arbitrage.",
+              "Lacks explicit evaluation metrics, robust plan for sunset/rollback, and a risk-benefit analytic framework; penalties guidance is vague."
+            ],
+            "summary": "The proposal presents a coherent, principled vision for regulating high-risk AI with due-process safeguards and international considerations. However, it lacks essential operational details: explicit high-risk criteria, due-process mechanisms, enforcement feasibility, and a concrete evaluation framework. To improve, define objective high-risk thresholds, specify hearings and appeals, quantify enforcement resources and provisions for small actors, close scope gaps for open-source/dual-use deployments, and lay out concrete metrics, timelines, and mechanisms for sunset/rollback and governance to monitor effectiveness and adapt over time."
+          }
+        ],
+        "output": {
+          "kind": "judgement",
+          "data": {
+            "rubricScores": {
+              "coherence": 4,
+              "completeness": 2,
+              "factualRisk": 3,
+              "uncertaintyHandling": 3
+            },
+            "strengths": [
+              "Clear overarching aim to regulate high-risk AI within a rights-respecting, transparent framework.",
+              "Articulates a risk-based, domain-aware approach with explicit governance concepts (due process, independent review, sunset/rollback).",
+              "Covers a broad set of artifacts and deployment contexts (weights, data, APIs, services, edge, on-premise, open-source in high-risk contexts).",
+              "Acknowledges international coordination and proportional penalties as part of a balanced regime."
+            ],
+            "weaknesses": [
+              "High-risk criteria are not explicitly defined (thresholds, domain-specific factors, and how risk evolves with capability).",
+              "No concrete due-process details (who adjudicates, hearing procedures, timelines, appeals, safe harbors).",
+              "Enforcement feasibility and resource needs are not substantiated; potential burden on small actors is not quantified.",
+              "Scope gaps: open-source, dual-use, and diverse deployment contexts may evade controls; weights, data, APIs, model variants need clearer coverage.",
+              "International coordination mechanisms, governance structures, and enforcement pathways are underspecified, risking fragmentation or arbitrage.",
+              "Lacks explicit evaluation metrics, robust plan for sunset/rollback, and a risk-benefit analytic framework; penalties guidance is vague."
+            ],
+            "summary": "The proposal presents a coherent, principled vision for regulating high-risk AI with due-process safeguards and international considerations. However, it lacks essential operational details: explicit high-risk criteria, due-process mechanisms, enforcement feasibility, and a concrete evaluation framework. To improve, define objective high-risk thresholds, specify hearings and appeals, quantify enforcement resources and provisions for small actors, close scope gaps for open-source/dual-use deployments, and lay out concrete metrics, timelines, and mechanisms for sunset/rollback and governance to monitor effectiveness and adapt over time."
+          }
+        },
+        "completedAt": "2026-02-17T12:38:20.350Z"
+      }
+    ],
+    "finalAnswer": "Yes. Governments should have powers to regulate or shut down AI systems deemed high-risk, but only within a carefully designed, rights-respecting, and transparent framework that is proportionate, auditable, and regularly reviewed. The regime should be risk-based and domain-aware, with explicit criteria for what counts as high risk, including potential for serious harm to safety, health, privacy, democratic processes, critical infrastructure, or financial stability. It must cover all relevant artifacts and deployments, including model weights, training data, APIs, software services, on-premise and edge deployments, and open source components when used in high risk contexts. Actions to gate, suspend, or shut down should be triggered only after due process and independent review, with clear criteria, published decisions, remedies for affected parties, and a finite emergency pathway with sunset reviews. The framework should require safety testing against standardized benchmarks, incident reporting, documentation, governance evidence, and independent oversight, with penalties that are proportionate to harm, culpability, and noncompliance. It should provide scalable compliance support for small actors and avoid undue burdens. International coordination can help harmonize baselines and reduce regulatory arbitrage while respecting sovereignty and privacy, with mutual recognition and room for national carve-outs. Finally, the regime must include explicit evaluation metrics and sunset or rollback mechanisms to measure effectiveness and adjust course over time.",
+    "metrics": {
+      "confidence": {
+        "solver": 0.7,
+        "revision": 0.4,
+        "synthesizer": 0.66,
+        "calibratedAdjusted": 0.66,
+        "solverToRevisionDelta": -0.3,
+        "revisionToSynthesizerDelta": 0.26
+      },
+      "critique": {
+        "maxSeverity": 5,
+        "avgSeverity": 4.45,
+        "byType": {
+          "factual": 4,
+          "missing": 8,
+          "ambiguity": 4,
+          "logic": 2,
+          "overconfidence": 2
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 2,
+        "factualRisk": 3,
+        "uncertaintyHandling": 3
+      },
+      "research": {
+        "evidenceRiskLevel": 3,
+        "counterfactualFailureModeCount": 10,
+        "topCounterfactualFailureMode": "Regulatory overreach stifling innovation and legitimate beneficial uses."
+      },
+      "consensus": {
+        "included": [
+          "solver",
+          "revision",
+          "synthesizer"
+        ],
+        "pairs": [
+          {
+            "a": "solver",
+            "b": "revision",
+            "similarity": 0.916
+          },
+          {
+            "a": "solver",
+            "b": "synthesizer",
+            "similarity": 0.916
+          },
+          {
+            "a": "revision",
+            "b": "synthesizer",
+            "similarity": 1
+          }
+        ],
+        "strength": 0.944
+      }
+    }
+  },
+  "metadata": {
+    "schemaVersion": 1,
+    "createdAt": "2026-02-17T12:38:20.350Z",
+    "model": "gpt-5-nano-2025-08-07",
+    "fastMode": false,
+    "pipelinePreset": "research_deep",
+    "pipelineVersion": "1.0.0",
+    "source": "cli"
+  }
+}

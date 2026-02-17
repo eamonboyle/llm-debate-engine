@@ -1,0 +1,247 @@
+{
+  "kind": "benchmark",
+  "id": "benchmark_1771342676099_703f78c9eaf418",
+  "question": "Should we establish a global minimum corporate tax?",
+  "metadata": {
+    "schemaVersion": 1,
+    "createdAt": "2026-02-17T15:37:56.099Z",
+    "model": "gpt-5-nano-2025-08-07",
+    "fastMode": false,
+    "pipelinePreset": "research_deep",
+    "pipelineVersion": "1.0.0",
+    "source": "cli"
+  },
+  "payload": {
+    "runs": 5,
+    "runIds": [
+      "run_1771342440320_5ddb9cec815eb",
+      "run_1771342445748_f192fac5b6c118",
+      "run_1771342478982_595a4ece0e5858",
+      "run_1771342649951_42da7735130fb8",
+      "run_1771342673779_ac7623b88a6f28"
+    ],
+    "modeCount": 5,
+    "modeSizes": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "divergenceEntropy": 2.321928094887362,
+    "threshold": 0.9,
+    "modeCountAt0_8": 3,
+    "modeCountAt0_9": 5,
+    "modeCountAt0_95": 5,
+    "modes": [
+      {
+        "size": 1,
+        "members": [
+          0
+        ],
+        "exemplarIndex": 0,
+        "exemplarPreview": "A global minimum corporate tax can be valuable to curb BEPS and stabilize government revenues, but its effectiveness depends on a robust, transparent design and a pragmatic rollout that accounts for p"
+      },
+      {
+        "size": 1,
+        "members": [
+          1
+        ],
+        "exemplarIndex": 1,
+        "exemplarPreview": "A global minimum corporate tax should be pursued, but only as part of a carefully designed, staged framework with credible enforcement, explicit design parameters, robust governance, and development s"
+      },
+      {
+        "size": 1,
+        "members": [
+          2
+        ],
+        "exemplarIndex": 2,
+        "exemplarPreview": "Yes, but only with a transparent, evidence-based, and phased design that defines scope, enforcement, transition, and evaluation. The 15% GloBE rate can serve as a workable anchor for discussion, but i"
+      },
+      {
+        "size": 1,
+        "members": [
+          3
+        ],
+        "exemplarIndex": 3,
+        "exemplarPreview": "Yes: pursue a global minimum corporate tax, but only with explicit definitions, credible measurement, and safeguards for developing countries. Given that revenue effects are uncertain and depend on ra"
+      },
+      {
+        "size": 1,
+        "members": [
+          4
+        ],
+        "exemplarIndex": 4,
+        "exemplarPreview": "A global minimum corporate tax can be a valuable tool to curb profit shifting and stabilize international tax revenues, but its success hinges on explicit, parameterized design, credible adoption by a"
+      }
+    ],
+    "modeCountClaimCentroid": 5,
+    "modeSizesClaimCentroid": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "divergenceEntropyClaimCentroid": 2.321928094887362,
+    "modeCountClaimCentroidAt0_8": 1,
+    "modeCountClaimCentroidAt0_9": 5,
+    "modeCountClaimCentroidAt0_95": 5,
+    "stabilityClaimCentroid": {
+      "pairwiseMean": 0.836,
+      "pairwiseStddev": 0.044,
+      "minPairwiseSimilarity": 0.771,
+      "maxPairwiseSimilarity": 0.888
+    },
+    "summary": {
+      "question": "Should we establish a global minimum corporate tax?",
+      "runs": 5,
+      "runIds": [
+        "run_1771342440320_5ddb9cec815eb",
+        "run_1771342445748_f192fac5b6c118",
+        "run_1771342478982_595a4ece0e5858",
+        "run_1771342649951_42da7735130fb8",
+        "run_1771342673779_ac7623b88a6f28"
+      ],
+      "consensus": {
+        "mean": 0.875,
+        "stddev": 0.024
+      },
+      "critiqueMaxSeverity": {
+        "mean": 4.8,
+        "stddev": 0.447
+      },
+      "modeCount": 5,
+      "modeSizes": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "divergenceEntropy": 2.321928094887362,
+      "threshold": 0.9,
+      "modeCountAt0_8": 3,
+      "modeCountAt0_9": 5,
+      "modeCountAt0_95": 5,
+      "modes": [
+        {
+          "size": 1,
+          "members": [
+            0
+          ],
+          "exemplarIndex": 0,
+          "exemplarPreview": "A global minimum corporate tax can be valuable to curb BEPS and stabilize government revenues, but its effectiveness depends on a robust, transparent design and a pragmatic rollout that accounts for p"
+        },
+        {
+          "size": 1,
+          "members": [
+            1
+          ],
+          "exemplarIndex": 1,
+          "exemplarPreview": "A global minimum corporate tax should be pursued, but only as part of a carefully designed, staged framework with credible enforcement, explicit design parameters, robust governance, and development s"
+        },
+        {
+          "size": 1,
+          "members": [
+            2
+          ],
+          "exemplarIndex": 2,
+          "exemplarPreview": "Yes, but only with a transparent, evidence-based, and phased design that defines scope, enforcement, transition, and evaluation. The 15% GloBE rate can serve as a workable anchor for discussion, but i"
+        },
+        {
+          "size": 1,
+          "members": [
+            3
+          ],
+          "exemplarIndex": 3,
+          "exemplarPreview": "Yes: pursue a global minimum corporate tax, but only with explicit definitions, credible measurement, and safeguards for developing countries. Given that revenue effects are uncertain and depend on ra"
+        },
+        {
+          "size": 1,
+          "members": [
+            4
+          ],
+          "exemplarIndex": 4,
+          "exemplarPreview": "A global minimum corporate tax can be a valuable tool to curb profit shifting and stabilize international tax revenues, but its success hinges on explicit, parameterized design, credible adoption by a"
+        }
+      ],
+      "stability": {
+        "pairwiseMean": 0.788,
+        "pairwiseStddev": 0.05,
+        "minPairwiseSimilarity": 0.698,
+        "maxPairwiseSimilarity": 0.874,
+        "pairs": [
+          {
+            "i": 0,
+            "j": 1,
+            "similarity": 0.776
+          },
+          {
+            "i": 0,
+            "j": 2,
+            "similarity": 0.79
+          },
+          {
+            "i": 0,
+            "j": 3,
+            "similarity": 0.874
+          },
+          {
+            "i": 0,
+            "j": 4,
+            "similarity": 0.818
+          },
+          {
+            "i": 1,
+            "j": 2,
+            "similarity": 0.698
+          },
+          {
+            "i": 1,
+            "j": 3,
+            "similarity": 0.785
+          },
+          {
+            "i": 1,
+            "j": 4,
+            "similarity": 0.831
+          },
+          {
+            "i": 2,
+            "j": 3,
+            "similarity": 0.789
+          },
+          {
+            "i": 2,
+            "j": 4,
+            "similarity": 0.723
+          },
+          {
+            "i": 3,
+            "j": 4,
+            "similarity": 0.792
+          }
+        ]
+      },
+      "modeCountClaimCentroid": 5,
+      "modeSizesClaimCentroid": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "divergenceEntropyClaimCentroid": 2.321928094887362,
+      "modeCountClaimCentroidAt0_8": 1,
+      "modeCountClaimCentroidAt0_9": 5,
+      "modeCountClaimCentroidAt0_95": 5,
+      "stabilityClaimCentroid": {
+        "pairwiseMean": 0.836,
+        "pairwiseStddev": 0.044,
+        "minPairwiseSimilarity": 0.771,
+        "maxPairwiseSimilarity": 0.888
+      }
+    }
+  }
+}

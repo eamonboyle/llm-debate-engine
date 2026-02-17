@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-02-17T10:40:41.115Z",
+  "generatedAt": "2026-02-17T15:51:24.322Z",
   "filterContext": {},
   "totals": {
-    "runs": 6,
-    "benchmarks": 1,
+    "runs": 16,
+    "benchmarks": 6,
     "skippedFiles": 0
   },
   "runs": [
@@ -251,6 +251,415 @@
         "counterfactualFailureModeCount": 10,
         "topCounterfactualFailureMode": "Overreliance on animal models with uncertain translational value leading to ethically questionable harms justified by anticipated benefits"
       }
+    },
+    {
+      "id": "run_1771331900350_c7e96e15567ea8",
+      "question": "Should governments have powers to regulate or shut down AI systems deemed high-risk?",
+      "createdAt": "2026-02-17T12:38:20.350Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "stepCount": 10,
+      "finalAnswerPreview": "Yes. Governments should have powers to regulate or shut down AI systems deemed high-risk, but only within a carefully designed, rights-respecting, and transparent framework that is proportionate, auditable, and regularly",
+      "confidence": {
+        "solver": 0.7,
+        "revision": 0.4,
+        "synthesizer": 0.66,
+        "calibratedAdjusted": 0.66,
+        "solverToRevisionDelta": -0.3,
+        "revisionToSynthesizerDelta": 0.26
+      },
+      "critique": {
+        "issueCount": 20,
+        "maxSeverity": 5,
+        "avgSeverity": 4.45,
+        "byType": {
+          "factual": 4,
+          "missing": 8,
+          "ambiguity": 4,
+          "logic": 2,
+          "overconfidence": 2
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 2,
+        "factualRisk": 3,
+        "uncertaintyHandling": 3
+      },
+      "research": {
+        "evidenceRiskLevel": 3,
+        "counterfactualFailureModeCount": 10,
+        "topCounterfactualFailureMode": "Regulatory overreach stifling innovation and legitimate beneficial uses."
+      }
+    },
+    {
+      "id": "run_1771332829155_c87bad4caa498",
+      "question": "Is nuclear energy a necessary bridge to decarbonization?",
+      "createdAt": "2026-02-17T12:53:49.155Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "stepCount": 10,
+      "finalAnswerPreview": "Nuclear energy is not universally required for decarbonization, but it can play a context-dependent role as a source of firm, low-carbon power and certain grid services when timelines, costs, and public acceptance align.",
+      "confidence": {
+        "solver": 0.65,
+        "revision": 0.42,
+        "synthesizer": 0.75,
+        "calibratedAdjusted": 0.75,
+        "solverToRevisionDelta": -0.23,
+        "revisionToSynthesizerDelta": 0.33
+      },
+      "critique": {
+        "issueCount": 18,
+        "maxSeverity": 5,
+        "avgSeverity": 4.056,
+        "byType": {
+          "ambiguity": 4,
+          "factual": 1,
+          "missing": 9,
+          "logic": 2,
+          "overconfidence": 2
+        }
+      },
+      "quality": {
+        "coherence": 3,
+        "completeness": 2,
+        "factualRisk": 3,
+        "uncertaintyHandling": 2
+      },
+      "research": {
+        "evidenceRiskLevel": 3,
+        "counterfactualFailureModeCount": 11,
+        "topCounterfactualFailureMode": "Cost overruns and schedule delays for new large reactors undermine economics and usable capacity."
+      }
+    },
+    {
+      "id": "run_1771333334625_cc1e875bfe936",
+      "question": "Should we use gene editing for human enhancement?",
+      "createdAt": "2026-02-17T13:02:14.625Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "stepCount": 10,
+      "finalAnswerPreview": "Based on current evidence and governance realities, gene editing for human enhancement should not be pursued for broad deployment. Distinctions between enhancement and therapy must be clearly defined: enhancement refers ",
+      "confidence": {
+        "solver": 0.65,
+        "revision": 0.6,
+        "synthesizer": 0.7,
+        "calibratedAdjusted": 0.7,
+        "solverToRevisionDelta": -0.05,
+        "revisionToSynthesizerDelta": 0.1
+      },
+      "critique": {
+        "issueCount": 19,
+        "maxSeverity": 5,
+        "avgSeverity": 2.053,
+        "byType": {
+          "factual": 4,
+          "missing": 8,
+          "logic": 1,
+          "ambiguity": 4,
+          "overconfidence": 2
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 3,
+        "factualRisk": 3,
+        "uncertaintyHandling": 4
+      },
+      "research": {
+        "evidenceRiskLevel": 4,
+        "counterfactualFailureModeCount": 10,
+        "topCounterfactualFailureMode": "Regulatory gaps and loopholes enabling enhancement trials to operate under therapy exemptions"
+      }
+    },
+    {
+      "id": "run_1771333687716_a6b19601e978b8",
+      "question": "Does cancel culture have a net positive or negative effect on society?",
+      "createdAt": "2026-02-17T13:08:07.716Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "stepCount": 10,
+      "finalAnswerPreview": "Cancel culture cannot be categorized as universally net positive or negative. Its net welfare is context-dependent and must be evaluated with explicit definitions, a clear taxonomy of variants, and a multidimensional wel",
+      "confidence": {
+        "solver": 0.58,
+        "revision": 0.25,
+        "synthesizer": 0.79,
+        "calibratedAdjusted": 0.79,
+        "solverToRevisionDelta": -0.33,
+        "revisionToSynthesizerDelta": 0.54
+      },
+      "critique": {
+        "issueCount": 15,
+        "maxSeverity": 5,
+        "avgSeverity": 4.067,
+        "byType": {
+          "factual": 3,
+          "logic": 1,
+          "missing": 6,
+          "ambiguity": 4,
+          "overconfidence": 1
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 3,
+        "factualRisk": 4,
+        "uncertaintyHandling": 3
+      },
+      "research": {
+        "evidenceRiskLevel": 4,
+        "counterfactualFailureModeCount": 9,
+        "topCounterfactualFailureMode": "Ambiguity and inconsistency in operationalizing 'cancel culture' into a taxonomy, leading to misclassification and non-comparability."
+      }
+    },
+    {
+      "id": "run_1771337364741_aed55aab299e18",
+      "question": "Should countries adopt open borders for migration?",
+      "createdAt": "2026-02-17T14:09:24.741Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "stepCount": 10,
+      "finalAnswerPreview": "Open borders should not be treated as a universal policy. Whether to open borders depends on country-specific institutions, labor markets, and public capacity. Evidence shows GDP gains and labor-supply effects are mixed ",
+      "confidence": {
+        "solver": 0.62,
+        "revision": 0.44,
+        "synthesizer": 0.65,
+        "calibratedAdjusted": 0.65,
+        "solverToRevisionDelta": -0.18,
+        "revisionToSynthesizerDelta": 0.21
+      },
+      "critique": {
+        "issueCount": 21,
+        "maxSeverity": 5,
+        "avgSeverity": 3.81,
+        "byType": {
+          "factual": 4,
+          "missing": 10,
+          "ambiguity": 4,
+          "logic": 1,
+          "overconfidence": 2
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 3,
+        "factualRisk": 4,
+        "uncertaintyHandling": 3
+      },
+      "research": {
+        "evidenceRiskLevel": 4,
+        "counterfactualFailureModeCount": 11,
+        "topCounterfactualFailureMode": "Fiscal overrun due to higher-than-expected welfare, housing, and integration costs"
+      }
+    },
+    {
+      "id": "run_1771337896110_a0e2f3069a7c28",
+      "question": "Is it defensible to prioritize the welfare of future generations over current ones?",
+      "createdAt": "2026-02-17T14:18:16.110Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "stepCount": 10,
+      "finalAnswerPreview": "Defensible in many ethical traditions, but only with explicit methods, transparent assumptions, and defensible evidence. The non-identity problem requires evaluating policies by the welfare of the people who would exist ",
+      "confidence": {
+        "solver": 0.65,
+        "revision": 0.4,
+        "synthesizer": 0.72,
+        "calibratedAdjusted": 0.72,
+        "solverToRevisionDelta": -0.25,
+        "revisionToSynthesizerDelta": 0.32
+      },
+      "critique": {
+        "issueCount": 16,
+        "maxSeverity": 5,
+        "avgSeverity": 3.125,
+        "byType": {
+          "ambiguity": 5,
+          "missing": 9,
+          "overconfidence": 1,
+          "factual": 1
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 3,
+        "factualRisk": 3,
+        "uncertaintyHandling": 4
+      },
+      "research": {
+        "evidenceRiskLevel": 4,
+        "counterfactualFailureModeCount": 10,
+        "topCounterfactualFailureMode": "Non-identity problem makes cross-generational welfare comparison ill-defined because the people who exist under each option differ."
+      }
+    },
+    {
+      "id": "run_1771338200547_b35afb9b3e49c",
+      "question": "Should algorithmic transparency be legally required for high-stakes decisions?",
+      "createdAt": "2026-02-17T14:23:20.547Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "stepCount": 10,
+      "finalAnswerPreview": "High-stakes decisions should not be subject to blanket mandatory disclosure of all model details. Instead, implement a risk- and impact-based transparency framework with governance and ongoing evaluation. Key elements in",
+      "confidence": {
+        "solver": 0.62,
+        "revision": 0.45,
+        "synthesizer": 0.66,
+        "calibratedAdjusted": 0.66,
+        "solverToRevisionDelta": -0.17,
+        "revisionToSynthesizerDelta": 0.21
+      },
+      "critique": {
+        "issueCount": 21,
+        "maxSeverity": 5,
+        "avgSeverity": 3.286,
+        "byType": {
+          "factual": 2,
+          "missing": 12,
+          "ambiguity": 3,
+          "logic": 2,
+          "overconfidence": 2
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 3,
+        "factualRisk": 3,
+        "uncertaintyHandling": 3
+      },
+      "research": {
+        "evidenceRiskLevel": 4,
+        "counterfactualFailureModeCount": 10,
+        "topCounterfactualFailureMode": "Superficial compliance: transparency measures are implemented as checkbox exercises without improving accountability or redress."
+      }
+    },
+    {
+      "id": "run_1771338666300_cf9b40011bfd58",
+      "question": "Should we tax robots or automation that displaces workers?",
+      "createdAt": "2026-02-17T14:31:06.300Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "stepCount": 10,
+      "finalAnswerPreview": "Not a blanket yes or no. A broad tax on automation that displaces workers risks reducing investment and innovation, and the net employment effects are uncertain and highly context-specific. If policymakers consider an au",
+      "confidence": {
+        "solver": 0.6,
+        "revision": 0.42,
+        "synthesizer": 0.83,
+        "calibratedAdjusted": 0.83,
+        "solverToRevisionDelta": -0.18,
+        "revisionToSynthesizerDelta": 0.41
+      },
+      "critique": {
+        "issueCount": 20,
+        "maxSeverity": 5,
+        "avgSeverity": 3.45,
+        "byType": {
+          "factual": 3,
+          "logic": 4,
+          "ambiguity": 4,
+          "missing": 7,
+          "overconfidence": 2
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 3,
+        "factualRisk": 2,
+        "uncertaintyHandling": 3
+      },
+      "research": {
+        "evidenceRiskLevel": 4,
+        "counterfactualFailureModeCount": 8,
+        "topCounterfactualFailureMode": "Ambiguity in defining and measuring automation/intensity leads to inconsistent tax bases and disputes over eligibility."
+      }
+    },
+    {
+      "id": "run_1771338921298_eef7ea7025ffa",
+      "question": "Is long-termism a sound framework for ethical prioritization?",
+      "createdAt": "2026-02-17T14:35:21.298Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "stepCount": 10,
+      "finalAnswerPreview": "Long-termism can be defensible as a framework for ethical prioritization, but only when it is precisely defined, transparently justified, and robust to uncertainty. Key requirements include: (1) a concrete horizon (e.g.,",
+      "confidence": {
+        "solver": 0.65,
+        "revision": 0.25,
+        "synthesizer": 0.63,
+        "calibratedAdjusted": 0.63,
+        "solverToRevisionDelta": -0.4,
+        "revisionToSynthesizerDelta": 0.38
+      },
+      "critique": {
+        "issueCount": 19,
+        "maxSeverity": 4,
+        "avgSeverity": 2.158,
+        "byType": {
+          "ambiguity": 4,
+          "factual": 1,
+          "logic": 2,
+          "overconfidence": 2,
+          "missing": 10
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 4,
+        "factualRisk": 1,
+        "uncertaintyHandling": 4
+      },
+      "research": {
+        "evidenceRiskLevel": 4,
+        "counterfactualFailureModeCount": 12,
+        "topCounterfactualFailureMode": "Horizon or discounting mis-specification leading to biased prioritization"
+      }
+    },
+    {
+      "id": "run_1771339358393_be66419088a87",
+      "question": "Should governments subsidize or ban cryptocurrency?",
+      "createdAt": "2026-02-17T14:42:38.393Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "stepCount": 10,
+      "finalAnswerPreview": "Governments should not pursue a blanket subsidy or blanket ban on cryptocurrency. Instead, adopt a phased, evidence‑based policy that couples targeted, sunset‑bound subsidies to support innovation and financial inclusion",
+      "confidence": {
+        "solver": 0.63,
+        "revision": 0.4,
+        "synthesizer": 0.76,
+        "calibratedAdjusted": 0.76,
+        "solverToRevisionDelta": -0.23,
+        "revisionToSynthesizerDelta": 0.36
+      },
+      "critique": {
+        "issueCount": 18,
+        "maxSeverity": 5,
+        "avgSeverity": 3.389,
+        "byType": {
+          "factual": 1,
+          "logic": 2,
+          "missing": 9,
+          "ambiguity": 4,
+          "overconfidence": 2
+        }
+      },
+      "quality": {
+        "coherence": 3,
+        "completeness": 3,
+        "factualRisk": 3,
+        "uncertaintyHandling": 2
+      },
+      "research": {
+        "evidenceRiskLevel": 4,
+        "counterfactualFailureModeCount": 11,
+        "topCounterfactualFailureMode": "Budgetary distortions due to mis-targeted subsidies that distort private investment and crowd out innovation."
+      }
     }
   ],
   "benchmarks": [
@@ -305,62 +714,301 @@
           "exemplarPreview": "Yes. Social media platforms should be held liable under a calibrated, tiered framework that protects safety while preserving free expression and innovation. The regime should distinguish illegal conte"
         }
       ]
+    },
+    {
+      "id": "benchmark_1771339872755_5450882533c458",
+      "question": "Should we ban or heavily restrict facial recognition in public spaces?",
+      "createdAt": "2026-02-17T14:51:12.755Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "runs": 5,
+      "modeCount": 4,
+      "modeSizes": [
+        1,
+        2,
+        1,
+        1
+      ],
+      "divergenceEntropy": 1.9219280948873623,
+      "stabilityPairwiseMean": 0.858,
+      "threshold": 0.9,
+      "modeLabels": [
+        {
+          "modeIndex": 0,
+          "size": 1,
+          "label": "policy-oriented",
+          "exemplarPreview": "Policy stance: default to banning broad public-space facial recognition deployments. Narrowly scoped pilots may be permitted only after a formal risk–benefit assessment that demonstrates compelling pu"
+        },
+        {
+          "modeIndex": 1,
+          "size": 2,
+          "label": "policy-oriented",
+          "exemplarPreview": "Policy direction: adopt a phased, evidence-based, time-bound regulation of facial recognition in public spaces. Start with strong restrictions on public-space deployments, narrowly defined emergency e"
+        },
+        {
+          "modeIndex": 2,
+          "size": 1,
+          "label": "policy-oriented",
+          "exemplarPreview": "We should ban facial recognition in public spaces or apply very strict restrictions, supported by a robust governance framework. If a ban is not feasible in a jurisdiction, implement the strictest pra"
+        },
+        {
+          "modeIndex": 3,
+          "size": 1,
+          "label": "general framing",
+          "exemplarPreview": "Default position: ban broad, general‑purpose, real‑time facial recognition in public spaces. Any permitted use should be highly restricted, narrowly defined, and governed by an explicit risk–benefit f"
+        }
+      ]
+    },
+    {
+      "id": "benchmark_1771340556245_a400d11985986",
+      "question": "Is the precautionary principle a sound basis for technology regulation?",
+      "createdAt": "2026-02-17T15:02:36.245Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "runs": 5,
+      "modeCount": 4,
+      "modeSizes": [
+        1,
+        1,
+        1,
+        2
+      ],
+      "divergenceEntropy": 1.9219280948873623,
+      "stabilityPairwiseMean": 0.813,
+      "threshold": 0.9,
+      "modeLabels": [
+        {
+          "modeIndex": 0,
+          "size": 1,
+          "label": "general framing",
+          "exemplarPreview": "PPP can be a sensible instrument for technology regulation, but only when bounded by a disciplined decision framework that explicitly weighs uncertainties, potential harms, and the costs and benefits "
+        },
+        {
+          "modeIndex": 1,
+          "size": 1,
+          "label": "policy-oriented",
+          "exemplarPreview": "The precautionary principle can be a sound basis for technology regulation when embedded in adaptive, risk-based governance rather than used as an absolute ban. Its value comes from making risk thresh"
+        },
+        {
+          "modeIndex": 2,
+          "size": 1,
+          "label": "policy-oriented",
+          "exemplarPreview": "Yes, but only when embedded in a narrowly scoped, time-bound, evidence-informed governance framework. The precautionary principle can help prevent irreversible harms under deep uncertainty if it is de"
+        },
+        {
+          "modeIndex": 3,
+          "size": 2,
+          "label": "general framing",
+          "exemplarPreview": "The precautionary principle can be a useful element of technology regulation, but its soundness is not universal. Its acceptability depends on precise definitions, explicit welfare and distributional "
+        }
+      ]
+    },
+    {
+      "id": "benchmark_1771341288792_0922b306e9b72",
+      "question": "Should we prioritize AI safety research over AI capability research?",
+      "createdAt": "2026-02-17T15:14:48.792Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "runs": 5,
+      "modeCount": 5,
+      "modeSizes": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "divergenceEntropy": 2.321928094887362,
+      "stabilityPairwiseMean": 0.719,
+      "threshold": 0.9,
+      "modeLabels": [
+        {
+          "modeIndex": 0,
+          "size": 1,
+          "label": "technical framing",
+          "exemplarPreview": "Yes. Safety research should be prioritized early, but with a clearly defined scope, measurable targets, and domain-sensitive gating. Safety research encompasses alignment, verification, red-teaming, g"
+        },
+        {
+          "modeIndex": 1,
+          "size": 1,
+          "label": "technical framing",
+          "exemplarPreview": "Yes—AI safety research should be prioritized, but as a dynamic, risk-managed portfolio rather than a fixed mandate. We should pursue safety in a bounded, clearly defined set of domains (alignment, rob"
+        },
+        {
+          "modeIndex": 2,
+          "size": 1,
+          "label": "policy-oriented",
+          "exemplarPreview": "Proposed approach: adopt a risk-weighted dual-track strategy that continues capability development while elevating safety-focused research, with explicit governance, measurement, and resource rules to"
+        },
+        {
+          "modeIndex": 3,
+          "size": 1,
+          "label": "high-risk framing",
+          "exemplarPreview": "Adopt a risk-informed, adaptive AI R&D portfolio that quantifies catastrophic misalignment risk across near-term (1–3 years), mid-term (3–7 years), and long-term (>7 years) horizons. Maintain a baseli"
+        },
+        {
+          "modeIndex": 4,
+          "size": 1,
+          "label": "general framing",
+          "exemplarPreview": "Adopt a risk-informed, staged portfolio that makes safety the primary objective while maintaining a calibrated capability program. The plan should explicitly define safety outcomes and metrics, establ"
+        }
+      ]
+    },
+    {
+      "id": "benchmark_1771341934570_cb5fa43b309ec",
+      "question": "Is degrowth a viable solution to climate change?",
+      "createdAt": "2026-02-17T15:25:34.570Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "runs": 5,
+      "modeCount": 4,
+      "modeSizes": [
+        1,
+        2,
+        1,
+        1
+      ],
+      "divergenceEntropy": 1.9219280948873623,
+      "stabilityPairwiseMean": 0.871,
+      "threshold": 0.9,
+      "modeLabels": [
+        {
+          "modeIndex": 0,
+          "size": 1,
+          "label": "policy-oriented",
+          "exemplarPreview": "Definitions and scope: Degrowth means policy-driven reductions in energy demand and material throughput achieved through sufficiency, efficiency, and a reorientation of welfare toward health, educatio"
+        },
+        {
+          "modeIndex": 1,
+          "size": 2,
+          "label": "policy-oriented",
+          "exemplarPreview": "Degrowth is not a universal fix for climate change. It can contribute within a broader climate strategy, but only if definitions, governance, and time horizons are explicit. Specifically: operationali"
+        },
+        {
+          "modeIndex": 2,
+          "size": 1,
+          "label": "policy-oriented",
+          "exemplarPreview": "Degrowth can be part of climate strategy but is not a guaranteed universal solution. It is viable only with a credible policy design, appropriate context, and a credible transition plan. A plausible d"
+        },
+        {
+          "modeIndex": 3,
+          "size": 1,
+          "label": "policy-oriented",
+          "exemplarPreview": "Degrowth is not universally viable; its viability depends on explicit definitions, credible targets, and robust policy and energy-transition plans. I propose three testable variants: sufficiency-based"
+        }
+      ]
+    },
+    {
+      "id": "benchmark_1771342676099_703f78c9eaf418",
+      "question": "Should we establish a global minimum corporate tax?",
+      "createdAt": "2026-02-17T15:37:56.099Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "runs": 5,
+      "modeCount": 5,
+      "modeSizes": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "divergenceEntropy": 2.321928094887362,
+      "stabilityPairwiseMean": 0.788,
+      "threshold": 0.9,
+      "modeLabels": [
+        {
+          "modeIndex": 0,
+          "size": 1,
+          "label": "general framing",
+          "exemplarPreview": "A global minimum corporate tax can be valuable to curb BEPS and stabilize government revenues, but its effectiveness depends on a robust, transparent design and a pragmatic rollout that accounts for p"
+        },
+        {
+          "modeIndex": 1,
+          "size": 1,
+          "label": "policy-oriented",
+          "exemplarPreview": "A global minimum corporate tax should be pursued, but only as part of a carefully designed, staged framework with credible enforcement, explicit design parameters, robust governance, and development s"
+        },
+        {
+          "modeIndex": 2,
+          "size": 1,
+          "label": "general framing",
+          "exemplarPreview": "Yes, but only with a transparent, evidence-based, and phased design that defines scope, enforcement, transition, and evaluation. The 15% GloBE rate can serve as a workable anchor for discussion, but i"
+        },
+        {
+          "modeIndex": 3,
+          "size": 1,
+          "label": "general framing",
+          "exemplarPreview": "Yes: pursue a global minimum corporate tax, but only with explicit definitions, credible measurement, and safeguards for developing countries. Given that revenue effects are uncertain and depend on ra"
+        },
+        {
+          "modeIndex": 4,
+          "size": 1,
+          "label": "general framing",
+          "exemplarPreview": "A global minimum corporate tax can be a valuable tool to curb profit shifting and stabilize international tax revenues, but its success hinges on explicit, parameterized design, credible adoption by a"
+        }
+      ]
     }
   ],
   "aggregates": {
     "issueTypeCounts": {
-      "ambiguity": 22,
-      "factual": 18,
-      "missing": 44,
-      "overconfidence": 7,
-      "logic": 7
+      "ambiguity": 62,
+      "factual": 42,
+      "missing": 132,
+      "overconfidence": 25,
+      "logic": 24
     },
     "issueSeverityByType": [
       {
         "type": "ambiguity",
-        "count": 22,
-        "avgSeverity": 2.955,
-        "maxSeverity": 4
+        "count": 62,
+        "avgSeverity": 3.226,
+        "maxSeverity": 5
       },
       {
         "type": "factual",
-        "count": 18,
-        "avgSeverity": 3.667,
+        "count": 42,
+        "avgSeverity": 3.476,
         "maxSeverity": 5
       },
       {
         "type": "missing",
-        "count": 44,
-        "avgSeverity": 3.341,
+        "count": 132,
+        "avgSeverity": 3.424,
         "maxSeverity": 5
       },
       {
         "type": "overconfidence",
-        "count": 7,
-        "avgSeverity": 2.857,
+        "count": 25,
+        "avgSeverity": 2.92,
         "maxSeverity": 5
       },
       {
         "type": "logic",
-        "count": 7,
-        "avgSeverity": 3.571,
-        "maxSeverity": 4
+        "count": 24,
+        "avgSeverity": 3.5,
+        "maxSeverity": 5
       }
     ],
     "confidenceDrift": {
-      "solverToRevisionMean": -0.247,
-      "revisionToSynthesizerMean": 0.248,
+      "solverToRevisionMean": -0.238,
+      "revisionToSynthesizerMean": 0.288,
       "calibratedMinusSynthMean": 0
     },
     "confidenceCorrelation": {
-      "severityVsSolverToRevisionDelta": -0.104,
-      "severityVsRevisionToSynthesizerDelta": 0.73
+      "severityVsSolverToRevisionDelta": 0.342,
+      "severityVsRevisionToSynthesizerDelta": 0.236
     },
     "evidencePlanning": {
-      "riskLevelMean": 3.5,
+      "riskLevelMean": 3.688,
       "riskLevelDistribution": {
-        "3": 3,
-        "4": 3
+        "3": 5,
+        "4": 11
       }
     },
     "counterfactualFailureModeCounts": {
@@ -423,14 +1071,146 @@
       "Fragmented governance across jurisdictions creating loopholes, inconsistent standards, and nonuniform enforcement": 1,
       "Incentives (funding, publishing, regulatory) favoring more complex or larger animal studies over refinement or replacement": 1,
       "Ethical deliberations that rely on culturally or legally biased views of animal status, reducing universal safeguards": 1,
-      "Insufficient preregistration and data-sharing practices increasing unnecessary repetition and animal use": 1
+      "Insufficient preregistration and data-sharing practices increasing unnecessary repetition and animal use": 1,
+      "Regulatory overreach stifling innovation and legitimate beneficial uses.": 1,
+      "Ambiguity in high-risk criteria leading to inconsistent or unjust enforcement.": 1,
+      "Regulatory capture by industry actors or vested interests shaping criteria and outcomes.": 1,
+      "Insufficient technical expertise within regulators causing ineffective or erroneous actions.": 1,
+      "Excessive compliance burden, disproportionately impacting startups and small actors.": 1,
+      "Chilling effects that deter research, experimentation, or beneficial deployment.": 1,
+      "Opacity or lack of due-process in decision-making eroding legitimacy.": 1,
+      "Regulatory fragmentation across jurisdictions causing arbitrage and safety gaps.": 1,
+      "Privacy and civil liberties risks from pervasive monitoring or data handling in enforcement.": 1,
+      "Emergency shutdown pathways being misused for political leverage or without robust justification.": 1,
+      "Cost overruns and schedule delays for new large reactors undermine economics and usable capacity.": 1,
+      "Regulatory or licensing uncertainty slowing deployment, especially for SMRs/advanced reactors.": 1,
+      "Public opposition or social license failures delaying deployment timelines.": 1,
+      "Waste management, long-term disposal, and decommissioning liabilities exceeding planned budgets.": 1,
+      "Financing risk due to high capital expenditure, interest rates, or limited investor appetite for nuclear.": 1,
+      "Manufacturing and supply-chain bottlenecks for critical components, fuel cycle services, or vendor concentration.": 1,
+      "Geopolitical or regulatory restrictions on fuel supply, cross-border waste handling, or export controls increasing risk.": 1,
+      "Overestimation of grid inertia and ancillary service value, leading to market design misalignment or reliability gaps.": 1,
+      "Opportunity costs entailing diverted funding from cheaper decarbonization options (e.g., storage, wind/solar) reducing overall decarbonization pace.": 1,
+      "Safety incidents or regulatory penalties eroding public trust and triggering policy backlash.": 1,
+      "Proliferation concerns or international sanctions complicating deployment in certain regions.": 1,
+      "Regulatory gaps and loopholes enabling enhancement trials to operate under therapy exemptions": 1,
+      "Off-target edits, mosaicism, or unintended tissue effects leading to adverse phenotypes with uncertain long-term consequences": 1,
+      "Germline edits or unintended germline transmission risk being inadequately acknowledged or constrained": 1,
+      "Inadequate safety signals and lack of long-term durability data creating a false sense of safety for broader use": 1,
+      "Immune responses to delivery methods or repeated administrations causing adverse events or reduced efficacy": 1,
+      "Competitive or hype-driven pressures accelerating deployment before robust safety frameworks are in place": 1,
+      "Rogue clinics or unregulated experimentation causing direct harm and undermining public trust": 1,
+      "Equity-related harms such as coercion, widening disparities, or stigmatization associated with access to enhancement technologies": 1,
+      "Dual-use or security risks including military or coercive applications of enhancement capabilities": 1,
+      "Misinterpretation or over-interpretation of limited data leading to premature adoption and policy backlash": 1,
+      "Ambiguity and inconsistency in operationalizing 'cancel culture' into a taxonomy, leading to misclassification and non-comparability.": 1,
+      "Selection bias from dataset composition (e.g., focusing on high-profile cases) misrepresenting systemic effects.": 1,
+      "Measurement error and invalid/outdated outcome metrics failing to capture welfare across dimensions (accountability, trust, mental health, free expression).": 1,
+      "Confounding factors and endogeneity (other political, economic, or cultural shifts) biasing estimated effects.": 1,
+      "Temporal misalignment: short-term fluctuations misattributed to cancel actions; long-term effects mischaracterized.": 1,
+      "Cross-cultural and platform heterogeneity causing poor generalizability and invalid meta-analytic conclusions.": 1,
+      "Privacy, ethics, and data access constraints limiting data richness and causing incomplete analyses.": 1,
+      "Overreliance on preregistration leading to rigidity and ignoring emergent, unanticipated variants of cancel actions.": 1,
+      "Policy and normative prescriptivity hazards: presuming a net welfare effect without considering due process risks and chilling effects.": 1,
+      "Fiscal overrun due to higher-than-expected welfare, housing, and integration costs": 1,
+      "Housing market pressures (rental price hikes, limited supply) in major cities leading to affordability crises": 1,
+      "Public service capacity strain (healthcare, education, housing, policing) exceeding budgeting and staffing plans": 1,
+      "Labor market disruption for low-skilled workers with wage suppression or local unemployment spikes": 1,
+      "Widening regional inequality and urban-rural disparities as benefits concentrate in select areas": 1,
+      "Security, asylum processing, and governance vulnerabilities (backlogs, fraud, privacy breaches)": 1,
+      "Administrative complexity and bureaucratic inefficiencies in visa/permits leading to delays and misallocation": 1,
+      "Policy path dependence and political backlash eroding public trust and future openness opportunities": 1,
+      "Data quality and evaluation challenges causing incorrect scaling, misinterpreting results due to selection bias": 1,
+      "Macro spillovers (inflation, exchange rate volatility, capital flows) amplified by migration and policy design": 1,
+      "External shocks (economic downturns, climate-related displacement) exacerbating negative outcomes when openness is expanding": 1,
+      "Non-identity problem makes cross-generational welfare comparison ill-defined because the people who exist under each option differ.": 1,
+      "Difficulty defining and measuring multi-dimensional welfare across generations (well-being, capabilities, health, education, security, freedom) in a consistent way.": 1,
+      "Discounting choices or horizon selection systematically undervalue future welfare, biasing policy in favor of present generations.": 1,
+      "Intra-generational distributional effects within future cohorts are neglected, leading to inequality or unfairness among future people.": 1,
+      "High sensitivity to long-horizon forecasts and deep uncertainty yields brittle recommendations that fail under plausible scenarios.": 1,
+      "Model and data uncertainty propagates through evaluations, undermining credibility of results.": 1,
+      "Overreliance on quantitative metrics crowds out normative debate and risks misrepresenting non-quantifiable values.": 1,
+      "Political incentives and present bias lead to weak commitment to long-term welfare goals.": 1,
+      "Designs may create perverse incentives or gaming opportunities that improve measured welfare without improving real welfare.": 1,
+      "Governance and enforcement challenges across jurisdictions threaten enforcement of intergenerational commitments.": 1,
+      "Superficial compliance: transparency measures are implemented as checkbox exercises without improving accountability or redress.": 1,
+      "Privacy and safety risk: disclosed information leaks sensitive data or enables re-identification via logs or model outputs.": 1,
+      "IP and innovation chill: proprietary components, training data, or architectures become exposed, reducing incentives to innovate.": 1,
+      "Resource and cost burden: high auditing and disclosure costs disproportionately burden SMEs and hinder deployment.": 1,
+      "Incoherent or inconsistent disclosures: fragmentation across domains and jurisdictions reduces usefulness and creates confusion.": 1,
+      "Gaming of triggers: entities restructure decisions or adjust thresholds to avoid disclosure.": 1,
+      "Security vulnerabilities: disclosed artifacts (logs, model cards) become attack surfaces if not properly protected.": 1,
+      "Misaligned risk signaling: disclosures reveal raw metrics that are misinterpreted, causing wrong public judgments or regulatory actions.": 1,
+      "Redress gaps: governance bodies or appeal pathways are under-resourced or captured, undermining accountability.": 1,
+      "Data minimization conflicts: attempts to minimize data reduce usefulness of disclosures or hamper accountability.": 1,
+      "Ambiguity in defining and measuring automation/intensity leads to inconsistent tax bases and disputes over eligibility.": 1,
+      "Deterrence of productivity-enhancing automation and innovation due to tax, reducing investment, job creation, and potential long-run employment gains.": 1,
+      "Tax design complexity creates loopholes, exemptions, and gaming strategies that erode effectiveness and equity.": 1,
+      "High administrative burden and compliance costs, especially for small firms or firms with limited administrative capacity.": 1,
+      "Revenue volatility and unreliability due to dependence on technology adoption cycles, leading to planning difficulties.": 1,
+      "Tax avoidance through cross-border relocation, profit shifting, or reclustering activities to jurisdictions with looser rules.": 1,
+      "Unequal or regressive impact on small firms, startups, developing economies, or low-wage workers if the tax burden is not carefully calibrated.": 1,
+      "Potential chilling effects on complementary policies (e.g., retraining, wage subsidies) and on human–robot collaboration initiatives.": 1,
+      "Horizon or discounting mis-specification leading to biased prioritization": 1,
+      "Overreliance on uncertain existential-risk estimates without robust uncertainty handling": 1,
+      "Circular reasoning where future value is used to justify present actions auditing future outcomes": 1,
+      "Ambiguity in defining long-term welfare and determining moral status of future generations and non-human beings": 1,
+      "Neglect of near-term welfare, equity, and distributional justice due to predominant long-run focus": 1,
+      "Poor data quality or lack of credible bounds on existential risks causing overconfident models": 1,
+      "Model misspecification and overconfidence in quantitative projections": 1,
+      "Implementation and scalability constraints rendering risk-reduction interventions ineffective": 1,
+      "Policy coordination failures and governance bottlenecks in international or cross-sector contexts": 1,
+      "Unintended consequences and moral hazard from risk-reduction policies that shift or create new risks": 1,
+      "Sensitivity to tail risks (AI acceleration, climate tipping, pandemics) dominating outcomes and driving unstable recommendations": 1,
+      "Reliance on single-line risk mitigation strategies that may be brittle under uncertainty": 1,
+      "Budgetary distortions due to mis-targeted subsidies that distort private investment and crowd out innovation.": 1,
+      "Regulatory arbitrage and inconsistent rules across jurisdictions undermining policy effectiveness.": 1,
+      "Inadequate measurement and data quality leading to mis-timed sunsets or subsidy allocation errors.": 1,
+      "Capture of subsidies by political actors or incumbent firms resulting in skewed distribution and reduced innovation.": 1,
+      "Subsidies failing to curb illicit activity due to enforcement gaps or scope limitations.": 1,
+      "Innovation stagnation or reduced market competition caused by protectionist subsidy environments.": 1,
+      "Unintended energy or environmental externalities despite mitigation measures.": 1,
+      "CBDC design choices that threaten financial stability or suppress private innovation rather than complement it.": 1,
+      "Governance failures due to opaque processes, weak accountability, or poor evaluation leading to misallocation.": 1,
+      "Cross-border enforcement gaps enabling fraud, tax evasion, or regulatory arbitrage.": 1,
+      "Long-term subsidy dependence creating cliff effects when sunset clauses trigger and private investment fails to materialize.": 1
     },
     "outlierRuns": [
+      {
+        "benchmarkId": "benchmark_1771341288792_0922b306e9b72",
+        "runId": "run_1771341109637_c59eba19fe3388",
+        "avgSimilarity": 0.695,
+        "zScore": -1.21
+      },
+      {
+        "benchmarkId": "benchmark_1771342676099_703f78c9eaf418",
+        "runId": "run_1771342478982_595a4ece0e5858",
+        "avgSimilarity": 0.75,
+        "zScore": -1.402
+      },
+      {
+        "benchmarkId": "benchmark_1771340556245_a400d11985986",
+        "runId": "run_1771340320577_2dbd209ed89498",
+        "avgSimilarity": 0.755,
+        "zScore": -1.512
+      },
       {
         "benchmarkId": "benchmark_1771322068310_3aa3bf8e08c788",
         "runId": "run_1771321850044_96309600733f5",
         "avgSimilarity": 0.811,
         "zScore": -1.134
+      },
+      {
+        "benchmarkId": "benchmark_1771339872755_5450882533c458",
+        "runId": "run_1771339870601_367300aa6ecc7",
+        "avgSimilarity": 0.829,
+        "zScore": -1.542
+      },
+      {
+        "benchmarkId": "benchmark_1771341934570_cb5fa43b309ec",
+        "runId": "run_1771341918134_3d6f72b150717",
+        "avgSimilarity": 0.851,
+        "zScore": -1.714
       }
     ],
     "critiqueVsConfidence": [
@@ -469,11 +1249,71 @@
         "maxSeverity": 5,
         "solverToRevisionDelta": -0.23,
         "revisionToSynthesizerDelta": 0.26
+      },
+      {
+        "runId": "run_1771331900350_c7e96e15567ea8",
+        "maxSeverity": 5,
+        "solverToRevisionDelta": -0.3,
+        "revisionToSynthesizerDelta": 0.26
+      },
+      {
+        "runId": "run_1771332829155_c87bad4caa498",
+        "maxSeverity": 5,
+        "solverToRevisionDelta": -0.23,
+        "revisionToSynthesizerDelta": 0.33
+      },
+      {
+        "runId": "run_1771333334625_cc1e875bfe936",
+        "maxSeverity": 5,
+        "solverToRevisionDelta": -0.05,
+        "revisionToSynthesizerDelta": 0.1
+      },
+      {
+        "runId": "run_1771333687716_a6b19601e978b8",
+        "maxSeverity": 5,
+        "solverToRevisionDelta": -0.33,
+        "revisionToSynthesizerDelta": 0.54
+      },
+      {
+        "runId": "run_1771337364741_aed55aab299e18",
+        "maxSeverity": 5,
+        "solverToRevisionDelta": -0.18,
+        "revisionToSynthesizerDelta": 0.21
+      },
+      {
+        "runId": "run_1771337896110_a0e2f3069a7c28",
+        "maxSeverity": 5,
+        "solverToRevisionDelta": -0.25,
+        "revisionToSynthesizerDelta": 0.32
+      },
+      {
+        "runId": "run_1771338200547_b35afb9b3e49c",
+        "maxSeverity": 5,
+        "solverToRevisionDelta": -0.17,
+        "revisionToSynthesizerDelta": 0.21
+      },
+      {
+        "runId": "run_1771338666300_cf9b40011bfd58",
+        "maxSeverity": 5,
+        "solverToRevisionDelta": -0.18,
+        "revisionToSynthesizerDelta": 0.41
+      },
+      {
+        "runId": "run_1771338921298_eef7ea7025ffa",
+        "maxSeverity": 4,
+        "solverToRevisionDelta": -0.4,
+        "revisionToSynthesizerDelta": 0.38
+      },
+      {
+        "runId": "run_1771339358393_be66419088a87",
+        "maxSeverity": 5,
+        "solverToRevisionDelta": -0.23,
+        "revisionToSynthesizerDelta": 0.36
       }
     ],
     "presets": {
       "standard": 0,
-      "research_deep": 6,
+      "research_deep": 16,
       "fast_research": 0
     }
   },
