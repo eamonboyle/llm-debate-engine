@@ -5,6 +5,7 @@ import { OpenAICompatibleClient } from "./llm/OpenAiCompatibleClient";
 import { OpenAiEmbeddingClient } from "./embedding/OpenAiEmbeddingClient";
 import { DebateEngine } from "./debate/DebateEngine";
 import { BenchmarkRunner } from "./bench/BenchmarkRunner";
+import { buildAndWriteAnalysisIndex } from "./artifacts/indexer";
 import { makeId } from "./core/id";
 import type { AgentResponse, Critique, CritiqueIssue } from "./types/agent";
 import type { BenchmarkArtifactPayload } from "./types/benchmark";
@@ -46,13 +47,15 @@ function printSummary(
     console.log("\n(Full run details saved in the JSON file.)");
 }
 
-const API_KEY = process.env.OPENAI_API_KEY;
-
-if (!API_KEY) {
-    console.error(
-        "Missing OPENAI_API_KEY. Set it in .env (copy .env.example) or as an environment variable.",
-    );
-    process.exit(1);
+function requireApiKey(): string {
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+        console.error(
+            "Missing OPENAI_API_KEY. Set it in .env (copy .env.example) or as an environment variable.",
+        );
+        process.exit(1);
+    }
+    return apiKey;
 }
 
 function buildMetadata(opts: {
@@ -85,14 +88,15 @@ async function runBenchmark(
     },
 ): Promise<void> {
     const { concurrency, model, fast, threshold, pipelinePreset } = opts ?? {};
+    const apiKey = requireApiKey();
     const llm = new OpenAICompatibleClient({
         baseURL: BASE_URL,
-        apiKey: API_KEY,
+        apiKey,
     });
 
     const embedding = new OpenAiEmbeddingClient({
         baseURL: BASE_URL,
-        apiKey: API_KEY,
+        apiKey,
     });
 
     const engine = new DebateEngine({ llm, embedding });
@@ -207,6 +211,8 @@ async function main() {
         'Usage: pnpm tsx src/cli.ts ask "<question>" [--model M] [--preset standard|research_deep|fast_research] [--fast] [--verbose]';
     const usageBenchmark =
         'Usage: pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model M] [--preset standard|research_deep|fast_research] [--threshold T] [--fast] [--verbose]';
+    const usageAnalyze =
+        'Usage: pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename]';
 
     const parseOpt = (flag: string): string | undefined => {
         const idx = rest.indexOf(flag);
@@ -243,6 +249,25 @@ async function main() {
         }
         return Array.from(set);
     };
+
+    if (cmd === "analyze-runs") {
+        const runsDir = parseOpt("--runs-dir") ?? RUNS_DIR;
+        const output = parseOpt("--output") ?? "analysis-index.json";
+        const { path, index } = await buildAndWriteAnalysisIndex({
+            runsDir,
+            outputFileName: output,
+        });
+        console.log(
+            `Analysis index saved to ${path} (${index.totals.runs} runs, ${index.totals.benchmarks} benchmarks)`,
+        );
+        if (index.skipped.length > 0) {
+            console.log(`Skipped ${index.skipped.length} file(s):`);
+            for (const skipped of index.skipped) {
+                console.log(`- ${skipped.file}: ${skipped.error}`);
+            }
+        }
+        return;
+    }
 
     if (cmd === "benchmark") {
         let runs = 5;
@@ -291,6 +316,7 @@ async function main() {
         console.error(`Unknown command: ${cmd ?? "(none)"}`);
         console.error(usageAsk);
         console.error(usageBenchmark);
+        console.error(usageAnalyze);
         process.exit(1);
     }
 
@@ -315,12 +341,12 @@ async function main() {
 
     const llm = new OpenAICompatibleClient({
         baseURL: BASE_URL,
-        apiKey: API_KEY,
+        apiKey: requireApiKey(),
     });
 
     const embedding = new OpenAiEmbeddingClient({
         baseURL: BASE_URL,
-        apiKey: API_KEY,
+        apiKey: requireApiKey(),
     });
 
     const engine = new DebateEngine({

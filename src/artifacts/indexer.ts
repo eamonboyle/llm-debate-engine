@@ -1,0 +1,219 @@
+import { mkdir, writeFile } from "fs/promises";
+import { join } from "path";
+import { loadRunArtifacts } from "./loader";
+import type { PipelinePreset } from "../types/artifact";
+import type {
+    AnalysisBenchmarkSummary,
+    AnalysisIndex,
+    AnalysisRunSummary,
+} from "../types/analysis";
+
+type SeverityBucket = {
+    count: number;
+    sumSeverity: number;
+    maxSeverity: number;
+};
+
+function mean(values: number[]): number {
+    if (!values.length) return 0;
+    return values.reduce((acc, value) => acc + value, 0) / values.length;
+}
+
+function round3(value: number): number {
+    return Math.round(value * 1000) / 1000;
+}
+
+function inferModeLabel(exemplarPreview: string): string {
+    const text = exemplarPreview.toLowerCase();
+    if (text.includes("existential") || text.includes("catastrophic")) {
+        return "high-risk framing";
+    }
+    if (text.includes("policy") || text.includes("governance")) {
+        return "policy-oriented";
+    }
+    if (text.includes("technical") || text.includes("alignment")) {
+        return "technical framing";
+    }
+    if (text.includes("economic") || text.includes("jobs")) {
+        return "economic framing";
+    }
+    return "general framing";
+}
+
+export async function buildAnalysisIndex(
+    runsDir = "runs",
+): Promise<AnalysisIndex> {
+    const loaded = await loadRunArtifacts(runsDir);
+
+    const issueTypeCounts: Record<string, number> = {};
+    const issueSeverityByTypeBuckets: Record<string, SeverityBucket> = {};
+    const confidenceSolverToRevision: number[] = [];
+    const confidenceRevisionToSynth: number[] = [];
+    const calibratedMinusSynth: number[] = [];
+    const critiqueVsConfidence: AnalysisIndex["aggregates"]["critiqueVsConfidence"] = [];
+    const presets: Record<PipelinePreset, number> = {
+        standard: 0,
+        research_deep: 0,
+        fast_research: 0,
+    };
+
+    const runSummaries: AnalysisRunSummary[] = loaded.runs.map((artifact) => {
+        const run = artifact.run;
+        const confidence = run.metrics.confidence ?? {};
+        const critique = run.metrics.critique ?? {};
+        const quality = run.metrics.quality;
+
+        presets[artifact.metadata.pipelinePreset] += 1;
+
+        if (typeof confidence.solverToRevisionDelta === "number") {
+            confidenceSolverToRevision.push(confidence.solverToRevisionDelta);
+        }
+        if (typeof confidence.revisionToSynthesizerDelta === "number") {
+            confidenceRevisionToSynth.push(confidence.revisionToSynthesizerDelta);
+        }
+        if (
+            typeof confidence.calibratedAdjusted === "number" &&
+            typeof confidence.synthesizer === "number"
+        ) {
+            calibratedMinusSynth.push(
+                confidence.calibratedAdjusted - confidence.synthesizer,
+            );
+        }
+
+        const issues = run.steps
+            .filter((step) => step.output?.kind === "critique")
+            .flatMap((step) =>
+                step.output?.kind === "critique" ? step.output.data.issues : [],
+            );
+        for (const issue of issues) {
+            issueTypeCounts[issue.type] = (issueTypeCounts[issue.type] ?? 0) + 1;
+            const bucket = issueSeverityByTypeBuckets[issue.type] ?? {
+                count: 0,
+                sumSeverity: 0,
+                maxSeverity: 0,
+            };
+            bucket.count += 1;
+            bucket.sumSeverity += issue.severity;
+            bucket.maxSeverity = Math.max(bucket.maxSeverity, issue.severity);
+            issueSeverityByTypeBuckets[issue.type] = bucket;
+        }
+
+        critiqueVsConfidence.push({
+            runId: artifact.id,
+            maxSeverity: critique.maxSeverity,
+            solverToRevisionDelta: confidence.solverToRevisionDelta,
+            revisionToSynthesizerDelta: confidence.revisionToSynthesizerDelta,
+        });
+
+        return {
+            id: artifact.id,
+            question: artifact.question,
+            createdAt: artifact.metadata.createdAt,
+            model: artifact.metadata.model,
+            pipelinePreset: artifact.metadata.pipelinePreset,
+            fastMode: artifact.metadata.fastMode,
+            stepCount: run.steps.length,
+            finalAnswerPreview: run.finalAnswer.slice(0, 220),
+            confidence: {
+                solver: confidence.solver,
+                revision: confidence.revision,
+                synthesizer: confidence.synthesizer,
+                calibratedAdjusted: confidence.calibratedAdjusted,
+                solverToRevisionDelta: confidence.solverToRevisionDelta,
+                revisionToSynthesizerDelta: confidence.revisionToSynthesizerDelta,
+            },
+            critique: {
+                issueCount: issues.length,
+                maxSeverity: critique.maxSeverity,
+                avgSeverity: critique.avgSeverity,
+                byType: critique.byType,
+            },
+            quality: quality
+                ? {
+                      coherence: quality.coherence,
+                      completeness: quality.completeness,
+                      factualRisk: quality.factualRisk,
+                      uncertaintyHandling: quality.uncertaintyHandling,
+                  }
+                : undefined,
+        };
+    });
+
+    const benchmarkSummaries: AnalysisBenchmarkSummary[] = loaded.benchmarks.map(
+        (artifact) => {
+            const payload = artifact.payload;
+            const modeLabels = (payload.modes ?? []).map((mode, idx) => ({
+                modeIndex: idx,
+                size: mode.size,
+                label: inferModeLabel(mode.exemplarPreview),
+                exemplarPreview: mode.exemplarPreview,
+            }));
+
+            return {
+                id: artifact.id,
+                question: artifact.question,
+                createdAt: artifact.metadata.createdAt,
+                model: artifact.metadata.model,
+                pipelinePreset: artifact.metadata.pipelinePreset,
+                fastMode: artifact.metadata.fastMode,
+                runs: payload.runs,
+                modeCount: payload.modeCount,
+                modeSizes: payload.modeSizes,
+                divergenceEntropy: payload.divergenceEntropy,
+                stabilityPairwiseMean: payload.summary.stability?.pairwiseMean,
+                threshold: payload.threshold,
+                modeLabels,
+            };
+        },
+    );
+
+    const issueSeverityByType = Object.entries(issueSeverityByTypeBuckets).map(
+        ([type, bucket]) => ({
+            type,
+            count: bucket.count,
+            avgSeverity: round3(bucket.sumSeverity / bucket.count),
+            maxSeverity: bucket.maxSeverity,
+        }),
+    );
+
+    return {
+        generatedAt: new Date().toISOString(),
+        totals: {
+            runs: runSummaries.length,
+            benchmarks: benchmarkSummaries.length,
+            skippedFiles: loaded.skipped.length,
+        },
+        runs: runSummaries,
+        benchmarks: benchmarkSummaries,
+        aggregates: {
+            issueTypeCounts,
+            issueSeverityByType,
+            confidenceDrift: {
+                solverToRevisionMean: round3(mean(confidenceSolverToRevision)),
+                revisionToSynthesizerMean: round3(mean(confidenceRevisionToSynth)),
+                calibratedMinusSynthMean: round3(mean(calibratedMinusSynth)),
+            },
+            critiqueVsConfidence,
+            presets,
+        },
+        skipped: loaded.skipped,
+    };
+}
+
+export async function buildAndWriteAnalysisIndex(opts?: {
+    runsDir?: string;
+    outputFileName?: string;
+}): Promise<{ path: string; index: AnalysisIndex }> {
+    const runsDir = opts?.runsDir ?? "runs";
+    const outputFileName = opts?.outputFileName ?? "analysis-index.json";
+    const index = await buildAnalysisIndex(runsDir);
+
+    await mkdir(runsDir, { recursive: true });
+    const outputPath = join(runsDir, outputFileName);
+    await writeFile(outputPath, JSON.stringify(index, null, 2), "utf-8");
+
+    return {
+        path: outputPath,
+        index,
+    };
+}
