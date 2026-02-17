@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
 import { loadRunArtifacts } from "./loader";
+import { inferModeLabel } from "../analysis/modeLabeler";
 import type { PipelinePreset } from "../types/artifact";
 import type {
     AnalysisBenchmarkSummary,
@@ -50,23 +51,6 @@ function pearsonCorrelation(xs: number[], ys: number[]): number {
 
 function round3(value: number): number {
     return Math.round(value * 1000) / 1000;
-}
-
-function inferModeLabel(exemplarPreview: string): string {
-    const text = exemplarPreview.toLowerCase();
-    if (text.includes("existential") || text.includes("catastrophic")) {
-        return "high-risk framing";
-    }
-    if (text.includes("policy") || text.includes("governance")) {
-        return "policy-oriented";
-    }
-    if (text.includes("technical") || text.includes("alignment")) {
-        return "technical framing";
-    }
-    if (text.includes("economic") || text.includes("jobs")) {
-        return "economic framing";
-    }
-    return "general framing";
 }
 
 function csvEscape(value: unknown): string {

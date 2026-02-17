@@ -76,3 +76,7 @@ If the new agent creates measurable outputs:
 - Evidence planner
 - Counterfactual scenario generator
 - Mode labeler (benchmark-level post-process agent)
+
+Note: there is already a rule-based benchmark mode labeler utility:
+
+- `src/analysis/modeLabeler.ts`
