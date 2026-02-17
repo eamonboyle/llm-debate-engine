@@ -8,6 +8,7 @@ function makeRunArtifact(params: {
     critiqueByType?: Record<string, number>;
     critiqueMaxSeverity?: number;
     quality?: Record<string, number>;
+    research?: Record<string, number>;
     stepCount?: number;
 }): RunArtifact {
     return {
@@ -35,6 +36,7 @@ function makeRunArtifact(params: {
                     maxSeverity: params.critiqueMaxSeverity,
                 },
                 quality: params.quality,
+                research: params.research,
             },
         },
     };
@@ -48,6 +50,7 @@ describe("run compare helpers", () => {
             critiqueByType: { missing: 2, factual_error: 1 },
             critiqueMaxSeverity: 4,
             quality: { completeness: 0.8 },
+            research: { evidenceRiskLevel: 4 },
             stepCount: 3,
         });
 
@@ -58,6 +61,7 @@ describe("run compare helpers", () => {
         expect(summary.metrics.critique.issueCount).toBe(3);
         expect(summary.metrics.critique.maxSeverity).toBe(4);
         expect(summary.metrics.quality.completeness).toBe(0.8);
+        expect(summary.metrics.research.evidenceRiskLevel).toBe(4);
     });
 
     it("computes deltas and preserves nulls for missing metrics", () => {
@@ -66,6 +70,7 @@ describe("run compare helpers", () => {
             confidence: { solver: 0.3, synthesizer: 0.5 },
             critiqueByType: { missing: 1 },
             quality: { factualRisk: 0.4 },
+            research: { evidenceRiskLevel: 2 },
             stepCount: 1,
         });
         const right = makeRunArtifact({
@@ -73,6 +78,7 @@ describe("run compare helpers", () => {
             confidence: { solver: 0.8 },
             critiqueByType: { missing: 3, overconfidence: 1 },
             quality: {},
+            research: { evidenceRiskLevel: 5 },
             stepCount: 2,
         });
 
@@ -82,5 +88,6 @@ describe("run compare helpers", () => {
         expect(compared.delta.confidence.synthesizer).toBeNull();
         expect(compared.delta.critique.issueCount).toBe(3);
         expect(compared.delta.quality.factualRisk).toBeNull();
+        expect(compared.delta.research.evidenceRiskLevel).toBe(3);
     });
 });

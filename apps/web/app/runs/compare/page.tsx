@@ -47,6 +47,10 @@ export default async function RunsComparePage({
                       metric: "factualRisk",
                       delta: compare.delta.quality.factualRisk,
                   },
+                  {
+                      metric: "evidenceRisk",
+                      delta: compare.delta.research.evidenceRiskLevel,
+                  },
               ]
             : [];
 
@@ -281,6 +285,27 @@ export default async function RunsComparePage({
                                     <td>
                                         {formatMetric(
                                             compare?.delta.quality.factualRisk ?? null,
+                                        )}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Evidence risk level</td>
+                                    <td>
+                                        {formatMetric(
+                                            leftSnapshot.metrics.research
+                                                .evidenceRiskLevel,
+                                        )}
+                                    </td>
+                                    <td>
+                                        {formatMetric(
+                                            rightSnapshot.metrics.research
+                                                .evidenceRiskLevel,
+                                        )}
+                                    </td>
+                                    <td>
+                                        {formatMetric(
+                                            compare?.delta.research
+                                                .evidenceRiskLevel ?? null,
                                         )}
                                     </td>
                                 </tr>

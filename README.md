@@ -188,7 +188,7 @@ This derived index powers the web dashboard.
 - `/` shows analysis filter context when index is built with CLI filters
 - `/runs` Run artifact table
 - `/runs/[id]` Run trace viewer (step-by-step structured summaries + raw JSON)
-- `/runs/compare` Side-by-side run comparison + metric deltas
+- `/runs/compare` Side-by-side run comparison + confidence/quality/research deltas
 - `/benchmarks` Benchmark artifact table
 - `/benchmarks/[id]` Benchmark deep-dive
 - `/benchmarks/compare` Side-by-side benchmark comparison + charted metric deltas

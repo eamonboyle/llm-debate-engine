@@ -29,6 +29,9 @@ export type RunCompareSummary = {
             factualRisk: number | null;
             uncertaintyHandling: number | null;
         };
+        research: {
+            evidenceRiskLevel: number | null;
+        };
     };
 };
 
@@ -55,6 +58,9 @@ export type RunComparePayload = {
             completeness: number | null;
             factualRisk: number | null;
             uncertaintyHandling: number | null;
+        };
+        research: {
+            evidenceRiskLevel: number | null;
         };
     };
 };
@@ -88,6 +94,7 @@ export function summarizeRun(run: RunArtifact): RunCompareSummary {
     const confidence = toRecord(run.run.metrics.confidence);
     const critique = toRecord(run.run.metrics.critique);
     const quality = toRecord(run.run.metrics.quality);
+    const research = toRecord(run.run.metrics.research);
 
     const solverConfidence = toNumberOrNull(confidence.solver);
     const revisionConfidence = toNumberOrNull(confidence.revision);
@@ -107,6 +114,7 @@ export function summarizeRun(run: RunArtifact): RunCompareSummary {
     const completeness = toNumberOrNull(quality.completeness);
     const factualRisk = toNumberOrNull(quality.factualRisk);
     const uncertaintyHandling = toNumberOrNull(quality.uncertaintyHandling);
+    const evidenceRiskLevel = toNumberOrNull(research.evidenceRiskLevel);
 
     return {
         id: run.id,
@@ -136,6 +144,9 @@ export function summarizeRun(run: RunArtifact): RunCompareSummary {
                 completeness,
                 factualRisk,
                 uncertaintyHandling,
+            },
+            research: {
+                evidenceRiskLevel,
             },
         },
     };
@@ -203,6 +214,12 @@ export function buildRunComparePayload(
                 uncertaintyHandling: delta(
                     right.metrics.quality.uncertaintyHandling,
                     left.metrics.quality.uncertaintyHandling,
+                ),
+            },
+            research: {
+                evidenceRiskLevel: delta(
+                    right.metrics.research.evidenceRiskLevel,
+                    left.metrics.research.evidenceRiskLevel,
                 ),
             },
         },
