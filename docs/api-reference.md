@@ -34,6 +34,8 @@ Query params:
 - `sort` (`newest` default, `oldest`)
 - `offset` zero-based pagination offset (default `0`)
 - `limit` page size (default `100`, max `500`)
+- `page` one-based page index alias (used when `offset` is not provided)
+- `pageSize` page size alias for `limit`
 
 Example:
 
