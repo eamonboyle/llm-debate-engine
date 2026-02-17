@@ -158,6 +158,7 @@ pnpm web:build
 
 ## Additional documentation
 
+- Architecture decision record: `docs/architecture-decision-record.md`
 - Artifact schema reference: `docs/artifact-schema.md`
 - Adding new agents: `docs/adding-agents.md`
 - Chart interpretation guide: `docs/chart-interpretation.md`
