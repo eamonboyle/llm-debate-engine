@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { ResponsiveTable, TruncateText } from "../../components/ResponsiveTable";
+import { MetricCard } from "../../components/MetricCard";
 import {
     filterBenchmarkArtifacts,
     loadBenchmarkArtifacts,
@@ -57,14 +60,39 @@ export default async function BenchmarksPage({
                 </p>
             </div>
 
+            <div className="grid-4">
+                <MetricCard label="Total benchmarks" value={benchmarks.length} />
+                <MetricCard
+                    label="Filtered"
+                    value={filtered.length}
+                    helper={
+                        filtered.length < benchmarks.length
+                            ? "matching filters"
+                            : undefined
+                    }
+                />
+                <MetricCard
+                    label="Total runs"
+                    value={filtered.reduce((s, b) => s + b.payload.runs, 0)}
+                    helper="across filtered benchmarks"
+                />
+                <MetricCard
+                    label="Avg entropy"
+                    value={
+                        filtered.length > 0
+                            ? (
+                                  filtered.reduce(
+                                      (s, b) => s + b.payload.divergenceEntropy,
+                                      0,
+                                  ) / filtered.length
+                              ).toFixed(3)
+                            : "—"
+                    }
+                />
+            </div>
+
             <form className="card" method="get">
-                <div
-                    style={{
-                        display: "grid",
-                        gap: 10,
-                        gridTemplateColumns: "repeat(6, minmax(0, 1fr))",
-                    }}
-                >
+                <div className="filter-grid">
                     <input
                         name="q"
                         placeholder="Search benchmark question"
@@ -105,9 +133,9 @@ export default async function BenchmarksPage({
                 </div>
                 <div
                     style={{
-                        marginTop: 10,
+                        marginTop: "1rem",
                         display: "grid",
-                        gap: 10,
+                        gap: "0.75rem",
                         gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)",
                         maxWidth: 360,
                     }}
@@ -127,14 +155,14 @@ export default async function BenchmarksPage({
                         <option value="100">100 per page</option>
                     </select>
                 </div>
-                <div style={{ marginTop: 10, display: "flex", gap: 10 }}>
+                <div className="filter-actions">
                     <button type="submit" className="button">
                         Apply filters
                     </button>
-                    <a href="/benchmarks" className="button secondary">
+                    <Link href="/benchmarks" className="button secondary">
                         Clear
-                    </a>
-                    <span className="small muted" style={{ alignSelf: "center" }}>
+                    </Link>
+                    <span className="small muted">
                         Showing {paging.startDisplay}-{paging.endDisplay} of{" "}
                         {filtered.length} filtered
                         benchmarks ({benchmarks.length} total)
@@ -143,51 +171,114 @@ export default async function BenchmarksPage({
             </form>
 
             <div className="card">
-                <div className="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Created</th>
-                                <th>Question</th>
-                                <th>Runs</th>
-                                <th>Modes</th>
-                                <th>Entropy</th>
-                                <th>Open</th>
-                                <th>Compare</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {paging.paged.map((benchmark) => (
-                                <tr key={benchmark.id}>
-                                    <td>{benchmark.id}</td>
-                                    <td>
-                                        {new Date(
-                                            benchmark.metadata.createdAt,
-                                        ).toLocaleString()}
-                                    </td>
-                                    <td>{benchmark.question}</td>
-                                    <td>{benchmark.payload.runs}</td>
-                                    <td>{benchmark.payload.modeCount}</td>
-                                    <td>{benchmark.payload.divergenceEntropy}</td>
-                                    <td>
-                                        <a href={`/benchmarks/${benchmark.id}`}>Details</a>
-                                    </td>
-                                    <td>
-                                        <a
-                                            href={`/benchmarks/compare?left=${benchmark.id}`}
-                                        >
-                                            Set left
-                                        </a>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                <ResponsiveTable
+                    columns={[
+                        {
+                            key: "details",
+                            label: "Actions",
+                            cellClass: "cell-actions",
+                            hideOnMobile: true,
+                            render: (row) => (
+                                <Link
+                                    href={`/benchmarks/${(row as { id: string }).id}`}
+                                    className="button"
+                                    style={{
+                                        padding: "0.35rem 0.6rem",
+                                        fontSize: "0.75rem",
+                                    }}
+                                >
+                                    Details
+                                </Link>
+                            ),
+                        },
+                        { key: "id", label: "ID" },
+                        {
+                            key: "createdAt",
+                            label: "Created",
+                            render: (row) =>
+                                new Date((row as { createdAt: string }).createdAt).toLocaleString(),
+                        },
+                        {
+                            key: "question",
+                            label: "Question",
+                            cellClass: "cell-question",
+                            render: (row) => (
+                                <TruncateText
+                                    text={(row as { question: string }).question}
+                                    maxLength={80}
+                                    className="muted"
+                                />
+                            ),
+                        },
+                        { key: "runs", label: "Runs" },
+                        { key: "modeCount", label: "Modes" },
+                        {
+                            key: "entropy",
+                            label: "Entropy",
+                            render: (row) => (
+                                <span className="benchmark-entropy">
+                                    {(row as { entropy: number }).entropy.toFixed(
+                                        3,
+                                    )}
+                                </span>
+                            ),
+                        },
+                        {
+                            key: "compare",
+                            label: "Compare",
+                            cellClass: "cell-actions",
+                            hideOnMobile: true,
+                            render: (row) => (
+                                <span className="cell-compare-links">
+                                    <Link
+                                        href={`/benchmarks/compare?left=${(row as { id: string }).id}`}
+                                    >
+                                        L
+                                    </Link>
+                                    <Link
+                                        href={`/benchmarks/compare?right=${(row as { id: string }).id}`}
+                                    >
+                                        R
+                                    </Link>
+                                </span>
+                            ),
+                        },
+                    ]}
+                    data={paging.paged.map((benchmark) => ({
+                        id: benchmark.id,
+                        createdAt: benchmark.metadata.createdAt,
+                        question: benchmark.question,
+                        runs: benchmark.payload.runs,
+                        modeCount: benchmark.payload.modeCount,
+                        entropy: benchmark.payload.divergenceEntropy,
+                    }))}
+                    getRowId={(row) => (row as { id: string }).id}
+                    renderCardActions={(row) => (
+                        <>
+                            <Link
+                                href={`/benchmarks/${(row as { id: string }).id}`}
+                                className="button"
+                            >
+                                Details
+                            </Link>
+                            <Link
+                                href={`/benchmarks/compare?left=${(row as { id: string }).id}`}
+                                className="button secondary"
+                            >
+                                Set left
+                            </Link>
+                            <Link
+                                href={`/benchmarks/compare?right=${(row as { id: string }).id}`}
+                                className="button secondary"
+                            >
+                                Set right
+                            </Link>
+                        </>
+                    )}
+                />
             </div>
 
-            <div className="card" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <div className="card pagination">
                 <a
                     className="button secondary"
                     aria-disabled={!paging.hasPrev}
@@ -236,7 +327,7 @@ export default async function BenchmarksPage({
                 >
                     Next
                 </a>
-                <span className="small muted" style={{ alignSelf: "center" }}>
+                <span className="small muted">
                     Page {paging.page} of {paging.totalPages}
                 </span>
             </div>

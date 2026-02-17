@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { loadBenchmarkById } from "../../../lib/data";
+import { MetricCard } from "../../../components/MetricCard";
+import { ModeSizeBar } from "../../../components/benchmark/ModeSizeBar";
+import { BenchmarkDetailCharts } from "../../../components/charts/BenchmarkDetailCharts";
+import { ResponsiveTable } from "../../../components/ResponsiveTable";
+import { TruncateText } from "../../../components/ResponsiveTable";
+import { inferModeLabel } from "../../../lib/modeLabeler";
 
 export async function generateMetadata({
     params,
@@ -14,8 +21,6 @@ export async function generateMetadata({
         : id;
     return { title: `Benchmark: ${title}` };
 }
-import { BenchmarkDetailCharts } from "../../../components/charts/BenchmarkDetailCharts";
-import { inferModeLabel } from "../../../lib/modeLabeler";
 
 export default async function BenchmarkDetailPage({
     params,
@@ -29,7 +34,7 @@ export default async function BenchmarkDetailPage({
         notFound();
     }
 
-    const modeSizes = benchmark.payload.modeSizes.join(", ");
+    const runIds = benchmark.payload.runIds ?? [];
     const pairs = benchmark.payload.summary?.stability?.pairs ?? [];
     const thresholdCounts = [
         { threshold: "0.8", modeCount: benchmark.payload.modeCountAt0_8 ?? 0 },
@@ -42,54 +47,50 @@ export default async function BenchmarkDetailPage({
         <section className="stack">
             <div>
                 <h1 className="title">Benchmark detail</h1>
-                <p className="subtitle">{benchmark.id}</p>
+                <p className="subtitle">
+                    {benchmark.id} ·{" "}
+                    {new Date(benchmark.metadata.createdAt).toLocaleString()}
+                </p>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    <Link
+                        href={`/benchmarks/compare?left=${benchmark.id}`}
+                        className="button secondary"
+                    >
+                        Compare as left
+                    </Link>
+                    <Link
+                        href={`/benchmarks/compare?right=${benchmark.id}`}
+                        className="button secondary"
+                    >
+                        Compare as right
+                    </Link>
+                </div>
             </div>
 
             <div className="grid-4">
                 <div className="card">
-                    <div className="small muted">Question</div>
-                    <div style={{ marginTop: 6 }}>{benchmark.question}</div>
-                </div>
-                <div className="card">
-                    <div className="small muted">Runs</div>
-                    <div style={{ marginTop: 6, fontSize: 24 }}>
-                        {benchmark.payload.runs}
+                    <div className="metric-label small muted">Question</div>
+                    <div style={{ marginTop: 6 }} className="benchmark-question">
+                        {benchmark.question}
                     </div>
                 </div>
-                <div className="card">
-                    <div className="small muted">Mode count</div>
-                    <div style={{ marginTop: 6, fontSize: 24 }}>
-                        {benchmark.payload.modeCount}
-                    </div>
-                </div>
-                <div className="card">
-                    <div className="small muted">Divergence entropy</div>
-                    <div style={{ marginTop: 6, fontSize: 24 }}>
-                        {benchmark.payload.divergenceEntropy}
-                    </div>
-                </div>
+                <MetricCard label="Runs" value={benchmark.payload.runs} />
+                <MetricCard
+                    label="Mode count"
+                    value={benchmark.payload.modeCount}
+                />
+                <MetricCard
+                    label="Divergence entropy"
+                    value={benchmark.payload.divergenceEntropy}
+                />
             </div>
 
-            <div className="card">
-                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                    <a
-                        className="button secondary"
-                        href={`/benchmarks/compare?left=${benchmark.id}`}
-                    >
-                        Compare as left
-                    </a>
-                    <a
-                        className="button secondary"
-                        href={`/benchmarks/compare?right=${benchmark.id}`}
-                    >
-                        Compare as right
-                    </a>
-                </div>
-            </div>
-
-            <div className="card">
+            <div className="card benchmark-mode-structure">
                 <h2 style={{ marginTop: 0 }}>Mode structure</h2>
-                <p className="muted small">Mode sizes: [{modeSizes}]</p>
+                <p className="small muted" style={{ marginBottom: "1rem" }}>
+                    Distribution of runs across discovered answer modes
+                </p>
+                <ModeSizeBar modeSizes={benchmark.payload.modeSizes} />
             </div>
 
             <BenchmarkDetailCharts
@@ -103,32 +104,136 @@ export default async function BenchmarkDetailPage({
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>Mode explorer</h2>
                 {modes.length === 0 ? (
-                    <p className="muted">No mode exemplars available in artifact.</p>
+                    <p className="muted">
+                        No mode exemplars available in artifact.
+                    </p>
                 ) : (
-                    <div className="table-wrap">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Mode</th>
-                                    <th>Label</th>
-                                    <th>Size</th>
-                                    <th>Members</th>
-                                    <th>Exemplar preview</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {modes.map((mode, idx) => (
-                                    <tr key={`mode-${idx}`}>
-                                        <td>{idx}</td>
-                                        <td>{inferModeLabel(mode.exemplarPreview)}</td>
-                                        <td>{mode.size}</td>
-                                        <td>{mode.members.join(", ")}</td>
-                                        <td className="muted">{mode.exemplarPreview}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <ResponsiveTable
+                        columns={[
+                            { key: "modeIndex", label: "Mode" },
+                            { key: "label", label: "Label" },
+                            { key: "size", label: "Size" },
+                            {
+                                key: "members",
+                                label: "Members",
+                                hideOnMobile: true,
+                                render: (row) => (
+                                    <span className="benchmark-members">
+                                        {(row as { memberLinks: React.ReactNode }).memberLinks}
+                                    </span>
+                                ),
+                            },
+                            {
+                                key: "exemplarPreview",
+                                label: "Exemplar preview",
+                                cellClass: "cell-answer-preview",
+                                hideOnMobile: true,
+                                render: (row) => (
+                                    <TruncateText
+                                        text={(row as { exemplarPreview: string }).exemplarPreview}
+                                        maxLength={120}
+                                        lines={2}
+                                        className="muted"
+                                    />
+                                ),
+                            },
+                            {
+                                key: "previewMobile",
+                                label: "Preview",
+                                showOnlyOnMobile: true,
+                                render: (row) => (
+                                    <TruncateText
+                                        text={(row as { exemplarPreview: string }).exemplarPreview}
+                                        maxLength={80}
+                                        className="muted"
+                                    />
+                                ),
+                            },
+                            {
+                                key: "actions",
+                                label: "",
+                                cellClass: "cell-actions",
+                                hideOnMobile: true,
+                                render: (row) => {
+                                    const r = row as {
+                                        memberRunIds: string[];
+                                    };
+                                    return (
+                                        <span className="benchmark-mode-actions">
+                                            {r.memberRunIds.slice(0, 3).map((runId) => (
+                                                <Link
+                                                    key={runId}
+                                                    href={`/runs/${runId}`}
+                                                    className="button"
+                                                    style={{
+                                                        padding: "0.3rem 0.5rem",
+                                                        fontSize: "0.7rem",
+                                                    }}
+                                                >
+                                                    Trace
+                                                </Link>
+                                            ))}
+                                            {r.memberRunIds.length > 3 && (
+                                                <span className="small muted">
+                                                    +{r.memberRunIds.length - 3}
+                                                </span>
+                                            )}
+                                        </span>
+                                    );
+                                },
+                            },
+                        ]}
+                        data={modes.map((mode, idx) => ({
+                            modeIndex: idx,
+                            label: inferModeLabel(mode.exemplarPreview),
+                            size: mode.size,
+                            exemplarPreview: mode.exemplarPreview,
+                            memberRunIds: mode.members
+                                .map((i) => runIds[i])
+                                .filter(Boolean),
+                            memberLinks: (
+                                <span className="benchmark-member-links">
+                                    {mode.members
+                                        .map((i) => runIds[i])
+                                        .filter(Boolean)
+                                        .slice(0, 5)
+                                        .map((runId, i) => (
+                                            <span key={runId}>
+                                                {i > 0 && ", "}
+                                                <Link href={`/runs/${runId}`}>
+                                                    {runId.slice(-8)}
+                                                </Link>
+                                            </span>
+                                        ))}
+                                    {mode.members.length > 5 && (
+                                        <span className="muted">
+                                            {" "}
+                                            +{mode.members.length - 5}
+                                        </span>
+                                    )}
+                                </span>
+                            ),
+                        }))}
+                        getRowId={(row) =>
+                            `mode-${(row as { modeIndex: number }).modeIndex}`
+                        }
+                        renderCardActions={(row) => {
+                            const r = row as { memberRunIds: string[] };
+                            return (
+                                <>
+                                    {r.memberRunIds.slice(0, 3).map((runId) => (
+                                        <Link
+                                            key={runId}
+                                            href={`/runs/${runId}`}
+                                            className="button"
+                                        >
+                                            Trace {runId.slice(-8)}
+                                        </Link>
+                                    ))}
+                                </>
+                            );
+                        }}
+                    />
                 )}
             </div>
         </section>

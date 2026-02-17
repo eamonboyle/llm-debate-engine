@@ -102,12 +102,18 @@ export function ResearchTrendCharts({
                 <h3 style={{ marginTop: 0 }}>Preset usage distribution</h3>
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={presetRows}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                        <XAxis dataKey="preset" stroke="#94a3b8" />
-                        <YAxis stroke="#94a3b8" />
-                        <Tooltip />
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                        <XAxis dataKey="preset" stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                        <YAxis stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                        <Tooltip
+                            contentStyle={{
+                                background: "var(--color-bg-card)",
+                                border: "1px solid var(--color-border-default)",
+                                borderRadius: "var(--radius-md)",
+                            }}
+                        />
                         <Legend />
-                        <Bar dataKey="count" fill="#22d3ee" />
+                        <Bar dataKey="count" fill="var(--color-data-cyan)" radius={[4, 4, 0, 0]} />
                     </BarChart>
                 </ResponsiveContainer>
             </div>
@@ -115,23 +121,31 @@ export function ResearchTrendCharts({
                 <h3 style={{ marginTop: 0 }}>Benchmark entropy & stability trend</h3>
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={benchmarkTrendRows}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                        <XAxis dataKey="label" stroke="#94a3b8" />
-                        <YAxis stroke="#94a3b8" />
-                        <Tooltip />
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                        <XAxis dataKey="label" stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                        <YAxis stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                        <Tooltip
+                            contentStyle={{
+                                background: "var(--color-bg-card)",
+                                border: "1px solid var(--color-border-default)",
+                                borderRadius: "var(--radius-md)",
+                            }}
+                        />
                         <Legend />
                         <Line
                             type="monotone"
                             dataKey="entropy"
-                            stroke="#f97316"
+                            stroke="var(--color-accent)"
                             dot={false}
+                            strokeWidth={2}
                             name="divergenceEntropy"
                         />
                         <Line
                             type="monotone"
                             dataKey="stability"
-                            stroke="#818cf8"
+                            stroke="var(--color-data-violet)"
                             dot={false}
+                            strokeWidth={2}
                             name="stabilityPairwiseMean"
                         />
                     </LineChart>
@@ -146,12 +160,18 @@ export function ResearchTrendCharts({
                 ) : null}
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={evidenceRiskRows}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                        <XAxis dataKey="riskLevel" stroke="#94a3b8" />
-                        <YAxis stroke="#94a3b8" />
-                        <Tooltip />
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                        <XAxis dataKey="riskLevel" stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                        <YAxis stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                        <Tooltip
+                            contentStyle={{
+                                background: "var(--color-bg-card)",
+                                border: "1px solid var(--color-border-default)",
+                                borderRadius: "var(--radius-md)",
+                            }}
+                        />
                         <Legend />
-                        <Bar dataKey="count" fill="#34d399" />
+                        <Bar dataKey="count" fill="var(--color-data-teal)" radius={[4, 4, 0, 0]} />
                     </BarChart>
                 </ResponsiveContainer>
             </div>
@@ -164,16 +184,23 @@ export function ResearchTrendCharts({
                 ) : null}
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={runRiskTrendRows}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                        <XAxis dataKey="label" stroke="#94a3b8" />
-                        <YAxis stroke="#94a3b8" domain={[1, 5]} />
-                        <Tooltip />
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                        <XAxis dataKey="label" stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                        <YAxis stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} domain={[1, 5]} />
+                        <Tooltip
+                            contentStyle={{
+                                background: "var(--color-bg-card)",
+                                border: "1px solid var(--color-border-default)",
+                                borderRadius: "var(--radius-md)",
+                            }}
+                        />
                         <Legend />
                         <Line
                             type="monotone"
                             dataKey="riskLevel"
-                            stroke="#34d399"
+                            stroke="var(--color-data-teal)"
                             dot={false}
+                            strokeWidth={2}
                             name="evidenceRiskLevel"
                         />
                     </LineChart>

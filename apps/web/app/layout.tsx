@@ -1,6 +1,27 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Sora, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+
+const sora = Sora({
+    subsets: ["latin"],
+    variable: "--font-display",
+    display: "swap",
+});
+
+const ibmPlexSans = IBM_Plex_Sans({
+    subsets: ["latin"],
+    weight: ["400", "500", "600"],
+    variable: "--font-body",
+    display: "swap",
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
+    subsets: ["latin"],
+    weight: ["400", "500", "600"],
+    variable: "--font-mono",
+    display: "swap",
+});
 
 const SITE_NAME = "LLM Debate Research";
 const DESCRIPTION =
@@ -42,15 +63,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
     return (
-        <html lang="en">
-            <body>
+        <html
+            lang="en"
+            className={`${sora.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable}`}
+        >
+            <body className={ibmPlexSans.className}>
                 <main className="page-shell">
                     <nav className="nav">
                         <a href="/">Overview</a>
                         <a href="/runs">Runs</a>
-                        <a href="/runs/compare">Run compare</a>
+                        <a href="/runs/compare">Compare runs</a>
                         <a href="/benchmarks">Benchmarks</a>
-                        <a href="/benchmarks/compare">Benchmark compare</a>
+                        <a href="/benchmarks/compare">Compare benchmarks</a>
                     </nav>
                     {children}
                 </main>

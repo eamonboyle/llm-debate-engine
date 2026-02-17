@@ -74,15 +74,9 @@ export default async function RunsComparePage({
             </div>
 
             <form className="card" method="get">
-                <div
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
-                        gap: 12,
-                    }}
-                >
+                <div className="two-col" style={{ maxWidth: "100%" }}>
                     <div>
-                        <label className="small muted" htmlFor="left">
+                        <label className="small muted" htmlFor="left" style={{ display: "block", marginBottom: 4 }}>
                             Left run
                         </label>
                         <select
@@ -100,7 +94,7 @@ export default async function RunsComparePage({
                         </select>
                     </div>
                     <div>
-                        <label className="small muted" htmlFor="right">
+                        <label className="small muted" htmlFor="right" style={{ display: "block", marginBottom: 4 }}>
                             Right run
                         </label>
                         <select
@@ -118,7 +112,7 @@ export default async function RunsComparePage({
                         </select>
                     </div>
                 </div>
-                <div style={{ marginTop: 10, display: "flex", gap: 10 }}>
+                <div className="filter-actions">
                     <button type="submit" className="button">
                         Compare
                     </button>

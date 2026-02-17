@@ -20,12 +20,12 @@ type BenchmarkDetailChartsProps = {
 };
 
 function similarityColor(value: number) {
-    if (value >= 0.95) return "#14532d";
-    if (value >= 0.9) return "#166534";
-    if (value >= 0.8) return "#15803d";
-    if (value >= 0.7) return "#65a30d";
-    if (value >= 0.5) return "#a16207";
-    return "#991b1b";
+    if (value >= 0.95) return "rgba(34, 197, 94, 0.5)";
+    if (value >= 0.9) return "rgba(34, 197, 94, 0.4)";
+    if (value >= 0.8) return "rgba(34, 197, 94, 0.3)";
+    if (value >= 0.7) return "rgba(234, 179, 8, 0.4)";
+    if (value >= 0.5) return "rgba(251, 146, 60, 0.4)";
+    return "rgba(248, 113, 113, 0.4)";
 }
 
 export function BenchmarkDetailCharts({
@@ -96,11 +96,17 @@ export function BenchmarkDetailCharts({
                     <h3 style={{ marginTop: 0 }}>Mode size distribution</h3>
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={modeData}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                            <XAxis dataKey="mode" stroke="#94a3b8" />
-                            <YAxis stroke="#94a3b8" />
-                            <Tooltip />
-                            <Bar dataKey="size" fill="#22d3ee" />
+                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                            <XAxis dataKey="mode" stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                            <YAxis stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                            <Tooltip
+                                contentStyle={{
+                                    background: "var(--color-bg-card)",
+                                    border: "1px solid var(--color-border-default)",
+                                    borderRadius: "var(--radius-md)",
+                                }}
+                            />
+                            <Bar dataKey="size" fill="var(--color-data-cyan)" radius={[4, 4, 0, 0]} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -108,11 +114,17 @@ export function BenchmarkDetailCharts({
                     <h3 style={{ marginTop: 0 }}>Threshold sensitivity</h3>
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={thresholdCounts}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                            <XAxis dataKey="threshold" stroke="#94a3b8" />
-                            <YAxis stroke="#94a3b8" />
-                            <Tooltip />
-                            <Bar dataKey="modeCount" fill="#818cf8" />
+                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                            <XAxis dataKey="threshold" stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                            <YAxis stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                            <Tooltip
+                                contentStyle={{
+                                    background: "var(--color-bg-card)",
+                                    border: "1px solid var(--color-border-default)",
+                                    borderRadius: "var(--radius-md)",
+                                }}
+                            />
+                            <Bar dataKey="modeCount" fill="var(--color-data-violet)" radius={[4, 4, 0, 0]} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -123,7 +135,7 @@ export function BenchmarkDetailCharts({
                 <p className="small muted">
                     source: {pairsSource} ({pairs.length} pairwise entries)
                 </p>
-                <div style={{ overflowX: "auto" }}>
+                <div className="benchmark-heatmap-wrap">
                     <table>
                         <thead>
                             <tr>
@@ -140,16 +152,16 @@ export function BenchmarkDetailCharts({
                                     {row.map((value, j) => (
                                         <td
                                             key={`cell-${i}-${j}`}
+                                            className="benchmark-heatmap-cell"
                                             style={{
                                                 background:
                                                     i === j
-                                                        ? "#0f172a"
+                                                        ? "var(--color-bg-elevated)"
                                                         : similarityColor(value),
-                                                color: "#e2e8f0",
-                                                minWidth: 52,
-                                                textAlign: "center",
-                                                fontSize: 12,
+                                                color: "var(--color-text-primary)",
+                                                minWidth: 44,
                                             }}
+                                            title={`r${i} vs r${j}: ${value.toFixed(3)}`}
                                         >
                                             {value.toFixed(3)}
                                         </td>

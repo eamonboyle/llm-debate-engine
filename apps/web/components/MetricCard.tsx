@@ -6,9 +6,9 @@ type MetricCardProps = {
 
 export function MetricCard({ label, value, helper }: MetricCardProps) {
     return (
-        <div className="card">
-            <div className="small muted">{label.toUpperCase()}</div>
-            <div style={{ marginTop: 8, fontSize: 28, fontWeight: 600 }}>{value}</div>
+        <div className="metric-card card">
+            <div className="metric-label small muted">{label}</div>
+            <div className="metric-value">{value}</div>
             {helper ? (
                 <div className="small muted" style={{ marginTop: 6 }}>
                     {helper}

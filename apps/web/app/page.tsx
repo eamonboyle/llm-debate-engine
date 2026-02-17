@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { MetricCard } from "../components/MetricCard";
+import { ResponsiveTable } from "../components/ResponsiveTable";
 import { OverviewCharts } from "../components/charts/OverviewCharts";
 import { ResearchTrendCharts } from "../components/charts/ResearchTrendCharts";
 import { MetricGlossary } from "../components/MetricGlossary";
@@ -98,24 +99,17 @@ export default async function OverviewPage() {
                     <p className="small muted">
                         This index was generated from a filtered artifact subset.
                     </p>
-                    <div className="table-wrap">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Filter</th>
-                                    <th>Value</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filterEntries.map(([key, value]) => (
-                                    <tr key={key}>
-                                        <td>{key}</td>
-                                        <td>{String(value)}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <ResponsiveTable
+                        columns={[
+                            { key: "key", label: "Filter" },
+                            { key: "value", label: "Value" },
+                        ]}
+                        data={filterEntries.map(([key, value]) => ({
+                            key,
+                            value: String(value),
+                        }))}
+                        getRowId={(row) => row.key as string}
+                    />
                 </div>
             ) : null}
 
@@ -124,32 +118,33 @@ export default async function OverviewPage() {
                 {outliers.length === 0 ? (
                     <p className="muted">No outlier data available yet.</p>
                 ) : (
-                    <div className="table-wrap">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Benchmark</th>
-                                    <th>Run ID</th>
-                                    <th>Avg similarity</th>
-                                    <th>Z-score</th>
-                                    <th>Open</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {outliers.map((row) => (
-                                    <tr key={`${row.benchmarkId}-${row.runId}`}>
-                                        <td>{row.benchmarkId}</td>
-                                        <td>{row.runId}</td>
-                                        <td>{row.avgSimilarity}</td>
-                                        <td>{row.zScore}</td>
-                                        <td>
-                                            <a href={`/runs/${row.runId}`}>Trace</a>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <ResponsiveTable
+                        columns={[
+                            { key: "benchmarkId", label: "Benchmark" },
+                            { key: "runId", label: "Run ID" },
+                            { key: "avgSimilarity", label: "Avg similarity" },
+                            { key: "zScore", label: "Z-score" },
+                            {
+                                key: "open",
+                                label: "Open",
+                                hideOnMobile: true,
+                                render: (row) => (
+                                    <a href={`/runs/${(row as { runId: string }).runId}`}>
+                                        Trace
+                                    </a>
+                                ),
+                            },
+                        ]}
+                        data={outliers as unknown as Record<string, unknown>[]}
+                        getRowId={(row) =>
+                            `${(row as { benchmarkId: string }).benchmarkId}-${(row as { runId: string }).runId}`
+                        }
+                        renderCardActions={(row) => (
+                            <a href={`/runs/${(row as { runId: string }).runId}`} className="button">
+                                View trace
+                            </a>
+                        )}
+                    />
                 )}
             </div>
 
@@ -160,26 +155,17 @@ export default async function OverviewPage() {
                         No counterfactual failure modes recorded yet.
                     </p>
                 ) : (
-                    <div className="table-wrap">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Failure mode</th>
-                                    <th>Count</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {topCounterfactualFailureModes.map(
-                                    ([failureMode, count]) => (
-                                        <tr key={failureMode}>
-                                            <td>{failureMode}</td>
-                                            <td>{count}</td>
-                                        </tr>
-                                    ),
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                    <ResponsiveTable
+                        columns={[
+                            { key: "failureMode", label: "Failure mode" },
+                            { key: "count", label: "Count" },
+                        ]}
+                        data={topCounterfactualFailureModes.map(([failureMode, count]) => ({
+                            failureMode,
+                            count,
+                        }))}
+                        getRowId={(row) => (row as { failureMode: string }).failureMode}
+                    />
                 )}
             </div>
 
@@ -210,84 +196,123 @@ export default async function OverviewPage() {
 
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>Recent runs</h2>
-                <div className="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Question</th>
-                                <th>Preset</th>
-                                <th>Model</th>
-                                <th>Issues</th>
-                                <th>Preview</th>
-                                <th>Open</th>
-                                <th>Compare</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {recentRuns.map((run, idx) => (
-                                <tr key={run.id}>
-                                    <td>{run.id}</td>
-                                    <td>{run.question}</td>
-                                    <td>{run.pipelinePreset}</td>
-                                    <td>{run.model}</td>
-                                    <td>{run.critique.issueCount}</td>
-                                    <td className="muted">{run.finalAnswerPreview}</td>
-                                    <td>
-                                        <a href={`/runs/${run.id}`}>Trace</a>
-                                    </td>
-                                    <td>
-                                        <a
-                                            href={`/runs/compare?left=${run.id}${recentRuns[idx + 1] ? `&right=${recentRuns[idx + 1].id}` : ""}`}
-                                        >
-                                            Compare
-                                        </a>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                <ResponsiveTable
+                    columns={[
+                        { key: "id", label: "ID" },
+                        { key: "question", label: "Question" },
+                        { key: "pipelinePreset", label: "Preset" },
+                        { key: "model", label: "Model" },
+                        { key: "issueCount", label: "Issues" },
+                        {
+                            key: "finalAnswerPreview",
+                            label: "Preview",
+                            hideOnMobile: true,
+                            render: (row) => (
+                                <span className="muted">
+                                    {(row as { finalAnswerPreview: string }).finalAnswerPreview}
+                                </span>
+                            ),
+                        },
+                        {
+                            key: "trace",
+                            label: "Open",
+                            render: (row) => (
+                                <a href={`/runs/${(row as { id: string }).id}`}>Trace</a>
+                            ),
+                        },
+                        {
+                            key: "compare",
+                            label: "Compare",
+                            render: (row) => (
+                                <a href={(row as { compareHref: string }).compareHref}>
+                                    Compare
+                                </a>
+                            ),
+                        },
+                    ]}
+                    data={recentRuns.map((run, idx) => ({
+                        id: run.id,
+                        question: run.question,
+                        pipelinePreset: run.pipelinePreset,
+                        model: run.model,
+                        issueCount: run.critique.issueCount,
+                        finalAnswerPreview: run.finalAnswerPreview,
+                        compareHref: `/runs/compare?left=${run.id}${recentRuns[idx + 1] ? `&right=${recentRuns[idx + 1].id}` : ""}`,
+                    }))}
+                    getRowId={(row) => (row as { id: string }).id}
+                    renderCardActions={(row) => (
+                        <>
+                            <a
+                                href={`/runs/${(row as { id: string }).id}`}
+                                className="button"
+                            >
+                                Trace
+                            </a>
+                            <a
+                                href={(row as { compareHref: string }).compareHref}
+                                className="button secondary"
+                            >
+                                Compare
+                            </a>
+                        </>
+                    )}
+                />
             </div>
 
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>Recent benchmarks</h2>
-                <div className="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Question</th>
-                                <th>Runs</th>
-                                <th>Mode count</th>
-                                <th>Entropy</th>
-                                <th>Open</th>
-                                <th>Compare</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {recentBenchmarks.map((bench, idx) => (
-                                <tr key={bench.id}>
-                                    <td>{bench.id}</td>
-                                    <td>{bench.question}</td>
-                                    <td>{bench.runs}</td>
-                                    <td>{bench.modeCount}</td>
-                                    <td>{bench.divergenceEntropy}</td>
-                                    <td>
-                                        <a href={`/benchmarks/${bench.id}`}>Details</a>
-                                    </td>
-                                    <td>
-                                        <a
-                                            href={`/benchmarks/compare?left=${bench.id}${recentBenchmarks[idx + 1] ? `&right=${recentBenchmarks[idx + 1].id}` : ""}`}
-                                        >
-                                            Compare
-                                        </a>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                <ResponsiveTable
+                    columns={[
+                        { key: "id", label: "ID" },
+                        { key: "question", label: "Question" },
+                        { key: "runs", label: "Runs" },
+                        { key: "modeCount", label: "Mode count" },
+                        { key: "divergenceEntropy", label: "Entropy" },
+                        {
+                            key: "details",
+                            label: "Open",
+                            render: (row) => (
+                                <a href={`/benchmarks/${(row as { id: string }).id}`}>
+                                    Details
+                                </a>
+                            ),
+                        },
+                        {
+                            key: "compare",
+                            label: "Compare",
+                            render: (row) => (
+                                <a href={(row as { compareHref: string }).compareHref}>
+                                    Compare
+                                </a>
+                            ),
+                        },
+                    ]}
+                    data={recentBenchmarks.map((bench, idx) => ({
+                        id: bench.id,
+                        question: bench.question,
+                        runs: bench.runs,
+                        modeCount: bench.modeCount,
+                        divergenceEntropy: bench.divergenceEntropy,
+                        compareHref: `/benchmarks/compare?left=${bench.id}${recentBenchmarks[idx + 1] ? `&right=${recentBenchmarks[idx + 1].id}` : ""}`,
+                    }))}
+                    getRowId={(row) => (row as { id: string }).id}
+                    renderCardActions={(row) => (
+                        <>
+                            <a
+                                href={`/benchmarks/${(row as { id: string }).id}`}
+                                className="button"
+                            >
+                                Details
+                            </a>
+                            <a
+                                href={(row as { compareHref: string }).compareHref}
+                                className="button secondary"
+                            >
+                                Compare
+                            </a>
+                        </>
+                    )}
+                />
             </div>
         </section>
     );

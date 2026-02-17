@@ -1,4 +1,8 @@
 import type { Metadata } from "next";
+import {
+    ResponsiveTable,
+    TruncateText,
+} from "../../components/ResponsiveTable";
 import { filterRunArtifacts, loadRunArtifacts } from "../../lib/data";
 import { sortArtifactsByCreatedAt } from "../../lib/artifactSort";
 import {
@@ -55,13 +59,7 @@ export default async function RunsPage({
             </div>
 
             <form className="card" method="get">
-                <div
-                    style={{
-                        display: "grid",
-                        gap: 10,
-                        gridTemplateColumns: "repeat(6, minmax(0, 1fr))",
-                    }}
-                >
+                <div className="filter-grid">
                     <input
                         name="q"
                         placeholder="Search question / answer"
@@ -102,9 +100,9 @@ export default async function RunsPage({
                 </div>
                 <div
                     style={{
-                        marginTop: 10,
+                        marginTop: "1rem",
                         display: "grid",
-                        gap: 10,
+                        gap: "0.75rem",
                         gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)",
                         maxWidth: 360,
                     }}
@@ -124,14 +122,14 @@ export default async function RunsPage({
                         <option value="100">100 per page</option>
                     </select>
                 </div>
-                <div style={{ marginTop: 10, display: "flex", gap: 10 }}>
+                <div className="filter-actions">
                     <button type="submit" className="button">
                         Apply filters
                     </button>
                     <a href="/runs" className="button secondary">
                         Clear
                     </a>
-                    <span className="small muted" style={{ alignSelf: "center" }}>
+                    <span className="small muted">
                         Showing {paging.startDisplay}-{paging.endDisplay} of{" "}
                         {filtered.length} filtered
                         runs ({runs.length} total)
@@ -140,60 +138,129 @@ export default async function RunsPage({
             </form>
 
             <div className="card">
-                <div className="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Created</th>
-                                <th>Question</th>
-                                <th>Model</th>
-                                <th>Preset</th>
-                                <th>Fast</th>
-                                <th>Final answer</th>
-                                <th>Open</th>
-                                <th>Compare</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {paging.paged.map((run) => (
-                                <tr key={run.id}>
-                                    <td>{run.id}</td>
-                                    <td>
-                                        {new Date(run.metadata.createdAt).toLocaleString()}
-                                    </td>
-                                    <td>{run.question}</td>
-                                    <td>{run.metadata.model}</td>
-                                    <td>{run.metadata.pipelinePreset}</td>
-                                    <td>{run.metadata.fastMode ? "yes" : "no"}</td>
-                                    <td className="muted">{run.run.finalAnswer}</td>
-                                    <td>
-                                        <a href={`/runs/${run.id}`}>Trace</a>
-                                    </td>
-                                    <td>
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                gap: 8,
-                                                flexWrap: "wrap",
-                                            }}
-                                        >
-                                            <a href={`/runs/compare?left=${run.id}`}>
-                                                Set left
-                                            </a>
-                                            <a href={`/runs/compare?right=${run.id}`}>
-                                                Set right
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                <ResponsiveTable
+                    columns={[
+                        {
+                            key: "trace",
+                            label: "Actions",
+                            cellClass: "cell-actions",
+                            hideOnMobile: true,
+                            render: (row) => (
+                                <a
+                                    href={`/runs/${(row as { id: string }).id}`}
+                                    className="button"
+                                    style={{ padding: "0.35rem 0.6rem", fontSize: "0.75rem" }}
+                                >
+                                    Trace
+                                </a>
+                            ),
+                        },
+                        { key: "id", label: "ID" },
+                        {
+                            key: "createdAt",
+                            label: "Created",
+                            render: (row) =>
+                                new Date((row as { createdAt: string }).createdAt).toLocaleString(),
+                        },
+                        {
+                            key: "question",
+                            label: "Question",
+                            cellClass: "cell-question",
+                            render: (row) => (
+                                <TruncateText
+                                    text={(row as { question: string }).question}
+                                    maxLength={80}
+                                    className="muted"
+                                />
+                            ),
+                        },
+                        { key: "model", label: "Model" },
+                        { key: "preset", label: "Preset" },
+                        {
+                            key: "fast",
+                            label: "Fast",
+                            render: (row) =>
+                                (row as { fast: boolean }).fast ? "yes" : "no",
+                        },
+                        {
+                            key: "finalAnswer",
+                            label: "Final answer",
+                            cellClass: "cell-answer-preview",
+                            hideOnMobile: true,
+                            render: (row) => (
+                                <TruncateText
+                                    text={(row as { finalAnswer: string }).finalAnswer}
+                                    maxLength={120}
+                                    lines={2}
+                                    className="muted"
+                                />
+                            ),
+                        },
+                        {
+                            key: "answerPreview",
+                            label: "Answer preview",
+                            showOnlyOnMobile: true,
+                            render: (row) => (
+                                <TruncateText
+                                    text={(row as { finalAnswer: string }).finalAnswer}
+                                    maxLength={80}
+                                    className="muted"
+                                />
+                            ),
+                        },
+                        {
+                            key: "compare",
+                            label: "Compare",
+                            cellClass: "cell-actions",
+                            hideOnMobile: true,
+                            render: (row) => (
+                                <span className="cell-compare-links">
+                                    <a href={`/runs/compare?left=${(row as { id: string }).id}`}>
+                                        L
+                                    </a>
+                                    <a href={`/runs/compare?right=${(row as { id: string }).id}`}>
+                                        R
+                                    </a>
+                                </span>
+                            ),
+                        },
+                    ]}
+                    data={paging.paged.map((run) => ({
+                        id: run.id,
+                        createdAt: run.metadata.createdAt,
+                        question: run.question,
+                        model: run.metadata.model,
+                        preset: run.metadata.pipelinePreset,
+                        fast: run.metadata.fastMode,
+                        finalAnswer: run.run.finalAnswer,
+                    }))}
+                    getRowId={(row) => (row as { id: string }).id}
+                    renderCardActions={(row) => (
+                        <>
+                            <a
+                                href={`/runs/${(row as { id: string }).id}`}
+                                className="button"
+                            >
+                                Trace
+                            </a>
+                            <a
+                                href={`/runs/compare?left=${(row as { id: string }).id}`}
+                                className="button secondary"
+                            >
+                                Set left
+                            </a>
+                            <a
+                                href={`/runs/compare?right=${(row as { id: string }).id}`}
+                                className="button secondary"
+                            >
+                                Set right
+                            </a>
+                        </>
+                    )}
+                />
             </div>
 
-            <div className="card" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <div className="card pagination">
                 <a
                     className="button secondary"
                     aria-disabled={!paging.hasPrev}
@@ -242,7 +309,7 @@ export default async function RunsPage({
                 >
                     Next
                 </a>
-                <span className="small muted" style={{ alignSelf: "center" }}>
+                <span className="small muted">
                     Page {paging.page} of {paging.totalPages}
                 </span>
             </div>

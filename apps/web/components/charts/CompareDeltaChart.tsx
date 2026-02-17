@@ -47,13 +47,19 @@ export function CompareDeltaChart({
             ) : null}
             <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartRows}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                    <XAxis dataKey="metric" stroke="#94a3b8" />
-                    <YAxis stroke="#94a3b8" />
-                    <Tooltip />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                    <XAxis dataKey="metric" stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                    <YAxis stroke="var(--color-text-muted)" tick={{ fill: "var(--color-text-secondary)" }} />
+                    <Tooltip
+                        contentStyle={{
+                            background: "var(--color-bg-card)",
+                            border: "1px solid var(--color-border-default)",
+                            borderRadius: "var(--radius-md)",
+                        }}
+                    />
                     <Legend />
-                    <Bar dataKey={leftLabel} fill="#22d3ee" />
-                    <Bar dataKey={rightLabel} fill="#818cf8" />
+                    <Bar dataKey={leftLabel} fill="var(--color-data-cyan)" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey={rightLabel} fill="var(--color-data-violet)" radius={[4, 4, 0, 0]} />
                 </BarChart>
             </ResponsiveContainer>
         </div>
