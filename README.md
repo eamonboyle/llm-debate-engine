@@ -244,6 +244,10 @@ pnpm web:build
 | `OPENAI_TEMPERATURE` | Optional global temperature override |
 | `RUNS_DIR` | Optional override used by web app data loader |
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and how to submit changes.
+
 ## License
 
-ISC
+ISC — see [LICENSE](LICENSE) for details.
