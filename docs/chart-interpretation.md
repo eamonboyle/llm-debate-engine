@@ -4,6 +4,16 @@ This document explains how to read the current research dashboard.
 
 ## Overview page
 
+## Preset usage + benchmark trend charts
+
+- **Preset usage distribution** shows relative usage of `standard`, `research_deep`, and `fast_research`.
+- **Benchmark entropy & stability trend** shows how diversity and consistency evolve over benchmark runs over time.
+
+Interpretation:
+
+- Rising entropy with falling stability can indicate drift or broader reasoning spread.
+- Stable entropy with rising stability can indicate robust convergence under consistent prompts/settings.
+
 ## 1) Critique issue types (bar chart)
 
 - Shows count of critique issues by type.

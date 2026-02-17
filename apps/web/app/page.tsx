@@ -1,5 +1,6 @@
 import { MetricCard } from "../components/MetricCard";
 import { OverviewCharts } from "../components/charts/OverviewCharts";
+import { ResearchTrendCharts } from "../components/charts/ResearchTrendCharts";
 import { MetricGlossary } from "../components/MetricGlossary";
 import { loadAnalysisIndex } from "../lib/data";
 
@@ -100,6 +101,16 @@ export default async function OverviewPage() {
             <OverviewCharts
                 issueTypeCounts={index.aggregates.issueTypeCounts}
                 critiqueVsConfidence={index.aggregates.critiqueVsConfidence}
+            />
+
+            <ResearchTrendCharts
+                presets={index.aggregates.presets}
+                benchmarks={index.benchmarks.map((benchmark) => ({
+                    id: benchmark.id,
+                    createdAt: benchmark.createdAt,
+                    divergenceEntropy: benchmark.divergenceEntropy,
+                    stabilityPairwiseMean: benchmark.stabilityPairwiseMean,
+                }))}
             />
 
             <MetricGlossary />

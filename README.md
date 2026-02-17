@@ -154,6 +154,7 @@ This derived index powers the web dashboard.
 - `/` Overview dashboard (KPIs + charts)
 - `/` includes metric glossary for interpretation context
 - `/` includes outlier run surfacing from pairwise similarity analysis
+- `/` includes preset distribution + benchmark entropy/stability trend charts
 - `/runs` Run artifact table
 - `/runs/[id]` Run trace viewer (step-by-step agent output JSON)
 - `/benchmarks` Benchmark artifact table
