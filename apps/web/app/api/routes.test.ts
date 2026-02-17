@@ -378,6 +378,64 @@ describe("web api routes", () => {
         expect(benchmarksJson.items[0].id).toBe("benchmark_b");
     });
 
+    it("uses fallback pagination defaults when params are missing or blank", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_a.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_a",
+                question: "A question",
+                metadata: {
+                    createdAt: "2025-01-01T00:00:00.000Z",
+                    model: "gpt",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: { id: "run_a", finalAnswer: "A", steps: [], metrics: {} },
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "benchmark_a.json"),
+            JSON.stringify({
+                kind: "benchmark",
+                id: "benchmark_a",
+                question: "A benchmark",
+                metadata: {
+                    createdAt: "2025-01-01T00:00:00.000Z",
+                    model: "gpt",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                payload: {
+                    runs: 1,
+                    modeCount: 1,
+                    modeSizes: [1],
+                    divergenceEntropy: 0,
+                    summary: { stability: { pairwiseMean: 1, pairs: [] } },
+                },
+            }),
+            "utf-8",
+        );
+
+        const runsResponse = await getRuns(new Request("http://localhost/api/runs"));
+        const runsJson = (await runsResponse.json()) as { limit: number; offset: number };
+        expect(runsJson.offset).toBe(0);
+        expect(runsJson.limit).toBe(100);
+
+        const benchmarksResponse = await getBenchmarks(
+            new Request("http://localhost/api/benchmarks?limit=&offset="),
+        );
+        const benchmarksJson = (await benchmarksResponse.json()) as {
+            limit: number;
+            offset: number;
+        };
+        expect(benchmarksJson.offset).toBe(0);
+        expect(benchmarksJson.limit).toBe(100);
+    });
+
     it("returns benchmark compare deltas", async () => {
         const dir = await makeTempDir();
         process.env.RUNS_DIR = dir;
