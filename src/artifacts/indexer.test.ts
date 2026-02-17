@@ -149,4 +149,93 @@ describe("buildAnalysisIndex", () => {
         expect(index.aggregates.outlierRuns).toHaveLength(0);
         expect(index.benchmarks[0].modeLabels[0].label).toContain("technical");
     });
+
+    it("detects low-similarity outlier run from pairwise matrix", async () => {
+        const dir = await createTempRunsDir();
+
+        const makeRun = (id: string) => ({
+            kind: "run",
+            id,
+            question: "Q",
+            metadata: {
+                schemaVersion: 1,
+                createdAt: new Date().toISOString(),
+                model: "gpt-test",
+                fastMode: false,
+                pipelinePreset: "standard",
+                pipelineVersion: "1.0.0",
+                source: "cli",
+            },
+            run: {
+                id,
+                createdAt: new Date().toISOString(),
+                question: "Q",
+                steps: [],
+                finalAnswer: `answer-${id}`,
+                metrics: {
+                    confidence: {},
+                    critique: {},
+                },
+            },
+        });
+
+        await writeFile(join(dir, "run_a.json"), JSON.stringify(makeRun("run_a")), "utf-8");
+        await writeFile(join(dir, "run_b.json"), JSON.stringify(makeRun("run_b")), "utf-8");
+        await writeFile(join(dir, "run_c.json"), JSON.stringify(makeRun("run_c")), "utf-8");
+
+        const benchmark = {
+            kind: "benchmark",
+            id: "benchmark_outlier",
+            question: "Q",
+            metadata: {
+                schemaVersion: 1,
+                createdAt: new Date().toISOString(),
+                model: "gpt-test",
+                fastMode: false,
+                pipelinePreset: "standard",
+                pipelineVersion: "1.0.0",
+                source: "cli",
+            },
+            payload: {
+                runs: 3,
+                runIds: ["run_a", "run_b", "run_c"],
+                modeCount: 2,
+                modeSizes: [2, 1],
+                divergenceEntropy: 0.918,
+                summary: {
+                    question: "Q",
+                    runs: 3,
+                    runIds: ["run_a", "run_b", "run_c"],
+                    consensus: { mean: 0.8, stddev: 0.1 },
+                    critiqueMaxSeverity: { mean: 3, stddev: 0.5 },
+                    modeCount: 2,
+                    modeSizes: [2, 1],
+                    divergenceEntropy: 0.918,
+                    stability: {
+                        pairwiseMean: 0.55,
+                        pairwiseStddev: 0.2,
+                        minPairwiseSimilarity: 0.2,
+                        maxPairwiseSimilarity: 0.95,
+                        pairs: [
+                            { i: 0, j: 1, similarity: 0.95 },
+                            { i: 0, j: 2, similarity: 0.25 },
+                            { i: 1, j: 2, similarity: 0.2 },
+                        ],
+                    },
+                },
+            },
+        };
+
+        await writeFile(
+            join(dir, "benchmark_outlier.json"),
+            JSON.stringify(benchmark),
+            "utf-8",
+        );
+
+        const index = await buildAnalysisIndex(dir);
+        expect(index.aggregates.outlierRuns).toHaveLength(1);
+        expect(index.aggregates.outlierRuns[0].benchmarkId).toBe("benchmark_outlier");
+        expect(index.aggregates.outlierRuns[0].runId).toBe("run_c");
+        expect(index.aggregates.outlierRuns[0].avgSimilarity).toBeCloseTo(0.225, 3);
+    });
 });
