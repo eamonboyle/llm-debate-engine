@@ -5,13 +5,22 @@ import { OpenAICompatibleClient } from "./llm/OpenAiCompatibleClient";
 import { OpenAiEmbeddingClient } from "./embedding/OpenAiEmbeddingClient";
 import { DebateEngine } from "./debate/DebateEngine";
 import { BenchmarkRunner } from "./bench/BenchmarkRunner";
+import { buildAndWriteAnalysisIndex } from "./artifacts/indexer";
 import { makeId } from "./core/id";
 import type { AgentResponse, Critique, CritiqueIssue } from "./types/agent";
-import type { BenchmarkArtifact } from "./types/benchmark";
+import type { BenchmarkArtifactPayload } from "./types/benchmark";
+import {
+    ARTIFACT_SCHEMA_VERSION,
+    PIPELINE_VERSION,
+    type BenchmarkArtifactV1,
+    type PipelinePreset,
+    type RunArtifactV1,
+} from "./types/artifact";
 
 const BASE_URL = process.env.OPENAI_BASE_URL ?? "https://api.openai.com/v1";
 const MODEL = process.env.OPENAI_MODEL ?? "gpt-5.2";
 const RUNS_DIR = "runs";
+const DEFAULT_PRESET: PipelinePreset = "standard";
 
 function printSummary(
     question: string,
@@ -38,13 +47,32 @@ function printSummary(
     console.log("\n(Full run details saved in the JSON file.)");
 }
 
-const API_KEY = process.env.OPENAI_API_KEY;
+function requireApiKey(): string {
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+        console.error(
+            "Missing OPENAI_API_KEY. Set it in .env (copy .env.example) or as an environment variable.",
+        );
+        process.exit(1);
+    }
+    return apiKey;
+}
 
-if (!API_KEY) {
-    console.error(
-        "Missing OPENAI_API_KEY. Set it in .env (copy .env.example) or as an environment variable.",
-    );
-    process.exit(1);
+function buildMetadata(opts: {
+    createdAt: string;
+    model: string;
+    fastMode: boolean;
+    pipelinePreset?: PipelinePreset;
+}) {
+    return {
+        schemaVersion: ARTIFACT_SCHEMA_VERSION,
+        createdAt: opts.createdAt,
+        model: opts.model,
+        fastMode: opts.fastMode,
+        pipelinePreset: opts.pipelinePreset ?? DEFAULT_PRESET,
+        pipelineVersion: PIPELINE_VERSION,
+        source: "cli" as const,
+    };
 }
 
 async function runBenchmark(
@@ -56,17 +84,19 @@ async function runBenchmark(
         model?: string;
         fast?: boolean;
         threshold?: number;
+        pipelinePreset?: PipelinePreset;
     },
 ): Promise<void> {
-    const { concurrency, model, fast, threshold } = opts ?? {};
+    const { concurrency, model, fast, threshold, pipelinePreset } = opts ?? {};
+    const apiKey = requireApiKey();
     const llm = new OpenAICompatibleClient({
         baseURL: BASE_URL,
-        apiKey: API_KEY,
+        apiKey,
     });
 
     const embedding = new OpenAiEmbeddingClient({
         baseURL: BASE_URL,
-        apiKey: API_KEY,
+        apiKey,
     });
 
     const engine = new DebateEngine({ llm, embedding });
@@ -75,7 +105,7 @@ async function runBenchmark(
     console.log(
         `Starting benchmark (${runs} runs, concurrency ${concurrency ?? 3})...`,
     );
-    const { result, raw } = await runner.run(question, runs, {
+    const { result } = await runner.run(question, runs, {
         model: model ?? MODEL,
         verbose,
         quiet: !verbose,
@@ -84,6 +114,7 @@ async function runBenchmark(
             : undefined,
         concurrency,
         fast,
+        preset: pipelinePreset,
         clusteringThreshold: threshold ?? 0.9,
     });
 
@@ -125,10 +156,8 @@ async function runBenchmark(
     console.log("divergenceEntropy:    ", divergenceEntropy);
 
     const benchmarkId = makeId("benchmark");
-    const benchmarkJson: BenchmarkArtifact = {
-        id: benchmarkId,
-        createdAt: new Date().toISOString(),
-        question,
+    const createdAt = new Date().toISOString();
+    const payload: BenchmarkArtifactPayload = {
         runs,
         runIds: result.runIds,
         modeCount,
@@ -149,6 +178,19 @@ async function runBenchmark(
         summary: result,
     };
 
+    const benchmarkJson: BenchmarkArtifactV1 = {
+        kind: "benchmark",
+        id: benchmarkId,
+        question,
+        metadata: buildMetadata({
+            createdAt,
+            model: model ?? MODEL,
+            fastMode: !!fast,
+            pipelinePreset,
+        }),
+        payload,
+    };
+
     await mkdir(RUNS_DIR, { recursive: true });
     const outputPath = join(RUNS_DIR, `${benchmarkId}.json`);
     await writeFile(
@@ -166,9 +208,11 @@ async function main() {
     const cmd = rest[0];
 
     const usageAsk =
-        'Usage: pnpm tsx src/cli.ts ask "<question>" [--model M] [--fast] [--verbose]';
+        'Usage: pnpm tsx src/cli.ts ask "<question>" [--model M] [--preset standard|research_deep|fast_research] [--fast] [--verbose]';
     const usageBenchmark =
-        'Usage: pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model M] [--threshold T] [--fast] [--verbose]';
+        'Usage: pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model M] [--preset standard|research_deep|fast_research] [--threshold T] [--fast] [--verbose]';
+    const usageAnalyze =
+        'Usage: pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--model text] [--preset standard|research_deep|fast_research] [--fast-mode true|false] [--created-after ISO] [--created-before ISO] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename] [--chunks] [--chunks-file filename]';
 
     const parseOpt = (flag: string): string | undefined => {
         const idx = rest.indexOf(flag);
@@ -186,6 +230,23 @@ async function main() {
         const n = parseFloat(v);
         return !Number.isNaN(n) && n > 0 && n <= 1 ? n : undefined;
     };
+    const parsePresetOpt = (): PipelinePreset | undefined => {
+        const preset = parseOpt("--preset");
+        if (
+            preset === "standard" ||
+            preset === "research_deep" ||
+            preset === "fast_research"
+        ) {
+            return preset;
+        }
+        return undefined;
+    };
+    const parseBooleanOpt = (flag: string): boolean | undefined => {
+        const value = parseOpt(flag);
+        if (value === "true") return true;
+        if (value === "false") return false;
+        return undefined;
+    };
     const excludeOptIndices = (indices: number[]): number[] => {
         const set = new Set<number>();
         for (const i of indices) {
@@ -195,18 +256,79 @@ async function main() {
         return Array.from(set);
     };
 
+    if (cmd === "analyze-runs") {
+        const runsDir = parseOpt("--runs-dir") ?? RUNS_DIR;
+        const output = parseOpt("--output") ?? "analysis-index.json";
+        const writeCsv = rest.includes("--csv");
+        const writeMarkdown = rest.includes("--markdown");
+        const markdownFileName = parseOpt("--markdown-file") ?? "analysis-report.md";
+        const writeBundle = rest.includes("--bundle");
+        const bundleFileName = parseOpt("--bundle-file") ?? "analysis-bundle.json";
+        const writeChunks = rest.includes("--chunks");
+        const chunkFileName =
+            parseOpt("--chunks-file") ?? "analysis-benchmark-pairs.json";
+        const questionContains = parseOpt("--question");
+        const modelContains = parseOpt("--model");
+        const presetEquals = parsePresetOpt();
+        const fastMode = parseBooleanOpt("--fast-mode");
+        const createdAfter = parseOpt("--created-after");
+        const createdBefore = parseOpt("--created-before");
+        const { path, index, csvPaths, markdownPath, bundlePath, chunkPath } =
+            await buildAndWriteAnalysisIndex({
+                runsDir,
+                outputFileName: output,
+                questionContains,
+                modelContains,
+                presetEquals,
+                fastMode,
+                createdAfter,
+                createdBefore,
+                writeCsv,
+                writeMarkdown,
+                markdownFileName,
+                writeBundle,
+                bundleFileName,
+                writeChunks,
+                chunkFileName,
+            });
+        console.log(
+            `Analysis index saved to ${path} (${index.totals.runs} runs, ${index.totals.benchmarks} benchmarks)`,
+        );
+        if (csvPaths) {
+            console.log(`CSV exports: ${csvPaths.runs}, ${csvPaths.benchmarks}`);
+        }
+        if (markdownPath) {
+            console.log(`Markdown report: ${markdownPath}`);
+        }
+        if (bundlePath) {
+            console.log(`Share bundle: ${bundlePath}`);
+        }
+        if (chunkPath) {
+            console.log(`Pairwise chunk file: ${chunkPath}`);
+        }
+        if (index.skipped.length > 0) {
+            console.log(`Skipped ${index.skipped.length} file(s):`);
+            for (const skipped of index.skipped) {
+                console.log(`- ${skipped.file}: ${skipped.error}`);
+            }
+        }
+        return;
+    }
+
     if (cmd === "benchmark") {
         let runs = 5;
         const runsVal = parseNumOpt("--runs");
         if (runsVal) runs = runsVal;
         const concurrency = parseNumOpt("--concurrency");
         const model = parseOpt("--model");
+        const preset = parsePresetOpt();
         const thresholdVal = parseFloatOpt("--threshold");
         const fast = rest.includes("--fast");
         const excludeIdx = excludeOptIndices([
             rest.indexOf("--runs"),
             rest.indexOf("--concurrency"),
             rest.indexOf("--model"),
+            rest.indexOf("--preset"),
             rest.indexOf("--threshold"),
             ...(fast ? [rest.indexOf("--fast")] : []),
         ].filter((i) => i >= 0));
@@ -231,6 +353,7 @@ async function main() {
             model,
             fast,
             threshold: thresholdVal,
+            pipelinePreset: preset,
         });
         return;
     }
@@ -239,13 +362,16 @@ async function main() {
         console.error(`Unknown command: ${cmd ?? "(none)"}`);
         console.error(usageAsk);
         console.error(usageBenchmark);
+        console.error(usageAnalyze);
         process.exit(1);
     }
 
     const askModel = parseOpt("--model");
+    const askPreset = parsePresetOpt();
     const askFast = rest.includes("--fast");
     const askExcludeIdx = excludeOptIndices([
         rest.indexOf("--model"),
+        rest.indexOf("--preset"),
         ...(askFast ? [rest.indexOf("--fast")] : []),
     ].filter((i) => i >= 0));
     const askQuestionParts = rest
@@ -259,16 +385,14 @@ async function main() {
         process.exit(1);
     }
 
-    const runId = makeId("run");
-
     const llm = new OpenAICompatibleClient({
         baseURL: BASE_URL,
-        apiKey: API_KEY,
+        apiKey: requireApiKey(),
     });
 
     const embedding = new OpenAiEmbeddingClient({
         baseURL: BASE_URL,
-        apiKey: API_KEY,
+        apiKey: requireApiKey(),
     });
 
     const engine = new DebateEngine({
@@ -278,15 +402,33 @@ async function main() {
 
     const result = await engine.run(
         { question },
-        { model: askModel ?? MODEL, verbose, fast: askFast },
+        {
+            model: askModel ?? MODEL,
+            verbose,
+            fast: askFast,
+            preset: askPreset,
+        },
     );
+    const runId = result.id;
 
-    const runJson = {
+    const runJson: RunArtifactV1 = {
+        kind: "run",
         id: runId,
         question,
-        steps: result.steps,
-        finalAnswer: result.finalAnswer,
-        metrics: result.metrics,
+        run: {
+            id: result.id,
+            createdAt: result.createdAt,
+            question,
+            steps: result.steps,
+            finalAnswer: result.finalAnswer,
+            metrics: result.metrics,
+        },
+        metadata: buildMetadata({
+            createdAt: result.createdAt,
+            model: askModel ?? MODEL,
+            fastMode: askFast,
+            pipelinePreset: askPreset,
+        }),
     };
 
     await mkdir(RUNS_DIR, { recursive: true });
@@ -295,22 +437,20 @@ async function main() {
     console.log(`\nRun saved to ${outputPath}`);
 
     if (!verbose) {
-        const proposal =
-            result.steps[0]?.output?.kind === "proposal"
-                ? (result.steps[0].output.data as AgentResponse)
-                : undefined;
-        const critique =
-            result.steps[1]?.output?.kind === "critique"
-                ? (result.steps[1].output.data as Critique)
-                : undefined;
-        const revisedProposal =
-            result.steps[2]?.output?.kind === "proposal"
-                ? (result.steps[2].output.data as AgentResponse)
-                : undefined;
-        const synthesizedProposal =
-            result.steps[3]?.output?.kind === "proposal"
-                ? (result.steps[3].output.data as AgentResponse)
-                : undefined;
+        const proposal = result.steps.find(
+            (s) => s.agentName === "SolverAgent" && s.output?.kind === "proposal",
+        )?.output?.data as AgentResponse | undefined;
+        const critique = result.steps.find(
+            (s) => s.role === "skeptic" && s.output?.kind === "critique",
+        )?.output?.data as Critique | undefined;
+        const revisedProposal = result.steps.find(
+            (s) =>
+                s.agentName.toLowerCase().includes("revision") &&
+                s.output?.kind === "proposal",
+        )?.output?.data as AgentResponse | undefined;
+        const synthesizedProposal = result.steps.find(
+            (s) => s.role === "synthesizer" && s.output?.kind === "proposal",
+        )?.output?.data as AgentResponse | undefined;
 
         if (proposal && critique) {
             printSummary(

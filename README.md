@@ -1,130 +1,240 @@
-# LLM Debate Engine
+# LLM Debate Research Platform
 
-A research and analysis tool for studying how LLMs reason and produce answers based on prompts and questions. By running multiple debate-style agents (Solver, Skeptic, Revision, Synthesizer) and repeating the same question across many runs, you can measure answer consistency, stability, and divergence—helping understand how models arrive at their conclusions.
+A multi-agent system for running structured LLM debates, analyzing outputs, and comparing results over time. The platform comprises:
 
-## What It Does
+- **CLI debate engine** — Multi-agent pipelines for single runs and benchmarks
+- **Artifact storage** — Versioned run and benchmark artifacts in `runs/`
+- **Analysis indexer** — `analyze-runs` for aggregating metrics and building searchable indexes
+- **Research UI** — Next.js dashboard (`apps/web`) for exploration, comparison, and visualization
 
-The engine runs a **multi-agent debate pipeline** on a given question:
+Designed for research, policy analysis, and model evaluation where measurable uncertainty and critique quality matter.
 
-1. **Solver** — Produces an initial answer with key claims, assumptions, and confidence.
+## Debate pipeline presets
 
-2. **Skeptic** — Critiques the proposal, identifying weaknesses and gaps.
+### `standard`
 
-3. **Solver Revision** — Revises the proposal in light of the critique.
+Solver -> Skeptic -> SolverRevision -> Synthesizer
 
-4. **Synthesizer** — Produces a final synthesized answer from proposal, critique, and revision.
+### `research_deep`
 
-Each run is saved to `./runs/` as JSON. You can run a single question once (`ask`) or run multiple times (`benchmark`) to analyze how answers vary across runs.
+QuestionDecomposer -> EvidencePlanner -> Solver -> Skeptic -> RedTeam -> SolverRevision -> Synthesizer -> Counterfactual -> Calibration -> Judge
 
-## Benchmark Metrics
+### `fast_research`
 
-From the benchmark logs in `./runs/`, the tool computes:
+QuestionDecomposer -> EvidencePlanner -> Solver -> Skeptic -> RedTeam -> Counterfactual -> Calibration -> Judge
 
-| Metric | Description |
-|--------|-------------|
-| **consensus** | Mean/stddev of agreement strength between proposal and critique. |
-| **critiqueMaxSeverity** | How harsh the skeptic was (1–5 scale). |
-| **stability** | Pairwise cosine similarity of final answers across runs. Higher = more consistent answers. |
-| **modeCount** | Number of distinct answer clusters (greedy clustering by embedding similarity). |
-| **modeSizes** | Size of each cluster (e.g. `[6, 1]` = 6 answers in one cluster, 1 outlier). |
-| **divergenceEntropy** | Entropy of the distribution across modes. Higher = more diverse answers. |
-| **modeCountAt0.8 / 0.9 / 0.95** | Sensitivity to similarity threshold—how many modes at different thresholds. |
+The `--fast` flag skips revision and synthesizer steps in compatible flows.
 
-### Example from `./runs/`
-
-Benchmark run on `"Is AI an existential threat?"`:
-
-- **High consistency** (`modeCount=1`, `divergenceEntropy=0`): All 7 runs clustered together; answers were similar.
-- **Moderate divergence** (`modeCount=2`, `modeSizes=[6,1]`): 6 runs clustered together, 1 outlier with a different framing.
-- **High divergence** (`modeCount=6`, `modeSizes=[2,1,1,1,1,1]`): 6 distinct answer clusters; similar question but very different reasoning paths.
-
-This helps distinguish:
-- **Style/calibration** vs **substantive claims** — when `modeCountClaimCentroid` < `modeCount`, answers differ more in style than in underlying claims.
-- **Stability** — how much the model’s answer changes when you re-run the same question.
-
-## Quick Start
+## Quick start
 
 ```bash
-# Install dependencies
 pnpm install
-
-# Copy env and fill in your API key
 cp .env.example .env
-
-# Set OPENAI_API_KEY (and optionally OPENAI_BASE_URL, OPENAI_MODEL)
+# set OPENAI_API_KEY in .env
 ```
 
-### Single question (one run)
+### Single run
 
 ```bash
-pnpm tsx src/cli.ts ask "Is AI an existential threat?"
+pnpm ask "Is AI an existential threat?" --preset research_deep
 ```
 
-Run saved to `./runs/run_<id>.json`.
-
-### Benchmark (multiple runs)
+### Benchmark
 
 ```bash
-pnpm tsx src/cli.ts benchmark "Is AI an existential threat?" --runs 7
+pnpm benchmark "Is AI an existential threat?" --runs 7 --preset research_deep
 ```
 
-Results saved to `./runs/benchmark_<id>.json` with full metrics and mode exemplars.
+### Build analysis index from `runs/`
 
-### Options
+```bash
+pnpm analyze
+```
 
-| Flag | Description |
-|------|-------------|
-| `--runs N` | Number of runs (default: 5). |
-| `--concurrency N` | Max concurrent runs (default: 3). |
-| `--model M` | Model name (override `OPENAI_MODEL`). |
-| `--threshold T` | Clustering threshold 0–1 (default: 0.9). |
-| `--fast` | Skip revision and synthesizer (~50% fewer LLM calls). |
-| `--verbose` / `-v` | Verbose output. |
+Writes `runs/analysis-index.json`.
+
+Optional CSV summaries:
+
+```bash
+pnpm analyze -- --csv
+```
+
+Writes:
+
+- `runs/analysis-runs.csv`
+- `runs/analysis-benchmarks.csv`
+
+Optional markdown report:
+
+```bash
+pnpm analyze -- --markdown
+```
+
+Writes:
+
+- `runs/analysis-report.md`
+
+Optional share bundle:
+
+```bash
+pnpm analyze -- --bundle
+```
+
+Writes:
+
+- `runs/analysis-bundle.json` (index + parsed run/benchmark artifacts)
+
+Optional pairwise chunk export:
+
+```bash
+pnpm analyze -- --chunks
+```
+
+Writes:
+
+- `runs/analysis-benchmark-pairs.json`
+
+All-in-one export (CSV, markdown, bundle, chunks):
+
+```bash
+pnpm analyze:full
+```
+
+### Start research UI
+
+```bash
+pnpm web:dev
+```
+
+Production build:
+
+```bash
+pnpm web:build
+```
+
+## CLI reference
+
+### `ask`
+
+```bash
+pnpm tsx src/cli.ts ask "<question>" [--model M] [--preset standard|research_deep|fast_research] [--fast] [--verbose]
+```
+
+### `benchmark`
+
+```bash
+pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model M] [--preset standard|research_deep|fast_research] [--threshold T] [--fast] [--verbose]
+```
+
+### `analyze-runs`
+
+```bash
+pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--model text] [--preset standard|research_deep|fast_research] [--fast-mode true|false] [--created-after ISO] [--created-before ISO] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename] [--chunks] [--chunks-file filename]
+```
+
+Filter options:
+
+- `--question "text"` — Include only artifacts whose question contains the given text
+- `--model "text"` — Include only artifacts whose model contains the given text
+- `--preset standard|research_deep|fast_research` — Restrict to a single preset
+- `--fast-mode true|false` — Restrict to fast or non-fast artifacts
+- `--created-after ISO` — Include artifacts at or after the given timestamp
+- `--created-before ISO` — Include artifacts at or before the given timestamp
+
+## Artifact model
+
+Artifacts use schema versioning (`schemaVersion: 1`) and include metadata:
+
+- `model`
+- `fastMode`
+- `pipelinePreset`
+- `pipelineVersion`
+- `createdAt`
+
+Type definitions:
+
+- `src/types/artifact.ts`
+- `src/types/benchmark.ts`
+- `src/types/analysis.ts`
+
+The compatibility loader (`src/artifacts/loader.ts`) supports legacy artifact formats.
+
+## Research analytics
+
+The `analyze-runs` command computes an analysis index containing:
+
+- Filter context metadata for reproducibility
+- Issue type counts and severity statistics
+- Confidence drift (solver→revision, revision→synthesizer, calibrated→synthesizer)
+- Evidence-planning risk aggregates (mean and distribution)
+- Counterfactual failure mode frequency aggregates
+- Severity–confidence Pearson correlations for stage deltas
+- Critique severity vs. confidence movement records
+- Benchmark mode labels inferred from exemplar previews
+
+Use `--question "text"` to build a focused index over matching artifacts. The resulting index powers the web dashboard.
+
+## Next.js research UI
+
+The `apps/web` dashboard provides:
+
+**Overview (`/`)** — KPIs, metric glossary, preset distribution, benchmark entropy and stability trends, evidence planner risk distribution, evidence risk trends, top counterfactual failure modes, outlier run surfacing from pairwise similarity analysis, and analysis filter context when the index is built with CLI filters.
+
+**Runs** — `/runs` artifact table; `/runs/[id]` trace viewer with step-by-step summaries and raw JSON; `/runs/compare` side-by-side comparison with confidence, quality, and research deltas.
+
+**Benchmarks** — `/benchmarks` artifact table; `/benchmarks/[id]` deep-dive; `/benchmarks/compare` side-by-side comparison with charted metric deltas.
+
+**Filters** — Query parameters for runs and benchmarks:
+
+- full-text question/answer search
+- model filter
+- preset filter
+- fast-mode filter
+- sort order (newest/oldest)
+- pagination controls (page + page size)
+
+Data is loaded from local filesystem artifacts in `runs/`. If `analysis-index.json` is missing, the UI falls back to `analysis-bundle.json`.
+
+**REST API** — Endpoints exposed by the web app:
+
+- `GET /api/analysis`
+- `GET /api/runs`
+- `GET /api/runs/:id`
+- `GET /api/runs/compare?left=:id&right=:id`
+- `GET /api/benchmarks`
+- `GET /api/benchmarks/compare?left=:id&right=:id`
+- `GET /api/benchmarks/:id`
+- `GET /api/benchmarks/:id/pairs`
+
+List routes support query filters (`q`, `model`, `preset`, `fast`, `from`, `to`) and pagination/sort parameters (`sort`, `offset`, `limit`, `page`, `pageSize`). Responses include pagination metadata (`page`, `totalPages`, `prevPage`, `nextPage`, `offset`, `limit`, `hasMore`). The benchmark pairs endpoint prefers `analysis-benchmark-pairs.json` when available.
+
+## Testing
+
+```bash
+pnpm test
+pnpm typecheck
+pnpm web:typecheck
+pnpm web:build
+```
+
+## Documentation
+
+- Architecture decision record: `docs/architecture-decision-record.md`
+- Web API reference: `docs/api-reference.md`
+- Experiment workflow: `docs/experiment-workflow.md`
+- Artifact schema reference: `docs/artifact-schema.md`
+- Adding new agents: `docs/adding-agents.md`
+- Chart interpretation guide: `docs/chart-interpretation.md`
 
 ## Environment
 
 | Variable | Description |
 |----------|-------------|
-| `OPENAI_API_KEY` | Required. API key for LLM. |
-| `OPENAI_BASE_URL` | Base URL (default: `https://api.openai.com/v1`). |
-| `OPENAI_MODEL` | Model name (default: `gpt-5.2`). |
-
-## Project Structure
-
-```
-src/
-├── cli.ts              # CLI entry (ask, benchmark)
-├── debate/
-│   └── DebateEngine.ts # Orchestrates Solver → Skeptic → Revision → Synthesizer
-├── agents/
-│   ├── SolverAgent.ts
-│   ├── SkepticAgent.ts
-│   ├── SolverRevisionAgent.ts
-│   └── SynthesizerAgent.ts
-├── bench/
-│   └── BenchmarkRunner.ts  # Runs N debates, computes metrics, clustering
-├── llm/
-│   └── OpenAiCompatibleClient.ts
-├── embedding/
-│   └── OpenAiEmbeddingClient.ts
-├── core/
-│   ├── metrics.ts
-│   ├── math.ts
-│   └── extraction.ts
-└── types/
-runs/                   # Run and benchmark JSON artifacts
-```
-
-## Research Use
-
-This tool is designed for:
-
-- **Answer consistency** — How often does the same model produce similar answers to the same question?
-- **Reasoning divergence** — Do different runs lead to different reasoning paths or conclusions?
-- **Prompt sensitivity** — How do changes in prompts or questions affect answer quality and stability?
-- **Model comparison** — How do different models (e.g. via `--model`) compare on stability and consistency?
-
-Use the benchmark JSON files in `./runs/` for further analysis, visualization, or integration with other research pipelines.
+| `OPENAI_API_KEY` | Required for `ask` / `benchmark`. Not required for `analyze-runs`. |
+| `OPENAI_BASE_URL` | OpenAI-compatible API base URL |
+| `OPENAI_MODEL` | Default model |
+| `OPENAI_TEMPERATURE` | Optional global temperature override |
+| `RUNS_DIR` | Optional override used by web app data loader |
 
 ## License
 

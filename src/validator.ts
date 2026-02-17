@@ -1,5 +1,12 @@
 import { AgentResponse } from "./types/agent";
 import type { Critique, CritiqueIssue } from "./types/agent";
+import type {
+    Calibration,
+    Counterfactual,
+    EvidencePlan,
+    Judgement,
+    QuestionDecomposition,
+} from "./types/agent";
 
 /**
  * Validates that a value conforms to the {@link AgentResponse} shape.
@@ -121,4 +128,169 @@ export function validateCritique(
     }
 
     return { ok: true, data: v as Critique };
+}
+
+export function validateQuestionDecomposition(
+    value: unknown,
+): { ok: true; data: QuestionDecomposition } | { ok: false; error: string } {
+    if (typeof value !== "object" || value === null)
+        return { ok: false, error: "Not an object" };
+    const v = value as any;
+
+    if (typeof v.framing !== "string" || v.framing.trim().length < 5) {
+        return { ok: false, error: "framing invalid" };
+    }
+
+    if (!Array.isArray(v.subQuestions) || v.subQuestions.length < 1) {
+        return { ok: false, error: "subQuestions missing/empty" };
+    }
+    if (!Array.isArray(v.hypotheses) || v.hypotheses.length < 1) {
+        return { ok: false, error: "hypotheses missing/empty" };
+    }
+
+    const allStrings = [...v.subQuestions, ...v.hypotheses].every(
+        (s) => typeof s === "string" && s.trim().length > 2,
+    );
+    if (!allStrings) {
+        return { ok: false, error: "subQuestions/hypotheses contain invalid item" };
+    }
+
+    return { ok: true, data: v as QuestionDecomposition };
+}
+
+export function validateCalibration(
+    value: unknown,
+): { ok: true; data: Calibration } | { ok: false; error: string } {
+    if (typeof value !== "object" || value === null)
+        return { ok: false, error: "Not an object" };
+    const v = value as any;
+
+    if (
+        typeof v.adjustedConfidence !== "number" ||
+        v.adjustedConfidence < 0 ||
+        v.adjustedConfidence > 1
+    ) {
+        return { ok: false, error: "adjustedConfidence invalid" };
+    }
+    if (typeof v.rationale !== "string" || v.rationale.trim().length < 5) {
+        return { ok: false, error: "rationale invalid" };
+    }
+    if (!Array.isArray(v.claimConfidences)) {
+        return { ok: false, error: "claimConfidences missing" };
+    }
+
+    for (const entry of v.claimConfidences as any[]) {
+        if (typeof entry !== "object" || entry === null) {
+            return { ok: false, error: "claim confidence entry invalid" };
+        }
+        if (typeof entry.claim !== "string" || entry.claim.trim().length < 3) {
+            return { ok: false, error: "claim invalid" };
+        }
+        if (
+            typeof entry.confidence !== "number" ||
+            entry.confidence < 0 ||
+            entry.confidence > 1
+        ) {
+            return { ok: false, error: "claim confidence invalid" };
+        }
+    }
+
+    return { ok: true, data: v as Calibration };
+}
+
+export function validateEvidencePlan(
+    value: unknown,
+): { ok: true; data: EvidencePlan } | { ok: false; error: string } {
+    if (typeof value !== "object" || value === null)
+        return { ok: false, error: "Not an object" };
+    const v = value as any;
+
+    const listFields = [
+        "evidenceRequirements",
+        "verificationChecks",
+        "majorUnknowns",
+    ] as const;
+    for (const field of listFields) {
+        if (!Array.isArray(v[field]) || v[field].length < 1) {
+            return { ok: false, error: `${field} missing/empty` };
+        }
+        const valid = v[field].every(
+            (item: unknown) => typeof item === "string" && item.trim().length >= 3,
+        );
+        if (!valid) {
+            return { ok: false, error: `${field} contains invalid item` };
+        }
+    }
+
+    if (![1, 2, 3, 4, 5].includes(v.riskLevel)) {
+        return { ok: false, error: "riskLevel invalid" };
+    }
+
+    return { ok: true, data: v as EvidencePlan };
+}
+
+export function validateCounterfactual(
+    value: unknown,
+): { ok: true; data: Counterfactual } | { ok: false; error: string } {
+    if (typeof value !== "object" || value === null)
+        return { ok: false, error: "Not an object" };
+    const v = value as any;
+
+    const fields = ["failureModes", "triggerConditions", "mitigations"] as const;
+    for (const field of fields) {
+        if (!Array.isArray(v[field]) || v[field].length < 1) {
+            return { ok: false, error: `${field} missing/empty` };
+        }
+        const validItems = v[field].every(
+            (item: unknown) => typeof item === "string" && item.trim().length >= 3,
+        );
+        if (!validItems) {
+            return { ok: false, error: `${field} contains invalid item` };
+        }
+    }
+
+    return { ok: true, data: v as Counterfactual };
+}
+
+export function validateJudgement(
+    value: unknown,
+): { ok: true; data: Judgement } | { ok: false; error: string } {
+    if (typeof value !== "object" || value === null)
+        return { ok: false, error: "Not an object" };
+    const v = value as any;
+    const scores = v.rubricScores;
+    if (typeof scores !== "object" || scores === null) {
+        return { ok: false, error: "rubricScores missing" };
+    }
+
+    const numericFields = [
+        "coherence",
+        "completeness",
+        "factualRisk",
+        "uncertaintyHandling",
+    ] as const;
+    for (const field of numericFields) {
+        const score = scores[field];
+        if (typeof score !== "number" || score < 1 || score > 5) {
+            return { ok: false, error: `${field} score invalid` };
+        }
+    }
+
+    if (
+        !Array.isArray(v.strengths) ||
+        !v.strengths.every((s: unknown) => typeof s === "string")
+    ) {
+        return { ok: false, error: "strengths invalid" };
+    }
+    if (
+        !Array.isArray(v.weaknesses) ||
+        !v.weaknesses.every((s: unknown) => typeof s === "string")
+    ) {
+        return { ok: false, error: "weaknesses invalid" };
+    }
+    if (typeof v.summary !== "string" || v.summary.trim().length < 5) {
+        return { ok: false, error: "summary invalid" };
+    }
+
+    return { ok: true, data: v as Judgement };
 }

@@ -1,4 +1,5 @@
 import type { ChatMessage, StructuredCompletionRequest } from "./llm";
+import type { PipelinePreset } from "./artifact";
 
 export type AgentResponse = {
     answer: string;
@@ -18,14 +19,59 @@ export type Critique = {
     issues: CritiqueIssue[];
 };
 
+export type QuestionDecomposition = {
+    framing: string;
+    subQuestions: string[];
+    hypotheses: string[];
+};
+
+export type EvidencePlan = {
+    evidenceRequirements: string[];
+    verificationChecks: string[];
+    majorUnknowns: string[];
+    riskLevel: 1 | 2 | 3 | 4 | 5;
+};
+
+export type Counterfactual = {
+    failureModes: string[];
+    triggerConditions: string[];
+    mitigations: string[];
+};
+
+export type Calibration = {
+    adjustedConfidence: number;
+    rationale: string;
+    claimConfidences: Array<{
+        claim: string;
+        confidence: number;
+    }>;
+};
+
+export type Judgement = {
+    rubricScores: {
+        coherence: number;
+        completeness: number;
+        factualRisk: number;
+        uncertaintyHandling: number;
+    };
+    strengths: string[];
+    weaknesses: string[];
+    summary: string;
+};
+
 export type AgentOutput =
     | { kind: "proposal"; data: AgentResponse }
-    | { kind: "critique"; data: Critique };
+    | { kind: "critique"; data: Critique }
+    | { kind: "decomposition"; data: QuestionDecomposition }
+    | { kind: "evidence_plan"; data: EvidencePlan }
+    | { kind: "counterfactual"; data: Counterfactual }
+    | { kind: "calibration"; data: Calibration }
+    | { kind: "judgement"; data: Judgement };
 
 export type AgentRun = {
     id: string;
     agentName: string;
-    role: "solver" | "skeptic" | "synthesizer";
+    role: "solver" | "skeptic" | "synthesizer" | "research";
     request: Pick<
         StructuredCompletionRequest,
         "model" | "temperature" | "messages" | "schemaName" | "schema"
@@ -45,6 +91,7 @@ export type DebateRun = {
     id: string;
     createdAt: string;
     question: string;
+    pipelinePreset?: PipelinePreset;
     steps: AgentRun[];
     finalAnswer: string;
 
@@ -53,6 +100,7 @@ export type DebateRun = {
             solver?: number;
             revision?: number;
             synthesizer?: number;
+            calibratedAdjusted?: number;
             solverToRevisionDelta?: number;
             revisionToSynthesizerDelta?: number;
         };
@@ -68,6 +116,17 @@ export type DebateRun = {
             included?: Array<"solver" | "revision" | "synthesizer">;
             // pairwise sims for debugging
             pairs?: Array<{ a: string; b: string; similarity: number }>;
+        };
+        quality?: {
+            coherence?: number;
+            completeness?: number;
+            factualRisk?: number;
+            uncertaintyHandling?: number;
+        };
+        research?: {
+            evidenceRiskLevel?: number;
+            counterfactualFailureModeCount?: number;
+            topCounterfactualFailureMode?: string;
         };
     };
 };

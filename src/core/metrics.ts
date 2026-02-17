@@ -17,9 +17,16 @@ export function computeBasicMetrics(run: DebateRun) {
     const synthStep = run.steps.find(
         (s) => s.role === "synthesizer" && s.output?.kind === "proposal",
     );
-    const skepticStep = run.steps.find(
-        (s) => s.role === "skeptic" && s.output?.kind === "critique",
+    const calibrationStep = run.steps.find(
+        (s) => s.output?.kind === "calibration",
     );
+    const evidencePlanStep = run.steps.find(
+        (s) => s.output?.kind === "evidence_plan",
+    );
+    const counterfactualStep = run.steps.find(
+        (s) => s.output?.kind === "counterfactual",
+    );
+    const judgeStep = run.steps.find((s) => s.output?.kind === "judgement");
 
     const solver =
         solverStep?.output?.kind === "proposal"
@@ -37,6 +44,10 @@ export function computeBasicMetrics(run: DebateRun) {
     if (solver) run.metrics.confidence.solver = solver.confidence;
     if (revision) run.metrics.confidence.revision = revision.confidence;
     if (synth) run.metrics.confidence.synthesizer = synth.confidence;
+    if (calibrationStep?.output?.kind === "calibration") {
+        run.metrics.confidence.calibratedAdjusted =
+            calibrationStep.output.data.adjustedConfidence;
+    }
 
     if (solver && revision) {
         run.metrics.confidence.solverToRevisionDelta = round3(
@@ -49,20 +60,50 @@ export function computeBasicMetrics(run: DebateRun) {
         );
     }
 
-    const critique =
-        skepticStep?.output?.kind === "critique"
-            ? skepticStep.output.data
-            : undefined;
-    if (critique?.issues?.length) {
-        const severities = critique.issues.map((i) => i.severity);
+    const critiqueIssues = run.steps
+        .filter((s) => s.output?.kind === "critique")
+        .flatMap((s) => (s.output?.kind === "critique" ? s.output.data.issues : []));
+    if (critiqueIssues.length) {
+        const severities = critiqueIssues.map((i) => i.severity);
         run.metrics.critique.maxSeverity = Math.max(...severities);
         run.metrics.critique.avgSeverity = round3(avg(severities));
 
         const byType: Record<string, number> = {};
-        for (const issue of critique.issues) {
+        for (const issue of critiqueIssues) {
             byType[issue.type] = (byType[issue.type] ?? 0) + 1;
         }
         run.metrics.critique.byType = byType;
+    }
+
+    if (judgeStep?.output?.kind === "judgement") {
+        const scores = judgeStep.output.data.rubricScores;
+        run.metrics.quality = {
+            coherence: scores.coherence,
+            completeness: scores.completeness,
+            factualRisk: scores.factualRisk,
+            uncertaintyHandling: scores.uncertaintyHandling,
+        };
+    }
+
+    const evidenceRiskLevel =
+        evidencePlanStep?.output?.kind === "evidence_plan"
+            ? evidencePlanStep.output.data.riskLevel
+            : undefined;
+    const counterfactualFailureModes =
+        counterfactualStep?.output?.kind === "counterfactual"
+            ? counterfactualStep.output.data.failureModes.filter(
+                  (mode) => mode.trim().length > 0,
+              )
+            : [];
+    if (
+        typeof evidenceRiskLevel === "number" ||
+        counterfactualFailureModes.length > 0
+    ) {
+        run.metrics.research = {
+            evidenceRiskLevel,
+            counterfactualFailureModeCount: counterfactualFailureModes.length,
+            topCounterfactualFailureMode: counterfactualFailureModes[0],
+        };
     }
 }
 
