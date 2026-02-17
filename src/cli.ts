@@ -101,7 +101,7 @@ async function runBenchmark(
     console.log(
         `Starting benchmark (${runs} runs, concurrency ${concurrency ?? 3})...`,
     );
-    const { result, raw } = await runner.run(question, runs, {
+    const { result } = await runner.run(question, runs, {
         model: model ?? MODEL,
         verbose,
         quiet: !verbose,
@@ -110,6 +110,7 @@ async function runBenchmark(
             : undefined,
         concurrency,
         fast,
+        preset: pipelinePreset,
         clusteringThreshold: threshold ?? 0.9,
     });
 
@@ -203,9 +204,9 @@ async function main() {
     const cmd = rest[0];
 
     const usageAsk =
-        'Usage: pnpm tsx src/cli.ts ask "<question>" [--model M] [--fast] [--verbose]';
+        'Usage: pnpm tsx src/cli.ts ask "<question>" [--model M] [--preset standard|research_deep|fast_research] [--fast] [--verbose]';
     const usageBenchmark =
-        'Usage: pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model M] [--threshold T] [--fast] [--verbose]';
+        'Usage: pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model M] [--preset standard|research_deep|fast_research] [--threshold T] [--fast] [--verbose]';
 
     const parseOpt = (flag: string): string | undefined => {
         const idx = rest.indexOf(flag);
@@ -223,6 +224,17 @@ async function main() {
         const n = parseFloat(v);
         return !Number.isNaN(n) && n > 0 && n <= 1 ? n : undefined;
     };
+    const parsePresetOpt = (): PipelinePreset | undefined => {
+        const preset = parseOpt("--preset");
+        if (
+            preset === "standard" ||
+            preset === "research_deep" ||
+            preset === "fast_research"
+        ) {
+            return preset;
+        }
+        return undefined;
+    };
     const excludeOptIndices = (indices: number[]): number[] => {
         const set = new Set<number>();
         for (const i of indices) {
@@ -238,12 +250,14 @@ async function main() {
         if (runsVal) runs = runsVal;
         const concurrency = parseNumOpt("--concurrency");
         const model = parseOpt("--model");
+        const preset = parsePresetOpt();
         const thresholdVal = parseFloatOpt("--threshold");
         const fast = rest.includes("--fast");
         const excludeIdx = excludeOptIndices([
             rest.indexOf("--runs"),
             rest.indexOf("--concurrency"),
             rest.indexOf("--model"),
+            rest.indexOf("--preset"),
             rest.indexOf("--threshold"),
             ...(fast ? [rest.indexOf("--fast")] : []),
         ].filter((i) => i >= 0));
@@ -268,6 +282,7 @@ async function main() {
             model,
             fast,
             threshold: thresholdVal,
+            pipelinePreset: preset,
         });
         return;
     }
@@ -280,9 +295,11 @@ async function main() {
     }
 
     const askModel = parseOpt("--model");
+    const askPreset = parsePresetOpt();
     const askFast = rest.includes("--fast");
     const askExcludeIdx = excludeOptIndices([
         rest.indexOf("--model"),
+        rest.indexOf("--preset"),
         ...(askFast ? [rest.indexOf("--fast")] : []),
     ].filter((i) => i >= 0));
     const askQuestionParts = rest
@@ -313,7 +330,12 @@ async function main() {
 
     const result = await engine.run(
         { question },
-        { model: askModel ?? MODEL, verbose, fast: askFast },
+        {
+            model: askModel ?? MODEL,
+            verbose,
+            fast: askFast,
+            preset: askPreset,
+        },
     );
     const runId = result.id;
 
@@ -333,6 +355,7 @@ async function main() {
             createdAt: result.createdAt,
             model: askModel ?? MODEL,
             fastMode: askFast,
+            pipelinePreset: askPreset,
         }),
     };
 
@@ -342,22 +365,20 @@ async function main() {
     console.log(`\nRun saved to ${outputPath}`);
 
     if (!verbose) {
-        const proposal =
-            result.steps[0]?.output?.kind === "proposal"
-                ? (result.steps[0].output.data as AgentResponse)
-                : undefined;
-        const critique =
-            result.steps[1]?.output?.kind === "critique"
-                ? (result.steps[1].output.data as Critique)
-                : undefined;
-        const revisedProposal =
-            result.steps[2]?.output?.kind === "proposal"
-                ? (result.steps[2].output.data as AgentResponse)
-                : undefined;
-        const synthesizedProposal =
-            result.steps[3]?.output?.kind === "proposal"
-                ? (result.steps[3].output.data as AgentResponse)
-                : undefined;
+        const proposal = result.steps.find(
+            (s) => s.agentName === "SolverAgent" && s.output?.kind === "proposal",
+        )?.output?.data as AgentResponse | undefined;
+        const critique = result.steps.find(
+            (s) => s.role === "skeptic" && s.output?.kind === "critique",
+        )?.output?.data as Critique | undefined;
+        const revisedProposal = result.steps.find(
+            (s) =>
+                s.agentName.toLowerCase().includes("revision") &&
+                s.output?.kind === "proposal",
+        )?.output?.data as AgentResponse | undefined;
+        const synthesizedProposal = result.steps.find(
+            (s) => s.role === "synthesizer" && s.output?.kind === "proposal",
+        )?.output?.data as AgentResponse | undefined;
 
         if (proposal && critique) {
             printSummary(

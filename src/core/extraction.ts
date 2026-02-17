@@ -1,5 +1,12 @@
 /* ------------------------- helpers: extraction ------------------------- */
-import { AgentResponse, AgentRun, Critique } from "../types/agent";
+import {
+    AgentResponse,
+    AgentRun,
+    Calibration,
+    Critique,
+    Judgement,
+    QuestionDecomposition,
+} from "../types/agent";
 
 export function getProposal(step: AgentRun): AgentResponse | null {
     if (!step.output) return null;
@@ -10,5 +17,23 @@ export function getProposal(step: AgentRun): AgentResponse | null {
 export function getCritique(step: AgentRun): Critique | null {
     if (!step.output) return null;
     if (step.output.kind !== "critique") return null;
+    return step.output.data;
+}
+
+export function getDecomposition(step: AgentRun): QuestionDecomposition | null {
+    if (!step.output) return null;
+    if (step.output.kind !== "decomposition") return null;
+    return step.output.data;
+}
+
+export function getCalibration(step: AgentRun): Calibration | null {
+    if (!step.output) return null;
+    if (step.output.kind !== "calibration") return null;
+    return step.output.data;
+}
+
+export function getJudgement(step: AgentRun): Judgement | null {
+    if (!step.output) return null;
+    if (step.output.kind !== "judgement") return null;
     return step.output.data;
 }

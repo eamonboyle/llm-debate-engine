@@ -1,5 +1,6 @@
 import type { DebateEngine } from "../debate/DebateEngine";
 import type { DebateRun } from "../types/agent";
+import type { PipelinePreset } from "../types/artifact";
 import type { EmbeddingClient } from "../types/embedding";
 import type { BenchmarkResult } from "../types/benchmark";
 import { cosineSimilarity, vectorMean } from "../core/math";
@@ -107,6 +108,8 @@ export class BenchmarkRunner {
             concurrency?: number;
             /** Skip revision and synthesizer steps (~50% fewer LLM calls). */
             fast?: boolean;
+            /** Debate pipeline preset. */
+            preset?: PipelinePreset;
             // allow caller to tweak the clustering threshold
             clusteringThreshold?: number;
         },
@@ -123,7 +126,13 @@ export class BenchmarkRunner {
             (i) =>
                 this.deps.engine.run(
                     { question },
-                    { model, verbose, quiet, fast: opts?.fast },
+                    {
+                        model,
+                        verbose,
+                        quiet,
+                        fast: opts?.fast,
+                        preset: opts?.preset,
+                    },
                 ),
             !verbose && onProgress
                 ? (_, i) => onProgress(i + 1, runs)
