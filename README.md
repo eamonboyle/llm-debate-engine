@@ -84,6 +84,12 @@ Writes:
 
 - `runs/analysis-bundle.json` (index + parsed run/benchmark artifacts)
 
+Convenience script for all optional exports:
+
+```bash
+pnpm analyze:full
+```
+
 ### Open research UI
 
 ```bash
