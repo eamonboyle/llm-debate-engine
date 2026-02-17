@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { validateAgentResponse, validateCritique } from "./validator";
+import {
+    validateAgentResponse,
+    validateCalibration,
+    validateCritique,
+    validateJudgement,
+    validateQuestionDecomposition,
+} from "./validator";
 
 describe("validateAgentResponse", () => {
     const valid = {
@@ -93,6 +99,78 @@ describe("validateCritique", () => {
         const r = validateCritique({
             ...valid,
             issues: [{ severity: 2, type: "invalid", note: "Wrong type." }],
+        });
+        expect(r.ok).toBe(false);
+    });
+});
+
+describe("validateQuestionDecomposition", () => {
+    it("accepts valid decomposition", () => {
+        const r = validateQuestionDecomposition({
+            framing: "Evaluate tradeoffs and risks",
+            subQuestions: ["What are key benefits?", "What are key risks?"],
+            hypotheses: ["Benefits dominate short term", "Risks grow at scale"],
+        });
+        expect(r.ok).toBe(true);
+    });
+
+    it("rejects invalid decomposition", () => {
+        const r = validateQuestionDecomposition({
+            framing: "x",
+            subQuestions: [],
+            hypotheses: [],
+        });
+        expect(r.ok).toBe(false);
+    });
+});
+
+describe("validateCalibration", () => {
+    it("accepts valid calibration", () => {
+        const r = validateCalibration({
+            adjustedConfidence: 0.6,
+            rationale: "Evidence is mixed",
+            claimConfidences: [{ claim: "Claim A", confidence: 0.6 }],
+        });
+        expect(r.ok).toBe(true);
+    });
+
+    it("rejects invalid calibration", () => {
+        const r = validateCalibration({
+            adjustedConfidence: 2,
+            rationale: "",
+            claimConfidences: [],
+        });
+        expect(r.ok).toBe(false);
+    });
+});
+
+describe("validateJudgement", () => {
+    it("accepts valid judgement", () => {
+        const r = validateJudgement({
+            rubricScores: {
+                coherence: 4,
+                completeness: 3,
+                factualRisk: 2,
+                uncertaintyHandling: 4,
+            },
+            strengths: ["clear argument"],
+            weaknesses: ["few citations"],
+            summary: "Overall solid with moderate caveats",
+        });
+        expect(r.ok).toBe(true);
+    });
+
+    it("rejects invalid judgement", () => {
+        const r = validateJudgement({
+            rubricScores: {
+                coherence: 7,
+                completeness: 3,
+                factualRisk: 2,
+                uncertaintyHandling: 4,
+            },
+            strengths: [],
+            weaknesses: [],
+            summary: "bad",
         });
         expect(r.ok).toBe(false);
     });
