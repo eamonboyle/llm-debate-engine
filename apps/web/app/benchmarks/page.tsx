@@ -10,7 +10,38 @@ type BenchmarkSearchParams = {
     fast?: string;
     from?: string;
     to?: string;
+    sort?: string;
+    page?: string;
+    pageSize?: string;
 };
+
+function parsePositiveInt(
+    value: string | undefined,
+    opts: { fallback: number; max: number },
+) {
+    if (!value || value.trim() === "") return opts.fallback;
+    const parsed = Number(value);
+    if (!Number.isFinite(parsed)) return opts.fallback;
+    return Math.max(1, Math.min(opts.max, Math.floor(parsed)));
+}
+
+function buildQueryString(
+    params: BenchmarkSearchParams,
+    overrides: Partial<BenchmarkSearchParams>,
+) {
+    const merged: BenchmarkSearchParams = { ...params, ...overrides };
+    const query = new URLSearchParams();
+    const entries = Object.entries(merged) as Array<
+        [keyof BenchmarkSearchParams, string]
+    >;
+    for (const [key, value] of entries) {
+        if (typeof value === "string" && value.length > 0) {
+            query.set(key, value);
+        }
+    }
+    const result = query.toString();
+    return result ? `?${result}` : "";
+}
 
 export default async function BenchmarksPage({
     searchParams,
@@ -27,6 +58,21 @@ export default async function BenchmarksPage({
         from: params.from,
         to: params.to,
     });
+    const sort = params.sort === "oldest" ? "oldest" : "newest";
+    const pageSize = parsePositiveInt(params.pageSize, { fallback: 25, max: 200 });
+    const requestedPage = parsePositiveInt(params.page, {
+        fallback: 1,
+        max: 100000,
+    });
+    const sorted = sort === "oldest" ? filtered.slice().reverse() : filtered;
+    const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize));
+    const page = Math.min(requestedPage, totalPages);
+    const start = (page - 1) * pageSize;
+    const paged = sorted.slice(start, start + pageSize);
+    const startDisplay = paged.length === 0 ? 0 : start + 1;
+    const endDisplay = start + paged.length;
+    const hasPrev = page > 1;
+    const hasNext = page < totalPages;
 
     return (
         <section className="stack">
@@ -83,6 +129,30 @@ export default async function BenchmarksPage({
                         title="Created at or before"
                     />
                 </div>
+                <div
+                    style={{
+                        marginTop: 10,
+                        display: "grid",
+                        gap: 10,
+                        gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)",
+                        maxWidth: 360,
+                    }}
+                >
+                    <select name="sort" defaultValue={sort} className="input">
+                        <option value="newest">Sort: newest first</option>
+                        <option value="oldest">Sort: oldest first</option>
+                    </select>
+                    <select
+                        name="pageSize"
+                        defaultValue={String(pageSize)}
+                        className="input"
+                    >
+                        <option value="10">10 per page</option>
+                        <option value="25">25 per page</option>
+                        <option value="50">50 per page</option>
+                        <option value="100">100 per page</option>
+                    </select>
+                </div>
                 <div style={{ marginTop: 10, display: "flex", gap: 10 }}>
                     <button type="submit" className="button">
                         Apply filters
@@ -91,7 +161,8 @@ export default async function BenchmarksPage({
                         Clear
                     </a>
                     <span className="small muted" style={{ alignSelf: "center" }}>
-                        Showing {filtered.length} of {benchmarks.length}
+                        Showing {startDisplay}-{endDisplay} of {filtered.length} filtered
+                        benchmarks ({benchmarks.length} total)
                     </span>
                 </div>
             </form>
@@ -112,7 +183,7 @@ export default async function BenchmarksPage({
                             </tr>
                         </thead>
                         <tbody>
-                            {filtered.map((benchmark) => (
+                            {paged.map((benchmark) => (
                                 <tr key={benchmark.id}>
                                     <td>{benchmark.id}</td>
                                     <td>
@@ -139,6 +210,60 @@ export default async function BenchmarksPage({
                         </tbody>
                     </table>
                 </div>
+            </div>
+
+            <div className="card" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                <a
+                    className="button secondary"
+                    aria-disabled={!hasPrev}
+                    href={
+                        hasPrev
+                            ? buildQueryString(params, {
+                                  sort,
+                                  pageSize: String(pageSize),
+                                  page: String(page - 1),
+                              })
+                            : buildQueryString(params, {
+                                  sort,
+                                  pageSize: String(pageSize),
+                                  page: String(page),
+                              })
+                    }
+                    style={
+                        hasPrev
+                            ? undefined
+                            : { pointerEvents: "none", opacity: 0.5, textDecoration: "none" }
+                    }
+                >
+                    Previous
+                </a>
+                <a
+                    className="button secondary"
+                    aria-disabled={!hasNext}
+                    href={
+                        hasNext
+                            ? buildQueryString(params, {
+                                  sort,
+                                  pageSize: String(pageSize),
+                                  page: String(page + 1),
+                              })
+                            : buildQueryString(params, {
+                                  sort,
+                                  pageSize: String(pageSize),
+                                  page: String(page),
+                              })
+                    }
+                    style={
+                        hasNext
+                            ? undefined
+                            : { pointerEvents: "none", opacity: 0.5, textDecoration: "none" }
+                    }
+                >
+                    Next
+                </a>
+                <span className="small muted" style={{ alignSelf: "center" }}>
+                    Page {page} of {totalPages}
+                </span>
             </div>
         </section>
     );

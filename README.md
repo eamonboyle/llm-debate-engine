@@ -196,6 +196,8 @@ UI supports query-param filters for runs and benchmarks:
 - model filter
 - preset filter
 - fast-mode filter
+- sort order (newest/oldest)
+- pagination controls (page + page size)
 
 Data is loaded directly from local filesystem artifacts in `runs/`.
 If `analysis-index.json` is missing, UI can fall back to `analysis-bundle.json`.
