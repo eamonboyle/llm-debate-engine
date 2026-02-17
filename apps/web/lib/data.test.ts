@@ -113,6 +113,47 @@ describe("web data loader", () => {
         expect(index?.totals.runs).toBe(0);
     });
 
+    it("falls back to analysis-bundle index when analysis-index is missing", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-bundle.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                index: {
+                    generatedAt: new Date().toISOString(),
+                    totals: { runs: 2, benchmarks: 1, skippedFiles: 0 },
+                    runs: [],
+                    benchmarks: [],
+                    aggregates: {
+                        issueTypeCounts: {},
+                        confidenceDrift: {
+                            solverToRevisionMean: 0,
+                            revisionToSynthesizerMean: 0,
+                            calibratedMinusSynthMean: 0,
+                        },
+                        confidenceCorrelation: {
+                            severityVsSolverToRevisionDelta: 0,
+                            severityVsRevisionToSynthesizerDelta: 0,
+                        },
+                        outlierRuns: [],
+                        presets: {},
+                        critiqueVsConfidence: [],
+                    },
+                    skipped: [],
+                },
+                runs: [],
+                benchmarks: [],
+            }),
+            "utf-8",
+        );
+
+        const index = await loadAnalysisIndex();
+        expect(index).not.toBeNull();
+        expect(index?.totals.runs).toBe(2);
+        expect(index?.totals.benchmarks).toBe(1);
+    });
+
     it("loads and sorts run artifacts, and finds run by id", async () => {
         const dir = await makeTempDir();
         process.env.RUNS_DIR = dir;

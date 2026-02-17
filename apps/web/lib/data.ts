@@ -162,8 +162,18 @@ async function readJsonIfExists<T>(path: string): Promise<T | null> {
 }
 
 export async function loadAnalysisIndex(): Promise<AnalysisIndex | null> {
-    const path = join(getRunsDir(), "analysis-index.json");
-    return readJsonIfExists<AnalysisIndex>(path);
+    const runsDir = getRunsDir();
+    const indexPath = join(runsDir, "analysis-index.json");
+    const index = await readJsonIfExists<AnalysisIndex>(indexPath);
+    if (index) return index;
+
+    const bundlePath = join(runsDir, "analysis-bundle.json");
+    const bundle = await readJsonIfExists<{
+        index?: AnalysisIndex;
+    }>(bundlePath);
+    if (bundle?.index) return bundle.index;
+
+    return null;
 }
 
 export async function loadRunArtifacts(): Promise<RunArtifact[]> {

@@ -184,6 +184,7 @@ UI supports query-param filters for runs and benchmarks:
 - fast-mode filter
 
 Data is loaded directly from local filesystem artifacts in `runs/`.
+If `analysis-index.json` is missing, UI can fall back to `analysis-bundle.json`.
 
 ## Testing
 
