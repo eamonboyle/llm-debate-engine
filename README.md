@@ -1,13 +1,13 @@
 # LLM Debate Research Platform
 
-This repository now includes:
+A multi-agent system for running structured LLM debates, analyzing outputs, and comparing results over time. The platform comprises:
 
-1. A multi-agent CLI debate engine
-2. Versioned run/benchmark artifacts in `runs/`
-3. An analysis indexer (`analyze-runs`)
-4. A Next.js research UI (`apps/web`) with charts and drilldowns
+- **CLI debate engine** — Multi-agent pipelines for single runs and benchmarks
+- **Artifact storage** — Versioned run and benchmark artifacts in `runs/`
+- **Analysis indexer** — `analyze-runs` for aggregating metrics and building searchable indexes
+- **Research UI** — Next.js dashboard (`apps/web`) for exploration, comparison, and visualization
 
-The goal is to make repeated LLM debates measurable, explorable, and easy to compare over time.
+Designed for research, policy analysis, and model evaluation where measurable uncertainty and critique quality matter.
 
 ## Debate pipeline presets
 
@@ -23,7 +23,7 @@ QuestionDecomposer -> EvidencePlanner -> Solver -> Skeptic -> RedTeam -> SolverR
 
 QuestionDecomposer -> EvidencePlanner -> Solver -> Skeptic -> RedTeam -> Counterfactual -> Calibration -> Judge
 
-`--fast` can also be used to skip revision+synthesizer in compatible flows.
+The `--fast` flag skips revision and synthesizer steps in compatible flows.
 
 ## Quick start
 
@@ -94,19 +94,19 @@ Writes:
 
 - `runs/analysis-benchmark-pairs.json`
 
-Convenience script for all optional exports:
+All-in-one export (CSV, markdown, bundle, chunks):
 
 ```bash
 pnpm analyze:full
 ```
 
-### Open research UI
+### Start research UI
 
 ```bash
 pnpm web:dev
 ```
 
-Or verify production build:
+Production build:
 
 ```bash
 pnpm web:build
@@ -132,18 +132,18 @@ pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model
 pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--model text] [--preset standard|research_deep|fast_research] [--fast-mode true|false] [--created-after ISO] [--created-before ISO] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename] [--chunks] [--chunks-file filename]
 ```
 
-Useful focus flags:
+Filter options:
 
-- `--question "text"`: include only artifacts whose question contains text
-- `--model "text"`: include only artifacts whose model contains text
-- `--preset standard|research_deep|fast_research`: include only one preset
-- `--fast-mode true|false`: include only fast/non-fast artifacts
-- `--created-after ISO`: include artifacts at/after timestamp
-- `--created-before ISO`: include artifacts at/before timestamp
+- `--question "text"` — Include only artifacts whose question contains the given text
+- `--model "text"` — Include only artifacts whose model contains the given text
+- `--preset standard|research_deep|fast_research` — Restrict to a single preset
+- `--fast-mode true|false` — Restrict to fast or non-fast artifacts
+- `--created-after ISO` — Include artifacts at or after the given timestamp
+- `--created-before ISO` — Include artifacts at or before the given timestamp
 
 ## Artifact model
 
-Artifacts are schema-versioned (`schemaVersion: 1`) and include metadata:
+Artifacts use schema versioning (`schemaVersion: 1`) and include metadata:
 
 - `model`
 - `fastMode`
@@ -151,52 +151,40 @@ Artifacts are schema-versioned (`schemaVersion: 1`) and include metadata:
 - `pipelineVersion`
 - `createdAt`
 
-Types live in:
+Type definitions:
 
 - `src/types/artifact.ts`
 - `src/types/benchmark.ts`
 - `src/types/analysis.ts`
 
-Legacy artifacts are still supported by the compatibility loader (`src/artifacts/loader.ts`).
+The compatibility loader (`src/artifacts/loader.ts`) supports legacy artifact formats.
 
 ## Research analytics
 
-`analyze-runs` computes an index with:
+The `analyze-runs` command computes an analysis index containing:
 
-- filter context metadata for reproducibility
-- issue type counts
-- severity statistics by issue type
-- confidence drift (solver->revision, revision->synth, calibrated->synth delta)
-- evidence-planning risk aggregates (mean + distribution)
-- counterfactual failure mode frequency aggregates
-- severity-confidence Pearson correlations for stage deltas
-- critique severity vs confidence movement records
-- benchmark mode labels inferred from exemplar previews
+- Filter context metadata for reproducibility
+- Issue type counts and severity statistics
+- Confidence drift (solver→revision, revision→synthesizer, calibrated→synthesizer)
+- Evidence-planning risk aggregates (mean and distribution)
+- Counterfactual failure mode frequency aggregates
+- Severity–confidence Pearson correlations for stage deltas
+- Critique severity vs. confidence movement records
+- Benchmark mode labels inferred from exemplar previews
 
-Use `--question "text"` to build a focused index over matching artifacts only.
-
-This derived index powers the web dashboard.
+Use `--question "text"` to build a focused index over matching artifacts. The resulting index powers the web dashboard.
 
 ## Next.js research UI
 
-`apps/web` includes:
+The `apps/web` dashboard provides:
 
-- `/` Overview dashboard (KPIs + charts)
-- `/` includes metric glossary for interpretation context
-- `/` includes outlier run surfacing from pairwise similarity analysis
-- `/` includes preset distribution + benchmark entropy/stability trend charts
-- `/` includes evidence planner risk distribution chart
-- `/` includes evidence risk trend chart across runs
-- `/` includes top counterfactual failure mode table
-- `/` shows analysis filter context when index is built with CLI filters
-- `/runs` Run artifact table
-- `/runs/[id]` Run trace viewer (step-by-step structured summaries + raw JSON)
-- `/runs/compare` Side-by-side run comparison + confidence/quality/research deltas
-- `/benchmarks` Benchmark artifact table
-- `/benchmarks/[id]` Benchmark deep-dive
-- `/benchmarks/compare` Side-by-side benchmark comparison + charted metric deltas
+**Overview (`/`)** — KPIs, metric glossary, preset distribution, benchmark entropy and stability trends, evidence planner risk distribution, evidence risk trends, top counterfactual failure modes, outlier run surfacing from pairwise similarity analysis, and analysis filter context when the index is built with CLI filters.
 
-UI supports query-param filters for runs and benchmarks:
+**Runs** — `/runs` artifact table; `/runs/[id]` trace viewer with step-by-step summaries and raw JSON; `/runs/compare` side-by-side comparison with confidence, quality, and research deltas.
+
+**Benchmarks** — `/benchmarks` artifact table; `/benchmarks/[id]` deep-dive; `/benchmarks/compare` side-by-side comparison with charted metric deltas.
+
+**Filters** — Query parameters for runs and benchmarks:
 
 - full-text question/answer search
 - model filter
@@ -205,10 +193,9 @@ UI supports query-param filters for runs and benchmarks:
 - sort order (newest/oldest)
 - pagination controls (page + page size)
 
-Data is loaded directly from local filesystem artifacts in `runs/`.
-If `analysis-index.json` is missing, UI can fall back to `analysis-bundle.json`.
+Data is loaded from local filesystem artifacts in `runs/`. If `analysis-index.json` is missing, the UI falls back to `analysis-bundle.json`.
 
-API endpoints are also available in the web app:
+**REST API** — Endpoints exposed by the web app:
 
 - `GET /api/analysis`
 - `GET /api/runs`
@@ -219,12 +206,7 @@ API endpoints are also available in the web app:
 - `GET /api/benchmarks/:id`
 - `GET /api/benchmarks/:id/pairs`
 
-List routes support query filters: `q`, `model`, `preset`, `fast`, `from`, `to`,
-plus pagination/sort params: `sort`, `offset`, `limit`, `page`, `pageSize`.
-List API responses include pagination metadata (`page`, `totalPages`, `prevPage`,
-`nextPage`, `offset`, `limit`, `hasMore`).
-
-The benchmark pairs endpoint prefers `analysis-benchmark-pairs.json` when available.
+List routes support query filters (`q`, `model`, `preset`, `fast`, `from`, `to`) and pagination/sort parameters (`sort`, `offset`, `limit`, `page`, `pageSize`). Responses include pagination metadata (`page`, `totalPages`, `prevPage`, `nextPage`, `offset`, `limit`, `hasMore`). The benchmark pairs endpoint prefers `analysis-benchmark-pairs.json` when available.
 
 ## Testing
 
@@ -235,7 +217,7 @@ pnpm web:typecheck
 pnpm web:build
 ```
 
-## Additional documentation
+## Documentation
 
 - Architecture decision record: `docs/architecture-decision-record.md`
 - Web API reference: `docs/api-reference.md`
