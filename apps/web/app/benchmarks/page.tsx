@@ -5,6 +5,8 @@ type BenchmarkSearchParams = {
     model?: string;
     preset?: string;
     fast?: string;
+    from?: string;
+    to?: string;
 };
 
 function normalize(v: string | undefined) {
@@ -22,6 +24,8 @@ export default async function BenchmarksPage({
     const model = normalize(params.model);
     const preset = normalize(params.preset);
     const fast = normalize(params.fast);
+    const fromDate = params.from ? new Date(params.from) : undefined;
+    const toDate = params.to ? new Date(params.to) : undefined;
 
     const filtered = benchmarks.filter((benchmark) => {
         if (q) {
@@ -40,6 +44,13 @@ export default async function BenchmarksPage({
         }
         if (fast === "true" && !benchmark.metadata.fastMode) return false;
         if (fast === "false" && benchmark.metadata.fastMode) return false;
+        const createdAt = new Date(benchmark.metadata.createdAt);
+        if (fromDate && !Number.isNaN(fromDate.getTime()) && createdAt < fromDate) {
+            return false;
+        }
+        if (toDate && !Number.isNaN(toDate.getTime()) && createdAt > toDate) {
+            return false;
+        }
         return true;
     });
 
@@ -57,7 +68,7 @@ export default async function BenchmarksPage({
                     style={{
                         display: "grid",
                         gap: 10,
-                        gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+                        gridTemplateColumns: "repeat(6, minmax(0, 1fr))",
                     }}
                 >
                     <input
@@ -83,6 +94,20 @@ export default async function BenchmarksPage({
                         <option value="true">Fast only</option>
                         <option value="false">Non-fast only</option>
                     </select>
+                    <input
+                        type="datetime-local"
+                        name="from"
+                        defaultValue={params.from ?? ""}
+                        className="input"
+                        title="Created at or after"
+                    />
+                    <input
+                        type="datetime-local"
+                        name="to"
+                        defaultValue={params.to ?? ""}
+                        className="input"
+                        title="Created at or before"
+                    />
                 </div>
                 <div style={{ marginTop: 10, display: "flex", gap: 10 }}>
                     <button type="submit" className="button">
