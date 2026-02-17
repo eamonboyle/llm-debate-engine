@@ -223,6 +223,7 @@ pnpm web:build
 ## Additional documentation
 
 - Architecture decision record: `docs/architecture-decision-record.md`
+- Web API reference: `docs/api-reference.md`
 - Experiment workflow: `docs/experiment-workflow.md`
 - Artifact schema reference: `docs/artifact-schema.md`
 - Adding new agents: `docs/adding-agents.md`
