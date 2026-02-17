@@ -120,9 +120,19 @@ This derived index powers the web dashboard.
 `apps/web` includes:
 
 - `/` Overview dashboard (KPIs + charts)
+- `/` includes outlier run surfacing from pairwise similarity analysis
 - `/runs` Run artifact table
+- `/runs/[id]` Run trace viewer (step-by-step agent output JSON)
 - `/benchmarks` Benchmark artifact table
 - `/benchmarks/[id]` Benchmark deep-dive
+- `/benchmarks/compare` Side-by-side benchmark comparison
+
+UI supports query-param filters for runs and benchmarks:
+
+- full-text question/answer search
+- model filter
+- preset filter
+- fast-mode filter
 
 Data is loaded directly from local filesystem artifacts in `runs/`.
 
