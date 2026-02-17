@@ -212,7 +212,7 @@ async function main() {
     const usageBenchmark =
         'Usage: pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model M] [--preset standard|research_deep|fast_research] [--threshold T] [--fast] [--verbose]';
     const usageAnalyze =
-        'Usage: pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--model text] [--preset standard|research_deep|fast_research] [--fast-mode true|false] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename]';
+        'Usage: pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--model text] [--preset standard|research_deep|fast_research] [--fast-mode true|false] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename] [--chunks] [--chunks-file filename]';
 
     const parseOpt = (flag: string): string | undefined => {
         const idx = rest.indexOf(flag);
@@ -264,11 +264,14 @@ async function main() {
         const markdownFileName = parseOpt("--markdown-file") ?? "analysis-report.md";
         const writeBundle = rest.includes("--bundle");
         const bundleFileName = parseOpt("--bundle-file") ?? "analysis-bundle.json";
+        const writeChunks = rest.includes("--chunks");
+        const chunkFileName =
+            parseOpt("--chunks-file") ?? "analysis-benchmark-pairs.json";
         const questionContains = parseOpt("--question");
         const modelContains = parseOpt("--model");
         const presetEquals = parsePresetOpt();
         const fastMode = parseBooleanOpt("--fast-mode");
-        const { path, index, csvPaths, markdownPath, bundlePath } =
+        const { path, index, csvPaths, markdownPath, bundlePath, chunkPath } =
             await buildAndWriteAnalysisIndex({
                 runsDir,
                 outputFileName: output,
@@ -281,6 +284,8 @@ async function main() {
                 markdownFileName,
                 writeBundle,
                 bundleFileName,
+                writeChunks,
+                chunkFileName,
             });
         console.log(
             `Analysis index saved to ${path} (${index.totals.runs} runs, ${index.totals.benchmarks} benchmarks)`,
@@ -293,6 +298,9 @@ async function main() {
         }
         if (bundlePath) {
             console.log(`Share bundle: ${bundlePath}`);
+        }
+        if (chunkPath) {
+            console.log(`Pairwise chunk file: ${chunkPath}`);
         }
         if (index.skipped.length > 0) {
             console.log(`Skipped ${index.skipped.length} file(s):`);

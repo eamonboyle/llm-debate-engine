@@ -446,6 +446,8 @@ export async function buildAndWriteAnalysisIndex(opts?: {
     markdownFileName?: string;
     writeBundle?: boolean;
     bundleFileName?: string;
+    writeChunks?: boolean;
+    chunkFileName?: string;
     questionContains?: string;
     modelContains?: string;
     presetEquals?: PipelinePreset;
@@ -456,6 +458,7 @@ export async function buildAndWriteAnalysisIndex(opts?: {
     csvPaths?: { runs: string; benchmarks: string };
     markdownPath?: string;
     bundlePath?: string;
+    chunkPath?: string;
 }> {
     const runsDir = opts?.runsDir ?? "runs";
     const outputFileName = opts?.outputFileName ?? "analysis-index.json";
@@ -464,6 +467,8 @@ export async function buildAndWriteAnalysisIndex(opts?: {
     const markdownFileName = opts?.markdownFileName ?? "analysis-report.md";
     const writeBundle = opts?.writeBundle ?? false;
     const bundleFileName = opts?.bundleFileName ?? "analysis-bundle.json";
+    const writeChunks = opts?.writeChunks ?? false;
+    const chunkFileName = opts?.chunkFileName ?? "analysis-benchmark-pairs.json";
     const index = await buildAnalysisIndex(runsDir, {
         questionContains: opts?.questionContains,
         modelContains: opts?.modelContains,
@@ -575,11 +580,38 @@ export async function buildAndWriteAnalysisIndex(opts?: {
         await writeFile(bundlePath, JSON.stringify(bundle, null, 2), "utf-8");
     }
 
+    let chunkPath: string | undefined;
+    if (writeChunks) {
+        const artifacts = await loadRunArtifacts(runsDir);
+        const pairwise = artifacts.benchmarks
+            .map((artifact) => ({
+                benchmarkId: artifact.id,
+                runIds: artifact.payload.runIds ?? [],
+                pairs: artifact.payload.summary.stability?.pairs ?? [],
+            }))
+            .filter((entry) => entry.pairs.length > 0);
+
+        chunkPath = join(runsDir, chunkFileName);
+        await writeFile(
+            chunkPath,
+            JSON.stringify(
+                {
+                    generatedAt: new Date().toISOString(),
+                    pairwise,
+                },
+                null,
+                2,
+            ),
+            "utf-8",
+        );
+    }
+
     return {
         path: outputPath,
         index,
         csvPaths,
         markdownPath,
         bundlePath,
+        chunkPath,
     };
 }

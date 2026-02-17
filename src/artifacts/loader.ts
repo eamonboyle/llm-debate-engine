@@ -39,6 +39,11 @@ function isAnalysisBundle(value: unknown): boolean {
     );
 }
 
+function isAnalysisPairwiseChunk(value: unknown): boolean {
+    if (!isRecord(value)) return false;
+    return typeof value.generatedAt === "string" && Array.isArray(value.pairwise);
+}
+
 function defaultMetadata(
     createdAt: string,
     preset: PipelinePreset = "standard",
@@ -231,7 +236,11 @@ export async function loadRunArtifacts(
         return parsed;
     }
 
-    const excludedFiles = new Set(["analysis-index.json", "analysis-bundle.json"]);
+    const excludedFiles = new Set([
+        "analysis-index.json",
+        "analysis-bundle.json",
+        "analysis-benchmark-pairs.json",
+    ]);
     const jsonFiles = files
         .filter((f) => f.endsWith(".json") && !excludedFiles.has(f))
         .sort();
@@ -243,7 +252,7 @@ export async function loadRunArtifacts(
                 stat(filePath),
             ]);
             const body = JSON.parse(raw) as unknown;
-            if (isAnalysisBundle(body)) {
+            if (isAnalysisBundle(body) || isAnalysisPairwiseChunk(body)) {
                 continue;
             }
             const artifact = parseArtifact(body, {

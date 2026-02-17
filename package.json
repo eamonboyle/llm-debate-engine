@@ -8,7 +8,7 @@
         "ask": "pnpm tsx src/cli.ts ask",
         "benchmark": "pnpm tsx src/cli.ts benchmark",
         "analyze": "pnpm tsx src/cli.ts analyze-runs",
-        "analyze:full": "pnpm tsx src/cli.ts analyze-runs --csv --markdown --bundle",
+        "analyze:full": "pnpm tsx src/cli.ts analyze-runs --csv --markdown --bundle --chunks",
         "web:dev": "pnpm --filter @llm-research/web dev",
         "web:build": "pnpm --filter @llm-research/web build",
         "web:typecheck": "pnpm --filter @llm-research/web typecheck",

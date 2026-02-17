@@ -84,6 +84,16 @@ Writes:
 
 - `runs/analysis-bundle.json` (index + parsed run/benchmark artifacts)
 
+Optional pairwise chunk export:
+
+```bash
+pnpm analyze -- --chunks
+```
+
+Writes:
+
+- `runs/analysis-benchmark-pairs.json`
+
 Convenience script for all optional exports:
 
 ```bash
@@ -119,7 +129,7 @@ pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model
 ### `analyze-runs`
 
 ```bash
-pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--model text] [--preset standard|research_deep|fast_research] [--fast-mode true|false] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename]
+pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--model text] [--preset standard|research_deep|fast_research] [--fast-mode true|false] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename] [--chunks] [--chunks-file filename]
 ```
 
 Useful focus flags:

@@ -243,7 +243,7 @@ describe("buildAnalysisIndex", () => {
         expect(index.aggregates.outlierRuns[0].avgSimilarity).toBeCloseTo(0.225, 3);
     });
 
-    it("writes optional CSV, markdown, and bundle exports", async () => {
+    it("writes optional CSV, markdown, bundle, and chunk exports", async () => {
         const dir = await createTempRunsDir();
 
         const run = {
@@ -301,7 +301,7 @@ describe("buildAnalysisIndex", () => {
                         pairwiseStddev: 0,
                         minPairwiseSimilarity: 1,
                         maxPairwiseSimilarity: 1,
-                        pairs: [],
+                        pairs: [{ i: 0, j: 0, similarity: 1 }],
                     },
                 },
             },
@@ -322,14 +322,20 @@ describe("buildAnalysisIndex", () => {
             markdownFileName: "analysis-report.md",
             writeBundle: true,
             bundleFileName: "analysis-bundle.json",
+            writeChunks: true,
+            chunkFileName: "analysis-benchmark-pairs.json",
         });
 
         expect(result.csvPaths).toBeDefined();
         expect(result.markdownPath).toBeDefined();
         expect(result.bundlePath).toBeDefined();
+        expect(result.chunkPath).toBeDefined();
         const runsCsv = await readFile(result.csvPaths!.runs, "utf-8");
         const benchmarksCsv = await readFile(result.csvPaths!.benchmarks, "utf-8");
         const markdown = await readFile(result.markdownPath!, "utf-8");
+        const chunk = JSON.parse(
+            await readFile(result.chunkPath!, "utf-8"),
+        ) as { pairwise: Array<{ benchmarkId: string; pairs: unknown[] }> };
         const bundle = JSON.parse(
             await readFile(result.bundlePath!, "utf-8"),
         ) as { runs: unknown[]; benchmarks: unknown[]; index: { totals: { runs: number } } };
@@ -338,6 +344,8 @@ describe("buildAnalysisIndex", () => {
         expect(benchmarksCsv).toContain("benchmark_csv");
         expect(markdown).toContain("# Analysis Report");
         expect(markdown).toContain("## Totals");
+        expect(chunk.pairwise).toHaveLength(1);
+        expect(chunk.pairwise[0].benchmarkId).toBe("benchmark_csv");
         expect(bundle.runs).toHaveLength(1);
         expect(bundle.benchmarks).toHaveLength(1);
         expect(bundle.index.totals.runs).toBe(1);

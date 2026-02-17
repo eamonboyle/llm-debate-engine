@@ -39,7 +39,7 @@ pnpm analyze -- --model "gpt-5" --preset research_deep --fast-mode false
 Extended outputs:
 
 ```bash
-pnpm analyze -- --csv --markdown --bundle
+pnpm analyze -- --csv --markdown --bundle --chunks
 ```
 
 Equivalent shortcut:
@@ -55,6 +55,7 @@ This writes:
 - `analysis-benchmarks.csv`
 - `analysis-report.md`
 - `analysis-bundle.json`
+- `analysis-benchmark-pairs.json`
 
 ## 3) Explore in the UI
 

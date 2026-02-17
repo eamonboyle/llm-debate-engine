@@ -136,4 +136,21 @@ describe("loadRunArtifacts", () => {
         expect(loaded.benchmarks).toHaveLength(0);
         expect(loaded.skipped).toHaveLength(0);
     });
+
+    it("ignores pairwise chunk artifacts", async () => {
+        const dir = await makeTempRunsDir();
+        await writeFile(
+            join(dir, "analysis-benchmark-pairs-custom.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                pairwise: [],
+            }),
+            "utf-8",
+        );
+
+        const loaded = await loadRunArtifacts(dir);
+        expect(loaded.runs).toHaveLength(0);
+        expect(loaded.benchmarks).toHaveLength(0);
+        expect(loaded.skipped).toHaveLength(0);
+    });
 });

@@ -107,15 +107,16 @@ Includes:
 Optional exports:
 
 ```bash
-pnpm analyze -- --csv --markdown
+pnpm analyze -- --csv --markdown --bundle --chunks
 ```
 
 - `analysis-runs.csv`
 - `analysis-benchmarks.csv`
 - `analysis-report.md`
 - `analysis-bundle.json` (index + parsed artifacts for sharing)
+- `analysis-benchmark-pairs.json` (pairwise similarity chunk)
 
 ## Compatibility notes
 
-- Loader ignores `analysis-index.json` when parsing run artifacts.
+- Loader ignores derived analysis JSON files (`analysis-index`, bundle, pairwise chunk).
 - Unknown/invalid files are listed under `skipped`.
