@@ -224,8 +224,16 @@ export default async function BenchmarkComparePage({
                             },
                             {
                                 metric: "stability",
-                                left: left.payload.summary?.stability?.pairwiseMean ?? 0,
-                                right: right.payload.summary?.stability?.pairwiseMean ?? 0,
+                                left:
+                                    typeof left.payload.summary?.stability
+                                        ?.pairwiseMean === "number"
+                                        ? left.payload.summary.stability.pairwiseMean
+                                        : null,
+                                right:
+                                    typeof right.payload.summary?.stability
+                                        ?.pairwiseMean === "number"
+                                        ? right.payload.summary.stability.pairwiseMean
+                                        : null,
                             },
                         ]}
                     />

@@ -84,6 +84,18 @@ Compare two benchmark artifacts quickly:
 
 Use compare view before drilling into raw run traces.
 
+## Run compare page
+
+Use `/runs/compare` when you want trace-level metric deltas between two specific runs:
+
+- step count delta (pipeline depth / additional critique passes)
+- confidence deltas (solver/synthesizer)
+- critique pressure deltas (issue count + severity)
+- quality rubric deltas (coherence/completeness/factual risk)
+
+If a metric is absent in either run, the delta chart omits that metric rather than
+treating missing values as zero.
+
 ## Practical workflow
 
 1. Start at overview for broad anomalies.

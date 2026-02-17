@@ -92,27 +92,24 @@ export default async function RunsComparePage({
                   },
                   {
                       metric: "solverConf",
-                      delta:
-                          subtractOrNull(
-                              rightSnapshot.confidence.solver,
-                              leftSnapshot.confidence.solver,
-                          ) ?? 0,
+                      delta: subtractOrNull(
+                          rightSnapshot.confidence.solver,
+                          leftSnapshot.confidence.solver,
+                      ),
                   },
                   {
                       metric: "synthConf",
-                      delta:
-                          subtractOrNull(
-                              rightSnapshot.confidence.synthesizer,
-                              leftSnapshot.confidence.synthesizer,
-                          ) ?? 0,
+                      delta: subtractOrNull(
+                          rightSnapshot.confidence.synthesizer,
+                          leftSnapshot.confidence.synthesizer,
+                      ),
                   },
                   {
                       metric: "factualRisk",
-                      delta:
-                          subtractOrNull(
-                              rightSnapshot.quality.factualRisk,
-                              leftSnapshot.quality.factualRisk,
-                          ) ?? 0,
+                      delta: subtractOrNull(
+                          rightSnapshot.quality.factualRisk,
+                          leftSnapshot.quality.factualRisk,
+                      ),
                   },
               ]
             : [];
