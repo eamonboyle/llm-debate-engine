@@ -49,6 +49,22 @@ function inferModeLabel(exemplarPreview: string): string {
     return "general framing";
 }
 
+function csvEscape(value: unknown): string {
+    const text = String(value ?? "");
+    if (/[",\n]/.test(text)) {
+        return `"${text.replace(/"/g, '""')}"`;
+    }
+    return text;
+}
+
+function toCsv(rows: Array<Record<string, unknown>>, headers: string[]): string {
+    const lines = [headers.join(",")];
+    for (const row of rows) {
+        lines.push(headers.map((header) => csvEscape(row[header])).join(","));
+    }
+    return `${lines.join("\n")}\n`;
+}
+
 export async function buildAnalysisIndex(
     runsDir = "runs",
 ): Promise<AnalysisIndex> {
@@ -259,17 +275,103 @@ export async function buildAnalysisIndex(
 export async function buildAndWriteAnalysisIndex(opts?: {
     runsDir?: string;
     outputFileName?: string;
-}): Promise<{ path: string; index: AnalysisIndex }> {
+    writeCsv?: boolean;
+}): Promise<{
+    path: string;
+    index: AnalysisIndex;
+    csvPaths?: { runs: string; benchmarks: string };
+}> {
     const runsDir = opts?.runsDir ?? "runs";
     const outputFileName = opts?.outputFileName ?? "analysis-index.json";
+    const writeCsv = opts?.writeCsv ?? false;
     const index = await buildAnalysisIndex(runsDir);
 
     await mkdir(runsDir, { recursive: true });
     const outputPath = join(runsDir, outputFileName);
     await writeFile(outputPath, JSON.stringify(index, null, 2), "utf-8");
 
+    let csvPaths: { runs: string; benchmarks: string } | undefined;
+    if (writeCsv) {
+        const runCsvPath = join(runsDir, "analysis-runs.csv");
+        const benchmarkCsvPath = join(runsDir, "analysis-benchmarks.csv");
+
+        const runRows = index.runs.map((run) => ({
+            id: run.id,
+            question: run.question,
+            createdAt: run.createdAt,
+            model: run.model,
+            pipelinePreset: run.pipelinePreset,
+            fastMode: run.fastMode,
+            stepCount: run.stepCount,
+            issueCount: run.critique.issueCount,
+            maxSeverity: run.critique.maxSeverity ?? "",
+            solverConfidence: run.confidence.solver ?? "",
+            revisionConfidence: run.confidence.revision ?? "",
+            synthesizerConfidence: run.confidence.synthesizer ?? "",
+            calibratedAdjusted: run.confidence.calibratedAdjusted ?? "",
+            solverToRevisionDelta: run.confidence.solverToRevisionDelta ?? "",
+            revisionToSynthesizerDelta:
+                run.confidence.revisionToSynthesizerDelta ?? "",
+            finalAnswerPreview: run.finalAnswerPreview,
+        }));
+        const benchmarkRows = index.benchmarks.map((benchmark) => ({
+            id: benchmark.id,
+            question: benchmark.question,
+            createdAt: benchmark.createdAt,
+            model: benchmark.model,
+            pipelinePreset: benchmark.pipelinePreset,
+            fastMode: benchmark.fastMode,
+            runs: benchmark.runs,
+            modeCount: benchmark.modeCount,
+            modeSizes: benchmark.modeSizes.join("|"),
+            divergenceEntropy: benchmark.divergenceEntropy,
+            stabilityPairwiseMean: benchmark.stabilityPairwiseMean ?? "",
+            threshold: benchmark.threshold ?? "",
+        }));
+
+        const runsCsv = toCsv(runRows, [
+            "id",
+            "question",
+            "createdAt",
+            "model",
+            "pipelinePreset",
+            "fastMode",
+            "stepCount",
+            "issueCount",
+            "maxSeverity",
+            "solverConfidence",
+            "revisionConfidence",
+            "synthesizerConfidence",
+            "calibratedAdjusted",
+            "solverToRevisionDelta",
+            "revisionToSynthesizerDelta",
+            "finalAnswerPreview",
+        ]);
+        const benchmarksCsv = toCsv(benchmarkRows, [
+            "id",
+            "question",
+            "createdAt",
+            "model",
+            "pipelinePreset",
+            "fastMode",
+            "runs",
+            "modeCount",
+            "modeSizes",
+            "divergenceEntropy",
+            "stabilityPairwiseMean",
+            "threshold",
+        ]);
+
+        await Promise.all([
+            writeFile(runCsvPath, runsCsv, "utf-8"),
+            writeFile(benchmarkCsvPath, benchmarksCsv, "utf-8"),
+        ]);
+        csvPaths = { runs: runCsvPath, benchmarks: benchmarkCsvPath };
+    }
+
     return {
         path: outputPath,
         index,
+        csvPaths,
     };
 }

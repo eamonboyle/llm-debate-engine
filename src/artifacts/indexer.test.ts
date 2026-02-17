@@ -1,8 +1,8 @@
-import { mkdtemp, writeFile, rm } from "fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "fs/promises";
 import { tmpdir } from "os";
 import { join } from "path";
 import { afterEach, describe, expect, it } from "vitest";
-import { buildAnalysisIndex } from "./indexer";
+import { buildAnalysisIndex, buildAndWriteAnalysisIndex } from "./indexer";
 
 const tempDirs: string[] = [];
 
@@ -237,5 +237,90 @@ describe("buildAnalysisIndex", () => {
         expect(index.aggregates.outlierRuns[0].benchmarkId).toBe("benchmark_outlier");
         expect(index.aggregates.outlierRuns[0].runId).toBe("run_c");
         expect(index.aggregates.outlierRuns[0].avgSimilarity).toBeCloseTo(0.225, 3);
+    });
+
+    it("writes optional CSV summary exports", async () => {
+        const dir = await createTempRunsDir();
+
+        const run = {
+            kind: "run",
+            id: "run_csv",
+            question: "CSV question",
+            metadata: {
+                schemaVersion: 1,
+                createdAt: new Date().toISOString(),
+                model: "gpt-test",
+                fastMode: false,
+                pipelinePreset: "standard",
+                pipelineVersion: "1.0.0",
+                source: "cli",
+            },
+            run: {
+                id: "run_csv",
+                createdAt: new Date().toISOString(),
+                question: "CSV question",
+                steps: [],
+                finalAnswer: "CSV answer",
+                metrics: { confidence: {}, critique: {} },
+            },
+        };
+        const benchmark = {
+            kind: "benchmark",
+            id: "benchmark_csv",
+            question: "CSV question",
+            metadata: {
+                schemaVersion: 1,
+                createdAt: new Date().toISOString(),
+                model: "gpt-test",
+                fastMode: false,
+                pipelinePreset: "standard",
+                pipelineVersion: "1.0.0",
+                source: "cli",
+            },
+            payload: {
+                runs: 1,
+                runIds: ["run_csv"],
+                modeCount: 1,
+                modeSizes: [1],
+                divergenceEntropy: 0,
+                summary: {
+                    question: "CSV question",
+                    runs: 1,
+                    runIds: ["run_csv"],
+                    consensus: { mean: 1, stddev: 0 },
+                    critiqueMaxSeverity: { mean: 0, stddev: 0 },
+                    modeCount: 1,
+                    modeSizes: [1],
+                    divergenceEntropy: 0,
+                    stability: {
+                        pairwiseMean: 1,
+                        pairwiseStddev: 0,
+                        minPairwiseSimilarity: 1,
+                        maxPairwiseSimilarity: 1,
+                        pairs: [],
+                    },
+                },
+            },
+        };
+
+        await writeFile(join(dir, "run_csv.json"), JSON.stringify(run), "utf-8");
+        await writeFile(
+            join(dir, "benchmark_csv.json"),
+            JSON.stringify(benchmark),
+            "utf-8",
+        );
+
+        const result = await buildAndWriteAnalysisIndex({
+            runsDir: dir,
+            outputFileName: "analysis-index.json",
+            writeCsv: true,
+        });
+
+        expect(result.csvPaths).toBeDefined();
+        const runsCsv = await readFile(result.csvPaths!.runs, "utf-8");
+        const benchmarksCsv = await readFile(result.csvPaths!.benchmarks, "utf-8");
+        expect(runsCsv).toContain("id,question,createdAt,model");
+        expect(runsCsv).toContain("run_csv");
+        expect(benchmarksCsv).toContain("benchmark_csv");
     });
 });
