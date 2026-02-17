@@ -1,4 +1,5 @@
 import { filterRunArtifacts, loadRunArtifacts } from "../../lib/data";
+import { buildQueryString, paginateItems } from "../../lib/listPagination";
 
 type RunsSearchParams = {
     q?: string;
@@ -11,32 +12,6 @@ type RunsSearchParams = {
     page?: string;
     pageSize?: string;
 };
-
-function parsePositiveInt(
-    value: string | undefined,
-    opts: { fallback: number; max: number },
-) {
-    if (!value || value.trim() === "") return opts.fallback;
-    const parsed = Number(value);
-    if (!Number.isFinite(parsed)) return opts.fallback;
-    return Math.max(1, Math.min(opts.max, Math.floor(parsed)));
-}
-
-function buildQueryString(
-    params: RunsSearchParams,
-    overrides: Partial<RunsSearchParams>,
-) {
-    const merged: RunsSearchParams = { ...params, ...overrides };
-    const query = new URLSearchParams();
-    const entries = Object.entries(merged) as Array<[keyof RunsSearchParams, string]>;
-    for (const [key, value] of entries) {
-        if (typeof value === "string" && value.length > 0) {
-            query.set(key, value);
-        }
-    }
-    const result = query.toString();
-    return result ? `?${result}` : "";
-}
 
 export default async function RunsPage({
     searchParams,
@@ -53,21 +28,10 @@ export default async function RunsPage({
         from: params.from,
         to: params.to,
     });
-    const sort = params.sort === "oldest" ? "oldest" : "newest";
-    const pageSize = parsePositiveInt(params.pageSize, { fallback: 25, max: 200 });
-    const requestedPage = parsePositiveInt(params.page, {
-        fallback: 1,
-        max: 100000,
+    const paging = paginateItems(filtered, params, {
+        defaultPageSize: 25,
+        maxPageSize: 200,
     });
-    const sorted = sort === "oldest" ? filtered.slice().reverse() : filtered;
-    const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize));
-    const page = Math.min(requestedPage, totalPages);
-    const start = (page - 1) * pageSize;
-    const paged = sorted.slice(start, start + pageSize);
-    const startDisplay = paged.length === 0 ? 0 : start + 1;
-    const endDisplay = start + paged.length;
-    const hasPrev = page > 1;
-    const hasNext = page < totalPages;
 
     return (
         <section className="stack">
@@ -133,13 +97,13 @@ export default async function RunsPage({
                         maxWidth: 360,
                     }}
                 >
-                    <select name="sort" defaultValue={sort} className="input">
+                    <select name="sort" defaultValue={paging.sort} className="input">
                         <option value="newest">Sort: newest first</option>
                         <option value="oldest">Sort: oldest first</option>
                     </select>
                     <select
                         name="pageSize"
-                        defaultValue={String(pageSize)}
+                        defaultValue={String(paging.pageSize)}
                         className="input"
                     >
                         <option value="10">10 per page</option>
@@ -156,7 +120,8 @@ export default async function RunsPage({
                         Clear
                     </a>
                     <span className="small muted" style={{ alignSelf: "center" }}>
-                        Showing {startDisplay}-{endDisplay} of {filtered.length} filtered
+                        Showing {paging.startDisplay}-{paging.endDisplay} of{" "}
+                        {filtered.length} filtered
                         runs ({runs.length} total)
                     </span>
                 </div>
@@ -179,7 +144,7 @@ export default async function RunsPage({
                             </tr>
                         </thead>
                         <tbody>
-                            {paged.map((run) => (
+                            {paging.paged.map((run) => (
                                 <tr key={run.id}>
                                     <td>{run.id}</td>
                                     <td>
@@ -219,22 +184,22 @@ export default async function RunsPage({
             <div className="card" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                 <a
                     className="button secondary"
-                    aria-disabled={!hasPrev}
+                    aria-disabled={!paging.hasPrev}
                     href={
-                        hasPrev
+                        paging.hasPrev
                             ? buildQueryString(params, {
-                                  sort,
-                                  pageSize: String(pageSize),
-                                  page: String(page - 1),
+                                  sort: paging.sort,
+                                  pageSize: String(paging.pageSize),
+                                  page: String(paging.page - 1),
                               })
                             : buildQueryString(params, {
-                                  sort,
-                                  pageSize: String(pageSize),
-                                  page: String(page),
+                                  sort: paging.sort,
+                                  pageSize: String(paging.pageSize),
+                                  page: String(paging.page),
                               })
                     }
                     style={
-                        hasPrev
+                        paging.hasPrev
                             ? undefined
                             : { pointerEvents: "none", opacity: 0.5, textDecoration: "none" }
                     }
@@ -243,22 +208,22 @@ export default async function RunsPage({
                 </a>
                 <a
                     className="button secondary"
-                    aria-disabled={!hasNext}
+                    aria-disabled={!paging.hasNext}
                     href={
-                        hasNext
+                        paging.hasNext
                             ? buildQueryString(params, {
-                                  sort,
-                                  pageSize: String(pageSize),
-                                  page: String(page + 1),
+                                  sort: paging.sort,
+                                  pageSize: String(paging.pageSize),
+                                  page: String(paging.page + 1),
                               })
                             : buildQueryString(params, {
-                                  sort,
-                                  pageSize: String(pageSize),
-                                  page: String(page),
+                                  sort: paging.sort,
+                                  pageSize: String(paging.pageSize),
+                                  page: String(paging.page),
                               })
                     }
                     style={
-                        hasNext
+                        paging.hasNext
                             ? undefined
                             : { pointerEvents: "none", opacity: 0.5, textDecoration: "none" }
                     }
@@ -266,7 +231,7 @@ export default async function RunsPage({
                     Next
                 </a>
                 <span className="small muted" style={{ alignSelf: "center" }}>
-                    Page {page} of {totalPages}
+                    Page {paging.page} of {paging.totalPages}
                 </span>
             </div>
         </section>
