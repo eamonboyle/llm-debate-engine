@@ -25,6 +25,13 @@ export type QuestionDecomposition = {
     hypotheses: string[];
 };
 
+export type EvidencePlan = {
+    evidenceRequirements: string[];
+    verificationChecks: string[];
+    majorUnknowns: string[];
+    riskLevel: 1 | 2 | 3 | 4 | 5;
+};
+
 export type Calibration = {
     adjustedConfidence: number;
     rationale: string;
@@ -50,6 +57,7 @@ export type AgentOutput =
     | { kind: "proposal"; data: AgentResponse }
     | { kind: "critique"; data: Critique }
     | { kind: "decomposition"; data: QuestionDecomposition }
+    | { kind: "evidence_plan"; data: EvidencePlan }
     | { kind: "calibration"; data: Calibration }
     | { kind: "judgement"; data: Judgement };
 

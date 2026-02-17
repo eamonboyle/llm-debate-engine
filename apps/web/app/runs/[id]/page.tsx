@@ -76,6 +76,68 @@ function renderStructuredSummary(output: unknown) {
         );
     }
 
+    if (kind === "evidence_plan") {
+        const evidenceRequirements = Array.isArray(data.evidenceRequirements)
+            ? data.evidenceRequirements
+                  .filter((v): v is string => typeof v === "string")
+                  .slice(0, 6)
+            : [];
+        const verificationChecks = Array.isArray(data.verificationChecks)
+            ? data.verificationChecks
+                  .filter((v): v is string => typeof v === "string")
+                  .slice(0, 6)
+            : [];
+        const majorUnknowns = Array.isArray(data.majorUnknowns)
+            ? data.majorUnknowns
+                  .filter((v): v is string => typeof v === "string")
+                  .slice(0, 4)
+            : [];
+        const riskLevel =
+            typeof data.riskLevel === "number" ? data.riskLevel : undefined;
+        return (
+            <div className="card" style={{ marginTop: 12 }}>
+                <div className="small muted">Structured summary</div>
+                <p className="small muted">Risk level: {riskLevel ?? "-"}</p>
+                {evidenceRequirements.length > 0 ? (
+                    <>
+                        <p style={{ marginTop: 6, marginBottom: 4 }}>
+                            Evidence requirements
+                        </p>
+                        <ul>
+                            {evidenceRequirements.map((item, idx) => (
+                                <li key={`ev-${idx}`}>{item}</li>
+                            ))}
+                        </ul>
+                    </>
+                ) : null}
+                {verificationChecks.length > 0 ? (
+                    <>
+                        <p style={{ marginTop: 6, marginBottom: 4 }}>
+                            Verification checks
+                        </p>
+                        <ul>
+                            {verificationChecks.map((item, idx) => (
+                                <li key={`vc-${idx}`}>{item}</li>
+                            ))}
+                        </ul>
+                    </>
+                ) : null}
+                {majorUnknowns.length > 0 ? (
+                    <>
+                        <p style={{ marginTop: 6, marginBottom: 4 }}>
+                            Major unknowns
+                        </p>
+                        <ul>
+                            {majorUnknowns.map((item, idx) => (
+                                <li key={`mu-${idx}`}>{item}</li>
+                            ))}
+                        </ul>
+                    </>
+                ) : null}
+            </div>
+        );
+    }
+
     return null;
 }
 

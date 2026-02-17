@@ -4,6 +4,7 @@ import {
     AgentRun,
     Calibration,
     Critique,
+    EvidencePlan,
     Judgement,
     QuestionDecomposition,
 } from "../types/agent";
@@ -29,6 +30,12 @@ export function getDecomposition(step: AgentRun): QuestionDecomposition | null {
 export function getCalibration(step: AgentRun): Calibration | null {
     if (!step.output) return null;
     if (step.output.kind !== "calibration") return null;
+    return step.output.data;
+}
+
+export function getEvidencePlan(step: AgentRun): EvidencePlan | null {
+    if (!step.output) return null;
+    if (step.output.kind !== "evidence_plan") return null;
     return step.output.data;
 }
 

@@ -2,6 +2,7 @@ import { AgentResponse } from "./types/agent";
 import type { Critique, CritiqueIssue } from "./types/agent";
 import type {
     Calibration,
+    EvidencePlan,
     Judgement,
     QuestionDecomposition,
 } from "./types/agent";
@@ -194,6 +195,37 @@ export function validateCalibration(
     }
 
     return { ok: true, data: v as Calibration };
+}
+
+export function validateEvidencePlan(
+    value: unknown,
+): { ok: true; data: EvidencePlan } | { ok: false; error: string } {
+    if (typeof value !== "object" || value === null)
+        return { ok: false, error: "Not an object" };
+    const v = value as any;
+
+    const listFields = [
+        "evidenceRequirements",
+        "verificationChecks",
+        "majorUnknowns",
+    ] as const;
+    for (const field of listFields) {
+        if (!Array.isArray(v[field]) || v[field].length < 1) {
+            return { ok: false, error: `${field} missing/empty` };
+        }
+        const valid = v[field].every(
+            (item: unknown) => typeof item === "string" && item.trim().length >= 3,
+        );
+        if (!valid) {
+            return { ok: false, error: `${field} contains invalid item` };
+        }
+    }
+
+    if (![1, 2, 3, 4, 5].includes(v.riskLevel)) {
+        return { ok: false, error: "riskLevel invalid" };
+    }
+
+    return { ok: true, data: v as EvidencePlan };
 }
 
 export function validateJudgement(

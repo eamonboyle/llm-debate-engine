@@ -13,12 +13,14 @@ import { SkepticAgent } from "../agents/SkepticAgent";
 import { SolverRevisionAgent } from "../agents/SolverRevisionAgent";
 import { SynthesizerAgent } from "../agents/SynthesizerAgent";
 import { QuestionDecomposerAgent } from "../agents/QuestionDecomposerAgent";
+import { EvidencePlannerAgent } from "../agents/EvidencePlannerAgent";
 import { RedTeamAgent } from "../agents/RedTeamAgent";
 import { CalibrationAgent } from "../agents/CalibrationAgent";
 import { JudgeAgent } from "../agents/JudgeAgent";
 import {
     getCalibration,
     getCritique,
+    getEvidencePlan,
     getJudgement,
     getProposal,
 } from "../core/extraction";
@@ -42,6 +44,7 @@ export type DebateEngineDeps = {
         revision?: SolverRevisionAgent;
         synthesizer?: SynthesizerAgent;
         decomposer?: QuestionDecomposerAgent;
+        evidencePlanner?: EvidencePlannerAgent;
         redTeam?: RedTeamAgent;
         calibration?: CalibrationAgent;
         judge?: JudgeAgent;
@@ -59,6 +62,7 @@ export class DebateEngine {
         solverRevision: SolverRevisionAgent;
         synthesizer: SynthesizerAgent;
         decomposer: QuestionDecomposerAgent;
+        evidencePlanner: EvidencePlannerAgent;
         redTeam: RedTeamAgent;
         calibration: CalibrationAgent;
         judge: JudgeAgent;
@@ -73,6 +77,8 @@ export class DebateEngine {
             solverRevision: deps.agents?.revision ?? new SolverRevisionAgent(),
             synthesizer: deps.agents?.synthesizer ?? new SynthesizerAgent(),
             decomposer: deps.agents?.decomposer ?? new QuestionDecomposerAgent(),
+            evidencePlanner:
+                deps.agents?.evidencePlanner ?? new EvidencePlannerAgent(),
             redTeam: deps.agents?.redTeam ?? new RedTeamAgent(),
             calibration: deps.agents?.calibration ?? new CalibrationAgent(),
             judge: deps.agents?.judge ?? new JudgeAgent(),
@@ -96,6 +102,7 @@ export class DebateEngine {
         const fast = opts.fast ?? preset === "fast_research";
         const steps: AgentRun[] = [];
         const critiques: Critique[] = [];
+        let evidencePlan: ReturnType<typeof getEvidencePlan> = null;
 
         const pushAndLog = (label: string, step: AgentRun) => {
             steps.push(step);
@@ -116,6 +123,16 @@ export class DebateEngine {
                 { model: opts.model, verbose },
             );
             pushAndLog("Question decomposer", decomposerStep);
+
+            if (!quiet)
+                console.log("Evidence planner agent is mapping evidence checks...");
+            const evidencePlannerStep = await this.agents.evidencePlanner.run(
+                ctx,
+                this.llm,
+                { model: opts.model, verbose },
+            );
+            pushAndLog("Evidence planner", evidencePlannerStep);
+            evidencePlan = getEvidencePlan(evidencePlannerStep);
         }
 
         // Step 1: Solver
@@ -123,6 +140,7 @@ export class DebateEngine {
         const solverStep = await this.agents.solver.run(ctx, this.llm, {
             model: opts.model,
             verbose,
+            evidencePlan: evidencePlan ?? undefined,
         });
         pushAndLog("Solver", solverStep);
 

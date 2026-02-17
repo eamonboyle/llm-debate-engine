@@ -44,6 +44,20 @@ describe("DebateEngine presets", () => {
                         }),
                     ),
                 } as any,
+                evidencePlanner: {
+                    name: "EvidencePlannerAgent",
+                    run: vi.fn().mockResolvedValue(
+                        step("e1", "EvidencePlannerAgent", "research", {
+                            kind: "evidence_plan",
+                            data: {
+                                evidenceRequirements: ["Evidence A", "Evidence B"],
+                                verificationChecks: ["Check 1", "Check 2"],
+                                majorUnknowns: ["Unknown A"],
+                                riskLevel: 3,
+                            },
+                        }),
+                    ),
+                } as any,
                 solver: {
                     name: "SolverAgent",
                     run: vi.fn().mockResolvedValue(
@@ -157,6 +171,7 @@ describe("DebateEngine presets", () => {
         expect(result.pipelinePreset).toBe("research_deep");
         expect(result.steps.map((s) => s.agentName)).toEqual([
             "QuestionDecomposerAgent",
+            "EvidencePlannerAgent",
             "SolverAgent",
             "SkepticAgent",
             "RedTeamAgent",

@@ -3,6 +3,7 @@ import {
     validateAgentResponse,
     validateCalibration,
     validateCritique,
+    validateEvidencePlan,
     validateJudgement,
     validateQuestionDecomposition,
 } from "./validator";
@@ -139,6 +140,28 @@ describe("validateCalibration", () => {
             adjustedConfidence: 2,
             rationale: "",
             claimConfidences: [],
+        });
+        expect(r.ok).toBe(false);
+    });
+});
+
+describe("validateEvidencePlan", () => {
+    it("accepts valid evidence plans", () => {
+        const r = validateEvidencePlan({
+            evidenceRequirements: ["Independent evaluations", "Domain citations"],
+            verificationChecks: ["Cross-check core claims", "Verify quantitative assumptions"],
+            majorUnknowns: ["Long-term model drift"],
+            riskLevel: 4,
+        });
+        expect(r.ok).toBe(true);
+    });
+
+    it("rejects malformed evidence plans", () => {
+        const r = validateEvidencePlan({
+            evidenceRequirements: [],
+            verificationChecks: ["x"],
+            majorUnknowns: ["ok"],
+            riskLevel: 9,
         });
         expect(r.ok).toBe(false);
     });

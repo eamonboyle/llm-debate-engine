@@ -1,5 +1,10 @@
 import type { LLMClient, ChatMessage } from "../types/llm";
-import type { AgentResponse, AgentRun, DebateContext } from "../types/agent";
+import type {
+    AgentResponse,
+    AgentRun,
+    DebateContext,
+    EvidencePlan,
+} from "../types/agent";
 import { runStructuredWithGuard } from "../core/structuredRunner";
 import { validateAgentResponse } from "../validator";
 
@@ -29,7 +34,7 @@ export class SolverAgent {
     async run(
         ctx: DebateContext,
         llm: LLMClient,
-        opts: { model: string; verbose?: boolean },
+        opts: { model: string; verbose?: boolean; evidencePlan?: EvidencePlan },
     ): Promise<AgentRun> {
         const createdAt = nowIso();
 
@@ -39,7 +44,14 @@ export class SolverAgent {
                 content:
                     "You are the Solver. Produce a direct, helpful answer. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON.",
             },
-            { role: "user", content: `Question: ${ctx.question}` },
+            {
+                role: "user",
+                content: `Question: ${ctx.question}${
+                    opts.evidencePlan
+                        ? `\n\nEvidence plan:\n${JSON.stringify(opts.evidencePlan, null, 2)}`
+                        : ""
+                }`,
+            },
         ];
 
         const req = {
