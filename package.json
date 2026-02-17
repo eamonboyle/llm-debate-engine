@@ -2,8 +2,13 @@
     "name": "llm-comparison-engine",
     "version": "1.0.0",
     "description": "",
+    "type": "module",
     "main": "index.js",
     "scripts": {
+        "ask": "pnpm tsx src/cli.ts ask",
+        "benchmark": "pnpm tsx src/cli.ts benchmark",
+        "analyze": "pnpm tsx src/cli.ts analyze-runs",
+        "typecheck": "tsc --noEmit",
         "test": "vitest run",
         "test:watch": "vitest"
     },

@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { validateAgentResponse, validateCritique } from "./validator";
 
 describe("validateAgentResponse", () => {
-    const valid: Parameters<typeof validateAgentResponse>[0] = {
+    const valid = {
         answer: "Rust is safer than C++ for memory safety.",
         keyClaims: ["Rust enforces ownership at compile time."],
         assumptions: ["Comparing typical usage."],
@@ -26,7 +26,9 @@ describe("validateAgentResponse", () => {
     it("rejects short answer", () => {
         const r = validateAgentResponse({ ...valid, answer: "x" });
         expect(r.ok).toBe(false);
-        if (!r.ok) expect(r.error).toContain("answer");
+        if (r.ok === false) {
+            expect(r.error).toContain("answer");
+        }
     });
 
     it("rejects empty keyClaims", () => {
@@ -49,12 +51,12 @@ describe("validateAgentResponse", () => {
 });
 
 describe("validateCritique", () => {
-    const valid: Parameters<typeof validateCritique>[0] = {
+    const valid = {
         targetAgent: "SolverAgent",
         issues: [
             { severity: 3, type: "ambiguity", note: "The claim is underspecified." },
         ],
-    };
+    } as const;
 
     it("accepts valid critique", () => {
         const r = validateCritique(valid);
