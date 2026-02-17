@@ -212,7 +212,7 @@ async function main() {
     const usageBenchmark =
         'Usage: pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model M] [--preset standard|research_deep|fast_research] [--threshold T] [--fast] [--verbose]';
     const usageAnalyze =
-        'Usage: pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--model text] [--preset standard|research_deep|fast_research] [--fast-mode true|false] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename] [--chunks] [--chunks-file filename]';
+        'Usage: pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--model text] [--preset standard|research_deep|fast_research] [--fast-mode true|false] [--created-after ISO] [--created-before ISO] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename] [--chunks] [--chunks-file filename]';
 
     const parseOpt = (flag: string): string | undefined => {
         const idx = rest.indexOf(flag);
@@ -271,6 +271,8 @@ async function main() {
         const modelContains = parseOpt("--model");
         const presetEquals = parsePresetOpt();
         const fastMode = parseBooleanOpt("--fast-mode");
+        const createdAfter = parseOpt("--created-after");
+        const createdBefore = parseOpt("--created-before");
         const { path, index, csvPaths, markdownPath, bundlePath, chunkPath } =
             await buildAndWriteAnalysisIndex({
                 runsDir,
@@ -279,6 +281,8 @@ async function main() {
                 modelContains,
                 presetEquals,
                 fastMode,
+                createdAfter,
+                createdBefore,
                 writeCsv,
                 writeMarkdown,
                 markdownFileName,

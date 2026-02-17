@@ -143,6 +143,8 @@ export async function buildAnalysisIndex(
         modelContains?: string;
         presetEquals?: PipelinePreset;
         fastMode?: boolean;
+        createdAfter?: string;
+        createdBefore?: string;
     },
 ): Promise<AnalysisIndex> {
     const loaded = await loadRunArtifacts(runsDir);
@@ -150,6 +152,14 @@ export async function buildAnalysisIndex(
     const modelFilter = opts?.modelContains?.trim().toLowerCase();
     const presetFilter = opts?.presetEquals;
     const fastModeFilter = opts?.fastMode;
+    const createdAfter =
+        opts?.createdAfter && !Number.isNaN(new Date(opts.createdAfter).getTime())
+            ? new Date(opts.createdAfter)
+            : undefined;
+    const createdBefore =
+        opts?.createdBefore && !Number.isNaN(new Date(opts.createdBefore).getTime())
+            ? new Date(opts.createdBefore)
+            : undefined;
     const runs =
         loaded.runs.filter((artifact) => {
             if (
@@ -172,6 +182,21 @@ export async function buildAnalysisIndex(
             if (
                 typeof fastModeFilter === "boolean" &&
                 artifact.metadata.fastMode !== fastModeFilter
+            ) {
+                return false;
+            }
+            const createdAt = new Date(artifact.metadata.createdAt);
+            if (
+                createdAfter &&
+                !Number.isNaN(createdAt.getTime()) &&
+                createdAt < createdAfter
+            ) {
+                return false;
+            }
+            if (
+                createdBefore &&
+                !Number.isNaN(createdAt.getTime()) &&
+                createdAt > createdBefore
             ) {
                 return false;
             }
@@ -199,6 +224,21 @@ export async function buildAnalysisIndex(
             if (
                 typeof fastModeFilter === "boolean" &&
                 artifact.metadata.fastMode !== fastModeFilter
+            ) {
+                return false;
+            }
+            const createdAt = new Date(artifact.metadata.createdAt);
+            if (
+                createdAfter &&
+                !Number.isNaN(createdAt.getTime()) &&
+                createdAt < createdAfter
+            ) {
+                return false;
+            }
+            if (
+                createdBefore &&
+                !Number.isNaN(createdAt.getTime()) &&
+                createdAt > createdBefore
             ) {
                 return false;
             }
@@ -452,6 +492,8 @@ export async function buildAndWriteAnalysisIndex(opts?: {
     modelContains?: string;
     presetEquals?: PipelinePreset;
     fastMode?: boolean;
+    createdAfter?: string;
+    createdBefore?: string;
 }): Promise<{
     path: string;
     index: AnalysisIndex;
@@ -474,6 +516,8 @@ export async function buildAndWriteAnalysisIndex(opts?: {
         modelContains: opts?.modelContains,
         presetEquals: opts?.presetEquals,
         fastMode: opts?.fastMode,
+        createdAfter: opts?.createdAfter,
+        createdBefore: opts?.createdBefore,
     });
 
     await mkdir(runsDir, { recursive: true });

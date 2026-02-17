@@ -640,4 +640,102 @@ describe("buildAnalysisIndex", () => {
         expect(index.runs[0].id).toBe("run_match");
         expect(index.benchmarks[0].id).toBe("benchmark_match");
     });
+
+    it("supports created-after and created-before filtering", async () => {
+        const dir = await createTempRunsDir();
+        const makeRun = (id: string, createdAt: string) => ({
+            kind: "run",
+            id,
+            question: "Date filter",
+            metadata: {
+                schemaVersion: 1,
+                createdAt,
+                model: "gpt-test",
+                fastMode: false,
+                pipelinePreset: "standard",
+                pipelineVersion: "1.0.0",
+                source: "cli",
+            },
+            run: {
+                id,
+                createdAt,
+                question: "Date filter",
+                steps: [],
+                finalAnswer: "A",
+                metrics: { confidence: {}, critique: {} },
+            },
+        });
+        const makeBenchmark = (id: string, createdAt: string) => ({
+            kind: "benchmark",
+            id,
+            question: "Date filter",
+            metadata: {
+                schemaVersion: 1,
+                createdAt,
+                model: "gpt-test",
+                fastMode: false,
+                pipelinePreset: "standard",
+                pipelineVersion: "1.0.0",
+                source: "cli",
+            },
+            payload: {
+                runs: 1,
+                runIds: [id],
+                modeCount: 1,
+                modeSizes: [1],
+                divergenceEntropy: 0,
+                summary: {
+                    question: "Date filter",
+                    runs: 1,
+                    runIds: [id],
+                    consensus: { mean: 1, stddev: 0 },
+                    critiqueMaxSeverity: { mean: 0, stddev: 0 },
+                    modeCount: 1,
+                    modeSizes: [1],
+                    divergenceEntropy: 0,
+                    stability: {
+                        pairwiseMean: 1,
+                        pairwiseStddev: 0,
+                        minPairwiseSimilarity: 1,
+                        maxPairwiseSimilarity: 1,
+                        pairs: [],
+                    },
+                },
+            },
+        });
+
+        await writeFile(
+            join(dir, "run_old.json"),
+            JSON.stringify(makeRun("run_old", "2025-01-01T00:00:00.000Z")),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "run_new.json"),
+            JSON.stringify(makeRun("run_new", "2025-02-01T00:00:00.000Z")),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "benchmark_old.json"),
+            JSON.stringify(
+                makeBenchmark("benchmark_old", "2025-01-01T00:00:00.000Z"),
+            ),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "benchmark_new.json"),
+            JSON.stringify(
+                makeBenchmark("benchmark_new", "2025-02-01T00:00:00.000Z"),
+            ),
+            "utf-8",
+        );
+
+        const index = await buildAnalysisIndex(dir, {
+            createdAfter: "2025-01-15T00:00:00.000Z",
+            createdBefore: "2025-03-01T00:00:00.000Z",
+        });
+        expect(index.totals.runs).toBe(1);
+        expect(index.totals.benchmarks).toBe(1);
+        expect(index.runs[0].id).toBe("run_new");
+        expect(index.benchmarks[0].id).toBe("benchmark_new");
+    });
 });

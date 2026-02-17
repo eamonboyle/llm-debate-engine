@@ -129,7 +129,7 @@ pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model
 ### `analyze-runs`
 
 ```bash
-pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--model text] [--preset standard|research_deep|fast_research] [--fast-mode true|false] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename] [--chunks] [--chunks-file filename]
+pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--model text] [--preset standard|research_deep|fast_research] [--fast-mode true|false] [--created-after ISO] [--created-before ISO] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename] [--chunks] [--chunks-file filename]
 ```
 
 Useful focus flags:
@@ -138,6 +138,8 @@ Useful focus flags:
 - `--model "text"`: include only artifacts whose model contains text
 - `--preset standard|research_deep|fast_research`: include only one preset
 - `--fast-mode true|false`: include only fast/non-fast artifacts
+- `--created-after ISO`: include artifacts at/after timestamp
+- `--created-before ISO`: include artifacts at/before timestamp
 
 ## Artifact model
 

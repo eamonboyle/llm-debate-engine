@@ -36,6 +36,12 @@ Model/preset-focused index (optional):
 pnpm analyze -- --model "gpt-5" --preset research_deep --fast-mode false
 ```
 
+Time-window focused index (optional):
+
+```bash
+pnpm analyze -- --created-after "2025-01-01T00:00:00.000Z" --created-before "2025-02-01T00:00:00.000Z"
+```
+
 Extended outputs:
 
 ```bash
