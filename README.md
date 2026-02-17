@@ -186,6 +186,12 @@ UI supports query-param filters for runs and benchmarks:
 Data is loaded directly from local filesystem artifacts in `runs/`.
 If `analysis-index.json` is missing, UI can fall back to `analysis-bundle.json`.
 
+API endpoints are also available in the web app:
+
+- `GET /api/analysis`
+- `GET /api/runs/:id`
+- `GET /api/benchmarks/:id`
+
 ## Testing
 
 ```bash
