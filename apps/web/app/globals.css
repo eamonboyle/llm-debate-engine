@@ -1478,6 +1478,29 @@ pre {
    Info tooltip (help icons)
    ========================================================================== */
 
+.info-tooltip-wrapper {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Desktop: hover tooltip visible, click popover hidden */
+.info-tooltip-desktop {
+  display: inline-flex;
+}
+.info-tooltip-mobile {
+  display: none;
+}
+
+/* Mobile/touch: click popover visible, hover tooltip hidden */
+@media (hover: none) {
+  .info-tooltip-desktop {
+    display: none;
+  }
+  .info-tooltip-mobile {
+    display: inline-flex;
+  }
+}
+
 .info-tooltip-trigger {
   display: inline-flex;
   align-items: center;

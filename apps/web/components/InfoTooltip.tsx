@@ -1,5 +1,6 @@
 "use client";
 
+import * as Popover from "@radix-ui/react-popover";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { getGlossaryEntry } from "../lib/glossary";
 
@@ -21,26 +22,47 @@ export function InfoTooltip({
         content ?? (helpKey ? getGlossaryEntry(helpKey) : undefined);
     if (!text) return null;
 
+    const triggerProps = {
+        type: "button" as const,
+        className: "info-tooltip-trigger",
+        "aria-label": ariaLabel,
+        children: "?",
+    };
+
     return (
-        <Tooltip.Root delayDuration={300}>
-            <Tooltip.Trigger asChild>
-                <button
-                    type="button"
-                    className="info-tooltip-trigger"
-                    aria-label={ariaLabel}
-                >
-                    ?
-                </button>
-            </Tooltip.Trigger>
-            <Tooltip.Portal>
-                <Tooltip.Content
-                    className="info-tooltip-content"
-                    sideOffset={6}
-                    side="top"
-                >
-                    {text}
-                </Tooltip.Content>
-            </Tooltip.Portal>
-        </Tooltip.Root>
+        <span className="info-tooltip-wrapper">
+            <span className="info-tooltip-desktop">
+                <Tooltip.Root delayDuration={300}>
+                    <Tooltip.Trigger asChild>
+                        <button {...triggerProps} />
+                    </Tooltip.Trigger>
+                    <Tooltip.Portal>
+                        <Tooltip.Content
+                            className="info-tooltip-content"
+                            sideOffset={6}
+                            side="top"
+                        >
+                            {text}
+                        </Tooltip.Content>
+                    </Tooltip.Portal>
+                </Tooltip.Root>
+            </span>
+            <span className="info-tooltip-mobile">
+                <Popover.Root>
+                    <Popover.Trigger asChild>
+                        <button {...triggerProps} />
+                    </Popover.Trigger>
+                    <Popover.Portal>
+                        <Popover.Content
+                            className="info-tooltip-content"
+                            sideOffset={6}
+                            side="top"
+                        >
+                            {text}
+                        </Popover.Content>
+                    </Popover.Portal>
+                </Popover.Root>
+            </span>
+        </span>
     );
 }
