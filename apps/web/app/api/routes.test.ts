@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { GET as getAnalysis } from "./analysis/route";
 import { GET as getRunById } from "./runs/[id]/route";
 import { GET as getBenchmarkById } from "./benchmarks/[id]/route";
+import { GET as getBenchmarkPairsById } from "./benchmarks/[id]/pairs/route";
 
 const tempDirs: string[] = [];
 const originalRunsDir = process.env.RUNS_DIR;
@@ -124,5 +125,37 @@ describe("web api routes", () => {
         expect(benchmarkResponse.status).toBe(200);
         const benchmarkJson = (await benchmarkResponse.json()) as { id: string };
         expect(benchmarkJson.id).toBe("benchmark_1");
+    });
+
+    it("returns benchmark pairwise data from chunk file", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-benchmark-pairs.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                pairwise: [
+                    {
+                        benchmarkId: "benchmark_2",
+                        runIds: ["r1", "r2"],
+                        pairs: [{ i: 0, j: 1, similarity: 0.88 }],
+                    },
+                ],
+            }),
+            "utf-8",
+        );
+
+        const response = await getBenchmarkPairsById(new Request("http://localhost"), {
+            params: Promise.resolve({ id: "benchmark_2" }),
+        });
+        expect(response.status).toBe(200);
+        const json = (await response.json()) as {
+            benchmarkId: string;
+            runIds: string[];
+            pairs: Array<{ similarity: number }>;
+        };
+        expect(json.benchmarkId).toBe("benchmark_2");
+        expect(json.runIds).toEqual(["r1", "r2"]);
+        expect(json.pairs[0].similarity).toBe(0.88);
     });
 });

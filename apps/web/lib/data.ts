@@ -245,3 +245,34 @@ export async function loadRunById(id: string) {
     const runs = await loadRunArtifacts();
     return runs.find((run) => run.id === id) ?? null;
 }
+
+export async function loadBenchmarkPairsById(id: string): Promise<{
+    benchmarkId: string;
+    runIds: string[];
+    pairs: Array<{ i: number; j: number; similarity: number }>;
+}> {
+    const runsDir = getRunsDir();
+    const pairwisePath = join(runsDir, "analysis-benchmark-pairs.json");
+    const chunk = await readJsonIfExists<{
+        pairwise?: Array<{
+            benchmarkId: string;
+            runIds?: string[];
+            pairs?: Array<{ i: number; j: number; similarity: number }>;
+        }>;
+    }>(pairwisePath);
+    const fromChunk = chunk?.pairwise?.find((entry) => entry.benchmarkId === id);
+    if (fromChunk) {
+        return {
+            benchmarkId: id,
+            runIds: fromChunk.runIds ?? [],
+            pairs: fromChunk.pairs ?? [],
+        };
+    }
+
+    const benchmark = await loadBenchmarkById(id);
+    return {
+        benchmarkId: id,
+        runIds: benchmark?.payload.runIds ?? [],
+        pairs: benchmark?.payload.summary?.stability?.pairs ?? [],
+    };
+}

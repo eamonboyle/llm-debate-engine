@@ -6,6 +6,7 @@ import {
     loadAnalysisIndex,
     loadBenchmarkArtifacts,
     loadBenchmarkById,
+    loadBenchmarkPairsById,
     loadBenchmarksByIds,
     loadRunArtifacts,
     loadRunById,
@@ -207,5 +208,60 @@ describe("web data loader", () => {
 
         const selected = await loadBenchmarksByIds(["bench_a", "bench_b"]);
         expect(selected).toHaveLength(2);
+    });
+
+    it("loads benchmark pairwise data from chunk then fallback", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-benchmark-pairs.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                pairwise: [
+                    {
+                        benchmarkId: "bench_chunk",
+                        runIds: ["r1", "r2"],
+                        pairs: [{ i: 0, j: 1, similarity: 0.91 }],
+                    },
+                ],
+            }),
+            "utf-8",
+        );
+
+        const fromChunk = await loadBenchmarkPairsById("bench_chunk");
+        expect(fromChunk.runIds).toEqual(["r1", "r2"]);
+        expect(fromChunk.pairs).toHaveLength(1);
+
+        await writeFile(
+            join(dir, "bench_fallback.json"),
+            JSON.stringify({
+                kind: "benchmark",
+                id: "bench_fallback",
+                question: "Q",
+                metadata: {
+                    createdAt: "2025-01-01T00:00:00.000Z",
+                    model: "gpt-test",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                payload: {
+                    runs: 2,
+                    modeCount: 1,
+                    modeSizes: [2],
+                    divergenceEntropy: 0,
+                    summary: {
+                        stability: {
+                            pairwiseMean: 0.95,
+                            pairs: [{ i: 0, j: 1, similarity: 0.95 }],
+                        },
+                    },
+                },
+            }),
+            "utf-8",
+        );
+
+        const fallback = await loadBenchmarkPairsById("bench_fallback");
+        expect(fallback.pairs).toHaveLength(1);
+        expect(fallback.pairs[0].similarity).toBe(0.95);
     });
 });
