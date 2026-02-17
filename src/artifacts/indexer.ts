@@ -140,22 +140,70 @@ export async function buildAnalysisIndex(
     runsDir = "runs",
     opts?: {
         questionContains?: string;
+        modelContains?: string;
+        presetEquals?: PipelinePreset;
+        fastMode?: boolean;
     },
 ): Promise<AnalysisIndex> {
     const loaded = await loadRunArtifacts(runsDir);
     const questionFilter = opts?.questionContains?.trim().toLowerCase();
+    const modelFilter = opts?.modelContains?.trim().toLowerCase();
+    const presetFilter = opts?.presetEquals;
+    const fastModeFilter = opts?.fastMode;
     const runs =
-        questionFilter && questionFilter.length > 0
-            ? loaded.runs.filter((artifact) =>
-                  artifact.question.toLowerCase().includes(questionFilter),
-              )
-            : loaded.runs;
+        loaded.runs.filter((artifact) => {
+            if (
+                questionFilter &&
+                questionFilter.length > 0 &&
+                !artifact.question.toLowerCase().includes(questionFilter)
+            ) {
+                return false;
+            }
+            if (
+                modelFilter &&
+                modelFilter.length > 0 &&
+                !artifact.metadata.model.toLowerCase().includes(modelFilter)
+            ) {
+                return false;
+            }
+            if (presetFilter && artifact.metadata.pipelinePreset !== presetFilter) {
+                return false;
+            }
+            if (
+                typeof fastModeFilter === "boolean" &&
+                artifact.metadata.fastMode !== fastModeFilter
+            ) {
+                return false;
+            }
+            return true;
+        });
     const benchmarks =
-        questionFilter && questionFilter.length > 0
-            ? loaded.benchmarks.filter((artifact) =>
-                  artifact.question.toLowerCase().includes(questionFilter),
-              )
-            : loaded.benchmarks;
+        loaded.benchmarks.filter((artifact) => {
+            if (
+                questionFilter &&
+                questionFilter.length > 0 &&
+                !artifact.question.toLowerCase().includes(questionFilter)
+            ) {
+                return false;
+            }
+            if (
+                modelFilter &&
+                modelFilter.length > 0 &&
+                !artifact.metadata.model.toLowerCase().includes(modelFilter)
+            ) {
+                return false;
+            }
+            if (presetFilter && artifact.metadata.pipelinePreset !== presetFilter) {
+                return false;
+            }
+            if (
+                typeof fastModeFilter === "boolean" &&
+                artifact.metadata.fastMode !== fastModeFilter
+            ) {
+                return false;
+            }
+            return true;
+        });
 
     const issueTypeCounts: Record<string, number> = {};
     const issueSeverityByTypeBuckets: Record<string, SeverityBucket> = {};
@@ -399,6 +447,9 @@ export async function buildAndWriteAnalysisIndex(opts?: {
     writeBundle?: boolean;
     bundleFileName?: string;
     questionContains?: string;
+    modelContains?: string;
+    presetEquals?: PipelinePreset;
+    fastMode?: boolean;
 }): Promise<{
     path: string;
     index: AnalysisIndex;
@@ -415,6 +466,9 @@ export async function buildAndWriteAnalysisIndex(opts?: {
     const bundleFileName = opts?.bundleFileName ?? "analysis-bundle.json";
     const index = await buildAnalysisIndex(runsDir, {
         questionContains: opts?.questionContains,
+        modelContains: opts?.modelContains,
+        presetEquals: opts?.presetEquals,
+        fastMode: opts?.fastMode,
     });
 
     await mkdir(runsDir, { recursive: true });

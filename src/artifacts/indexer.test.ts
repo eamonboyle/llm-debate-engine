@@ -507,4 +507,129 @@ describe("buildAnalysisIndex", () => {
         expect(index.runs[0].id).toBe("run_alpha");
         expect(index.benchmarks[0].id).toBe("benchmark_alpha");
     });
+
+    it("supports model/preset/fast-mode filtering", async () => {
+        const dir = await createTempRunsDir();
+
+        const makeRun = (
+            id: string,
+            model: string,
+            pipelinePreset: "standard" | "research_deep" | "fast_research",
+            fastMode: boolean,
+        ) => ({
+            kind: "run",
+            id,
+            question: "Filter test",
+            metadata: {
+                schemaVersion: 1,
+                createdAt: new Date().toISOString(),
+                model,
+                fastMode,
+                pipelinePreset,
+                pipelineVersion: "1.0.0",
+                source: "cli",
+            },
+            run: {
+                id,
+                createdAt: new Date().toISOString(),
+                question: "Filter test",
+                steps: [],
+                finalAnswer: "answer",
+                metrics: { confidence: {}, critique: {} },
+            },
+        });
+        const makeBenchmark = (
+            id: string,
+            model: string,
+            pipelinePreset: "standard" | "research_deep" | "fast_research",
+            fastMode: boolean,
+        ) => ({
+            kind: "benchmark",
+            id,
+            question: "Filter test",
+            metadata: {
+                schemaVersion: 1,
+                createdAt: new Date().toISOString(),
+                model,
+                fastMode,
+                pipelinePreset,
+                pipelineVersion: "1.0.0",
+                source: "cli",
+            },
+            payload: {
+                runs: 1,
+                runIds: [id],
+                modeCount: 1,
+                modeSizes: [1],
+                divergenceEntropy: 0,
+                summary: {
+                    question: "Filter test",
+                    runs: 1,
+                    runIds: [id],
+                    consensus: { mean: 1, stddev: 0 },
+                    critiqueMaxSeverity: { mean: 0, stddev: 0 },
+                    modeCount: 1,
+                    modeSizes: [1],
+                    divergenceEntropy: 0,
+                    stability: {
+                        pairwiseMean: 1,
+                        pairwiseStddev: 0,
+                        minPairwiseSimilarity: 1,
+                        maxPairwiseSimilarity: 1,
+                        pairs: [],
+                    },
+                },
+            },
+        });
+
+        await writeFile(
+            join(dir, "run_match.json"),
+            JSON.stringify(
+                makeRun("run_match", "gpt-matched", "research_deep", false),
+            ),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "run_non_match.json"),
+            JSON.stringify(
+                makeRun("run_non_match", "gpt-other", "standard", true),
+            ),
+            "utf-8",
+        );
+
+        await writeFile(
+            join(dir, "benchmark_match.json"),
+            JSON.stringify(
+                makeBenchmark(
+                    "benchmark_match",
+                    "gpt-matched",
+                    "research_deep",
+                    false,
+                ),
+            ),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "benchmark_non_match.json"),
+            JSON.stringify(
+                makeBenchmark(
+                    "benchmark_non_match",
+                    "gpt-other",
+                    "standard",
+                    true,
+                ),
+            ),
+            "utf-8",
+        );
+
+        const index = await buildAnalysisIndex(dir, {
+            modelContains: "matched",
+            presetEquals: "research_deep",
+            fastMode: false,
+        });
+        expect(index.totals.runs).toBe(1);
+        expect(index.totals.benchmarks).toBe(1);
+        expect(index.runs[0].id).toBe("run_match");
+        expect(index.benchmarks[0].id).toBe("benchmark_match");
+    });
 });

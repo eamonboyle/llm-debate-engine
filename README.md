@@ -119,8 +119,15 @@ pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model
 ### `analyze-runs`
 
 ```bash
-pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename]
+pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--model text] [--preset standard|research_deep|fast_research] [--fast-mode true|false] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename]
 ```
+
+Useful focus flags:
+
+- `--question "text"`: include only artifacts whose question contains text
+- `--model "text"`: include only artifacts whose model contains text
+- `--preset standard|research_deep|fast_research`: include only one preset
+- `--fast-mode true|false`: include only fast/non-fast artifacts
 
 ## Artifact model
 

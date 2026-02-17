@@ -212,7 +212,7 @@ async function main() {
     const usageBenchmark =
         'Usage: pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model M] [--preset standard|research_deep|fast_research] [--threshold T] [--fast] [--verbose]';
     const usageAnalyze =
-        'Usage: pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename]';
+        'Usage: pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--model text] [--preset standard|research_deep|fast_research] [--fast-mode true|false] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename]';
 
     const parseOpt = (flag: string): string | undefined => {
         const idx = rest.indexOf(flag);
@@ -241,6 +241,12 @@ async function main() {
         }
         return undefined;
     };
+    const parseBooleanOpt = (flag: string): boolean | undefined => {
+        const value = parseOpt(flag);
+        if (value === "true") return true;
+        if (value === "false") return false;
+        return undefined;
+    };
     const excludeOptIndices = (indices: number[]): number[] => {
         const set = new Set<number>();
         for (const i of indices) {
@@ -259,11 +265,17 @@ async function main() {
         const writeBundle = rest.includes("--bundle");
         const bundleFileName = parseOpt("--bundle-file") ?? "analysis-bundle.json";
         const questionContains = parseOpt("--question");
+        const modelContains = parseOpt("--model");
+        const presetEquals = parsePresetOpt();
+        const fastMode = parseBooleanOpt("--fast-mode");
         const { path, index, csvPaths, markdownPath, bundlePath } =
             await buildAndWriteAnalysisIndex({
                 runsDir,
                 outputFileName: output,
                 questionContains,
+                modelContains,
+                presetEquals,
+                fastMode,
                 writeCsv,
                 writeMarkdown,
                 markdownFileName,

@@ -30,6 +30,12 @@ Question-focused index (optional):
 pnpm analyze -- --question "AI safety"
 ```
 
+Model/preset-focused index (optional):
+
+```bash
+pnpm analyze -- --model "gpt-5" --preset research_deep --fast-mode false
+```
+
 Extended outputs:
 
 ```bash
