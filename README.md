@@ -145,6 +145,12 @@ pnpm web:typecheck
 pnpm web:build
 ```
 
+## Additional documentation
+
+- Artifact schema reference: `docs/artifact-schema.md`
+- Adding new agents: `docs/adding-agents.md`
+- Chart interpretation guide: `docs/chart-interpretation.md`
+
 ## Environment
 
 | Variable | Description |
