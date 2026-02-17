@@ -2,6 +2,7 @@ import { AgentResponse } from "./types/agent";
 import type { Critique, CritiqueIssue } from "./types/agent";
 import type {
     Calibration,
+    Counterfactual,
     EvidencePlan,
     Judgement,
     QuestionDecomposition,
@@ -226,6 +227,29 @@ export function validateEvidencePlan(
     }
 
     return { ok: true, data: v as EvidencePlan };
+}
+
+export function validateCounterfactual(
+    value: unknown,
+): { ok: true; data: Counterfactual } | { ok: false; error: string } {
+    if (typeof value !== "object" || value === null)
+        return { ok: false, error: "Not an object" };
+    const v = value as any;
+
+    const fields = ["failureModes", "triggerConditions", "mitigations"] as const;
+    for (const field of fields) {
+        if (!Array.isArray(v[field]) || v[field].length < 1) {
+            return { ok: false, error: `${field} missing/empty` };
+        }
+        const validItems = v[field].every(
+            (item: unknown) => typeof item === "string" && item.trim().length >= 3,
+        );
+        if (!validItems) {
+            return { ok: false, error: `${field} contains invalid item` };
+        }
+    }
+
+    return { ok: true, data: v as Counterfactual };
 }
 
 export function validateJudgement(

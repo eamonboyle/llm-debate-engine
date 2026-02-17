@@ -17,11 +17,11 @@ Solver -> Skeptic -> SolverRevision -> Synthesizer
 
 ### `research_deep`
 
-QuestionDecomposer -> EvidencePlanner -> Solver -> Skeptic -> RedTeam -> SolverRevision -> Synthesizer -> Calibration -> Judge
+QuestionDecomposer -> EvidencePlanner -> Solver -> Skeptic -> RedTeam -> SolverRevision -> Synthesizer -> Counterfactual -> Calibration -> Judge
 
 ### `fast_research`
 
-QuestionDecomposer -> EvidencePlanner -> Solver -> Skeptic -> RedTeam -> Calibration -> Judge
+QuestionDecomposer -> EvidencePlanner -> Solver -> Skeptic -> RedTeam -> Counterfactual -> Calibration -> Judge
 
 `--fast` can also be used to skip revision+synthesizer in compatible flows.
 

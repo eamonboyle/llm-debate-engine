@@ -3,6 +3,7 @@ import {
     AgentResponse,
     AgentRun,
     Calibration,
+    Counterfactual,
     Critique,
     EvidencePlan,
     Judgement,
@@ -36,6 +37,12 @@ export function getCalibration(step: AgentRun): Calibration | null {
 export function getEvidencePlan(step: AgentRun): EvidencePlan | null {
     if (!step.output) return null;
     if (step.output.kind !== "evidence_plan") return null;
+    return step.output.data;
+}
+
+export function getCounterfactual(step: AgentRun): Counterfactual | null {
+    if (!step.output) return null;
+    if (step.output.kind !== "counterfactual") return null;
     return step.output.data;
 }
 

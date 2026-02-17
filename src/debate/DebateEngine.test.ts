@@ -128,10 +128,23 @@ describe("DebateEngine presets", () => {
                         }),
                     ),
                 } as any,
+                counterfactual: {
+                    name: "CounterfactualAgent",
+                    run: vi.fn().mockResolvedValue(
+                        step("s6", "CounterfactualAgent", "research", {
+                            kind: "counterfactual",
+                            data: {
+                                failureModes: ["Unseen domain shift"],
+                                triggerConditions: ["Major policy change"],
+                                mitigations: ["Re-run with updated evidence"],
+                            },
+                        }),
+                    ),
+                } as any,
                 calibration: {
                     name: "CalibrationAgent",
                     run: vi.fn().mockResolvedValue(
-                        step("s6", "CalibrationAgent", "research", {
+                        step("s7", "CalibrationAgent", "research", {
                             kind: "calibration",
                             data: {
                                 adjustedConfidence: 0.65,
@@ -144,7 +157,7 @@ describe("DebateEngine presets", () => {
                 judge: {
                     name: "JudgeAgent",
                     run: vi.fn().mockResolvedValue(
-                        step("s7", "JudgeAgent", "research", {
+                        step("s8", "JudgeAgent", "research", {
                             kind: "judgement",
                             data: {
                                 rubricScores: {
@@ -177,6 +190,7 @@ describe("DebateEngine presets", () => {
             "RedTeamAgent",
             "SolverRevisionAgent",
             "SynthesizerAgent",
+            "CounterfactualAgent",
             "CalibrationAgent",
             "JudgeAgent",
         ]);

@@ -138,6 +138,61 @@ function renderStructuredSummary(output: unknown) {
         );
     }
 
+    if (kind === "counterfactual") {
+        const failureModes = Array.isArray(data.failureModes)
+            ? data.failureModes
+                  .filter((v): v is string => typeof v === "string")
+                  .slice(0, 5)
+            : [];
+        const triggerConditions = Array.isArray(data.triggerConditions)
+            ? data.triggerConditions
+                  .filter((v): v is string => typeof v === "string")
+                  .slice(0, 5)
+            : [];
+        const mitigations = Array.isArray(data.mitigations)
+            ? data.mitigations
+                  .filter((v): v is string => typeof v === "string")
+                  .slice(0, 5)
+            : [];
+        return (
+            <div className="card" style={{ marginTop: 12 }}>
+                <div className="small muted">Structured summary</div>
+                {failureModes.length > 0 ? (
+                    <>
+                        <p style={{ marginTop: 6, marginBottom: 4 }}>Failure modes</p>
+                        <ul>
+                            {failureModes.map((item, idx) => (
+                                <li key={`fm-${idx}`}>{item}</li>
+                            ))}
+                        </ul>
+                    </>
+                ) : null}
+                {triggerConditions.length > 0 ? (
+                    <>
+                        <p style={{ marginTop: 6, marginBottom: 4 }}>
+                            Trigger conditions
+                        </p>
+                        <ul>
+                            {triggerConditions.map((item, idx) => (
+                                <li key={`tc-${idx}`}>{item}</li>
+                            ))}
+                        </ul>
+                    </>
+                ) : null}
+                {mitigations.length > 0 ? (
+                    <>
+                        <p style={{ marginTop: 6, marginBottom: 4 }}>Mitigations</p>
+                        <ul>
+                            {mitigations.map((item, idx) => (
+                                <li key={`mg-${idx}`}>{item}</li>
+                            ))}
+                        </ul>
+                    </>
+                ) : null}
+            </div>
+        );
+    }
+
     return null;
 }
 

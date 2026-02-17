@@ -14,11 +14,13 @@ import { SolverRevisionAgent } from "../agents/SolverRevisionAgent";
 import { SynthesizerAgent } from "../agents/SynthesizerAgent";
 import { QuestionDecomposerAgent } from "../agents/QuestionDecomposerAgent";
 import { EvidencePlannerAgent } from "../agents/EvidencePlannerAgent";
+import { CounterfactualAgent } from "../agents/CounterfactualAgent";
 import { RedTeamAgent } from "../agents/RedTeamAgent";
 import { CalibrationAgent } from "../agents/CalibrationAgent";
 import { JudgeAgent } from "../agents/JudgeAgent";
 import {
     getCalibration,
+    getCounterfactual,
     getCritique,
     getEvidencePlan,
     getJudgement,
@@ -45,6 +47,7 @@ export type DebateEngineDeps = {
         synthesizer?: SynthesizerAgent;
         decomposer?: QuestionDecomposerAgent;
         evidencePlanner?: EvidencePlannerAgent;
+        counterfactual?: CounterfactualAgent;
         redTeam?: RedTeamAgent;
         calibration?: CalibrationAgent;
         judge?: JudgeAgent;
@@ -63,6 +66,7 @@ export class DebateEngine {
         synthesizer: SynthesizerAgent;
         decomposer: QuestionDecomposerAgent;
         evidencePlanner: EvidencePlannerAgent;
+        counterfactual: CounterfactualAgent;
         redTeam: RedTeamAgent;
         calibration: CalibrationAgent;
         judge: JudgeAgent;
@@ -79,6 +83,8 @@ export class DebateEngine {
             decomposer: deps.agents?.decomposer ?? new QuestionDecomposerAgent(),
             evidencePlanner:
                 deps.agents?.evidencePlanner ?? new EvidencePlannerAgent(),
+            counterfactual:
+                deps.agents?.counterfactual ?? new CounterfactualAgent(),
             redTeam: deps.agents?.redTeam ?? new RedTeamAgent(),
             calibration: deps.agents?.calibration ?? new CalibrationAgent(),
             judge: deps.agents?.judge ?? new JudgeAgent(),
@@ -213,6 +219,21 @@ export class DebateEngine {
             if (preset !== "standard") {
                 if (!quiet)
                     console.log(
+                        "\nCounterfactual agent is probing failure conditions...",
+                    );
+                const counterfactualStep = await this.agents.counterfactual.run(
+                    ctx,
+                    this.llm,
+                    {
+                        model: opts.model,
+                        verbose,
+                        proposal,
+                    },
+                );
+                pushAndLog("Counterfactual", counterfactualStep);
+
+                if (!quiet)
+                    console.log(
                         "\nCalibration agent is calibrating fast-mode answer...",
                     );
                 const calibrationStep = await this.agents.calibration.run(
@@ -304,6 +325,28 @@ export class DebateEngine {
         const finalProposal = synthesized ?? revision;
 
         if (preset !== "standard") {
+            if (!quiet)
+                console.log(
+                    "\nCounterfactual agent is probing failure conditions...",
+                );
+            const counterfactualStep = await this.agents.counterfactual.run(
+                ctx,
+                this.llm,
+                {
+                    model: opts.model,
+                    verbose,
+                    proposal: finalProposal,
+                },
+            );
+            pushAndLog("Counterfactual", counterfactualStep);
+            const counterfactual = getCounterfactual(counterfactualStep);
+            if (counterfactual?.failureModes?.length) {
+                finalProposal.assumptions = [
+                    ...finalProposal.assumptions,
+                    `Counterfactual risk: ${counterfactual.failureModes[0]}`,
+                ];
+            }
+
             if (!quiet)
                 console.log("\nCalibration agent is calibrating final answer...");
             const calibrationStep = await this.agents.calibration.run(this.llm, {

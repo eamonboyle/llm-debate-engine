@@ -32,6 +32,12 @@ export type EvidencePlan = {
     riskLevel: 1 | 2 | 3 | 4 | 5;
 };
 
+export type Counterfactual = {
+    failureModes: string[];
+    triggerConditions: string[];
+    mitigations: string[];
+};
+
 export type Calibration = {
     adjustedConfidence: number;
     rationale: string;
@@ -58,6 +64,7 @@ export type AgentOutput =
     | { kind: "critique"; data: Critique }
     | { kind: "decomposition"; data: QuestionDecomposition }
     | { kind: "evidence_plan"; data: EvidencePlan }
+    | { kind: "counterfactual"; data: Counterfactual }
     | { kind: "calibration"; data: Calibration }
     | { kind: "judgement"; data: Judgement };
 

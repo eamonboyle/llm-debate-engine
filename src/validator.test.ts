@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
     validateAgentResponse,
     validateCalibration,
+    validateCounterfactual,
     validateCritique,
     validateEvidencePlan,
     validateJudgement,
@@ -162,6 +163,26 @@ describe("validateEvidencePlan", () => {
             verificationChecks: ["x"],
             majorUnknowns: ["ok"],
             riskLevel: 9,
+        });
+        expect(r.ok).toBe(false);
+    });
+});
+
+describe("validateCounterfactual", () => {
+    it("accepts valid counterfactual analysis", () => {
+        const r = validateCounterfactual({
+            failureModes: ["Model hallucinates stale facts"],
+            triggerConditions: ["Rapidly changing factual landscape"],
+            mitigations: ["Require independent source checks"],
+        });
+        expect(r.ok).toBe(true);
+    });
+
+    it("rejects malformed counterfactual outputs", () => {
+        const r = validateCounterfactual({
+            failureModes: [],
+            triggerConditions: ["x"],
+            mitigations: ["ok"],
         });
         expect(r.ok).toBe(false);
     });
