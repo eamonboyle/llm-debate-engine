@@ -1,8 +1,13 @@
+import type { Metadata } from "next";
 import { MetricCard } from "../components/MetricCard";
 import { OverviewCharts } from "../components/charts/OverviewCharts";
 import { ResearchTrendCharts } from "../components/charts/ResearchTrendCharts";
 import { MetricGlossary } from "../components/MetricGlossary";
 import { loadAnalysisIndex } from "../lib/data";
+
+export const metadata: Metadata = {
+    title: "Overview",
+};
 
 export default async function OverviewPage() {
     const index = await loadAnalysisIndex();
@@ -12,8 +17,9 @@ export default async function OverviewPage() {
             <section className="stack">
                 <h1 className="title">LLM Research Dashboard</h1>
                 <p className="subtitle">
-                    No analysis index found. Generate it with{" "}
-                    <code>pnpm analyze</code> from the repository root.
+                    No data available yet. Run <code>pnpm analyze</code> locally
+                    to generate the analysis index, or ensure run artifacts are
+                    present.
                 </p>
             </section>
         );

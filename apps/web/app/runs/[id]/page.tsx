@@ -1,5 +1,19 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { loadRunById } from "../../../lib/data";
+
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+    const { id } = await params;
+    const run = await loadRunById(id);
+    const title = run
+        ? `${run.question.slice(0, 50)}${run.question.length > 50 ? "…" : ""}`
+        : id;
+    return { title: `Run: ${title}` };
+}
 
 function isRecord(v: unknown): v is Record<string, unknown> {
     return typeof v === "object" && v !== null;

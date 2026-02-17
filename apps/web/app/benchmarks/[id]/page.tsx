@@ -1,5 +1,19 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { loadBenchmarkById } from "../../../lib/data";
+
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+    const { id } = await params;
+    const benchmark = await loadBenchmarkById(id);
+    const title = benchmark
+        ? `${benchmark.question.slice(0, 50)}${benchmark.question.length > 50 ? "…" : ""}`
+        : id;
+    return { title: `Benchmark: ${title}` };
+}
 import { BenchmarkDetailCharts } from "../../../components/charts/BenchmarkDetailCharts";
 import { inferModeLabel } from "../../../lib/modeLabeler";
 

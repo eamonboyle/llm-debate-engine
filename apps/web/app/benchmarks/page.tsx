@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
     filterBenchmarkArtifacts,
     loadBenchmarkArtifacts,
@@ -8,6 +9,10 @@ import {
     paginateItems,
     resolveSortOrder,
 } from "../../lib/listPagination";
+
+export const metadata: Metadata = {
+    title: "Benchmarks",
+};
 
 type BenchmarkSearchParams = {
     q?: string;

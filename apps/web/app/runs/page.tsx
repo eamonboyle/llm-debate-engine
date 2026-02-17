@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { filterRunArtifacts, loadRunArtifacts } from "../../lib/data";
 import { sortArtifactsByCreatedAt } from "../../lib/artifactSort";
 import {
@@ -5,6 +6,10 @@ import {
     paginateItems,
     resolveSortOrder,
 } from "../../lib/listPagination";
+
+export const metadata: Metadata = {
+    title: "Runs",
+};
 
 type RunsSearchParams = {
     q?: string;

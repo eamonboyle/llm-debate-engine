@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import { loadBenchmarkArtifacts, loadBenchmarksByIds } from "../../../lib/data";
 import { CompareDeltaChart } from "../../../components/charts/CompareDeltaChart";
 import { buildBenchmarkComparePayload } from "../../../lib/benchmarkCompare";
+
+export const metadata: Metadata = {
+    title: "Benchmark compare",
+};
 
 type CompareSearchParams = {
     left?: string;

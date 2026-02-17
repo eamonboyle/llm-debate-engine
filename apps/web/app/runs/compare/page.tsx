@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import { RunCompareDeltaChart } from "../../../components/charts/RunCompareDeltaChart";
 import { loadRunArtifacts } from "../../../lib/data";
 import { buildRunComparePayload } from "../../../lib/runCompare";
+
+export const metadata: Metadata = {
+    title: "Run compare",
+};
 
 type CompareSearchParams = {
     left?: string;
