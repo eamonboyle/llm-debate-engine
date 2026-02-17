@@ -209,7 +209,8 @@ API endpoints are also available in the web app:
 - `GET /api/benchmarks/:id`
 - `GET /api/benchmarks/:id/pairs`
 
-List routes support query filters: `q`, `model`, `preset`, `fast`, `from`, `to`.
+List routes support query filters: `q`, `model`, `preset`, `fast`, `from`, `to`,
+plus pagination/sort params: `sort`, `offset`, `limit`.
 
 The benchmark pairs endpoint prefers `analysis-benchmark-pairs.json` when available.
 

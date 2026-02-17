@@ -221,6 +221,28 @@ describe("web api routes", () => {
             }),
             "utf-8",
         );
+        await writeFile(
+            join(dir, "benchmark_b.json"),
+            JSON.stringify({
+                kind: "benchmark",
+                id: "benchmark_b",
+                question: "Beta benchmark",
+                metadata: {
+                    createdAt: "2025-02-01T00:00:00.000Z",
+                    model: "gpt-beta",
+                    pipelinePreset: "research_deep",
+                    fastMode: true,
+                },
+                payload: {
+                    runs: 1,
+                    modeCount: 1,
+                    modeSizes: [1],
+                    divergenceEntropy: 0,
+                    summary: { stability: { pairwiseMean: 1, pairs: [] } },
+                },
+            }),
+            "utf-8",
+        );
 
         const runResponse = await getRuns(
             new Request("http://localhost/api/runs?model=beta&fast=true"),
@@ -240,6 +262,119 @@ describe("web api routes", () => {
         };
         expect(benchmarkJson.filtered).toBe(1);
         expect(benchmarkJson.items[0].id).toBe("benchmark_a");
+    });
+
+    it("supports runs and benchmarks pagination and oldest sort", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_a.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_a",
+                question: "A question",
+                metadata: {
+                    createdAt: "2025-01-01T00:00:00.000Z",
+                    model: "gpt",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: { id: "run_a", finalAnswer: "A", steps: [], metrics: {} },
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "run_b.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_b",
+                question: "B question",
+                metadata: {
+                    createdAt: "2025-02-01T00:00:00.000Z",
+                    model: "gpt",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: { id: "run_b", finalAnswer: "B", steps: [], metrics: {} },
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "benchmark_a.json"),
+            JSON.stringify({
+                kind: "benchmark",
+                id: "benchmark_a",
+                question: "A benchmark",
+                metadata: {
+                    createdAt: "2025-01-01T00:00:00.000Z",
+                    model: "gpt",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                payload: {
+                    runs: 1,
+                    modeCount: 1,
+                    modeSizes: [1],
+                    divergenceEntropy: 0,
+                    summary: { stability: { pairwiseMean: 1, pairs: [] } },
+                },
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "benchmark_b.json"),
+            JSON.stringify({
+                kind: "benchmark",
+                id: "benchmark_b",
+                question: "B benchmark",
+                metadata: {
+                    createdAt: "2025-02-01T00:00:00.000Z",
+                    model: "gpt",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                payload: {
+                    runs: 1,
+                    modeCount: 1,
+                    modeSizes: [1],
+                    divergenceEntropy: 0,
+                    summary: { stability: { pairwiseMean: 1, pairs: [] } },
+                },
+            }),
+            "utf-8",
+        );
+
+        const runsResponse = await getRuns(
+            new Request("http://localhost/api/runs?sort=oldest&offset=0&limit=1"),
+        );
+        expect(runsResponse.status).toBe(200);
+        const runsJson = (await runsResponse.json()) as {
+            offset: number;
+            limit: number;
+            hasMore: boolean;
+            items: Array<{ id: string }>;
+        };
+        expect(runsJson.offset).toBe(0);
+        expect(runsJson.limit).toBe(1);
+        expect(runsJson.hasMore).toBe(true);
+        expect(runsJson.items[0].id).toBe("run_a");
+
+        const benchmarksResponse = await getBenchmarks(
+            new Request(
+                "http://localhost/api/benchmarks?sort=oldest&offset=1&limit=1",
+            ),
+        );
+        expect(benchmarksResponse.status).toBe(200);
+        const benchmarksJson = (await benchmarksResponse.json()) as {
+            offset: number;
+            limit: number;
+            hasMore: boolean;
+            items: Array<{ id: string }>;
+        };
+        expect(benchmarksJson.offset).toBe(1);
+        expect(benchmarksJson.limit).toBe(1);
+        expect(benchmarksJson.hasMore).toBe(false);
+        expect(benchmarksJson.items[0].id).toBe("benchmark_b");
     });
 
     it("returns benchmark compare deltas", async () => {

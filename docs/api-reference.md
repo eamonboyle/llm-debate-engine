@@ -31,6 +31,9 @@ Query params:
 - `fast` (`true`/`false`)
 - `from` datetime lower bound (`datetime-local` or ISO-compatible)
 - `to` datetime upper bound
+- `sort` (`newest` default, `oldest`)
+- `offset` zero-based pagination offset (default `0`)
+- `limit` page size (default `100`, max `500`)
 
 Example:
 
@@ -44,7 +47,8 @@ Returns a single run artifact or 404.
 
 ## `GET /api/benchmarks`
 
-Returns benchmark artifact list with same filter params as `/api/runs`.
+Returns benchmark artifact list with same filter params and pagination params as
+`/api/runs`.
 
 Example:
 
