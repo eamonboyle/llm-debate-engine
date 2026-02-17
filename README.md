@@ -1,6 +1,6 @@
 # LLM Debate Research Platform
 
-**Live dashboard:** [llm-debate-research.vercel.app](https://llm-debate-research.vercel.app/)
+**Live dashboard:** [llm-debate-research.vercel.app](https://llm-debate-research.vercel.app/) — explore runs, benchmarks, and metrics without installing anything.
 
 A multi-agent system for running structured LLM debates, analyzing outputs, and comparing results over time. The platform comprises:
 
@@ -102,7 +102,7 @@ All-in-one export (CSV, markdown, bundle, chunks):
 pnpm analyze:full
 ```
 
-### Start research UI
+### Start research UI (local)
 
 ```bash
 pnpm web:dev
@@ -113,6 +113,8 @@ Production build:
 ```bash
 pnpm web:build
 ```
+
+The web app reads from `runs/` — run `pnpm analyze` first so `analysis-index.json` (or `analysis-bundle.json`) exists.
 
 ## CLI reference
 
@@ -195,7 +197,7 @@ The `apps/web` dashboard provides:
 - sort order (newest/oldest)
 - pagination controls (page + page size)
 
-Data is loaded from local filesystem artifacts in `runs/`. If `analysis-index.json` is missing, the UI falls back to `analysis-bundle.json`.
+Data is loaded from local filesystem artifacts in `runs/`. If `analysis-index.json` is missing, the UI falls back to `analysis-bundle.json`. The [live dashboard](https://llm-debate-research.vercel.app/) uses pre-built analysis from the repository.
 
 **REST API** — Endpoints exposed by the web app:
 
@@ -209,6 +211,10 @@ Data is loaded from local filesystem artifacts in `runs/`. If `analysis-index.js
 - `GET /api/benchmarks/:id/pairs`
 
 List routes support query filters (`q`, `model`, `preset`, `fast`, `from`, `to`) and pagination/sort parameters (`sort`, `offset`, `limit`, `page`, `pageSize`). Responses include pagination metadata (`page`, `totalPages`, `prevPage`, `nextPage`, `offset`, `limit`, `hasMore`). The benchmark pairs endpoint prefers `analysis-benchmark-pairs.json` when available.
+
+## Deployment
+
+The web app deploys to [Vercel](https://vercel.com) via `apps/web/vercel.json`. Deploy your own instance to explore your own `runs/` artifacts: run `pnpm analyze` (or `pnpm analyze:full`) locally, commit the generated `runs/analysis-*.json` files, then connect the repo to Vercel.
 
 ## Testing
 
