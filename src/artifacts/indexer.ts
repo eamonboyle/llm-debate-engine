@@ -294,7 +294,7 @@ export async function buildAnalysisIndex(
         const critique = run.metrics.critique ?? {};
         const quality = run.metrics.quality;
         const research = run.metrics.research;
-        const counterfactualFailureModes = run.steps
+        const counterfactualFailureModesFromSteps = run.steps
             .filter((step) => step.output?.kind === "counterfactual")
             .flatMap((step) =>
                 step.output?.kind === "counterfactual"
@@ -305,6 +305,22 @@ export async function buildAnalysisIndex(
                 (mode): mode is string =>
                     typeof mode === "string" && mode.trim().length > 0,
             );
+        const metricsCounterfactualFailureModeCount =
+            typeof research?.counterfactualFailureModeCount === "number"
+                ? research.counterfactualFailureModeCount
+                : undefined;
+        const metricsTopCounterfactualFailureMode =
+            typeof research?.topCounterfactualFailureMode === "string" &&
+            research.topCounterfactualFailureMode.trim().length > 0
+                ? research.topCounterfactualFailureMode
+                : undefined;
+        const counterfactualFailureModeCount =
+            counterfactualFailureModesFromSteps.length > 0
+                ? counterfactualFailureModesFromSteps.length
+                : metricsCounterfactualFailureModeCount;
+        const topCounterfactualFailureMode =
+            counterfactualFailureModesFromSteps[0] ??
+            metricsTopCounterfactualFailureMode;
 
         presets[artifact.metadata.pipelinePreset] += 1;
 
@@ -328,9 +344,19 @@ export async function buildAnalysisIndex(
             evidenceRiskLevelDistribution[bucket] =
                 (evidenceRiskLevelDistribution[bucket] ?? 0) + 1;
         }
-        for (const failureMode of counterfactualFailureModes) {
+        for (const failureMode of counterfactualFailureModesFromSteps) {
             counterfactualFailureModeCounts[failureMode] =
                 (counterfactualFailureModeCounts[failureMode] ?? 0) + 1;
+        }
+        if (
+            counterfactualFailureModesFromSteps.length === 0 &&
+            topCounterfactualFailureMode &&
+            typeof counterfactualFailureModeCount === "number" &&
+            counterfactualFailureModeCount > 0
+        ) {
+            counterfactualFailureModeCounts[topCounterfactualFailureMode] =
+                (counterfactualFailureModeCounts[topCounterfactualFailureMode] ??
+                    0) + counterfactualFailureModeCount;
         }
 
         const issues = run.steps
@@ -391,13 +417,12 @@ export async function buildAnalysisIndex(
                 : undefined,
             research:
                 typeof research?.evidenceRiskLevel === "number" ||
-                counterfactualFailureModes.length > 0
+                typeof counterfactualFailureModeCount === "number" ||
+                typeof topCounterfactualFailureMode === "string"
                     ? {
                           evidenceRiskLevel: research?.evidenceRiskLevel,
-                          counterfactualFailureModeCount:
-                              counterfactualFailureModes.length,
-                          topCounterfactualFailureMode:
-                              counterfactualFailureModes[0],
+                          counterfactualFailureModeCount,
+                          topCounterfactualFailureMode,
                       }
                     : undefined,
         };
@@ -616,6 +641,10 @@ export async function buildAndWriteAnalysisIndex(opts?: {
             stepCount: run.stepCount,
             issueCount: run.critique.issueCount,
             evidenceRiskLevel: run.research?.evidenceRiskLevel ?? "",
+            counterfactualFailureModeCount:
+                run.research?.counterfactualFailureModeCount ?? "",
+            topCounterfactualFailureMode:
+                run.research?.topCounterfactualFailureMode ?? "",
             maxSeverity: run.critique.maxSeverity ?? "",
             solverConfidence: run.confidence.solver ?? "",
             revisionConfidence: run.confidence.revision ?? "",
@@ -651,6 +680,8 @@ export async function buildAndWriteAnalysisIndex(opts?: {
             "stepCount",
             "issueCount",
             "evidenceRiskLevel",
+            "counterfactualFailureModeCount",
+            "topCounterfactualFailureMode",
             "maxSeverity",
             "solverConfidence",
             "revisionConfidence",

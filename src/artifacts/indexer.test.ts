@@ -274,6 +274,60 @@ describe("buildAnalysisIndex", () => {
         expect(index.aggregates.outlierRuns[0].avgSimilarity).toBeCloseTo(0.225, 3);
     });
 
+    it("falls back to run metrics for counterfactual summaries when steps are missing", async () => {
+        const dir = await createTempRunsDir();
+
+        const run = {
+            kind: "run",
+            id: "run_metrics_fallback",
+            question: "Fallback question",
+            metadata: {
+                schemaVersion: 1,
+                createdAt: new Date().toISOString(),
+                model: "gpt-test",
+                fastMode: false,
+                pipelinePreset: "research_deep",
+                pipelineVersion: "1.0.0",
+                source: "cli",
+            },
+            run: {
+                id: "run_metrics_fallback",
+                createdAt: new Date().toISOString(),
+                question: "Fallback question",
+                steps: [],
+                finalAnswer: "A",
+                metrics: {
+                    confidence: {},
+                    critique: {},
+                    research: {
+                        evidenceRiskLevel: 3,
+                        counterfactualFailureModeCount: 2,
+                        topCounterfactualFailureMode: "Metric-only failure mode",
+                    },
+                },
+            },
+        };
+
+        await writeFile(
+            join(dir, "run_metrics_fallback.json"),
+            JSON.stringify(run),
+            "utf-8",
+        );
+
+        const index = await buildAnalysisIndex(dir);
+        expect(index.runs).toHaveLength(1);
+        expect(index.runs[0].research?.evidenceRiskLevel).toBe(3);
+        expect(index.runs[0].research?.counterfactualFailureModeCount).toBe(2);
+        expect(index.runs[0].research?.topCounterfactualFailureMode).toBe(
+            "Metric-only failure mode",
+        );
+        expect(
+            index.aggregates.counterfactualFailureModeCounts[
+                "Metric-only failure mode"
+            ],
+        ).toBe(2);
+    });
+
     it("writes optional CSV, markdown, bundle, and chunk exports", async () => {
         const dir = await createTempRunsDir();
 
