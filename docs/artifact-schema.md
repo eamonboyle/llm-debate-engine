@@ -116,6 +116,15 @@ pnpm analyze -- --csv --markdown --bundle --chunks
 - `analysis-bundle.json` (index + parsed artifacts for sharing)
 - `analysis-benchmark-pairs.json` (pairwise similarity chunk)
 
+Optional filters while building index:
+
+- `--question`
+- `--model`
+- `--preset`
+- `--fast-mode`
+- `--created-after`
+- `--created-before`
+
 ## Compatibility notes
 
 - Loader ignores derived analysis JSON files (`analysis-index`, bundle, pairwise chunk).
