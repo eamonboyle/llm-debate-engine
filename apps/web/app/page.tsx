@@ -143,6 +143,9 @@ export default async function OverviewPage() {
 
             <ResearchTrendCharts
                 presets={index.aggregates.presets}
+                evidenceRiskDistribution={
+                    evidencePlanning.riskLevelDistribution ?? {}
+                }
                 benchmarks={index.benchmarks.map((benchmark) => ({
                     id: benchmark.id,
                     createdAt: benchmark.createdAt,

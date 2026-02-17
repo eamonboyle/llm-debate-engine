@@ -51,6 +51,9 @@ Interpretation:
   (1=low risk, 5=high risk) across included runs.
 - Higher values suggest question sets or prompt setups are pushing the system
   into higher-uncertainty / higher-stakes reasoning terrain.
+- The **Evidence planner risk distribution** bar chart shows score frequency.
+  A right-skewed distribution (more 4/5 scores) indicates consistently
+  high-risk planning conditions across runs.
 
 ## 4) Outlier runs table
 

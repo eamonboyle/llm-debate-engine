@@ -16,6 +16,7 @@ import {
 
 type ResearchTrendChartsProps = {
     presets: Record<string, number>;
+    evidenceRiskDistribution: Record<string, number>;
     benchmarks: Array<{
         id: string;
         createdAt: string;
@@ -34,6 +35,7 @@ function shortLabel(id: string, createdAt: string, idx: number) {
 
 export function ResearchTrendCharts({
     presets,
+    evidenceRiskDistribution,
     benchmarks,
 }: ResearchTrendChartsProps) {
     const [mounted, setMounted] = useState(false);
@@ -45,6 +47,18 @@ export function ResearchTrendCharts({
         preset,
         count,
     }));
+    const evidenceRiskRows = Object.entries(evidenceRiskDistribution)
+        .map(([riskLevel, count]) => ({
+            riskLevel,
+            count,
+            numericRisk: Number(riskLevel),
+        }))
+        .sort((a, b) => {
+            if (Number.isFinite(a.numericRisk) && Number.isFinite(b.numericRisk)) {
+                return a.numericRisk - b.numericRisk;
+            }
+            return a.riskLevel.localeCompare(b.riskLevel);
+        });
 
     const benchmarkTrendRows = benchmarks
         .slice()
@@ -57,7 +71,8 @@ export function ResearchTrendCharts({
 
     if (!mounted) {
         return (
-            <div className="two-col">
+            <div className="three-col">
+                <div className="card" style={{ height: 340 }} />
                 <div className="card" style={{ height: 340 }} />
                 <div className="card" style={{ height: 340 }} />
             </div>
@@ -65,7 +80,7 @@ export function ResearchTrendCharts({
     }
 
     return (
-        <div className="two-col">
+        <div className="three-col">
             <div className="card" style={{ height: 340 }}>
                 <h3 style={{ marginTop: 0 }}>Preset usage distribution</h3>
                 <ResponsiveContainer width="100%" height="100%">
@@ -103,6 +118,24 @@ export function ResearchTrendCharts({
                             name="stabilityPairwiseMean"
                         />
                     </LineChart>
+                </ResponsiveContainer>
+            </div>
+            <div className="card" style={{ height: 340 }}>
+                <h3 style={{ marginTop: 0 }}>Evidence planner risk distribution</h3>
+                {evidenceRiskRows.length === 0 ? (
+                    <p className="small muted">
+                        No evidence planner risk data available.
+                    </p>
+                ) : null}
+                <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={evidenceRiskRows}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                        <XAxis dataKey="riskLevel" stroke="#94a3b8" />
+                        <YAxis stroke="#94a3b8" />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="count" fill="#34d399" />
+                    </BarChart>
                 </ResponsiveContainer>
             </div>
         </div>
