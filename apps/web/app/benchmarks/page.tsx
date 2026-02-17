@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CollapsibleFilterCard } from "../../components/CollapsibleFilterCard";
-import { ResponsiveTable, TruncateText } from "../../components/ResponsiveTable";
+import {
+    ResponsiveTable,
+    TruncateText,
+} from "../../components/ResponsiveTable";
 import { MetricCard } from "../../components/MetricCard";
 import {
     filterBenchmarkArtifacts,
@@ -57,7 +60,8 @@ export default async function BenchmarksPage({
             <div>
                 <h1 className="title">Benchmark artifacts</h1>
                 <p className="subtitle">
-                    Inspect benchmark-level divergence, mode structure, and stability.
+                    Inspect benchmark-level divergence, mode structure, and
+                    stability.
                 </p>
             </div>
 
@@ -101,80 +105,89 @@ export default async function BenchmarksPage({
             <CollapsibleFilterCard
                 resultsSummary={
                     <>
-                        {paging.startDisplay}-{paging.endDisplay} of {filtered.length} benchmarks
+                        {paging.startDisplay}-{paging.endDisplay} of{" "}
+                        {filtered.length} benchmarks
                     </>
                 }
             >
-            <form method="get">
-                <div className="filter-grid">
-                    <input
-                        name="q"
-                        placeholder="Search benchmark question"
-                        defaultValue={params.q ?? ""}
-                        className="input"
-                    />
-                    <input
-                        name="model"
-                        placeholder="Model contains..."
-                        defaultValue={params.model ?? ""}
-                        className="input"
-                    />
-                    <input
-                        name="preset"
-                        placeholder="Preset (standard, research_deep...)"
-                        defaultValue={params.preset ?? ""}
-                        className="input"
-                    />
-                    <select name="fast" defaultValue={params.fast ?? ""} className="input">
-                        <option value="">Fast mode: any</option>
-                        <option value="true">Fast only</option>
-                        <option value="false">Non-fast only</option>
-                    </select>
-                    <input
-                        type="datetime-local"
-                        name="from"
-                        defaultValue={params.from ?? ""}
-                        className="input"
-                        title="Created at or after"
-                    />
-                    <input
-                        type="datetime-local"
-                        name="to"
-                        defaultValue={params.to ?? ""}
-                        className="input"
-                        title="Created at or before"
-                    />
-                </div>
-                <div className="filter-sort-row">
-                    <select name="sort" defaultValue={sort} className="input">
-                        <option value="newest">Sort: newest first</option>
-                        <option value="oldest">Sort: oldest first</option>
-                    </select>
-                    <select
-                        name="pageSize"
-                        defaultValue={String(paging.pageSize)}
-                        className="input"
-                    >
-                        <option value="10">10 per page</option>
-                        <option value="25">25 per page</option>
-                        <option value="50">50 per page</option>
-                        <option value="100">100 per page</option>
-                    </select>
-                </div>
-                <div className="filter-actions">
-                    <button type="submit" className="button">
-                        Apply filters
-                    </button>
-                    <Link href="/benchmarks" className="button secondary">
-                        Clear
-                    </Link>
-                    <span className="small muted">
-                        Showing {paging.startDisplay}-{paging.endDisplay} of{" "}
-                        {filtered.length} filtered
-                        benchmarks ({benchmarks.length} total)
-                    </span>
-                </div>
-            </form>
+                <form method="get">
+                    <div className="filter-grid">
+                        <input
+                            name="q"
+                            placeholder="Search benchmark question"
+                            defaultValue={params.q ?? ""}
+                            className="input"
+                        />
+                        <input
+                            name="model"
+                            placeholder="Model contains..."
+                            defaultValue={params.model ?? ""}
+                            className="input"
+                        />
+                        <input
+                            name="preset"
+                            placeholder="Preset (standard, research_deep...)"
+                            defaultValue={params.preset ?? ""}
+                            className="input"
+                        />
+                        <select
+                            name="fast"
+                            defaultValue={params.fast ?? ""}
+                            className="input"
+                        >
+                            <option value="">Fast mode: any</option>
+                            <option value="true">Fast only</option>
+                            <option value="false">Non-fast only</option>
+                        </select>
+                        <input
+                            type="datetime-local"
+                            name="from"
+                            defaultValue={params.from ?? ""}
+                            className="input"
+                            title="Created at or after"
+                        />
+                        <input
+                            type="datetime-local"
+                            name="to"
+                            defaultValue={params.to ?? ""}
+                            className="input"
+                            title="Created at or before"
+                        />
+                    </div>
+                    <div className="filter-sort-row">
+                        <select
+                            name="sort"
+                            defaultValue={sort}
+                            className="input"
+                        >
+                            <option value="newest">Sort: newest first</option>
+                            <option value="oldest">Sort: oldest first</option>
+                        </select>
+                        <select
+                            name="pageSize"
+                            defaultValue={String(paging.pageSize)}
+                            className="input"
+                        >
+                            <option value="10">10 per page</option>
+                            <option value="25">25 per page</option>
+                            <option value="50">50 per page</option>
+                            <option value="100">100 per page</option>
+                        </select>
+                    </div>
+                    <div className="filter-actions">
+                        <button type="submit" className="button">
+                            Apply filters
+                        </button>
+                        <Link href="/benchmarks" className="button secondary">
+                            Clear
+                        </Link>
+                        <span className="small muted">
+                            Showing {paging.startDisplay}-{paging.endDisplay} of{" "}
+                            {filtered.length} filtered benchmarks (
+                            {benchmarks.length} total)
+                        </span>
+                    </div>
+                </form>
             </CollapsibleFilterCard>
 
             <div className="card">
@@ -203,7 +216,9 @@ export default async function BenchmarksPage({
                             key: "createdAt",
                             label: "Created",
                             render: (row) =>
-                                new Date((row as { createdAt: string }).createdAt).toLocaleString(),
+                                new Date(
+                                    (row as { createdAt: string }).createdAt,
+                                ).toLocaleString(),
                         },
                         {
                             key: "question",
@@ -211,7 +226,9 @@ export default async function BenchmarksPage({
                             cellClass: "cell-question",
                             render: (row) => (
                                 <TruncateText
-                                    text={(row as { question: string }).question}
+                                    text={
+                                        (row as { question: string }).question
+                                    }
                                     maxLength={80}
                                     className="muted"
                                 />
@@ -233,9 +250,9 @@ export default async function BenchmarksPage({
                             helpKey: "entropy",
                             render: (row) => (
                                 <span className="benchmark-entropy">
-                                    {(row as { entropy: number }).entropy.toFixed(
-                                        3,
-                                    )}
+                                    {(
+                                        row as { entropy: number }
+                                    ).entropy.toFixed(3)}
                                 </span>
                             ),
                         },
@@ -314,7 +331,11 @@ export default async function BenchmarksPage({
                     style={
                         paging.hasPrev
                             ? undefined
-                            : { pointerEvents: "none", opacity: 0.5, textDecoration: "none" }
+                            : {
+                                  pointerEvents: "none",
+                                  opacity: 0.5,
+                                  textDecoration: "none",
+                              }
                     }
                 >
                     Previous
@@ -338,7 +359,11 @@ export default async function BenchmarksPage({
                     style={
                         paging.hasNext
                             ? undefined
-                            : { pointerEvents: "none", opacity: 0.5, textDecoration: "none" }
+                            : {
+                                  pointerEvents: "none",
+                                  opacity: 0.5,
+                                  textDecoration: "none",
+                              }
                     }
                 >
                     Next

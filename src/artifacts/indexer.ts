@@ -61,7 +61,10 @@ function csvEscape(value: unknown): string {
     return text;
 }
 
-function toCsv(rows: Array<Record<string, unknown>>, headers: string[]): string {
+function toCsv(
+    rows: Array<Record<string, unknown>>,
+    headers: string[],
+): string {
     const lines = [headers.join(",")];
     for (const row of rows) {
         lines.push(headers.map((header) => csvEscape(row[header])).join(","));
@@ -181,97 +184,97 @@ export async function buildAnalysisIndex(
     const presetFilter = opts?.presetEquals;
     const fastModeFilter = opts?.fastMode;
     const createdAfter =
-        opts?.createdAfter && !Number.isNaN(new Date(opts.createdAfter).getTime())
+        opts?.createdAfter &&
+        !Number.isNaN(new Date(opts.createdAfter).getTime())
             ? new Date(opts.createdAfter)
             : undefined;
     const createdBefore =
-        opts?.createdBefore && !Number.isNaN(new Date(opts.createdBefore).getTime())
+        opts?.createdBefore &&
+        !Number.isNaN(new Date(opts.createdBefore).getTime())
             ? new Date(opts.createdBefore)
             : undefined;
-    const runs =
-        loaded.runs.filter((artifact) => {
-            if (
-                questionFilter &&
-                questionFilter.length > 0 &&
-                !artifact.question.toLowerCase().includes(questionFilter)
-            ) {
-                return false;
-            }
-            if (
-                modelFilter &&
-                modelFilter.length > 0 &&
-                !artifact.metadata.model.toLowerCase().includes(modelFilter)
-            ) {
-                return false;
-            }
-            if (presetFilter && artifact.metadata.pipelinePreset !== presetFilter) {
-                return false;
-            }
-            if (
-                typeof fastModeFilter === "boolean" &&
-                artifact.metadata.fastMode !== fastModeFilter
-            ) {
-                return false;
-            }
-            const createdAt = new Date(artifact.metadata.createdAt);
-            if (
-                createdAfter &&
-                !Number.isNaN(createdAt.getTime()) &&
-                createdAt < createdAfter
-            ) {
-                return false;
-            }
-            if (
-                createdBefore &&
-                !Number.isNaN(createdAt.getTime()) &&
-                createdAt > createdBefore
-            ) {
-                return false;
-            }
-            return true;
-        });
-    const benchmarks =
-        loaded.benchmarks.filter((artifact) => {
-            if (
-                questionFilter &&
-                questionFilter.length > 0 &&
-                !artifact.question.toLowerCase().includes(questionFilter)
-            ) {
-                return false;
-            }
-            if (
-                modelFilter &&
-                modelFilter.length > 0 &&
-                !artifact.metadata.model.toLowerCase().includes(modelFilter)
-            ) {
-                return false;
-            }
-            if (presetFilter && artifact.metadata.pipelinePreset !== presetFilter) {
-                return false;
-            }
-            if (
-                typeof fastModeFilter === "boolean" &&
-                artifact.metadata.fastMode !== fastModeFilter
-            ) {
-                return false;
-            }
-            const createdAt = new Date(artifact.metadata.createdAt);
-            if (
-                createdAfter &&
-                !Number.isNaN(createdAt.getTime()) &&
-                createdAt < createdAfter
-            ) {
-                return false;
-            }
-            if (
-                createdBefore &&
-                !Number.isNaN(createdAt.getTime()) &&
-                createdAt > createdBefore
-            ) {
-                return false;
-            }
-            return true;
-        });
+    const runs = loaded.runs.filter((artifact) => {
+        if (
+            questionFilter &&
+            questionFilter.length > 0 &&
+            !artifact.question.toLowerCase().includes(questionFilter)
+        ) {
+            return false;
+        }
+        if (
+            modelFilter &&
+            modelFilter.length > 0 &&
+            !artifact.metadata.model.toLowerCase().includes(modelFilter)
+        ) {
+            return false;
+        }
+        if (presetFilter && artifact.metadata.pipelinePreset !== presetFilter) {
+            return false;
+        }
+        if (
+            typeof fastModeFilter === "boolean" &&
+            artifact.metadata.fastMode !== fastModeFilter
+        ) {
+            return false;
+        }
+        const createdAt = new Date(artifact.metadata.createdAt);
+        if (
+            createdAfter &&
+            !Number.isNaN(createdAt.getTime()) &&
+            createdAt < createdAfter
+        ) {
+            return false;
+        }
+        if (
+            createdBefore &&
+            !Number.isNaN(createdAt.getTime()) &&
+            createdAt > createdBefore
+        ) {
+            return false;
+        }
+        return true;
+    });
+    const benchmarks = loaded.benchmarks.filter((artifact) => {
+        if (
+            questionFilter &&
+            questionFilter.length > 0 &&
+            !artifact.question.toLowerCase().includes(questionFilter)
+        ) {
+            return false;
+        }
+        if (
+            modelFilter &&
+            modelFilter.length > 0 &&
+            !artifact.metadata.model.toLowerCase().includes(modelFilter)
+        ) {
+            return false;
+        }
+        if (presetFilter && artifact.metadata.pipelinePreset !== presetFilter) {
+            return false;
+        }
+        if (
+            typeof fastModeFilter === "boolean" &&
+            artifact.metadata.fastMode !== fastModeFilter
+        ) {
+            return false;
+        }
+        const createdAt = new Date(artifact.metadata.createdAt);
+        if (
+            createdAfter &&
+            !Number.isNaN(createdAt.getTime()) &&
+            createdAt < createdAfter
+        ) {
+            return false;
+        }
+        if (
+            createdBefore &&
+            !Number.isNaN(createdAt.getTime()) &&
+            createdAt > createdBefore
+        ) {
+            return false;
+        }
+        return true;
+    });
 
     const issueTypeCounts: Record<string, number> = {};
     const issueSeverityByTypeBuckets: Record<string, SeverityBucket> = {};
@@ -281,7 +284,8 @@ export async function buildAnalysisIndex(
     const evidenceRiskLevels: number[] = [];
     const evidenceRiskLevelDistribution: Record<string, number> = {};
     const counterfactualFailureModeCounts: Record<string, number> = {};
-    const critiqueVsConfidence: AnalysisIndex["aggregates"]["critiqueVsConfidence"] = [];
+    const critiqueVsConfidence: AnalysisIndex["aggregates"]["critiqueVsConfidence"] =
+        [];
     const presets: Record<PipelinePreset, number> = {
         standard: 0,
         research_deep: 0,
@@ -328,7 +332,9 @@ export async function buildAnalysisIndex(
             confidenceSolverToRevision.push(confidence.solverToRevisionDelta);
         }
         if (typeof confidence.revisionToSynthesizerDelta === "number") {
-            confidenceRevisionToSynth.push(confidence.revisionToSynthesizerDelta);
+            confidenceRevisionToSynth.push(
+                confidence.revisionToSynthesizerDelta,
+            );
         }
         if (
             typeof confidence.calibratedAdjusted === "number" &&
@@ -355,8 +361,9 @@ export async function buildAnalysisIndex(
             counterfactualFailureModeCount > 0
         ) {
             counterfactualFailureModeCounts[topCounterfactualFailureMode] =
-                (counterfactualFailureModeCounts[topCounterfactualFailureMode] ??
-                    0) + counterfactualFailureModeCount;
+                (counterfactualFailureModeCounts[
+                    topCounterfactualFailureMode
+                ] ?? 0) + counterfactualFailureModeCount;
         }
 
         const issues = run.steps
@@ -365,7 +372,8 @@ export async function buildAnalysisIndex(
                 step.output?.kind === "critique" ? step.output.data.issues : [],
             );
         for (const issue of issues) {
-            issueTypeCounts[issue.type] = (issueTypeCounts[issue.type] ?? 0) + 1;
+            issueTypeCounts[issue.type] =
+                (issueTypeCounts[issue.type] ?? 0) + 1;
             const bucket = issueSeverityByTypeBuckets[issue.type] ?? {
                 count: 0,
                 sumSeverity: 0,
@@ -399,7 +407,8 @@ export async function buildAnalysisIndex(
                 synthesizer: confidence.synthesizer,
                 calibratedAdjusted: confidence.calibratedAdjusted,
                 solverToRevisionDelta: confidence.solverToRevisionDelta,
-                revisionToSynthesizerDelta: confidence.revisionToSynthesizerDelta,
+                revisionToSynthesizerDelta:
+                    confidence.revisionToSynthesizerDelta,
             },
             critique: {
                 issueCount: issues.length,
@@ -472,7 +481,8 @@ export async function buildAnalysisIndex(
                 ) {
                     continue;
                 }
-                if (pair.i >= runIds.length || pair.j >= runIds.length) continue;
+                if (pair.i >= runIds.length || pair.j >= runIds.length)
+                    continue;
                 sums[pair.i] += pair.similarity;
                 counts[pair.i] += 1;
                 sums[pair.j] += pair.similarity;
@@ -496,7 +506,9 @@ export async function buildAnalysisIndex(
                 runId: runIds[minIndex],
                 avgSimilarity: round3(outlierAvg),
                 zScore:
-                    stdevAvg === 0 ? 0 : round3((outlierAvg - meanAvg) / stdevAvg),
+                    stdevAvg === 0
+                        ? 0
+                        : round3((outlierAvg - meanAvg) / stdevAvg),
             };
         })
         .filter((entry): entry is NonNullable<typeof entry> => entry !== null)
@@ -560,7 +572,9 @@ export async function buildAnalysisIndex(
             issueSeverityByType,
             confidenceDrift: {
                 solverToRevisionMean: round3(mean(confidenceSolverToRevision)),
-                revisionToSynthesizerMean: round3(mean(confidenceRevisionToSynth)),
+                revisionToSynthesizerMean: round3(
+                    mean(confidenceRevisionToSynth),
+                ),
                 calibratedMinusSynthMean: round3(mean(calibratedMinusSynth)),
             },
             confidenceCorrelation: {
@@ -612,7 +626,8 @@ export async function buildAndWriteAnalysisIndex(opts?: {
     const writeBundle = opts?.writeBundle ?? false;
     const bundleFileName = opts?.bundleFileName ?? "analysis-bundle.json";
     const writeChunks = opts?.writeChunks ?? false;
-    const chunkFileName = opts?.chunkFileName ?? "analysis-benchmark-pairs.json";
+    const chunkFileName =
+        opts?.chunkFileName ?? "analysis-benchmark-pairs.json";
     const index = await buildAnalysisIndex(runsDir, {
         questionContains: opts?.questionContains,
         modelContains: opts?.modelContains,

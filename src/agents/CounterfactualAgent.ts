@@ -1,5 +1,10 @@
 import type { ChatMessage, LLMClient } from "../types/llm";
-import type { AgentResponse, AgentRun, Counterfactual, DebateContext } from "../types/agent";
+import type {
+    AgentResponse,
+    AgentRun,
+    Counterfactual,
+    DebateContext,
+} from "../types/agent";
 import { runStructuredWithGuard } from "../core/structuredRunner";
 import { validateCounterfactual } from "../validator";
 
@@ -71,26 +76,27 @@ export class CounterfactualAgent {
         };
 
         try {
-            const { data, attempts } = await runStructuredWithGuard<Counterfactual>(
-                llm,
-                req,
-                validateCounterfactual,
-                (bad, error): ChatMessage[] => [
-                    {
-                        role: "system",
-                        content:
-                            "You are a JSON repair function. Return only JSON matching the schema.",
-                    },
-                    {
-                        role: "user",
-                        content: `Validation failed: ${error}\n\nBad object:\n${JSON.stringify(
-                            bad,
-                            null,
-                            2,
-                        )}`,
-                    },
-                ],
-            );
+            const { data, attempts } =
+                await runStructuredWithGuard<Counterfactual>(
+                    llm,
+                    req,
+                    validateCounterfactual,
+                    (bad, error): ChatMessage[] => [
+                        {
+                            role: "system",
+                            content:
+                                "You are a JSON repair function. Return only JSON matching the schema.",
+                        },
+                        {
+                            role: "user",
+                            content: `Validation failed: ${error}\n\nBad object:\n${JSON.stringify(
+                                bad,
+                                null,
+                                2,
+                            )}`,
+                        },
+                    ],
+                );
 
             return {
                 id: runId("step"),

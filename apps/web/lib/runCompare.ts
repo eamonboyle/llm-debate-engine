@@ -109,7 +109,9 @@ export function summarizeRun(run: RunArtifact): RunCompareSummary {
     const calibratedAdjustedConfidence = toNumberOrNull(
         confidence.calibratedAdjusted,
     );
-    const solverToRevisionDelta = toNumberOrNull(confidence.solverToRevisionDelta);
+    const solverToRevisionDelta = toNumberOrNull(
+        confidence.solverToRevisionDelta,
+    );
     const revisionToSynthesizerDelta = toNumberOrNull(
         confidence.revisionToSynthesizerDelta,
     );
@@ -179,7 +181,10 @@ export function buildRunComparePayload(
         delta: {
             stepCount: right.stepCount - left.stepCount,
             confidence: {
-                solver: delta(right.metrics.confidence.solver, left.metrics.confidence.solver),
+                solver: delta(
+                    right.metrics.confidence.solver,
+                    left.metrics.confidence.solver,
+                ),
                 revision: delta(
                     right.metrics.confidence.revision,
                     left.metrics.confidence.revision,
@@ -203,7 +208,8 @@ export function buildRunComparePayload(
             },
             critique: {
                 issueCount:
-                    right.metrics.critique.issueCount - left.metrics.critique.issueCount,
+                    right.metrics.critique.issueCount -
+                    left.metrics.critique.issueCount,
                 maxSeverity: delta(
                     right.metrics.critique.maxSeverity,
                     left.metrics.critique.maxSeverity,

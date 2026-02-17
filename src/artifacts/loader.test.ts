@@ -14,7 +14,9 @@ async function makeTempRunsDir() {
 
 afterEach(async () => {
     await Promise.all(
-        tempDirs.splice(0).map((dir) => rm(dir, { recursive: true, force: true })),
+        tempDirs
+            .splice(0)
+            .map((dir) => rm(dir, { recursive: true, force: true })),
     );
 });
 
@@ -43,7 +45,11 @@ describe("loadRunArtifacts", () => {
                 source: "cli",
             },
         };
-        await writeFile(join(dir, "run_1.json"), JSON.stringify(payload), "utf-8");
+        await writeFile(
+            join(dir, "run_1.json"),
+            JSON.stringify(payload),
+            "utf-8",
+        );
 
         const loaded = await loadRunArtifacts(dir);
         expect(loaded.runs).toHaveLength(1);

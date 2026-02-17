@@ -26,11 +26,11 @@ Without an explicit architecture decision, feature work risked creating schema c
 
 - Use versioned artifact model (`schemaVersion: 1`) for run and benchmark artifacts.
 - Include metadata required for longitudinal analysis:
-  - model
-  - fast mode
-  - pipeline preset
-  - pipeline version
-  - createdAt
+    - model
+    - fast mode
+    - pipeline preset
+    - pipeline version
+    - createdAt
 - Maintain compatibility with legacy artifact format via loader migration.
 
 ## 3) Analysis flow
@@ -43,9 +43,9 @@ Without an explicit architecture decision, feature work risked creating schema c
 
 - Extend orchestration with preset-driven multi-agent execution.
 - Support research presets in addition to standard baseline:
-  - `standard`
-  - `research_deep`
-  - `fast_research`
+    - `standard`
+    - `research_deep`
+    - `fast_research`
 - New agent outputs are persisted in run steps for downstream analytics.
 
 ## 5) UI data strategy

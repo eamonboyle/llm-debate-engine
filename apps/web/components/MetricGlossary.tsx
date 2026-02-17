@@ -71,7 +71,8 @@ export function MetricGlossary() {
                 </table>
             </div>
             <p className="small muted" style={{ marginTop: 10 }}>
-                See <code>docs/chart-interpretation.md</code> for deeper guidance.
+                See <code>docs/chart-interpretation.md</code> for deeper
+                guidance.
             </p>
         </div>
     );

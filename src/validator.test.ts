@@ -45,8 +45,12 @@ describe("validateAgentResponse", () => {
     });
 
     it("rejects invalid confidence", () => {
-        expect(validateAgentResponse({ ...valid, confidence: 1.5 }).ok).toBe(false);
-        expect(validateAgentResponse({ ...valid, confidence: -0.1 }).ok).toBe(false);
+        expect(validateAgentResponse({ ...valid, confidence: 1.5 }).ok).toBe(
+            false,
+        );
+        expect(validateAgentResponse({ ...valid, confidence: -0.1 }).ok).toBe(
+            false,
+        );
     });
 
     it("rejects keyClaims with JSON-like fragment", () => {
@@ -62,7 +66,11 @@ describe("validateCritique", () => {
     const valid = {
         targetAgent: "SolverAgent",
         issues: [
-            { severity: 3, type: "ambiguity", note: "The claim is underspecified." },
+            {
+                severity: 3,
+                type: "ambiguity",
+                note: "The claim is underspecified.",
+            },
         ],
     } as const;
 
@@ -92,7 +100,9 @@ describe("validateCritique", () => {
     it("rejects invalid severity", () => {
         const r = validateCritique({
             ...valid,
-            issues: [{ severity: 0, type: "factual", note: "Invalid severity." }],
+            issues: [
+                { severity: 0, type: "factual", note: "Invalid severity." },
+            ],
         });
         expect(r.ok).toBe(false);
     });
@@ -149,8 +159,14 @@ describe("validateCalibration", () => {
 describe("validateEvidencePlan", () => {
     it("accepts valid evidence plans", () => {
         const r = validateEvidencePlan({
-            evidenceRequirements: ["Independent evaluations", "Domain citations"],
-            verificationChecks: ["Cross-check core claims", "Verify quantitative assumptions"],
+            evidenceRequirements: [
+                "Independent evaluations",
+                "Domain citations",
+            ],
+            verificationChecks: [
+                "Cross-check core claims",
+                "Verify quantitative assumptions",
+            ],
             majorUnknowns: ["Long-term model drift"],
             riskLevel: 4,
         });

@@ -46,14 +46,13 @@ export function ResponsiveTable<T extends Record<string, unknown>>({
                     <thead>
                         <tr>
                             {tableColumns.map((col) => (
-                                <th
-                                    key={col.key}
-                                    className={col.cellClass}
-                                >
+                                <th key={col.key} className={col.cellClass}>
                                     <span className="table-header-with-help">
                                         {col.label}
                                         {col.helpKey && (
-                                            <InfoTooltip helpKey={col.helpKey} />
+                                            <InfoTooltip
+                                                helpKey={col.helpKey}
+                                            />
                                         )}
                                     </span>
                                 </th>
@@ -64,13 +63,13 @@ export function ResponsiveTable<T extends Record<string, unknown>>({
                         {data.map((row) => (
                             <tr key={getRowId(row)}>
                                 {tableColumns.map((col) => (
-                                    <td
-                                        key={col.key}
-                                        className={col.cellClass}
-                                    >
+                                    <td key={col.key} className={col.cellClass}>
                                         {col.render
                                             ? col.render(row)
-                                            : String((row[col.key] as ReactNode) ?? "")}
+                                            : String(
+                                                  (row[col.key] as ReactNode) ??
+                                                      "",
+                                              )}
                                     </td>
                                 ))}
                             </tr>
@@ -87,14 +86,18 @@ export function ResponsiveTable<T extends Record<string, unknown>>({
                                     <span className="table-header-with-help">
                                         {col.label}
                                         {col.helpKey && (
-                                            <InfoTooltip helpKey={col.helpKey} />
+                                            <InfoTooltip
+                                                helpKey={col.helpKey}
+                                            />
                                         )}
                                     </span>
                                 </dt>
                                 <dd>
                                     {col.render
                                         ? col.render(row)
-                                        : String((row[col.key] as ReactNode) ?? "")}
+                                        : String(
+                                              (row[col.key] as ReactNode) ?? "",
+                                          )}
                                 </dd>
                             </div>
                         ))}
@@ -122,7 +125,8 @@ export function TruncateText({
     lines?: number;
     className?: string;
 }) {
-    const truncated = text.length > maxLength ? truncate(text, maxLength) : text;
+    const truncated =
+        text.length > maxLength ? truncate(text, maxLength) : text;
     const needsTruncation = text.length > maxLength;
 
     if (lines && lines > 1) {

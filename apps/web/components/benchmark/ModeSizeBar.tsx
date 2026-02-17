@@ -31,7 +31,8 @@ export function ModeSizeBar({ modeSizes }: { modeSizes: number[] }) {
                         <span
                             className="mode-size-bar-legend-dot"
                             style={{
-                                background: MODE_COLORS[idx % MODE_COLORS.length],
+                                background:
+                                    MODE_COLORS[idx % MODE_COLORS.length],
                             }}
                         />
                         Mode {idx + 1}: {size}

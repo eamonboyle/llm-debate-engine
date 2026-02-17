@@ -48,10 +48,7 @@ export function paginateItems<T>(
 
 export function buildQueryString<
     TParams extends Record<string, string | undefined>,
->(
-    params: TParams,
-    overrides: Partial<TParams>,
-) {
+>(params: TParams, overrides: Partial<TParams>) {
     const merged: Record<string, string | undefined> = {
         ...params,
         ...overrides,

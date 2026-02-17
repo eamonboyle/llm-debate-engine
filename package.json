@@ -14,7 +14,9 @@
         "web:typecheck": "pnpm --filter @llm-research/web typecheck",
         "typecheck": "tsc --noEmit",
         "test": "vitest run",
-        "test:watch": "vitest"
+        "test:watch": "vitest",
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
     },
     "keywords": [],
     "author": "",

@@ -40,7 +40,10 @@ export default async function BenchmarkDetailPage({
     const thresholdCounts = [
         { threshold: "0.8", modeCount: benchmark.payload.modeCountAt0_8 ?? 0 },
         { threshold: "0.9", modeCount: benchmark.payload.modeCountAt0_9 ?? 0 },
-        { threshold: "0.95", modeCount: benchmark.payload.modeCountAt0_95 ?? 0 },
+        {
+            threshold: "0.95",
+            modeCount: benchmark.payload.modeCountAt0_95 ?? 0,
+        },
     ];
     const modes = benchmark.payload.modes ?? [];
 
@@ -52,7 +55,10 @@ export default async function BenchmarkDetailPage({
                     {benchmark.id} ·{" "}
                     {new Date(benchmark.metadata.createdAt).toLocaleString()}
                 </p>
-                <div className="page-actions" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                <div
+                    className="page-actions"
+                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                >
                     <Link
                         href={`/benchmarks/compare?left=${benchmark.id}`}
                         className="button secondary"
@@ -71,7 +77,10 @@ export default async function BenchmarkDetailPage({
             <div className="grid-4">
                 <div className="card">
                     <div className="metric-label small muted">Question</div>
-                    <div style={{ marginTop: 6 }} className="benchmark-question">
+                    <div
+                        style={{ marginTop: 6 }}
+                        className="benchmark-question"
+                    >
                         {benchmark.question}
                     </div>
                 </div>
@@ -132,7 +141,13 @@ export default async function BenchmarkDetailPage({
                                 hideOnMobile: true,
                                 render: (row) => (
                                     <span className="benchmark-members">
-                                        {(row as { memberLinks: React.ReactNode }).memberLinks}
+                                        {
+                                            (
+                                                row as {
+                                                    memberLinks: React.ReactNode;
+                                                }
+                                            ).memberLinks
+                                        }
                                     </span>
                                 ),
                             },
@@ -143,7 +158,10 @@ export default async function BenchmarkDetailPage({
                                 hideOnMobile: true,
                                 render: (row) => (
                                     <TruncateText
-                                        text={(row as { exemplarPreview: string }).exemplarPreview}
+                                        text={
+                                            (row as { exemplarPreview: string })
+                                                .exemplarPreview
+                                        }
                                         maxLength={120}
                                         lines={2}
                                         className="muted"
@@ -156,7 +174,10 @@ export default async function BenchmarkDetailPage({
                                 showOnlyOnMobile: true,
                                 render: (row) => (
                                     <TruncateText
-                                        text={(row as { exemplarPreview: string }).exemplarPreview}
+                                        text={
+                                            (row as { exemplarPreview: string })
+                                                .exemplarPreview
+                                        }
                                         maxLength={80}
                                         className="muted"
                                     />
@@ -173,19 +194,22 @@ export default async function BenchmarkDetailPage({
                                     };
                                     return (
                                         <span className="benchmark-mode-actions">
-                                            {r.memberRunIds.slice(0, 3).map((runId) => (
-                                                <Link
-                                                    key={runId}
-                                                    href={`/runs/${runId}`}
-                                                    className="button"
-                                                    style={{
-                                                        padding: "0.3rem 0.5rem",
-                                                        fontSize: "0.7rem",
-                                                    }}
-                                                >
-                                                    Trace
-                                                </Link>
-                                            ))}
+                                            {r.memberRunIds
+                                                .slice(0, 3)
+                                                .map((runId) => (
+                                                    <Link
+                                                        key={runId}
+                                                        href={`/runs/${runId}`}
+                                                        className="button"
+                                                        style={{
+                                                            padding:
+                                                                "0.3rem 0.5rem",
+                                                            fontSize: "0.7rem",
+                                                        }}
+                                                    >
+                                                        Trace
+                                                    </Link>
+                                                ))}
                                             {r.memberRunIds.length > 3 && (
                                                 <span className="small muted">
                                                     +{r.memberRunIds.length - 3}

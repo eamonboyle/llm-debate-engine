@@ -62,7 +62,9 @@ export function computeBasicMetrics(run: DebateRun) {
 
     const critiqueIssues = run.steps
         .filter((s) => s.output?.kind === "critique")
-        .flatMap((s) => (s.output?.kind === "critique" ? s.output.data.issues : []));
+        .flatMap((s) =>
+            s.output?.kind === "critique" ? s.output.data.issues : [],
+        );
     if (critiqueIssues.length) {
         const severities = critiqueIssues.map((i) => i.severity);
         run.metrics.critique.maxSeverity = Math.max(...severities);

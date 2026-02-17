@@ -71,7 +71,8 @@ export default async function BenchmarkComparePage({
                                     key={`left-${artifact.id}`}
                                     value={artifact.id}
                                 >
-                                    {artifact.id} · {artifact.question.slice(0, 60)}
+                                    {artifact.id} ·{" "}
+                                    {artifact.question.slice(0, 60)}
                                 </option>
                             ))}
                         </select>
@@ -97,7 +98,8 @@ export default async function BenchmarkComparePage({
                                     key={`right-${artifact.id}`}
                                     value={artifact.id}
                                 >
-                                    {artifact.id} · {artifact.question.slice(0, 60)}
+                                    {artifact.id} ·{" "}
+                                    {artifact.question.slice(0, 60)}
                                 </option>
                             ))}
                         </select>
@@ -107,7 +109,10 @@ export default async function BenchmarkComparePage({
                     <button type="submit" className="button">
                         Compare
                     </button>
-                    <Link href="/benchmarks/compare" className="button secondary">
+                    <Link
+                        href="/benchmarks/compare"
+                        className="button secondary"
+                    >
                         Clear
                     </Link>
                 </div>
@@ -281,7 +286,10 @@ export default async function BenchmarkComparePage({
                 <div className="stack">
                     <div className="card compare-delta-card">
                         <h2 style={{ marginTop: 0 }}>Delta summary</h2>
-                        <p className="small muted" style={{ marginBottom: "1rem" }}>
+                        <p
+                            className="small muted"
+                            style={{ marginBottom: "1rem" }}
+                        >
                             right − left
                         </p>
                         <div className="compare-delta-table-wrap">
@@ -340,16 +348,16 @@ export default async function BenchmarkComparePage({
                                     <tr>
                                         <td>Stability mean</td>
                                         <td>
-                                            {compare.left.stabilityPairwiseMean !=
-                                            null
+                                            {compare.left
+                                                .stabilityPairwiseMean != null
                                                 ? compare.left.stabilityPairwiseMean.toFixed(
                                                       3,
                                                   )
                                                 : "—"}
                                         </td>
                                         <td>
-                                            {compare.right.stabilityPairwiseMean !=
-                                            null
+                                            {compare.right
+                                                .stabilityPairwiseMean != null
                                                 ? compare.right.stabilityPairwiseMean.toFixed(
                                                       3,
                                                   )
@@ -359,7 +367,8 @@ export default async function BenchmarkComparePage({
                                             className={`compare-delta-cell ${typeof compare.delta.stabilityPairwiseMean === "number" ? (compare.delta.stabilityPairwiseMean > 0 ? "compare-delta-pos" : compare.delta.stabilityPairwiseMean < 0 ? "compare-delta-neg" : "") : ""}`}
                                         >
                                             {formatDelta(
-                                                compare.delta.stabilityPairwiseMean,
+                                                compare.delta
+                                                    .stabilityPairwiseMean,
                                             )}
                                         </td>
                                     </tr>

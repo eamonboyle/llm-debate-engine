@@ -14,7 +14,9 @@ async function createTempRunsDir() {
 
 afterEach(async () => {
     await Promise.all(
-        tempDirs.splice(0).map((dir) => rm(dir, { recursive: true, force: true })),
+        tempDirs
+            .splice(0)
+            .map((dir) => rm(dir, { recursive: true, force: true })),
     );
 });
 
@@ -71,7 +73,9 @@ describe("buildAnalysisIndex", () => {
                         output: {
                             kind: "counterfactual",
                             data: {
-                                failureModes: ["Domain shift invalidates assumptions"],
+                                failureModes: [
+                                    "Domain shift invalidates assumptions",
+                                ],
                                 triggerConditions: ["New policy constraints"],
                                 mitigations: ["Re-run with updated sources"],
                             },
@@ -130,7 +134,8 @@ describe("buildAnalysisIndex", () => {
                         size: 1,
                         members: [0],
                         exemplarIndex: 0,
-                        exemplarPreview: "This is a technical alignment discussion.",
+                        exemplarPreview:
+                            "This is a technical alignment discussion.",
                     },
                 ],
                 summary: {
@@ -164,7 +169,9 @@ describe("buildAnalysisIndex", () => {
         expect(index.totals.runs).toBe(1);
         expect(index.totals.benchmarks).toBe(1);
         expect(index.aggregates.issueTypeCounts.factual).toBe(1);
-        expect(index.aggregates.confidenceDrift.solverToRevisionMean).toBe(-0.1);
+        expect(index.aggregates.confidenceDrift.solverToRevisionMean).toBe(
+            -0.1,
+        );
         expect(
             index.aggregates.confidenceCorrelation
                 .severityVsSolverToRevisionDelta,
@@ -176,7 +183,9 @@ describe("buildAnalysisIndex", () => {
             "Domain shift",
         );
         expect(index.aggregates.evidencePlanning?.riskLevelMean).toBe(4);
-        expect(index.aggregates.evidencePlanning?.riskLevelDistribution["4"]).toBe(1);
+        expect(
+            index.aggregates.evidencePlanning?.riskLevelDistribution["4"],
+        ).toBe(1);
         expect(
             index.aggregates.counterfactualFailureModeCounts[
                 "Domain shift invalidates assumptions"
@@ -214,9 +223,21 @@ describe("buildAnalysisIndex", () => {
             },
         });
 
-        await writeFile(join(dir, "run_a.json"), JSON.stringify(makeRun("run_a")), "utf-8");
-        await writeFile(join(dir, "run_b.json"), JSON.stringify(makeRun("run_b")), "utf-8");
-        await writeFile(join(dir, "run_c.json"), JSON.stringify(makeRun("run_c")), "utf-8");
+        await writeFile(
+            join(dir, "run_a.json"),
+            JSON.stringify(makeRun("run_a")),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "run_b.json"),
+            JSON.stringify(makeRun("run_b")),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "run_c.json"),
+            JSON.stringify(makeRun("run_c")),
+            "utf-8",
+        );
 
         const benchmark = {
             kind: "benchmark",
@@ -269,9 +290,14 @@ describe("buildAnalysisIndex", () => {
 
         const index = await buildAnalysisIndex(dir);
         expect(index.aggregates.outlierRuns).toHaveLength(1);
-        expect(index.aggregates.outlierRuns[0].benchmarkId).toBe("benchmark_outlier");
+        expect(index.aggregates.outlierRuns[0].benchmarkId).toBe(
+            "benchmark_outlier",
+        );
         expect(index.aggregates.outlierRuns[0].runId).toBe("run_c");
-        expect(index.aggregates.outlierRuns[0].avgSimilarity).toBeCloseTo(0.225, 3);
+        expect(index.aggregates.outlierRuns[0].avgSimilarity).toBeCloseTo(
+            0.225,
+            3,
+        );
     });
 
     it("falls back to run metrics for counterfactual summaries when steps are missing", async () => {
@@ -302,7 +328,8 @@ describe("buildAnalysisIndex", () => {
                     research: {
                         evidenceRiskLevel: 3,
                         counterfactualFailureModeCount: 2,
-                        topCounterfactualFailureMode: "Metric-only failure mode",
+                        topCounterfactualFailureMode:
+                            "Metric-only failure mode",
                     },
                 },
             },
@@ -392,7 +419,11 @@ describe("buildAnalysisIndex", () => {
             },
         };
 
-        await writeFile(join(dir, "run_csv.json"), JSON.stringify(run), "utf-8");
+        await writeFile(
+            join(dir, "run_csv.json"),
+            JSON.stringify(run),
+            "utf-8",
+        );
         await writeFile(
             join(dir, "benchmark_csv.json"),
             JSON.stringify(benchmark),
@@ -416,14 +447,21 @@ describe("buildAnalysisIndex", () => {
         expect(result.bundlePath).toBeDefined();
         expect(result.chunkPath).toBeDefined();
         const runsCsv = await readFile(result.csvPaths!.runs, "utf-8");
-        const benchmarksCsv = await readFile(result.csvPaths!.benchmarks, "utf-8");
+        const benchmarksCsv = await readFile(
+            result.csvPaths!.benchmarks,
+            "utf-8",
+        );
         const markdown = await readFile(result.markdownPath!, "utf-8");
         const chunk = JSON.parse(
             await readFile(result.chunkPath!, "utf-8"),
         ) as { pairwise: Array<{ benchmarkId: string; pairs: unknown[] }> };
         const bundle = JSON.parse(
             await readFile(result.bundlePath!, "utf-8"),
-        ) as { runs: unknown[]; benchmarks: unknown[]; index: { totals: { runs: number } } };
+        ) as {
+            runs: unknown[];
+            benchmarks: unknown[];
+            index: { totals: { runs: number } };
+        };
         expect(runsCsv).toContain("id,question,createdAt,model");
         expect(runsCsv).toContain("run_csv");
         expect(benchmarksCsv).toContain("benchmark_csv");
@@ -588,7 +626,9 @@ describe("buildAnalysisIndex", () => {
         );
         await writeFile(
             join(dir, "benchmark_beta.json"),
-            JSON.stringify(makeBenchmark("benchmark_beta", "Beta project analysis")),
+            JSON.stringify(
+                makeBenchmark("benchmark_beta", "Beta project analysis"),
+            ),
             "utf-8",
         );
 

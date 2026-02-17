@@ -28,9 +28,9 @@ Pattern to follow:
 - Build deterministic system/user messages
 - Execute via `runStructuredWithGuard`
 - Return `AgentRun` with
-  - `request`
-  - `rawAttempts`
-  - typed `output`
+    - `request`
+    - `rawAttempts`
+    - typed `output`
 
 ## 4) Expose extraction helper (optional but recommended)
 
@@ -66,10 +66,10 @@ If the new agent creates measurable outputs:
 - Add docs explaining the new output semantics
 - Add visualizations or table columns in `apps/web` if useful
 - Validate by:
-  - `pnpm test`
-  - `pnpm typecheck`
-  - `pnpm web:typecheck`
-  - `pnpm web:build`
+    - `pnpm test`
+    - `pnpm typecheck`
+    - `pnpm web:typecheck`
+    - `pnpm web:build`
 
 ## Example candidates
 

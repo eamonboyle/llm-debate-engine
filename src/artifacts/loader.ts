@@ -41,7 +41,9 @@ function isAnalysisBundle(value: unknown): boolean {
 
 function isAnalysisPairwiseChunk(value: unknown): boolean {
     if (!isRecord(value)) return false;
-    return typeof value.generatedAt === "string" && Array.isArray(value.pairwise);
+    return (
+        typeof value.generatedAt === "string" && Array.isArray(value.pairwise)
+    );
 }
 
 function defaultMetadata(

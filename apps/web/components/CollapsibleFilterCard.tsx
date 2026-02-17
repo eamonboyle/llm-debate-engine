@@ -24,14 +24,15 @@ export function CollapsibleFilterCard({
     }, []);
 
     return (
-        <details
-            className="filter-card-collapsible"
-            open={!isMobile}
-        >
+        <details className="filter-card-collapsible" open={!isMobile}>
             <summary className="filter-card-summary">
-                <span className="filter-card-summary-label">{summaryLabel}</span>
+                <span className="filter-card-summary-label">
+                    {summaryLabel}
+                </span>
                 {resultsSummary ? (
-                    <span className="filter-card-summary-results">{resultsSummary}</span>
+                    <span className="filter-card-summary-results">
+                        {resultsSummary}
+                    </span>
                 ) : null}
             </summary>
             <div className="filter-card-content">{children}</div>

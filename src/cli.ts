@@ -137,7 +137,10 @@ async function runBenchmark(
     );
     console.log("threshold:            ", result.threshold ?? "(default)");
     console.log("modeCount (full-answer):     ", modeCount);
-    console.log("modeCountClaimCentroid:      ", result.modeCountClaimCentroid ?? "-");
+    console.log(
+        "modeCountClaimCentroid:      ",
+        result.modeCountClaimCentroid ?? "-",
+    );
     if (
         result.modeCountClaimCentroid != null &&
         modeCount > result.modeCountClaimCentroid
@@ -241,7 +244,7 @@ async function main() {
     const usageBenchmark =
         'Usage: pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model M] [--preset standard|research_deep|fast_research] [--threshold T] [--fast] [--verbose]';
     const usageAnalyze =
-        'Usage: pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--model text] [--preset standard|research_deep|fast_research] [--fast-mode true|false] [--created-after ISO] [--created-before ISO] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename] [--chunks] [--chunks-file filename]';
+        "Usage: pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--model text] [--preset standard|research_deep|fast_research] [--fast-mode true|false] [--created-after ISO] [--created-before ISO] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename] [--chunks] [--chunks-file filename]";
 
     const parseOpt = (flag: string): string | undefined => {
         const idx = rest.indexOf(flag);
@@ -290,9 +293,11 @@ async function main() {
         const output = parseOpt("--output") ?? "analysis-index.json";
         const writeCsv = rest.includes("--csv");
         const writeMarkdown = rest.includes("--markdown");
-        const markdownFileName = parseOpt("--markdown-file") ?? "analysis-report.md";
+        const markdownFileName =
+            parseOpt("--markdown-file") ?? "analysis-report.md";
         const writeBundle = rest.includes("--bundle");
-        const bundleFileName = parseOpt("--bundle-file") ?? "analysis-bundle.json";
+        const bundleFileName =
+            parseOpt("--bundle-file") ?? "analysis-bundle.json";
         const writeChunks = rest.includes("--chunks");
         const chunkFileName =
             parseOpt("--chunks-file") ?? "analysis-benchmark-pairs.json";
@@ -324,7 +329,9 @@ async function main() {
             `Analysis index saved to ${path} (${index.totals.runs} runs, ${index.totals.benchmarks} benchmarks)`,
         );
         if (csvPaths) {
-            console.log(`CSV exports: ${csvPaths.runs}, ${csvPaths.benchmarks}`);
+            console.log(
+                `CSV exports: ${csvPaths.runs}, ${csvPaths.benchmarks}`,
+            );
         }
         if (markdownPath) {
             console.log(`Markdown report: ${markdownPath}`);
@@ -353,14 +360,16 @@ async function main() {
         const preset = parsePresetOpt();
         const thresholdVal = parseFloatOpt("--threshold");
         const fast = rest.includes("--fast");
-        const excludeIdx = excludeOptIndices([
-            rest.indexOf("--runs"),
-            rest.indexOf("--concurrency"),
-            rest.indexOf("--model"),
-            rest.indexOf("--preset"),
-            rest.indexOf("--threshold"),
-            ...(fast ? [rest.indexOf("--fast")] : []),
-        ].filter((i) => i >= 0));
+        const excludeIdx = excludeOptIndices(
+            [
+                rest.indexOf("--runs"),
+                rest.indexOf("--concurrency"),
+                rest.indexOf("--model"),
+                rest.indexOf("--preset"),
+                rest.indexOf("--threshold"),
+                ...(fast ? [rest.indexOf("--fast")] : []),
+            ].filter((i) => i >= 0),
+        );
         const questionParts = rest
             .filter((_, i) => !excludeIdx.includes(i))
             .slice(1);
@@ -398,11 +407,13 @@ async function main() {
     const askModel = parseOpt("--model");
     const askPreset = parsePresetOpt();
     const askFast = rest.includes("--fast");
-    const askExcludeIdx = excludeOptIndices([
-        rest.indexOf("--model"),
-        rest.indexOf("--preset"),
-        ...(askFast ? [rest.indexOf("--fast")] : []),
-    ].filter((i) => i >= 0));
+    const askExcludeIdx = excludeOptIndices(
+        [
+            rest.indexOf("--model"),
+            rest.indexOf("--preset"),
+            ...(askFast ? [rest.indexOf("--fast")] : []),
+        ].filter((i) => i >= 0),
+    );
     const askQuestionParts = rest
         .filter((_, i) => !askExcludeIdx.includes(i))
         .slice(1);
@@ -467,7 +478,8 @@ async function main() {
 
     if (!verbose) {
         const proposal = result.steps.find(
-            (s) => s.agentName === "SolverAgent" && s.output?.kind === "proposal",
+            (s) =>
+                s.agentName === "SolverAgent" && s.output?.kind === "proposal",
         )?.output?.data as AgentResponse | undefined;
         const critique = result.steps.find(
             (s) => s.role === "skeptic" && s.output?.kind === "critique",

@@ -236,13 +236,13 @@ pnpm web:build
 
 ## Environment
 
-| Variable | Description |
-|----------|-------------|
-| `OPENAI_API_KEY` | Required for `ask` / `benchmark`. Not required for `analyze-runs`. |
-| `OPENAI_BASE_URL` | OpenAI-compatible API base URL |
-| `OPENAI_MODEL` | Default model |
-| `OPENAI_TEMPERATURE` | Optional global temperature override |
-| `RUNS_DIR` | Optional override used by web app data loader |
+| Variable             | Description                                                        |
+| -------------------- | ------------------------------------------------------------------ |
+| `OPENAI_API_KEY`     | Required for `ask` / `benchmark`. Not required for `analyze-runs`. |
+| `OPENAI_BASE_URL`    | OpenAI-compatible API base URL                                     |
+| `OPENAI_MODEL`       | Default model                                                      |
+| `OPENAI_TEMPERATURE` | Optional global temperature override                               |
+| `RUNS_DIR`           | Optional override used by web app data loader                      |
 
 ## Contributing
 

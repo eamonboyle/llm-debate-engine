@@ -121,10 +121,10 @@ Returns benchmark pairwise similarity payload:
 
 ```json
 {
-  "benchmarkId": "benchmark_...",
-  "source": "chunk | artifact",
-  "runIds": ["run_a", "run_b"],
-  "pairs": [{ "i": 0, "j": 1, "similarity": 0.91 }]
+    "benchmarkId": "benchmark_...",
+    "source": "chunk | artifact",
+    "runIds": ["run_a", "run_b"],
+    "pairs": [{ "i": 0, "j": 1, "similarity": 0.91 }]
 }
 ```
 
