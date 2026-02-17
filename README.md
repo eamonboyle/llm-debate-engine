@@ -141,6 +141,7 @@ This derived index powers the web dashboard.
 `apps/web` includes:
 
 - `/` Overview dashboard (KPIs + charts)
+- `/` includes metric glossary for interpretation context
 - `/` includes outlier run surfacing from pairwise similarity analysis
 - `/runs` Run artifact table
 - `/runs/[id]` Run trace viewer (step-by-step agent output JSON)
