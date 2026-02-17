@@ -53,6 +53,17 @@ pnpm analyze
 
 Writes `runs/analysis-index.json`.
 
+Optional CSV summaries:
+
+```bash
+pnpm analyze -- --csv
+```
+
+Writes:
+
+- `runs/analysis-runs.csv`
+- `runs/analysis-benchmarks.csv`
+
 ### Open research UI
 
 ```bash
@@ -82,7 +93,7 @@ pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model
 ### `analyze-runs`
 
 ```bash
-pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename]
+pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--csv]
 ```
 
 ## Artifact model
