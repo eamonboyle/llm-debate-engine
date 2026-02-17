@@ -1,4 +1,5 @@
 import { loadBenchmarkArtifacts, loadBenchmarksByIds } from "../../../lib/data";
+import { CompareDeltaChart } from "../../../components/charts/CompareDeltaChart";
 
 type CompareSearchParams = {
     left?: string;
@@ -18,6 +19,8 @@ export default async function BenchmarkComparePage({
     const selected = await loadBenchmarksByIds(selectedIds);
     const left = selected.find((b) => b.id === params.left) ?? null;
     const right = selected.find((b) => b.id === params.right) ?? null;
+    const leftLabel = left ? `left:${left.id.slice(0, 6)}` : "left";
+    const rightLabel = right ? `right:${right.id.slice(0, 6)}` : "right";
 
     return (
         <section className="stack">
@@ -146,61 +149,86 @@ export default async function BenchmarkComparePage({
             </div>
 
             {left && right ? (
-                <div className="card">
-                    <h2 style={{ marginTop: 0 }}>Delta summary</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Metric</th>
-                                <th>Left</th>
-                                <th>Right</th>
-                                <th>Delta (right - left)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Runs</td>
-                                <td>{left.payload.runs}</td>
-                                <td>{right.payload.runs}</td>
-                                <td>{right.payload.runs - left.payload.runs}</td>
-                            </tr>
-                            <tr>
-                                <td>Mode count</td>
-                                <td>{left.payload.modeCount}</td>
-                                <td>{right.payload.modeCount}</td>
-                                <td>
-                                    {right.payload.modeCount - left.payload.modeCount}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Divergence entropy</td>
-                                <td>{left.payload.divergenceEntropy}</td>
-                                <td>{right.payload.divergenceEntropy}</td>
-                                <td>
-                                    {(
-                                        right.payload.divergenceEntropy -
-                                        left.payload.divergenceEntropy
-                                    ).toFixed(3)}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Stability mean</td>
-                                <td>{left.payload.summary?.stability?.pairwiseMean ?? "-"}</td>
-                                <td>{right.payload.summary?.stability?.pairwiseMean ?? "-"}</td>
-                                <td>
-                                    {typeof right.payload.summary?.stability?.pairwiseMean ===
-                                        "number" &&
-                                    typeof left.payload.summary?.stability?.pairwiseMean ===
-                                        "number"
-                                        ? (
-                                              right.payload.summary.stability.pairwiseMean -
-                                              left.payload.summary.stability.pairwiseMean
-                                          ).toFixed(3)
-                                        : "-"}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div className="stack">
+                    <div className="card">
+                        <h2 style={{ marginTop: 0 }}>Delta summary</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>Left</th>
+                                    <th>Right</th>
+                                    <th>Delta (right - left)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Runs</td>
+                                    <td>{left.payload.runs}</td>
+                                    <td>{right.payload.runs}</td>
+                                    <td>{right.payload.runs - left.payload.runs}</td>
+                                </tr>
+                                <tr>
+                                    <td>Mode count</td>
+                                    <td>{left.payload.modeCount}</td>
+                                    <td>{right.payload.modeCount}</td>
+                                    <td>
+                                        {right.payload.modeCount - left.payload.modeCount}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Divergence entropy</td>
+                                    <td>{left.payload.divergenceEntropy}</td>
+                                    <td>{right.payload.divergenceEntropy}</td>
+                                    <td>
+                                        {(
+                                            right.payload.divergenceEntropy -
+                                            left.payload.divergenceEntropy
+                                        ).toFixed(3)}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Stability mean</td>
+                                    <td>{left.payload.summary?.stability?.pairwiseMean ?? "-"}</td>
+                                    <td>{right.payload.summary?.stability?.pairwiseMean ?? "-"}</td>
+                                    <td>
+                                        {typeof right.payload.summary?.stability
+                                            ?.pairwiseMean === "number" &&
+                                        typeof left.payload.summary?.stability
+                                            ?.pairwiseMean === "number"
+                                            ? (
+                                                  right.payload.summary.stability
+                                                      .pairwiseMean -
+                                                  left.payload.summary.stability
+                                                      .pairwiseMean
+                                              ).toFixed(3)
+                                            : "-"}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <CompareDeltaChart
+                        leftLabel={leftLabel}
+                        rightLabel={rightLabel}
+                        rows={[
+                            {
+                                metric: "modeCount",
+                                left: left.payload.modeCount,
+                                right: right.payload.modeCount,
+                            },
+                            {
+                                metric: "entropy",
+                                left: left.payload.divergenceEntropy,
+                                right: right.payload.divergenceEntropy,
+                            },
+                            {
+                                metric: "stability",
+                                left: left.payload.summary?.stability?.pairwiseMean ?? 0,
+                                right: right.payload.summary?.stability?.pairwiseMean ?? 0,
+                            },
+                        ]}
+                    />
                 </div>
             ) : null}
         </section>

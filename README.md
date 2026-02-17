@@ -159,7 +159,7 @@ This derived index powers the web dashboard.
 - `/runs/[id]` Run trace viewer (step-by-step structured summaries + raw JSON)
 - `/benchmarks` Benchmark artifact table
 - `/benchmarks/[id]` Benchmark deep-dive
-- `/benchmarks/compare` Side-by-side benchmark comparison
+- `/benchmarks/compare` Side-by-side benchmark comparison + charted metric deltas
 
 UI supports query-param filters for runs and benchmarks:
 

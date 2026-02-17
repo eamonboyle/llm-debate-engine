@@ -79,6 +79,7 @@ Compare two benchmark artifacts quickly:
 - mode count delta
 - entropy delta
 - stability mean delta
+- side-by-side bar chart for these key metrics
 
 Use compare view before drilling into raw run traces.
 
