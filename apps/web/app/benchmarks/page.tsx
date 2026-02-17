@@ -1,4 +1,7 @@
-import { loadBenchmarkArtifacts } from "../../lib/data";
+import {
+    filterBenchmarkArtifacts,
+    loadBenchmarkArtifacts,
+} from "../../lib/data";
 
 type BenchmarkSearchParams = {
     q?: string;
@@ -9,10 +12,6 @@ type BenchmarkSearchParams = {
     to?: string;
 };
 
-function normalize(v: string | undefined) {
-    return (v ?? "").trim().toLowerCase();
-}
-
 export default async function BenchmarksPage({
     searchParams,
 }: {
@@ -20,38 +19,13 @@ export default async function BenchmarksPage({
 }) {
     const benchmarks = await loadBenchmarkArtifacts();
     const params = await searchParams;
-    const q = normalize(params.q);
-    const model = normalize(params.model);
-    const preset = normalize(params.preset);
-    const fast = normalize(params.fast);
-    const fromDate = params.from ? new Date(params.from) : undefined;
-    const toDate = params.to ? new Date(params.to) : undefined;
-
-    const filtered = benchmarks.filter((benchmark) => {
-        if (q) {
-            const haystack =
-                `${benchmark.id} ${benchmark.question}`.toLowerCase();
-            if (!haystack.includes(q)) return false;
-        }
-        if (model && !benchmark.metadata.model.toLowerCase().includes(model)) {
-            return false;
-        }
-        if (
-            preset &&
-            benchmark.metadata.pipelinePreset.toLowerCase() !== preset
-        ) {
-            return false;
-        }
-        if (fast === "true" && !benchmark.metadata.fastMode) return false;
-        if (fast === "false" && benchmark.metadata.fastMode) return false;
-        const createdAt = new Date(benchmark.metadata.createdAt);
-        if (fromDate && !Number.isNaN(fromDate.getTime()) && createdAt < fromDate) {
-            return false;
-        }
-        if (toDate && !Number.isNaN(toDate.getTime()) && createdAt > toDate) {
-            return false;
-        }
-        return true;
+    const filtered = filterBenchmarkArtifacts(benchmarks, {
+        q: params.q,
+        model: params.model,
+        preset: params.preset,
+        fast: params.fast,
+        from: params.from,
+        to: params.to,
     });
 
     return (

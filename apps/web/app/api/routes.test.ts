@@ -3,7 +3,9 @@ import { tmpdir } from "os";
 import { join } from "path";
 import { afterEach, describe, expect, it } from "vitest";
 import { GET as getAnalysis } from "./analysis/route";
+import { GET as getBenchmarks } from "./benchmarks/route";
 import { GET as getRunById } from "./runs/[id]/route";
+import { GET as getRuns } from "./runs/route";
 import { GET as getBenchmarkById } from "./benchmarks/[id]/route";
 import { GET as getBenchmarkPairsById } from "./benchmarks/[id]/pairs/route";
 
@@ -157,5 +159,83 @@ describe("web api routes", () => {
         expect(json.benchmarkId).toBe("benchmark_2");
         expect(json.runIds).toEqual(["r1", "r2"]);
         expect(json.pairs[0].similarity).toBe(0.88);
+    });
+
+    it("filters run and benchmark list endpoints by query params", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_a.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_a",
+                question: "Alpha question",
+                metadata: {
+                    createdAt: "2025-01-01T00:00:00.000Z",
+                    model: "gpt-alpha",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: { id: "run_a", finalAnswer: "A", steps: [], metrics: {} },
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "run_b.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_b",
+                question: "Beta question",
+                metadata: {
+                    createdAt: "2025-02-01T00:00:00.000Z",
+                    model: "gpt-beta",
+                    pipelinePreset: "research_deep",
+                    fastMode: true,
+                },
+                run: { id: "run_b", finalAnswer: "B", steps: [], metrics: {} },
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "benchmark_a.json"),
+            JSON.stringify({
+                kind: "benchmark",
+                id: "benchmark_a",
+                question: "Alpha question",
+                metadata: {
+                    createdAt: "2025-01-01T00:00:00.000Z",
+                    model: "gpt-alpha",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                payload: {
+                    runs: 1,
+                    modeCount: 1,
+                    modeSizes: [1],
+                    divergenceEntropy: 0,
+                    summary: { stability: { pairwiseMean: 1, pairs: [] } },
+                },
+            }),
+            "utf-8",
+        );
+
+        const runResponse = await getRuns(
+            new Request("http://localhost/api/runs?model=beta&fast=true"),
+        );
+        expect(runResponse.status).toBe(200);
+        const runJson = (await runResponse.json()) as { filtered: number; items: Array<{ id: string }> };
+        expect(runJson.filtered).toBe(1);
+        expect(runJson.items[0].id).toBe("run_b");
+
+        const benchmarkResponse = await getBenchmarks(
+            new Request("http://localhost/api/benchmarks?q=alpha&preset=standard"),
+        );
+        expect(benchmarkResponse.status).toBe(200);
+        const benchmarkJson = (await benchmarkResponse.json()) as {
+            filtered: number;
+            items: Array<{ id: string }>;
+        };
+        expect(benchmarkJson.filtered).toBe(1);
+        expect(benchmarkJson.items[0].id).toBe("benchmark_a");
     });
 });

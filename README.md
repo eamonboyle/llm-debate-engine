@@ -201,9 +201,13 @@ If `analysis-index.json` is missing, UI can fall back to `analysis-bundle.json`.
 API endpoints are also available in the web app:
 
 - `GET /api/analysis`
+- `GET /api/runs`
 - `GET /api/runs/:id`
+- `GET /api/benchmarks`
 - `GET /api/benchmarks/:id`
 - `GET /api/benchmarks/:id/pairs`
+
+List routes support query filters: `q`, `model`, `preset`, `fast`, `from`, `to`.
 
 The benchmark pairs endpoint prefers `analysis-benchmark-pairs.json` when available.
 

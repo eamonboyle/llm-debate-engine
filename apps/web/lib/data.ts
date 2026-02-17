@@ -1,7 +1,7 @@
 import { readdir, readFile } from "fs/promises";
 import { join, resolve } from "path";
 
-type AnalysisIndex = {
+export type AnalysisIndex = {
     generatedAt: string;
     totals: {
         runs: number;
@@ -74,7 +74,7 @@ type AnalysisIndex = {
     skipped: Array<{ file: string; error: string }>;
 };
 
-type RunArtifact = {
+export type RunArtifact = {
     kind: "run";
     id: string;
     question: string;
@@ -110,7 +110,7 @@ type RunArtifact = {
     };
 };
 
-type BenchmarkArtifact = {
+export type BenchmarkArtifact = {
     kind: "benchmark";
     id: string;
     question: string;
@@ -150,6 +150,106 @@ function getRunsDir() {
         return resolve(process.env.RUNS_DIR);
     }
     return resolve(process.cwd(), "../../runs");
+}
+
+export type ArtifactFilterParams = {
+    q?: string;
+    model?: string;
+    preset?: string;
+    fast?: string;
+    from?: string;
+    to?: string;
+};
+
+function normalize(v: string | undefined) {
+    return (v ?? "").trim().toLowerCase();
+}
+
+function parseDateInput(v: string | undefined): Date | undefined {
+    if (!v) return undefined;
+    const d = new Date(v);
+    if (Number.isNaN(d.getTime())) return undefined;
+    return d;
+}
+
+function parseFastFilter(v: string | undefined): boolean | undefined {
+    const n = normalize(v);
+    if (n === "true") return true;
+    if (n === "false") return false;
+    return undefined;
+}
+
+export function filterRunArtifacts(
+    runs: RunArtifact[],
+    filters: ArtifactFilterParams,
+): RunArtifact[] {
+    const q = normalize(filters.q);
+    const model = normalize(filters.model);
+    const preset = normalize(filters.preset);
+    const fast = parseFastFilter(filters.fast);
+    const fromDate = parseDateInput(filters.from);
+    const toDate = parseDateInput(filters.to);
+
+    return runs.filter((run) => {
+        if (q) {
+            const haystack =
+                `${run.id} ${run.question} ${run.run.finalAnswer}`.toLowerCase();
+            if (!haystack.includes(q)) return false;
+        }
+        if (model && !run.metadata.model.toLowerCase().includes(model)) {
+            return false;
+        }
+        if (preset && run.metadata.pipelinePreset.toLowerCase() !== preset) {
+            return false;
+        }
+        if (typeof fast === "boolean" && run.metadata.fastMode !== fast) {
+            return false;
+        }
+        const createdAt = new Date(run.metadata.createdAt);
+        if (fromDate && !Number.isNaN(createdAt.getTime()) && createdAt < fromDate) {
+            return false;
+        }
+        if (toDate && !Number.isNaN(createdAt.getTime()) && createdAt > toDate) {
+            return false;
+        }
+        return true;
+    });
+}
+
+export function filterBenchmarkArtifacts(
+    benchmarks: BenchmarkArtifact[],
+    filters: ArtifactFilterParams,
+): BenchmarkArtifact[] {
+    const q = normalize(filters.q);
+    const model = normalize(filters.model);
+    const preset = normalize(filters.preset);
+    const fast = parseFastFilter(filters.fast);
+    const fromDate = parseDateInput(filters.from);
+    const toDate = parseDateInput(filters.to);
+
+    return benchmarks.filter((benchmark) => {
+        if (q) {
+            const haystack = `${benchmark.id} ${benchmark.question}`.toLowerCase();
+            if (!haystack.includes(q)) return false;
+        }
+        if (model && !benchmark.metadata.model.toLowerCase().includes(model)) {
+            return false;
+        }
+        if (preset && benchmark.metadata.pipelinePreset.toLowerCase() !== preset) {
+            return false;
+        }
+        if (typeof fast === "boolean" && benchmark.metadata.fastMode !== fast) {
+            return false;
+        }
+        const createdAt = new Date(benchmark.metadata.createdAt);
+        if (fromDate && !Number.isNaN(createdAt.getTime()) && createdAt < fromDate) {
+            return false;
+        }
+        if (toDate && !Number.isNaN(createdAt.getTime()) && createdAt > toDate) {
+            return false;
+        }
+        return true;
+    });
 }
 
 async function readJsonIfExists<T>(path: string): Promise<T | null> {
