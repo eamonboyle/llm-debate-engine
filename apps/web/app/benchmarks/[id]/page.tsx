@@ -1,23 +1,7 @@
 import { notFound } from "next/navigation";
 import { loadBenchmarkById } from "../../../lib/data";
 import { BenchmarkDetailCharts } from "../../../components/charts/BenchmarkDetailCharts";
-
-function inferModeLabel(preview: string) {
-    const text = preview.toLowerCase();
-    if (text.includes("policy") || text.includes("governance")) {
-        return "policy-oriented";
-    }
-    if (text.includes("technical") || text.includes("alignment")) {
-        return "technical framing";
-    }
-    if (text.includes("economic") || text.includes("jobs")) {
-        return "economic framing";
-    }
-    if (text.includes("existential") || text.includes("catastrophic")) {
-        return "high-risk framing";
-    }
-    return "general framing";
-}
+import { inferModeLabel } from "../../../lib/modeLabeler";
 
 export default async function BenchmarkDetailPage({
     params,
