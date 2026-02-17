@@ -73,6 +73,7 @@ Then inspect:
 
 - Overview dashboard for KPI and trend triage
 - Outlier run table -> run trace page
+- Run compare page for side-by-side run-level metric deltas
 - Benchmark detail heatmap and mode explorer
 - Compare page for side-by-side benchmark deltas
 
@@ -82,8 +83,9 @@ Suggested rhythm:
 
 1. Start with overview anomalies (entropy spikes, outliers, correlation shifts)
 2. Open related run traces to inspect agent-level behavior
-3. Compare benchmark versions after prompt/model/preset changes
-4. Document conclusions in `analysis-report.md` snapshots
+3. Use run compare for focused trace-to-trace metric changes
+4. Compare benchmark versions after prompt/model/preset changes
+5. Document conclusions in `analysis-report.md` snapshots
 
 ## 5) Optional regression checks
 

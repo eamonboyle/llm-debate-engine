@@ -128,10 +128,11 @@ export default async function OverviewPage() {
                                 <th>Issues</th>
                                 <th>Preview</th>
                                 <th>Open</th>
+                                <th>Compare</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {recentRuns.map((run) => (
+                            {recentRuns.map((run, idx) => (
                                 <tr key={run.id}>
                                     <td>{run.id}</td>
                                     <td>{run.question}</td>
@@ -141,6 +142,13 @@ export default async function OverviewPage() {
                                     <td className="muted">{run.finalAnswerPreview}</td>
                                     <td>
                                         <a href={`/runs/${run.id}`}>Trace</a>
+                                    </td>
+                                    <td>
+                                        <a
+                                            href={`/runs/compare?left=${run.id}${recentRuns[idx + 1] ? `&right=${recentRuns[idx + 1].id}` : ""}`}
+                                        >
+                                            Compare
+                                        </a>
                                     </td>
                                 </tr>
                             ))}

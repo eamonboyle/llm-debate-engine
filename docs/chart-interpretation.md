@@ -73,7 +73,7 @@ More negative z-score means stronger outlier behavior.
 - Presents each mode exemplar and inferred label.
 - Useful for qualitatively naming divergence patterns.
 
-## Compare page
+## Benchmark compare page
 
 Compare two benchmark artifacts quickly:
 
