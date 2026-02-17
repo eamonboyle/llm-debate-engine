@@ -1,0 +1,481 @@
+{
+  "generatedAt": "2026-02-17T10:40:41.115Z",
+  "filterContext": {},
+  "totals": {
+    "runs": 6,
+    "benchmarks": 1,
+    "skippedFiles": 0
+  },
+  "runs": [
+    {
+      "id": "run_1771320514121_7149dc8eb5301",
+      "question": "Is AI an existential threat?",
+      "createdAt": "2026-02-17T09:28:34.121Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "stepCount": 10,
+      "finalAnswerPreview": "Existential risk from AI refers to the risk of human extinction, irreversible collapse of civilization, or permanent loss of humanity’s potential caused by AI systems. This risk is plausible but not settled. It depends o",
+      "confidence": {
+        "solver": 0.72,
+        "revision": 0.45,
+        "synthesizer": 0.78,
+        "calibratedAdjusted": 0.78,
+        "solverToRevisionDelta": -0.27,
+        "revisionToSynthesizerDelta": 0.33
+      },
+      "critique": {
+        "issueCount": 20,
+        "maxSeverity": 5,
+        "avgSeverity": 3.55,
+        "byType": {
+          "ambiguity": 5,
+          "factual": 4,
+          "missing": 8,
+          "overconfidence": 2,
+          "logic": 1
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 3,
+        "factualRisk": 2,
+        "uncertaintyHandling": 4
+      },
+      "research": {
+        "evidenceRiskLevel": 4,
+        "counterfactualFailureModeCount": 10,
+        "topCounterfactualFailureMode": "Misinterpretation of existential risk as a binary or imminent threat, leading to either paralysis or alarmism without acknowledging uncertainties and timelines."
+      }
+    },
+    {
+      "id": "run_1771323274630_2a1f8e139823d",
+      "question": "Is the four-day work week a good idea?",
+      "createdAt": "2026-02-17T10:14:34.630Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "stepCount": 10,
+      "finalAnswerPreview": "A four-day work week can be beneficial in some contexts, but it is not universally better. It should be adopted only after a careful, evidence-based pilot. Organizations should run a controlled pilot with precise definit",
+      "confidence": {
+        "solver": 0.65,
+        "revision": 0.4,
+        "synthesizer": 0.7,
+        "calibratedAdjusted": 0.7,
+        "solverToRevisionDelta": -0.25,
+        "revisionToSynthesizerDelta": 0.3
+      },
+      "critique": {
+        "issueCount": 16,
+        "maxSeverity": 5,
+        "avgSeverity": 3.938,
+        "byType": {
+          "factual": 2,
+          "logic": 2,
+          "missing": 9,
+          "ambiguity": 2,
+          "overconfidence": 1
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 2,
+        "factualRisk": 4,
+        "uncertaintyHandling": 3
+      },
+      "research": {
+        "evidenceRiskLevel": 3,
+        "counterfactualFailureModeCount": 12,
+        "topCounterfactualFailureMode": "No or negative productivity gains due to compressed hours causing fatigue, task switching overhead, and reduced focus."
+      }
+    },
+    {
+      "id": "run_1771323663273_213ffb72260f6",
+      "question": "Should we prioritize economic growth over environmental sustainability?",
+      "createdAt": "2026-02-17T10:21:03.273Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "stepCount": 10,
+      "finalAnswerPreview": "Not automatically. GDP growth and environmental sustainability are not guaranteed to move in lockstep. Absolute decoupling (growth with no increase in environmental harm) is not proven across sectors or time, even if som",
+      "confidence": {
+        "solver": 0.75,
+        "revision": 0.45,
+        "synthesizer": 0.73,
+        "calibratedAdjusted": 0.73,
+        "solverToRevisionDelta": -0.3,
+        "revisionToSynthesizerDelta": 0.28
+      },
+      "critique": {
+        "issueCount": 15,
+        "maxSeverity": 4,
+        "avgSeverity": 3.2,
+        "byType": {
+          "factual": 1,
+          "missing": 8,
+          "logic": 1,
+          "ambiguity": 4,
+          "overconfidence": 1
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 3,
+        "factualRisk": 3,
+        "uncertaintyHandling": 3
+      },
+      "research": {
+        "evidenceRiskLevel": 3,
+        "counterfactualFailureModeCount": 10,
+        "topCounterfactualFailureMode": "Policy leakage or carbon leakage due to uneven stringency across jurisdictions, allowing emissions to shift to lax-regulation regions."
+      }
+    },
+    {
+      "id": "run_1771323965850_d24d7c8c011b2",
+      "question": "Is universal basic income a good solution to technological unemployment?",
+      "createdAt": "2026-02-17T10:26:05.850Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "stepCount": 10,
+      "finalAnswerPreview": "UBI is not a universal cure for technological unemployment. It can improve income security and reduce poverty in some settings, but labor-supply responses and macro effects depend strongly on design (universal vs targete",
+      "confidence": {
+        "solver": 0.65,
+        "revision": 0.45,
+        "synthesizer": 0.6,
+        "calibratedAdjusted": 0.6,
+        "solverToRevisionDelta": -0.2,
+        "revisionToSynthesizerDelta": 0.15
+      },
+      "critique": {
+        "issueCount": 16,
+        "maxSeverity": 4,
+        "avgSeverity": 3.25,
+        "byType": {
+          "factual": 4,
+          "missing": 6,
+          "ambiguity": 4,
+          "logic": 1,
+          "overconfidence": 1
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 3,
+        "factualRisk": 3,
+        "uncertaintyHandling": 4
+      },
+      "research": {
+        "evidenceRiskLevel": 4,
+        "counterfactualFailureModeCount": 8,
+        "topCounterfactualFailureMode": "Inflationary pressure and fiscal sustainability risk from money-financed or large deficits, potentially eroding real incomes and harming macro stability"
+      }
+    },
+    {
+      "id": "run_1771324209948_0ca90f835a365",
+      "question": "Does remote work improve or harm productivity?",
+      "createdAt": "2026-02-17T10:30:09.948Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "stepCount": 10,
+      "finalAnswerPreview": "Remote work does not have a universal effect on productivity. Meta-analytic findings typically show small or near-zero average effects, with substantial heterogeneity across industries, roles, metrics, and study designs.",
+      "confidence": {
+        "solver": 0.65,
+        "revision": 0.42,
+        "synthesizer": 0.59,
+        "calibratedAdjusted": 0.59,
+        "solverToRevisionDelta": -0.23,
+        "revisionToSynthesizerDelta": 0.17
+      },
+      "critique": {
+        "issueCount": 16,
+        "maxSeverity": 4,
+        "avgSeverity": 2.438,
+        "byType": {
+          "factual": 3,
+          "ambiguity": 4,
+          "missing": 6,
+          "logic": 1,
+          "overconfidence": 2
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 3,
+        "factualRisk": 3,
+        "uncertaintyHandling": 4
+      },
+      "research": {
+        "evidenceRiskLevel": 4,
+        "counterfactualFailureModeCount": 10,
+        "topCounterfactualFailureMode": "Measurement/construct validity issues: productivity metrics vary across studies and may mix quantity, quality, engagement, and satisfaction, causing biased or incomparable estimates."
+      }
+    },
+    {
+      "id": "run_1771324760541_a9ed6413a3079",
+      "question": "Is it ethical to use animals for medical research?",
+      "createdAt": "2026-02-17T10:39:20.541Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "stepCount": 10,
+      "finalAnswerPreview": "Ethical acceptability of animal research is conditional, not universal. It depends on context, potential benefits, and how well welfare and rights-based concerns are addressed, with a focus on meaningful disease burdens,",
+      "confidence": {
+        "solver": 0.65,
+        "revision": 0.42,
+        "synthesizer": 0.68,
+        "calibratedAdjusted": 0.68,
+        "solverToRevisionDelta": -0.23,
+        "revisionToSynthesizerDelta": 0.26
+      },
+      "critique": {
+        "issueCount": 15,
+        "maxSeverity": 5,
+        "avgSeverity": 3.333,
+        "byType": {
+          "factual": 4,
+          "ambiguity": 3,
+          "missing": 7,
+          "logic": 1
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 3,
+        "factualRisk": 3,
+        "uncertaintyHandling": 4
+      },
+      "research": {
+        "evidenceRiskLevel": 3,
+        "counterfactualFailureModeCount": 10,
+        "topCounterfactualFailureMode": "Overreliance on animal models with uncertain translational value leading to ethically questionable harms justified by anticipated benefits"
+      }
+    }
+  ],
+  "benchmarks": [
+    {
+      "id": "benchmark_1771322068310_3aa3bf8e08c788",
+      "question": "Should social media platforms be held liable for user-generated content?",
+      "createdAt": "2026-02-17T09:54:28.310Z",
+      "model": "gpt-5-nano-2025-08-07",
+      "pipelinePreset": "research_deep",
+      "fastMode": false,
+      "runs": 5,
+      "modeCount": 5,
+      "modeSizes": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "divergenceEntropy": 2.321928094887362,
+      "stabilityPairwiseMean": 0.839,
+      "threshold": 0.9,
+      "modeLabels": [
+        {
+          "modeIndex": 0,
+          "size": 1,
+          "label": "general framing",
+          "exemplarPreview": "Yes, social media platforms should be held liable to a calibrated degree, with clearly defined safe harbors and robust due-process safeguards. A defensible regime combines jurisdiction-sensitive rules"
+        },
+        {
+          "modeIndex": 1,
+          "size": 1,
+          "label": "general framing",
+          "exemplarPreview": "A calibrated, multi-layer liability framework that clearly separates illegal or highly harmful content from ordinary user content, with jurisdiction-aware definitions and concrete safeguards. It shoul"
+        },
+        {
+          "modeIndex": 2,
+          "size": 1,
+          "label": "general framing",
+          "exemplarPreview": "Proposed approach: implement a calibrated liability framework that targets egregious harms and failures to act on clearly defined obligations, while preserving lawful expression and platform viability"
+        },
+        {
+          "modeIndex": 3,
+          "size": 1,
+          "label": "general framing",
+          "exemplarPreview": "Yes. Platforms should be held liable within a calibrated, jurisdiction-aware framework that clearly distinguishes illegal content, highly harmful content, and general moderation failures. This hybrid "
+        },
+        {
+          "modeIndex": 4,
+          "size": 1,
+          "label": "general framing",
+          "exemplarPreview": "Yes. Social media platforms should be held liable under a calibrated, tiered framework that protects safety while preserving free expression and innovation. The regime should distinguish illegal conte"
+        }
+      ]
+    }
+  ],
+  "aggregates": {
+    "issueTypeCounts": {
+      "ambiguity": 22,
+      "factual": 18,
+      "missing": 44,
+      "overconfidence": 7,
+      "logic": 7
+    },
+    "issueSeverityByType": [
+      {
+        "type": "ambiguity",
+        "count": 22,
+        "avgSeverity": 2.955,
+        "maxSeverity": 4
+      },
+      {
+        "type": "factual",
+        "count": 18,
+        "avgSeverity": 3.667,
+        "maxSeverity": 5
+      },
+      {
+        "type": "missing",
+        "count": 44,
+        "avgSeverity": 3.341,
+        "maxSeverity": 5
+      },
+      {
+        "type": "overconfidence",
+        "count": 7,
+        "avgSeverity": 2.857,
+        "maxSeverity": 5
+      },
+      {
+        "type": "logic",
+        "count": 7,
+        "avgSeverity": 3.571,
+        "maxSeverity": 4
+      }
+    ],
+    "confidenceDrift": {
+      "solverToRevisionMean": -0.247,
+      "revisionToSynthesizerMean": 0.248,
+      "calibratedMinusSynthMean": 0
+    },
+    "confidenceCorrelation": {
+      "severityVsSolverToRevisionDelta": -0.104,
+      "severityVsRevisionToSynthesizerDelta": 0.73
+    },
+    "evidencePlanning": {
+      "riskLevelMean": 3.5,
+      "riskLevelDistribution": {
+        "3": 3,
+        "4": 3
+      }
+    },
+    "counterfactualFailureModeCounts": {
+      "Misinterpretation of existential risk as a binary or imminent threat, leading to either paralysis or alarmism without acknowledging uncertainties and timelines.": 1,
+      "Overreliance on governance and international cooperation to mitigate risk, underestimating incentives for a race-to-deploy and enforcement challenges across jurisdictions.": 1,
+      "Neglect of inner alignment, mesa-optimizer risks, and unanticipated objective optimizations that can derail intended behavior even with good outer alignment.": 1,
+      "Underestimation of non-AGI or non-hierarchical risks (data poisoning, prompt injections, cybersecurity failures) as existential rather than systemic or near-term.": 1,
+      "Inappropriate probabilistic framing (fixed-point probabilities or timelines) due to deep uncertainty, leading to misinformed policy or resource allocation.": 1,
+      "Incomplete consideration of global distributional and geopolitical dynamics, potentially creating governance gaps or competitive disadvantages for some regions.": 1,
+      "Safety research bottlenecks (funding, talent, access) causing stagnation or misallocation of resources, reducing resilience to failure modes.": 1,
+      "Evaluation biases and overreliance on empirical signals that do not extrapolate to long-horizon risks, producing false negatives/positives.": 1,
+      "Verification and enforcement challenges undermining any agreed-upon standards, enabling drift, noncompliance, or regulatory capture.": 1,
+      "Overconfidence in the proposed mitigation suite without robust operationalization, leading to a gap between theory and practice that permits unnoticed risk accumulation.": 1,
+      "No or negative productivity gains due to compressed hours causing fatigue, task switching overhead, and reduced focus.": 1,
+      "Service levels or coverage decline, especially for frontline or customer-facing roles, leading to SLA breaches or customer dissatisfaction.": 1,
+      "Higher total costs than savings due to overtime, premium pay, temporary hires, onboarding, and administrative complexity.": 1,
+      "Equity harms where caregivers, part-time workers, or lower-paid staff face reduced opportunities or slower advancement.": 1,
+      "Employee burnout or morale decline from longer workdays or perceived workload pressure, increasing attrition.": 1,
+      "Scheduling and tooling failures: time-tracking, payroll, and benefits systems not adapted to new schedules, causing errors and mispayments.": 1,
+      "Regulatory or union constraints hindering hour reductions, triggering renegotiation, penalties, or forced revert.": 1,
+      "Poor experimental design leading to inconclusive or biased results (e.g., weak control, confounding factors, or underpowered study).": 1,
+      "Demand and capacity misalignment: volume spikes or seasonality negate benefits, harming service and productivity.": 1,
+      "Rebound effects: tasks are compressed but overall workload remains the same, with quality or thoroughness compromised.": 1,
+      "Unequal impacts across departments: heterogeneity limits generalizability and risks misinformed scaling.": 1,
+      "Implementation fatigue and change-management risk: resistance from managers or employees undermines adoption.": 1,
+      "Policy leakage or carbon leakage due to uneven stringency across jurisdictions, allowing emissions to shift to lax-regulation regions.": 1,
+      "Rebound effects offset gains from efficiency and demand-side interventions as income growth and services expand.": 1,
+      "Misallocation of investments due to price signal design flaws, sector biases, or political capture.": 1,
+      "Measurement uncertainty, greenwashing, or data gaps leading to misinformed decisions and overestimated progress.": 1,
+      "Weak governance and enforcement enabling regulatory capture, corruption, or delayed implementation.": 1,
+      "Financing constraints and macro shocks (debt distress, inflation, interest rate hikes) limiting green investment.": 1,
+      "Technology risk and path dependency (overreliance on unproven options, supply chain bottlenecks, stranded assets).": 1,
+      "Equity-related pushback or social disruption harming political support for sustainable growth policies.": 1,
+      "International coordination failures, free-riding, or trade/technology spillovers reducing effectiveness.": 1,
+      "Political short-termism and policy reversals eroding milestones and long-horizon risk management.": 1,
+      "Inflationary pressure and fiscal sustainability risk from money-financed or large deficits, potentially eroding real incomes and harming macro stability": 1,
+      "Work-disincentive effects for particular groups (e.g., low-wage workers, caregivers) leading to reduced labor-force participation or discouraged work-search": 1,
+      "Administrative overhead, leakage, fraud, and errors due to complex delivery systems, identity verification failures, or inefficiencies in targeting (even with universal design, leakage can occur in implementation)": 1,
+      "Widening or shifting inequality if the design interacts with preexisting disparities or if the program crowds out other targeted supports": 1,
+      "Political backlash and reform risk: perceived unfairness or tax burdens could trigger policy reversal or scaling-back of benefits": 1,
+      "Crowding out of essential public services or investments if financing crowds out other priorities, reducing overall welfare impact": 1,
+      "Poor cross-country transferability due to differing institutions, norms, and tax/credit systems, limiting generalizability of pilot results": 1,
+      "Dependency and crowding-out of complementary investments (e.g., retraining, job-search incentives) if UBI substitutes for active labor-market policies": 1,
+      "Measurement/construct validity issues: productivity metrics vary across studies and may mix quantity, quality, engagement, and satisfaction, causing biased or incomparable estimates.": 1,
+      "Confounding and selection bias: remote workers may self-select into roles, companies, or tasks that are more or less productive, undermining causal interpretation.": 1,
+      "Publication and reporting bias: visible effect sizes are influenced by which studies are published or disseminated, skewing meta-analytic conclusions.": 1,
+      "Heterogeneity and aggregation error: averaging across industries, roles, and cultures hides meaningful subgroup differences and leads to overgeneralization.": 1,
+      "Time-zone and coordination mis-specification: failure to account for asynchronous work or time-zone dispersion biases estimates of productivity.": 1,
+      "Task-type misalignment: remote work impacts on real-time collaboration and tacit knowledge transfer; but for routine, independent tasks it may look productive, leading to incorrect policy guidance if task mix is not accounted for.": 1,
+      "Short-term focus and durability uncertainty: evidence often reflects short-term adaptations; long-run productivity implications remain unclear.": 1,
+      "Measurement-induced behavior change: monitoring and metrics might alter worker behavior (Hawthorne, surveillance concerns), distorting productivity measurements.": 1,
+      "Definition drift of 'hybrid' and 'productivity': inconsistent operationalizations across studies reduce comparability and confidence.": 1,
+      "Model misspecification: failing to control for important moderators (leadership quality, tooling, norms) leads to biased conclusions.": 1,
+      "Overreliance on animal models with uncertain translational value leading to ethically questionable harms justified by anticipated benefits": 1,
+      "Treating the 3Rs as checkbox compliance rather than core ethical commitments, resulting in insufficient welfare safeguards": 1,
+      "Inadequate species- and context-specific welfare assessment causing underrecognition of pain/distress and ineffective analgesia": 1,
+      "Biases in oversight and conflicts of interest reducing robustness of approvals and reducing accountability": 1,
+      "Poor reporting, replication failures, and publication bias obscuring true harms and ineffective designs, perpetuating unnecessary use": 1,
+      "Delayed adoption or rejection of alternatives due to feasibility assumptions, stalling progress toward reduction": 1,
+      "Fragmented governance across jurisdictions creating loopholes, inconsistent standards, and nonuniform enforcement": 1,
+      "Incentives (funding, publishing, regulatory) favoring more complex or larger animal studies over refinement or replacement": 1,
+      "Ethical deliberations that rely on culturally or legally biased views of animal status, reducing universal safeguards": 1,
+      "Insufficient preregistration and data-sharing practices increasing unnecessary repetition and animal use": 1
+    },
+    "outlierRuns": [
+      {
+        "benchmarkId": "benchmark_1771322068310_3aa3bf8e08c788",
+        "runId": "run_1771321850044_96309600733f5",
+        "avgSimilarity": 0.811,
+        "zScore": -1.134
+      }
+    ],
+    "critiqueVsConfidence": [
+      {
+        "runId": "run_1771320514121_7149dc8eb5301",
+        "maxSeverity": 5,
+        "solverToRevisionDelta": -0.27,
+        "revisionToSynthesizerDelta": 0.33
+      },
+      {
+        "runId": "run_1771323274630_2a1f8e139823d",
+        "maxSeverity": 5,
+        "solverToRevisionDelta": -0.25,
+        "revisionToSynthesizerDelta": 0.3
+      },
+      {
+        "runId": "run_1771323663273_213ffb72260f6",
+        "maxSeverity": 4,
+        "solverToRevisionDelta": -0.3,
+        "revisionToSynthesizerDelta": 0.28
+      },
+      {
+        "runId": "run_1771323965850_d24d7c8c011b2",
+        "maxSeverity": 4,
+        "solverToRevisionDelta": -0.2,
+        "revisionToSynthesizerDelta": 0.15
+      },
+      {
+        "runId": "run_1771324209948_0ca90f835a365",
+        "maxSeverity": 4,
+        "solverToRevisionDelta": -0.23,
+        "revisionToSynthesizerDelta": 0.17
+      },
+      {
+        "runId": "run_1771324760541_a9ed6413a3079",
+        "maxSeverity": 5,
+        "solverToRevisionDelta": -0.23,
+        "revisionToSynthesizerDelta": 0.26
+      }
+    ],
+    "presets": {
+      "standard": 0,
+      "research_deep": 6,
+      "fast_research": 0
+    }
+  },
+  "skipped": []
+}

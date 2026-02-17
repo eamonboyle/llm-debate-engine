@@ -1,0 +1,1379 @@
+{
+  "kind": "run",
+  "id": "run_1771323274630_2a1f8e139823d",
+  "question": "Is the four-day work week a good idea?",
+  "run": {
+    "id": "run_1771323274630_2a1f8e139823d",
+    "createdAt": "2026-02-17T10:14:34.630Z",
+    "question": "Is the four-day work week a good idea?",
+    "steps": [
+      {
+        "id": "step_1771323014516_6f18a68b989478",
+        "agentName": "QuestionDecomposerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:09:40.295Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a research planner. Decompose the question into sub-questions and hypotheses. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is the four-day work week a good idea?"
+            }
+          ],
+          "schemaName": "QuestionDecomposition",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "framing": {
+                "type": "string"
+              },
+              "subQuestions": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "hypotheses": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "framing",
+              "subQuestions",
+              "hypotheses"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "framing": "Question framing: Evaluate whether implementing a four-day work week is beneficial overall, considering productivity, employee well-being, costs, equity, and policy/regulatory context, with attention to sector, job type, and design (compressed vs reduced-hour models).",
+            "subQuestions": [
+              "What are the most common models of a four-day work week (e.g., four 10-hour days, or 32 hours distributed over four days), and how do their hour distributions affect feasibility across sectors?",
+              "How does a four-day work week affect total productivity, output, and profitability at the firm level across industries and job types?",
+              "What are the impacts on employee well-being, mental health, job satisfaction, burnout, sleep, and work-life balance under a four-day work week?",
+              "How does the model influence attendance, absenteeism, presenteeism, and voluntary turnover, and do effects differ by role or sector?",
+              "How are wages, compensation, overtime eligibility, and overall labor costs affected under different four-day week designs?",
+              "What are the implications for service levels, customer satisfaction, project timelines, and supply-chain performance in frontline versus knowledge-work settings?",
+              "What regulatory, contractual, and union-related barriers or facilitators exist for implementing a four-day work week, and what governance structures support scaling?",
+              "What are the capital and operating cost implications (office space, energy, IT, training) of implementing a four-day week?",
+              "How does a four-day week affect equity outcomes (caregivers, women, low-income workers, minorities) and access to opportunities, and what design features mitigate harms?",
+              "What environmental effects (emissions, energy use, commuting) can be expected from a four-day week, and how do they vary by location and occupancy?",
+              "To what extent do sector, firm size, geography, and job type moderate the effectiveness of a four-day work week?",
+              "What study designs and metrics (pilot vs. scale, pre/post measures, control groups) are best suited to evaluate four-day-week implementations, and what data should be collected?"
+            ],
+            "hypotheses": [
+              "H1: A four-day work week, implemented with reduced hours (e.g., 32 hours/week) or compressed weeks, maintains or increases productivity per hour, resulting in similar or higher total weekly output despite fewer days worked.",
+              "H2: Employee well-being, job satisfaction, and perceived work-life balance improve under a four-day work week, with reductions in burnout and stress.",
+              "H3: Absenteeism and voluntary turnover decrease with a four-day week due to better balance, particularly in knowledge-work and caregiving-heavy roles; effects are smaller in high-demand frontline contexts without adequate staffing.",
+              "H4: Payroll costs per employee decline if pay is aligned with reduced hours; if wages remain fixed while hours are reduced, costs per unit of output may rise unless productivity gains offset this effect.",
+              "H5: Customer service quality and delivery timelines are maintained with appropriate staffing and scheduling; without adjustment, frontline service levels may decline in some configurations.",
+              "H6: Environmental impacts include reduced commuting emissions and lower office energy use, especially with partial occupancy or hybrid arrangements.",
+              "H7: Equity outcomes are mixed: benefits may accrue for caregivers and women, but risk of wage penalties or limited access without careful policy design and bargaining power considerations.",
+              "H8: Implementation requires upfront investments in planning, IT, and change management, but can yield net savings or productivity gains over time if well-managed.",
+              "H9: The effects of a four-day week are highly context-dependent; sector, firm size, and occupation moderate both feasibility and outcomes.",
+              "H10: Successful scaling relies on clear metrics, governance, stakeholder alignment, and supportive regulatory or policy frameworks to minimize risks and heterogeneity of results."
+            ]
+          }
+        ],
+        "output": {
+          "kind": "decomposition",
+          "data": {
+            "framing": "Question framing: Evaluate whether implementing a four-day work week is beneficial overall, considering productivity, employee well-being, costs, equity, and policy/regulatory context, with attention to sector, job type, and design (compressed vs reduced-hour models).",
+            "subQuestions": [
+              "What are the most common models of a four-day work week (e.g., four 10-hour days, or 32 hours distributed over four days), and how do their hour distributions affect feasibility across sectors?",
+              "How does a four-day work week affect total productivity, output, and profitability at the firm level across industries and job types?",
+              "What are the impacts on employee well-being, mental health, job satisfaction, burnout, sleep, and work-life balance under a four-day work week?",
+              "How does the model influence attendance, absenteeism, presenteeism, and voluntary turnover, and do effects differ by role or sector?",
+              "How are wages, compensation, overtime eligibility, and overall labor costs affected under different four-day week designs?",
+              "What are the implications for service levels, customer satisfaction, project timelines, and supply-chain performance in frontline versus knowledge-work settings?",
+              "What regulatory, contractual, and union-related barriers or facilitators exist for implementing a four-day work week, and what governance structures support scaling?",
+              "What are the capital and operating cost implications (office space, energy, IT, training) of implementing a four-day week?",
+              "How does a four-day week affect equity outcomes (caregivers, women, low-income workers, minorities) and access to opportunities, and what design features mitigate harms?",
+              "What environmental effects (emissions, energy use, commuting) can be expected from a four-day week, and how do they vary by location and occupancy?",
+              "To what extent do sector, firm size, geography, and job type moderate the effectiveness of a four-day work week?",
+              "What study designs and metrics (pilot vs. scale, pre/post measures, control groups) are best suited to evaluate four-day-week implementations, and what data should be collected?"
+            ],
+            "hypotheses": [
+              "H1: A four-day work week, implemented with reduced hours (e.g., 32 hours/week) or compressed weeks, maintains or increases productivity per hour, resulting in similar or higher total weekly output despite fewer days worked.",
+              "H2: Employee well-being, job satisfaction, and perceived work-life balance improve under a four-day work week, with reductions in burnout and stress.",
+              "H3: Absenteeism and voluntary turnover decrease with a four-day week due to better balance, particularly in knowledge-work and caregiving-heavy roles; effects are smaller in high-demand frontline contexts without adequate staffing.",
+              "H4: Payroll costs per employee decline if pay is aligned with reduced hours; if wages remain fixed while hours are reduced, costs per unit of output may rise unless productivity gains offset this effect.",
+              "H5: Customer service quality and delivery timelines are maintained with appropriate staffing and scheduling; without adjustment, frontline service levels may decline in some configurations.",
+              "H6: Environmental impacts include reduced commuting emissions and lower office energy use, especially with partial occupancy or hybrid arrangements.",
+              "H7: Equity outcomes are mixed: benefits may accrue for caregivers and women, but risk of wage penalties or limited access without careful policy design and bargaining power considerations.",
+              "H8: Implementation requires upfront investments in planning, IT, and change management, but can yield net savings or productivity gains over time if well-managed.",
+              "H9: The effects of a four-day week are highly context-dependent; sector, firm size, and occupation moderate both feasibility and outcomes.",
+              "H10: Successful scaling relies on clear metrics, governance, stakeholder alignment, and supportive regulatory or policy frameworks to minimize risks and heterogeneity of results."
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T10:10:14.516Z"
+      },
+      {
+        "id": "step_1771323032359_2a44d48317826",
+        "agentName": "EvidencePlannerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:10:14.517Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are an evidence planning specialist. Produce a compact evidence and verification plan for the question. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is the four-day work week a good idea?"
+            }
+          ],
+          "schemaName": "EvidencePlan",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "evidenceRequirements": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "verificationChecks": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "majorUnknowns": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "riskLevel": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              }
+            },
+            "required": [
+              "evidenceRequirements",
+              "verificationChecks",
+              "majorUnknowns",
+              "riskLevel"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "evidenceRequirements": [
+              "Assess impact on productivity (output per hour and per employee) across sectors and job types; measure changes in total output, quality, and delivery times.",
+              "Evaluate employee well-being and work-life balance using standardized scales (e.g., job satisfaction, burnout, sleep quality) and track absenteeism/staff turnover.",
+              "Quantify costs and savings (overtime, temporary staffing, energy, facilities) and any impact on wages or pay structure.",
+              "Examine implementation feasibility and fidelity (schedule type: compressed 4x10 vs 4x8 with extra day off; coverage, handoffs, customer impact).",
+              "Assess effects on customers and external stakeholders (service levels, satisfaction, reliability) where applicable.",
+              "Investigate equity implications (childcare access, gender gaps, part-time workers, career progression) and potential differential impacts.",
+              "Control for confounders and consider repeated measures to determine short-term vs long-term effects; include sector/role/organizational size stratification.",
+              "Synthesize evidence via meta-analysis or systematic review of pilot programs, trials, and natural experiments to assess generalizability."
+            ],
+            "verificationChecks": [
+              "Use pre-post and controlled comparisons with appropriate benchmarks; compute effect sizes for productivity and well-being.",
+              "Triangulate HR/payroll data (hourly wages, overtime hours, attendance) with operational metrics (on-time delivery, error rates, customer metrics).",
+              "Apply standardized well-being instruments and compare across time and cohorts.",
+              "Validate schedule adherence and coverage plans; test for unintended overtime shifts or coverage gaps.",
+              "Assess robustness through sensitivity analyses and check for confounding factors (demand changes, external shocks).",
+              "Require independent audits or external replication of results where possible.",
+              "Document implementation fidelity, context, and variations across organizations to support generalizability."
+            ],
+            "majorUnknowns": [
+              "Long-term sustainability and effects beyond pilot periods (2+ years).",
+              "Optimal four-day model (compressed 4x10 vs 4x8 and flexible options) and its generalizability across sectors.",
+              "Impact on part-time workers, contractors, and overall labor force diversity.",
+              "Industry-specific results and scalability for small vs large organizations; cost implications for SMEs.",
+              "Potential unintended consequences (overtime shifting, burnout from compressed hours, coverage challenges).",
+              "Economic and competitive effects in different demand environments (recession vs growth) and regulatory constraints."
+            ],
+            "riskLevel": 3
+          }
+        ],
+        "output": {
+          "kind": "evidence_plan",
+          "data": {
+            "evidenceRequirements": [
+              "Assess impact on productivity (output per hour and per employee) across sectors and job types; measure changes in total output, quality, and delivery times.",
+              "Evaluate employee well-being and work-life balance using standardized scales (e.g., job satisfaction, burnout, sleep quality) and track absenteeism/staff turnover.",
+              "Quantify costs and savings (overtime, temporary staffing, energy, facilities) and any impact on wages or pay structure.",
+              "Examine implementation feasibility and fidelity (schedule type: compressed 4x10 vs 4x8 with extra day off; coverage, handoffs, customer impact).",
+              "Assess effects on customers and external stakeholders (service levels, satisfaction, reliability) where applicable.",
+              "Investigate equity implications (childcare access, gender gaps, part-time workers, career progression) and potential differential impacts.",
+              "Control for confounders and consider repeated measures to determine short-term vs long-term effects; include sector/role/organizational size stratification.",
+              "Synthesize evidence via meta-analysis or systematic review of pilot programs, trials, and natural experiments to assess generalizability."
+            ],
+            "verificationChecks": [
+              "Use pre-post and controlled comparisons with appropriate benchmarks; compute effect sizes for productivity and well-being.",
+              "Triangulate HR/payroll data (hourly wages, overtime hours, attendance) with operational metrics (on-time delivery, error rates, customer metrics).",
+              "Apply standardized well-being instruments and compare across time and cohorts.",
+              "Validate schedule adherence and coverage plans; test for unintended overtime shifts or coverage gaps.",
+              "Assess robustness through sensitivity analyses and check for confounding factors (demand changes, external shocks).",
+              "Require independent audits or external replication of results where possible.",
+              "Document implementation fidelity, context, and variations across organizations to support generalizability."
+            ],
+            "majorUnknowns": [
+              "Long-term sustainability and effects beyond pilot periods (2+ years).",
+              "Optimal four-day model (compressed 4x10 vs 4x8 and flexible options) and its generalizability across sectors.",
+              "Impact on part-time workers, contractors, and overall labor force diversity.",
+              "Industry-specific results and scalability for small vs large organizations; cost implications for SMEs.",
+              "Potential unintended consequences (overtime shifting, burnout from compressed hours, coverage challenges).",
+              "Economic and competitive effects in different demand environments (recession vs growth) and regulatory constraints."
+            ],
+            "riskLevel": 3
+          }
+        },
+        "completedAt": "2026-02-17T10:10:32.359Z"
+      },
+      {
+        "id": "step_1771323049665_63e9b8e6db54",
+        "agentName": "SolverAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T10:10:32.359Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.4,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver. Produce a direct, helpful answer. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is the four-day work week a good idea?\n\nEvidence plan:\n{\n  \"evidenceRequirements\": [\n    \"Assess impact on productivity (output per hour and per employee) across sectors and job types; measure changes in total output, quality, and delivery times.\",\n    \"Evaluate employee well-being and work-life balance using standardized scales (e.g., job satisfaction, burnout, sleep quality) and track absenteeism/staff turnover.\",\n    \"Quantify costs and savings (overtime, temporary staffing, energy, facilities) and any impact on wages or pay structure.\",\n    \"Examine implementation feasibility and fidelity (schedule type: compressed 4x10 vs 4x8 with extra day off; coverage, handoffs, customer impact).\",\n    \"Assess effects on customers and external stakeholders (service levels, satisfaction, reliability) where applicable.\",\n    \"Investigate equity implications (childcare access, gender gaps, part-time workers, career progression) and potential differential impacts.\",\n    \"Control for confounders and consider repeated measures to determine short-term vs long-term effects; include sector/role/organizational size stratification.\",\n    \"Synthesize evidence via meta-analysis or systematic review of pilot programs, trials, and natural experiments to assess generalizability.\"\n  ],\n  \"verificationChecks\": [\n    \"Use pre-post and controlled comparisons with appropriate benchmarks; compute effect sizes for productivity and well-being.\",\n    \"Triangulate HR/payroll data (hourly wages, overtime hours, attendance) with operational metrics (on-time delivery, error rates, customer metrics).\",\n    \"Apply standardized well-being instruments and compare across time and cohorts.\",\n    \"Validate schedule adherence and coverage plans; test for unintended overtime shifts or coverage gaps.\",\n    \"Assess robustness through sensitivity analyses and check for confounding factors (demand changes, external shocks).\",\n    \"Require independent audits or external replication of results where possible.\",\n    \"Document implementation fidelity, context, and variations across organizations to support generalizability.\"\n  ],\n  \"majorUnknowns\": [\n    \"Long-term sustainability and effects beyond pilot periods (2+ years).\",\n    \"Optimal four-day model (compressed 4x10 vs 4x8 and flexible options) and its generalizability across sectors.\",\n    \"Impact on part-time workers, contractors, and overall labor force diversity.\",\n    \"Industry-specific results and scalability for small vs large organizations; cost implications for SMEs.\",\n    \"Potential unintended consequences (overtime shifting, burnout from compressed hours, coverage challenges).\",\n    \"Economic and competitive effects in different demand environments (recession vs growth) and regulatory constraints.\"\n  ],\n  \"riskLevel\": 3\n}"
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "A four-day work week can be a good idea in many contexts, but it is not universally beneficial. When implemented thoughtfully, it often maintains or even improves productivity per employee and boosts well-being (job satisfaction, sleep, reduced burnout), while potentially lowering certain costs (overtime, energy, facilities) and improving retention. However, total weekly output, delivery times, and service levels can vary by sector and job type, and coverage challenges may arise for frontline and customer-facing roles. The model matters: compressed 4x10 and 4x8 with an extra day off have different implications for fatigue, handoffs, overtime shifting, and customer impact. Equity considerations are important—impacts may differ by caregiving responsibilities, part-time workers, and gender dynamics. Implementation fidelity, demand patterns, and organizational size influence outcomes and scalability. Long-term effects beyond pilots (2+ years) remain uncertain. A rigorous, controlled pilot with clear metrics and independent evaluation is essential to decide applicability in a given organization.",
+            "keyClaims": [
+              "Productivity impact is mixed but can be neutral or positive per employee when hours are reduced without sacrificing output, especially in knowledge-work contexts.",
+              "Employee well-being often improves under a four-day model (higher job satisfaction, better sleep; potential burnout reduction).",
+              "Cost implications are context-dependent: potential savings (overtime, facilities, energy) but possible needs for higher wages or more temporary staff to maintain coverage.",
+              "Feasibility and impact depend on schedule type and industry: 4x10 vs 4x8 have different coverage, handoff, and customer-service implications.",
+              "Equity considerations are critical: effects on caregivers, part-time workers, and career progression can vary.",
+              "Outcomes are highly context-specific (sector, organization size, demand environment); long-term effects are still uncertain.",
+              "Implementation fidelity and independent verification are crucial for reliable conclusions."
+            ],
+            "assumptions": [
+              "Sufficient pilot or trial data exist across comparable sectors to inform a decision.",
+              "Labor laws, collective agreements, and fair pay structures are respected in the plan for reductions in hours.",
+              "Organizations can adjust staffing and service delivery models to maintain coverage and customer satisfaction.",
+              "Employee and customer stakeholders are engaged, and robust change-management processes are in place.",
+              "Evaluation includes both productivity metrics and well-being measures with appropriate benchmarks across time.",
+              "Contextual factors (economic conditions, demand patterns) are accounted for when interpreting results."
+            ],
+            "confidence": 0.65
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "A four-day work week can be a good idea in many contexts, but it is not universally beneficial. When implemented thoughtfully, it often maintains or even improves productivity per employee and boosts well-being (job satisfaction, sleep, reduced burnout), while potentially lowering certain costs (overtime, energy, facilities) and improving retention. However, total weekly output, delivery times, and service levels can vary by sector and job type, and coverage challenges may arise for frontline and customer-facing roles. The model matters: compressed 4x10 and 4x8 with an extra day off have different implications for fatigue, handoffs, overtime shifting, and customer impact. Equity considerations are important—impacts may differ by caregiving responsibilities, part-time workers, and gender dynamics. Implementation fidelity, demand patterns, and organizational size influence outcomes and scalability. Long-term effects beyond pilots (2+ years) remain uncertain. A rigorous, controlled pilot with clear metrics and independent evaluation is essential to decide applicability in a given organization.",
+            "keyClaims": [
+              "Productivity impact is mixed but can be neutral or positive per employee when hours are reduced without sacrificing output, especially in knowledge-work contexts.",
+              "Employee well-being often improves under a four-day model (higher job satisfaction, better sleep; potential burnout reduction).",
+              "Cost implications are context-dependent: potential savings (overtime, facilities, energy) but possible needs for higher wages or more temporary staff to maintain coverage.",
+              "Feasibility and impact depend on schedule type and industry: 4x10 vs 4x8 have different coverage, handoff, and customer-service implications.",
+              "Equity considerations are critical: effects on caregivers, part-time workers, and career progression can vary.",
+              "Outcomes are highly context-specific (sector, organization size, demand environment); long-term effects are still uncertain.",
+              "Implementation fidelity and independent verification are crucial for reliable conclusions."
+            ],
+            "assumptions": [
+              "Sufficient pilot or trial data exist across comparable sectors to inform a decision.",
+              "Labor laws, collective agreements, and fair pay structures are respected in the plan for reductions in hours.",
+              "Organizations can adjust staffing and service delivery models to maintain coverage and customer satisfaction.",
+              "Employee and customer stakeholders are engaged, and robust change-management processes are in place.",
+              "Evaluation includes both productivity metrics and well-being measures with appropriate benchmarks across time.",
+              "Contextual factors (economic conditions, demand patterns) are accounted for when interpreting results."
+            ],
+            "confidence": 0.65
+          }
+        },
+        "completedAt": "2026-02-17T10:10:49.665Z"
+      },
+      {
+        "id": "step_1771323087397_84f9eb9c1d55d",
+        "agentName": "SkepticAgent",
+        "role": "skeptic",
+        "createdAt": "2026-02-17T10:10:49.666Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Skeptic. Critique the proposal rigorously. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is the four-day work week a good idea?\n\nTarget agent: SolverAgent\n\nProposal JSON:\n{\n  \"answer\": \"A four-day work week can be a good idea in many contexts, but it is not universally beneficial. When implemented thoughtfully, it often maintains or even improves productivity per employee and boosts well-being (job satisfaction, sleep, reduced burnout), while potentially lowering certain costs (overtime, energy, facilities) and improving retention. However, total weekly output, delivery times, and service levels can vary by sector and job type, and coverage challenges may arise for frontline and customer-facing roles. The model matters: compressed 4x10 and 4x8 with an extra day off have different implications for fatigue, handoffs, overtime shifting, and customer impact. Equity considerations are important—impacts may differ by caregiving responsibilities, part-time workers, and gender dynamics. Implementation fidelity, demand patterns, and organizational size influence outcomes and scalability. Long-term effects beyond pilots (2+ years) remain uncertain. A rigorous, controlled pilot with clear metrics and independent evaluation is essential to decide applicability in a given organization.\",\n  \"keyClaims\": [\n    \"Productivity impact is mixed but can be neutral or positive per employee when hours are reduced without sacrificing output, especially in knowledge-work contexts.\",\n    \"Employee well-being often improves under a four-day model (higher job satisfaction, better sleep; potential burnout reduction).\",\n    \"Cost implications are context-dependent: potential savings (overtime, facilities, energy) but possible needs for higher wages or more temporary staff to maintain coverage.\",\n    \"Feasibility and impact depend on schedule type and industry: 4x10 vs 4x8 have different coverage, handoff, and customer-service implications.\",\n    \"Equity considerations are critical: effects on caregivers, part-time workers, and career progression can vary.\",\n    \"Outcomes are highly context-specific (sector, organization size, demand environment); long-term effects are still uncertain.\",\n    \"Implementation fidelity and independent verification are crucial for reliable conclusions.\"\n  ],\n  \"assumptions\": [\n    \"Sufficient pilot or trial data exist across comparable sectors to inform a decision.\",\n    \"Labor laws, collective agreements, and fair pay structures are respected in the plan for reductions in hours.\",\n    \"Organizations can adjust staffing and service delivery models to maintain coverage and customer satisfaction.\",\n    \"Employee and customer stakeholders are engaged, and robust change-management processes are in place.\",\n    \"Evaluation includes both productivity metrics and well-being measures with appropriate benchmarks across time.\",\n    \"Contextual factors (economic conditions, demand patterns) are accounted for when interpreting results.\"\n  ],\n  \"confidence\": 0.65\n}\n\nFind issues. Prefer factual risk, missing edge cases, ambiguity, and overconfidence."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "The claim that productivity per employee can be neutral or positive relies on pilots with potential selection bias and non-randomization; may not generalize to other firms or roles."
+              },
+              {
+                "severity": 3,
+                "type": "logic",
+                "note": "Causal link between improved well-being and sustained productivity is assumed but not established; risk of diminishing returns if fatigue windows shift or workload spikes persist."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "No explicit metrics, baselines, or power analysis; unclear how 'productivity' and 'well-being' are defined, measured, and benchmarked across time."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Terminology '4x10' vs '4x8 with an extra day off' is ambiguous; schedule definitions affect fatigue, handoffs, and coverage; need precise scheduling models."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "Regulatory labor laws, overtime rules, and collective agreements are not analyzed; constraints could prevent reductions in hours or require offsets."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "Frontline/customer-facing functions and high-variability demand raises risk of degraded service levels; no contingency plans described."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No transition plan or capability to manage change; needs governance, training, and management capacity to ensure fidelity."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Equity concerns are acknowledged but no mitigation; potential adverse effects on caregivers, part-time workers, promotions; lacks strategies."
+              },
+              {
+                "severity": 4,
+                "type": "overconfidence",
+                "note": "Long-term effects and scalability rely on pilots; likelihood of publication bias; need uncertainty bounds and scenario analysis rather than a single confidence claim."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "The claim that productivity per employee can be neutral or positive relies on pilots with potential selection bias and non-randomization; may not generalize to other firms or roles."
+              },
+              {
+                "severity": 3,
+                "type": "logic",
+                "note": "Causal link between improved well-being and sustained productivity is assumed but not established; risk of diminishing returns if fatigue windows shift or workload spikes persist."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "No explicit metrics, baselines, or power analysis; unclear how 'productivity' and 'well-being' are defined, measured, and benchmarked across time."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Terminology '4x10' vs '4x8 with an extra day off' is ambiguous; schedule definitions affect fatigue, handoffs, and coverage; need precise scheduling models."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "Regulatory labor laws, overtime rules, and collective agreements are not analyzed; constraints could prevent reductions in hours or require offsets."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "Frontline/customer-facing functions and high-variability demand raises risk of degraded service levels; no contingency plans described."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No transition plan or capability to manage change; needs governance, training, and management capacity to ensure fidelity."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Equity concerns are acknowledged but no mitigation; potential adverse effects on caregivers, part-time workers, promotions; lacks strategies."
+              },
+              {
+                "severity": 4,
+                "type": "overconfidence",
+                "note": "Long-term effects and scalability rely on pilots; likelihood of publication bias; need uncertainty bounds and scenario analysis rather than a single confidence claim."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T10:11:27.397Z"
+      },
+      {
+        "id": "step_1771323120708_cd3aece3000408",
+        "agentName": "RedTeamAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:11:27.397Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a red-team analyst. Find high-risk failure modes and adversarial weaknesses in the answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is the four-day work week a good idea?\n\nCandidate answer JSON:\n{\n  \"answer\": \"A four-day work week can be a good idea in many contexts, but it is not universally beneficial. When implemented thoughtfully, it often maintains or even improves productivity per employee and boosts well-being (job satisfaction, sleep, reduced burnout), while potentially lowering certain costs (overtime, energy, facilities) and improving retention. However, total weekly output, delivery times, and service levels can vary by sector and job type, and coverage challenges may arise for frontline and customer-facing roles. The model matters: compressed 4x10 and 4x8 with an extra day off have different implications for fatigue, handoffs, overtime shifting, and customer impact. Equity considerations are important—impacts may differ by caregiving responsibilities, part-time workers, and gender dynamics. Implementation fidelity, demand patterns, and organizational size influence outcomes and scalability. Long-term effects beyond pilots (2+ years) remain uncertain. A rigorous, controlled pilot with clear metrics and independent evaluation is essential to decide applicability in a given organization.\",\n  \"keyClaims\": [\n    \"Productivity impact is mixed but can be neutral or positive per employee when hours are reduced without sacrificing output, especially in knowledge-work contexts.\",\n    \"Employee well-being often improves under a four-day model (higher job satisfaction, better sleep; potential burnout reduction).\",\n    \"Cost implications are context-dependent: potential savings (overtime, facilities, energy) but possible needs for higher wages or more temporary staff to maintain coverage.\",\n    \"Feasibility and impact depend on schedule type and industry: 4x10 vs 4x8 have different coverage, handoff, and customer-service implications.\",\n    \"Equity considerations are critical: effects on caregivers, part-time workers, and career progression can vary.\",\n    \"Outcomes are highly context-specific (sector, organization size, demand environment); long-term effects are still uncertain.\",\n    \"Implementation fidelity and independent verification are crucial for reliable conclusions.\"\n  ],\n  \"assumptions\": [\n    \"Sufficient pilot or trial data exist across comparable sectors to inform a decision.\",\n    \"Labor laws, collective agreements, and fair pay structures are respected in the plan for reductions in hours.\",\n    \"Organizations can adjust staffing and service delivery models to maintain coverage and customer satisfaction.\",\n    \"Employee and customer stakeholders are engaged, and robust change-management processes are in place.\",\n    \"Evaluation includes both productivity metrics and well-being measures with appropriate benchmarks across time.\",\n    \"Contextual factors (economic conditions, demand patterns) are accounted for when interpreting results.\"\n  ],\n  \"confidence\": 0.65\n}\n\nReturn a rigorous critique with severe issues when justified."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "Candidate answer on four-day work week",
+            "issues": [
+              {
+                "severity": 5,
+                "type": "factual",
+                "note": "Claims of productivity neutrality/positivity rely on limited evidence; no references or meta-analysis cited; risk of overgeneralization."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "No explicit metrics, baselines, or data collection plan; no guidance on sample size, control groups, or statistical methods; results may be biased or non-reproducible."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Definitions of '4x10' vs '4x8' and 'an extra day off' are unclear; readers may misinterpret the schedule specifics."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "No consideration of legal, regulatory, and union constraints around hours-reduction and scheduling; could lead to non-compliance or contract disputes."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Equity discussion is not operationalized; lacks guidance on how to measure and mitigate effects on caregivers, part-time workers, and progression paths."
+              },
+              {
+                "severity": 4,
+                "type": "logic",
+                "note": "Risk of selection bias in pilots (high performers or certain departments) skewing results; evaluation design needs controls and independent verification to avoid overoptimistic conclusions."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Safety-critical or frontline service roles and customer-facing contexts require explicit safeguards; the answer should outline how coverage, service levels, and safety remain acceptable."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "Candidate answer on four-day work week",
+            "issues": [
+              {
+                "severity": 5,
+                "type": "factual",
+                "note": "Claims of productivity neutrality/positivity rely on limited evidence; no references or meta-analysis cited; risk of overgeneralization."
+              },
+              {
+                "severity": 5,
+                "type": "missing",
+                "note": "No explicit metrics, baselines, or data collection plan; no guidance on sample size, control groups, or statistical methods; results may be biased or non-reproducible."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Definitions of '4x10' vs '4x8' and 'an extra day off' are unclear; readers may misinterpret the schedule specifics."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "No consideration of legal, regulatory, and union constraints around hours-reduction and scheduling; could lead to non-compliance or contract disputes."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Equity discussion is not operationalized; lacks guidance on how to measure and mitigate effects on caregivers, part-time workers, and progression paths."
+              },
+              {
+                "severity": 4,
+                "type": "logic",
+                "note": "Risk of selection bias in pilots (high performers or certain departments) skewing results; evaluation design needs controls and independent verification to avoid overoptimistic conclusions."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Safety-critical or frontline service roles and customer-facing contexts require explicit safeguards; the answer should outline how coverage, service levels, and safety remain acceptable."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T10:12:00.708Z"
+      },
+      {
+        "id": "step_1771323170298_2ef3e38c7d054",
+        "agentName": "SolverRevisionAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T10:12:00.708Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver revising your proposal after critique. Produce a revised AgentResponse that addresses all issues.\n\nInternal reasoning (do not put this in output fields):\n- Reference each critique issue in your reasoning before producing output.\n- Consider how each issue affects the answer, keyClaims, assumptions, and confidence.\n\nOutput requirements:\n- Change answer and keyClaims accordingly to address the critique.\n- Adjust confidence downward when critique severity is high (4–5).\n- Add assumptions when critique indicates ambiguity (type \"ambiguity\").\n- Keep keyClaims clean and non-duplicated.\n- Do not include any JSON fragments inside keyClaims. keyClaims must be plain English sentences only.\n- Do not reference the critique or revision process in answer, keyClaims, or assumptions—output only the revised content.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is the four-day work week a good idea?\n\nOriginal proposal:\n{\n  \"answer\": \"A four-day work week can be a good idea in many contexts, but it is not universally beneficial. When implemented thoughtfully, it often maintains or even improves productivity per employee and boosts well-being (job satisfaction, sleep, reduced burnout), while potentially lowering certain costs (overtime, energy, facilities) and improving retention. However, total weekly output, delivery times, and service levels can vary by sector and job type, and coverage challenges may arise for frontline and customer-facing roles. The model matters: compressed 4x10 and 4x8 with an extra day off have different implications for fatigue, handoffs, overtime shifting, and customer impact. Equity considerations are important—impacts may differ by caregiving responsibilities, part-time workers, and gender dynamics. Implementation fidelity, demand patterns, and organizational size influence outcomes and scalability. Long-term effects beyond pilots (2+ years) remain uncertain. A rigorous, controlled pilot with clear metrics and independent evaluation is essential to decide applicability in a given organization.\",\n  \"keyClaims\": [\n    \"Productivity impact is mixed but can be neutral or positive per employee when hours are reduced without sacrificing output, especially in knowledge-work contexts.\",\n    \"Employee well-being often improves under a four-day model (higher job satisfaction, better sleep; potential burnout reduction).\",\n    \"Cost implications are context-dependent: potential savings (overtime, facilities, energy) but possible needs for higher wages or more temporary staff to maintain coverage.\",\n    \"Feasibility and impact depend on schedule type and industry: 4x10 vs 4x8 have different coverage, handoff, and customer-service implications.\",\n    \"Equity considerations are critical: effects on caregivers, part-time workers, and career progression can vary.\",\n    \"Outcomes are highly context-specific (sector, organization size, demand environment); long-term effects are still uncertain.\",\n    \"Implementation fidelity and independent verification are crucial for reliable conclusions.\"\n  ],\n  \"assumptions\": [\n    \"Sufficient pilot or trial data exist across comparable sectors to inform a decision.\",\n    \"Labor laws, collective agreements, and fair pay structures are respected in the plan for reductions in hours.\",\n    \"Organizations can adjust staffing and service delivery models to maintain coverage and customer satisfaction.\",\n    \"Employee and customer stakeholders are engaged, and robust change-management processes are in place.\",\n    \"Evaluation includes both productivity metrics and well-being measures with appropriate benchmarks across time.\",\n    \"Contextual factors (economic conditions, demand patterns) are accounted for when interpreting results.\"\n  ],\n  \"confidence\": 0.65\n}\n\nCritique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 4,\n      \"type\": \"factual\",\n      \"note\": \"The claim that productivity per employee can be neutral or positive relies on pilots with potential selection bias and non-randomization; may not generalize to other firms or roles.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"logic\",\n      \"note\": \"Causal link between improved well-being and sustained productivity is assumed but not established; risk of diminishing returns if fatigue windows shift or workload spikes persist.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"No explicit metrics, baselines, or power analysis; unclear how 'productivity' and 'well-being' are defined, measured, and benchmarked across time.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"Terminology '4x10' vs '4x8 with an extra day off' is ambiguous; schedule definitions affect fatigue, handoffs, and coverage; need precise scheduling models.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"missing\",\n      \"note\": \"Regulatory labor laws, overtime rules, and collective agreements are not analyzed; constraints could prevent reductions in hours or require offsets.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"missing\",\n      \"note\": \"Frontline/customer-facing functions and high-variability demand raises risk of degraded service levels; no contingency plans described.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"No transition plan or capability to manage change; needs governance, training, and management capacity to ensure fidelity.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Equity concerns are acknowledged but no mitigation; potential adverse effects on caregivers, part-time workers, promotions; lacks strategies.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"overconfidence\",\n      \"note\": \"Long-term effects and scalability rely on pilots; likelihood of publication bias; need uncertainty bounds and scenario analysis rather than a single confidence claim.\"\n    }\n  ]\n}\n\nRevise the proposal to address each issue. Return the revised AgentResponse as valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "A four-day work week can be beneficial in some contexts, but it requires a rigorous, evidence-based approach to decide applicability. Organizations should run a controlled, pilot program with precise definitions, metrics, governance, and mitigation plans before broad adoption. Two common compressed formats should be defined clearly: 4x10 (four 10-hour days per week, usually with a three-day weekend) and 4x8 (four 8-hour days per week, typically with three days off). Exact schedules (start/end times, handoffs, and coverage) must be specified, tested, and possibly simulated to understand fatigue, handoffs, and customer impact. The pilot should use robust experimental or quasi-experimental designs (randomized assignment where feasible, or matched controls and difference-in-differences when not) and collect baseline and follow-up data on productivity, service levels, costs, and well-being.\n\nKey metrics and design considerations should include: baseline and ongoing productivity (output per labor hour or value added), unit throughput, quality measures (defect/error rates), service levels (on-time delivery, response times), customer satisfaction, employee well-being (burnout, sleep quality, job satisfaction), attendance and turnover, overtime hours, and total labor costs. Define targets and ensure the study has adequate statistical power (power analysis) and a clear analysis plan with pre-specified benchmarks for success or failure. Pilot duration should be 8–12 weeks (with a predefined extension if results are inconclusive) and include a control or benchmark period.\n\nEvidence interpretation should acknowledge biases: existing pilots may suffer from selection bias or non-randomization, so results should not be generalized across all firms or roles without careful design and replication. There must be clear plans to manage regulatory and contractual constraints, including labor laws, overtime rules, and collective agreements; these may constrain hour reductions or require compensation adjustments.\n\nFrontline and customer-facing functions require explicit contingency planning: cross-training, surge staffing, on-call options, shift swaps, and service-level guardrails to prevent degradation of service during demand variability.\n\nGovernance and change management are essential: establish a program charter, steering committee, defined roles and responsibilities, training, communications, data governance, and an independent evaluation process to ensure fidelity and credible results.\n\nEquity considerations need concrete mitigation: monitor and address effects on caregivers, part-time workers, and promotion pipelines; implement flexible scheduling, fair access to opportunities, and clear advancement criteria; adjust plans if disparities emerge.\n\nOnly after meeting predefined criteria across productivity, service, cost, well-being, and equity should an organization scale the approach. Because long-term effects and scalability are uncertain, treat this as a staged experiment with scenario analyses and ongoing monitoring rather than a one-off conclusion.\n",
+            "keyClaims": [
+              "Evidence on productivity effects is mixed and not guaranteed; rigorous pilots with robust design are needed to estimate causal effects.",
+              "Employee well-being often improves under a four-day model, but outcomes depend on workload management and the specific schedule used.",
+              "Service levels and coverage are sensitive to schedule design and industry; explicit contingency plans and staffing considerations are essential.",
+              "Labor-regulatory and collective bargaining constraints can limit hour reductions and must be analyzed and managed before any rollout.",
+              "Equity effects require proactive mitigation to protect caregivers, part-time workers, and career progression; monitoring and adjustments are needed.",
+              "A formal transition plan with governance, training, and independent evaluation is essential to ensure fidelity and credible conclusions.",
+              "Long-term effects and scalability are uncertain; conclusions should rely on scenario analysis and ongoing evaluation rather than a single pilot outcome."
+            ],
+            "assumptions": [
+              "Sufficient data infrastructure exists to collect baseline and follow-up metrics.",
+              "Jobs being considered for a compressed schedule are compatible with the chosen format or can be redesigned accordingly.",
+              "Legal and contractual reviews are feasible within the project timeline and will guide the design of any hour reductions.",
+              "Stakeholders (management, employees, and unions where applicable) are engaged and supportive of a structured pilot.",
+              "Power analysis can determine the necessary sample size and duration to detect meaningful changes in productivity, service, and well-being.",
+              "A control or benchmark period can be established for credible causal inference."
+            ],
+            "confidence": 0.4
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "A four-day work week can be beneficial in some contexts, but it requires a rigorous, evidence-based approach to decide applicability. Organizations should run a controlled, pilot program with precise definitions, metrics, governance, and mitigation plans before broad adoption. Two common compressed formats should be defined clearly: 4x10 (four 10-hour days per week, usually with a three-day weekend) and 4x8 (four 8-hour days per week, typically with three days off). Exact schedules (start/end times, handoffs, and coverage) must be specified, tested, and possibly simulated to understand fatigue, handoffs, and customer impact. The pilot should use robust experimental or quasi-experimental designs (randomized assignment where feasible, or matched controls and difference-in-differences when not) and collect baseline and follow-up data on productivity, service levels, costs, and well-being.\n\nKey metrics and design considerations should include: baseline and ongoing productivity (output per labor hour or value added), unit throughput, quality measures (defect/error rates), service levels (on-time delivery, response times), customer satisfaction, employee well-being (burnout, sleep quality, job satisfaction), attendance and turnover, overtime hours, and total labor costs. Define targets and ensure the study has adequate statistical power (power analysis) and a clear analysis plan with pre-specified benchmarks for success or failure. Pilot duration should be 8–12 weeks (with a predefined extension if results are inconclusive) and include a control or benchmark period.\n\nEvidence interpretation should acknowledge biases: existing pilots may suffer from selection bias or non-randomization, so results should not be generalized across all firms or roles without careful design and replication. There must be clear plans to manage regulatory and contractual constraints, including labor laws, overtime rules, and collective agreements; these may constrain hour reductions or require compensation adjustments.\n\nFrontline and customer-facing functions require explicit contingency planning: cross-training, surge staffing, on-call options, shift swaps, and service-level guardrails to prevent degradation of service during demand variability.\n\nGovernance and change management are essential: establish a program charter, steering committee, defined roles and responsibilities, training, communications, data governance, and an independent evaluation process to ensure fidelity and credible results.\n\nEquity considerations need concrete mitigation: monitor and address effects on caregivers, part-time workers, and promotion pipelines; implement flexible scheduling, fair access to opportunities, and clear advancement criteria; adjust plans if disparities emerge.\n\nOnly after meeting predefined criteria across productivity, service, cost, well-being, and equity should an organization scale the approach. Because long-term effects and scalability are uncertain, treat this as a staged experiment with scenario analyses and ongoing monitoring rather than a one-off conclusion.\n",
+            "keyClaims": [
+              "Evidence on productivity effects is mixed and not guaranteed; rigorous pilots with robust design are needed to estimate causal effects.",
+              "Employee well-being often improves under a four-day model, but outcomes depend on workload management and the specific schedule used.",
+              "Service levels and coverage are sensitive to schedule design and industry; explicit contingency plans and staffing considerations are essential.",
+              "Labor-regulatory and collective bargaining constraints can limit hour reductions and must be analyzed and managed before any rollout.",
+              "Equity effects require proactive mitigation to protect caregivers, part-time workers, and career progression; monitoring and adjustments are needed.",
+              "A formal transition plan with governance, training, and independent evaluation is essential to ensure fidelity and credible conclusions.",
+              "Long-term effects and scalability are uncertain; conclusions should rely on scenario analysis and ongoing evaluation rather than a single pilot outcome."
+            ],
+            "assumptions": [
+              "Sufficient data infrastructure exists to collect baseline and follow-up metrics.",
+              "Jobs being considered for a compressed schedule are compatible with the chosen format or can be redesigned accordingly.",
+              "Legal and contractual reviews are feasible within the project timeline and will guide the design of any hour reductions.",
+              "Stakeholders (management, employees, and unions where applicable) are engaged and supportive of a structured pilot.",
+              "Power analysis can determine the necessary sample size and duration to detect meaningful changes in productivity, service, and well-being.",
+              "A control or benchmark period can be established for credible causal inference."
+            ],
+            "confidence": 0.4
+          }
+        },
+        "completedAt": "2026-02-17T10:12:50.298Z"
+      },
+      {
+        "id": "step_1771323194841_5d1e5a574f7c68",
+        "agentName": "SynthesizerAgent",
+        "role": "synthesizer",
+        "createdAt": "2026-02-17T10:12:50.299Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Synthesizer. Given the question, the solver's original proposal, the skeptic's critique, and the solver's revision, produce a final synthesized AgentResponse.\n\nInternal reasoning (do not put this in output fields):\n- Consider how the critique and revision improved or changed the proposal.\n- Synthesize the best elements into a coherent final answer.\n\nOutput requirements:\n- Produce a clear, well-supported answer that incorporates valid points from the debate.\n- keyClaims must be plain English sentences only. No JSON fragments.\n- Set confidence appropriately based on the debate outcome.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is the four-day work week a good idea?\n\nSolver proposal:\n{\n  \"answer\": \"A four-day work week can be a good idea in many contexts, but it is not universally beneficial. When implemented thoughtfully, it often maintains or even improves productivity per employee and boosts well-being (job satisfaction, sleep, reduced burnout), while potentially lowering certain costs (overtime, energy, facilities) and improving retention. However, total weekly output, delivery times, and service levels can vary by sector and job type, and coverage challenges may arise for frontline and customer-facing roles. The model matters: compressed 4x10 and 4x8 with an extra day off have different implications for fatigue, handoffs, overtime shifting, and customer impact. Equity considerations are important—impacts may differ by caregiving responsibilities, part-time workers, and gender dynamics. Implementation fidelity, demand patterns, and organizational size influence outcomes and scalability. Long-term effects beyond pilots (2+ years) remain uncertain. A rigorous, controlled pilot with clear metrics and independent evaluation is essential to decide applicability in a given organization.\",\n  \"keyClaims\": [\n    \"Productivity impact is mixed but can be neutral or positive per employee when hours are reduced without sacrificing output, especially in knowledge-work contexts.\",\n    \"Employee well-being often improves under a four-day model (higher job satisfaction, better sleep; potential burnout reduction).\",\n    \"Cost implications are context-dependent: potential savings (overtime, facilities, energy) but possible needs for higher wages or more temporary staff to maintain coverage.\",\n    \"Feasibility and impact depend on schedule type and industry: 4x10 vs 4x8 have different coverage, handoff, and customer-service implications.\",\n    \"Equity considerations are critical: effects on caregivers, part-time workers, and career progression can vary.\",\n    \"Outcomes are highly context-specific (sector, organization size, demand environment); long-term effects are still uncertain.\",\n    \"Implementation fidelity and independent verification are crucial for reliable conclusions.\"\n  ],\n  \"assumptions\": [\n    \"Sufficient pilot or trial data exist across comparable sectors to inform a decision.\",\n    \"Labor laws, collective agreements, and fair pay structures are respected in the plan for reductions in hours.\",\n    \"Organizations can adjust staffing and service delivery models to maintain coverage and customer satisfaction.\",\n    \"Employee and customer stakeholders are engaged, and robust change-management processes are in place.\",\n    \"Evaluation includes both productivity metrics and well-being measures with appropriate benchmarks across time.\",\n    \"Contextual factors (economic conditions, demand patterns) are accounted for when interpreting results.\"\n  ],\n  \"confidence\": 0.65\n}\n\nSkeptic critique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 4,\n      \"type\": \"factual\",\n      \"note\": \"The claim that productivity per employee can be neutral or positive relies on pilots with potential selection bias and non-randomization; may not generalize to other firms or roles.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"logic\",\n      \"note\": \"Causal link between improved well-being and sustained productivity is assumed but not established; risk of diminishing returns if fatigue windows shift or workload spikes persist.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"No explicit metrics, baselines, or power analysis; unclear how 'productivity' and 'well-being' are defined, measured, and benchmarked across time.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"Terminology '4x10' vs '4x8 with an extra day off' is ambiguous; schedule definitions affect fatigue, handoffs, and coverage; need precise scheduling models.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"missing\",\n      \"note\": \"Regulatory labor laws, overtime rules, and collective agreements are not analyzed; constraints could prevent reductions in hours or require offsets.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"missing\",\n      \"note\": \"Frontline/customer-facing functions and high-variability demand raises risk of degraded service levels; no contingency plans described.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"No transition plan or capability to manage change; needs governance, training, and management capacity to ensure fidelity.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Equity concerns are acknowledged but no mitigation; potential adverse effects on caregivers, part-time workers, promotions; lacks strategies.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"overconfidence\",\n      \"note\": \"Long-term effects and scalability rely on pilots; likelihood of publication bias; need uncertainty bounds and scenario analysis rather than a single confidence claim.\"\n    }\n  ]\n}\n\nSolver revision:\n{\n  \"answer\": \"A four-day work week can be beneficial in some contexts, but it requires a rigorous, evidence-based approach to decide applicability. Organizations should run a controlled, pilot program with precise definitions, metrics, governance, and mitigation plans before broad adoption. Two common compressed formats should be defined clearly: 4x10 (four 10-hour days per week, usually with a three-day weekend) and 4x8 (four 8-hour days per week, typically with three days off). Exact schedules (start/end times, handoffs, and coverage) must be specified, tested, and possibly simulated to understand fatigue, handoffs, and customer impact. The pilot should use robust experimental or quasi-experimental designs (randomized assignment where feasible, or matched controls and difference-in-differences when not) and collect baseline and follow-up data on productivity, service levels, costs, and well-being.\\n\\nKey metrics and design considerations should include: baseline and ongoing productivity (output per labor hour or value added), unit throughput, quality measures (defect/error rates), service levels (on-time delivery, response times), customer satisfaction, employee well-being (burnout, sleep quality, job satisfaction), attendance and turnover, overtime hours, and total labor costs. Define targets and ensure the study has adequate statistical power (power analysis) and a clear analysis plan with pre-specified benchmarks for success or failure. Pilot duration should be 8–12 weeks (with a predefined extension if results are inconclusive) and include a control or benchmark period.\\n\\nEvidence interpretation should acknowledge biases: existing pilots may suffer from selection bias or non-randomization, so results should not be generalized across all firms or roles without careful design and replication. There must be clear plans to manage regulatory and contractual constraints, including labor laws, overtime rules, and collective agreements; these may constrain hour reductions or require compensation adjustments.\\n\\nFrontline and customer-facing functions require explicit contingency planning: cross-training, surge staffing, on-call options, shift swaps, and service-level guardrails to prevent degradation of service during demand variability.\\n\\nGovernance and change management are essential: establish a program charter, steering committee, defined roles and responsibilities, training, communications, data governance, and an independent evaluation process to ensure fidelity and credible results.\\n\\nEquity considerations need concrete mitigation: monitor and address effects on caregivers, part-time workers, and promotion pipelines; implement flexible scheduling, fair access to opportunities, and clear advancement criteria; adjust plans if disparities emerge.\\n\\nOnly after meeting predefined criteria across productivity, service, cost, well-being, and equity should an organization scale the approach. Because long-term effects and scalability are uncertain, treat this as a staged experiment with scenario analyses and ongoing monitoring rather than a one-off conclusion.\\n\",\n  \"keyClaims\": [\n    \"Evidence on productivity effects is mixed and not guaranteed; rigorous pilots with robust design are needed to estimate causal effects.\",\n    \"Employee well-being often improves under a four-day model, but outcomes depend on workload management and the specific schedule used.\",\n    \"Service levels and coverage are sensitive to schedule design and industry; explicit contingency plans and staffing considerations are essential.\",\n    \"Labor-regulatory and collective bargaining constraints can limit hour reductions and must be analyzed and managed before any rollout.\",\n    \"Equity effects require proactive mitigation to protect caregivers, part-time workers, and career progression; monitoring and adjustments are needed.\",\n    \"A formal transition plan with governance, training, and independent evaluation is essential to ensure fidelity and credible conclusions.\",\n    \"Long-term effects and scalability are uncertain; conclusions should rely on scenario analysis and ongoing evaluation rather than a single pilot outcome.\"\n  ],\n  \"assumptions\": [\n    \"Sufficient data infrastructure exists to collect baseline and follow-up metrics.\",\n    \"Jobs being considered for a compressed schedule are compatible with the chosen format or can be redesigned accordingly.\",\n    \"Legal and contractual reviews are feasible within the project timeline and will guide the design of any hour reductions.\",\n    \"Stakeholders (management, employees, and unions where applicable) are engaged and supportive of a structured pilot.\",\n    \"Power analysis can determine the necessary sample size and duration to detect meaningful changes in productivity, service, and well-being.\",\n    \"A control or benchmark period can be established for credible causal inference.\"\n  ],\n  \"confidence\": 0.4\n}\n\nSynthesize a final AgentResponse from the debate. Return valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "A four-day work week can be beneficial in some contexts, but it is not universally better. It should be adopted only after a careful, evidence-based pilot. Organizations should run a controlled pilot with precise definitions (4x10 and 4x8 formats), rigorous metrics, governance, and mitigation plans before broad adoption. The pilot should use robust experimental or quasi-experimental designs, collect baseline and follow-up data on productivity, service levels, costs, and well-being, and ensure adequate statistical power. Schedule details, coverage, and contingency plans for frontline work must be defined. Regulatory and contractual constraints must be analyzed. Equity implications require proactive mitigation. Treat it as staged experimentation with ongoing monitoring; long-term effects and scalability remain uncertain.",
+            "keyClaims": [
+              "Evidence on productivity is not guaranteed and depends on the design; robust pilots are needed to estimate causal effects.",
+              "Employee well-being can improve with a four-day week, but outcomes depend on workload management and the specific schedule.",
+              "Service levels and coverage are sensitive to schedule design; explicit contingency plans and staffing are essential.",
+              "Regulatory and collective bargaining constraints can limit hour reductions and must be analyzed upfront.",
+              "Equity effects require proactive mitigation to protect caregivers, part-time workers, and promotion opportunities.",
+              "A formal transition plan with governance, training, and independent evaluation is essential.",
+              "Long-term effects and scalability are uncertain; rely on scenario analysis and ongoing evaluation, not a single pilot.",
+              "Distinguishing between 4x10 and 4x8 schedules and testing both can help identify which brings benefits."
+            ],
+            "assumptions": [
+              "Sufficient data infrastructure exists to collect baseline and follow-up metrics.",
+              "Jobs considered for compressed schedules can be designed to fit either 4x10 or 4x8.",
+              "Legal and regulatory constraints, and union agreements, can be navigated within the pilot.",
+              "Stakeholders (management, employees, and unions where applicable) are engaged and supportive of a structured pilot.",
+              "Power analysis can determine the necessary sample size and duration to detect meaningful changes in productivity, service, and well-being.",
+              "A control or benchmark period can be established for credible causal inference.",
+              "Counterfactual risk: No or negative productivity gains due to compressed hours causing fatigue, task switching overhead, and reduced focus.",
+              "Judge summary: The proposal is coherent and prudent in advocating a controlled, evidence-based four-day-work-week pilot, but it omits many core details needed for credible evaluation and scalable implementation: explicit metrics and data plans, power analysis, regulatory/contractual analysis, operational contingency planning, and concrete equity mitigations. To be credible for adoption, it should provide detailed measurement definitions, an experimental design with controls, regulatory review, transition governance, and robust mitigation strategies for frontline coverage and equity."
+            ],
+            "confidence": 0.7
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "A four-day work week can be beneficial in some contexts, but it is not universally better. It should be adopted only after a careful, evidence-based pilot. Organizations should run a controlled pilot with precise definitions (4x10 and 4x8 formats), rigorous metrics, governance, and mitigation plans before broad adoption. The pilot should use robust experimental or quasi-experimental designs, collect baseline and follow-up data on productivity, service levels, costs, and well-being, and ensure adequate statistical power. Schedule details, coverage, and contingency plans for frontline work must be defined. Regulatory and contractual constraints must be analyzed. Equity implications require proactive mitigation. Treat it as staged experimentation with ongoing monitoring; long-term effects and scalability remain uncertain.",
+            "keyClaims": [
+              "Evidence on productivity is not guaranteed and depends on the design; robust pilots are needed to estimate causal effects.",
+              "Employee well-being can improve with a four-day week, but outcomes depend on workload management and the specific schedule.",
+              "Service levels and coverage are sensitive to schedule design; explicit contingency plans and staffing are essential.",
+              "Regulatory and collective bargaining constraints can limit hour reductions and must be analyzed upfront.",
+              "Equity effects require proactive mitigation to protect caregivers, part-time workers, and promotion opportunities.",
+              "A formal transition plan with governance, training, and independent evaluation is essential.",
+              "Long-term effects and scalability are uncertain; rely on scenario analysis and ongoing evaluation, not a single pilot.",
+              "Distinguishing between 4x10 and 4x8 schedules and testing both can help identify which brings benefits."
+            ],
+            "assumptions": [
+              "Sufficient data infrastructure exists to collect baseline and follow-up metrics.",
+              "Jobs considered for compressed schedules can be designed to fit either 4x10 or 4x8.",
+              "Legal and regulatory constraints, and union agreements, can be navigated within the pilot.",
+              "Stakeholders (management, employees, and unions where applicable) are engaged and supportive of a structured pilot.",
+              "Power analysis can determine the necessary sample size and duration to detect meaningful changes in productivity, service, and well-being.",
+              "A control or benchmark period can be established for credible causal inference.",
+              "Counterfactual risk: No or negative productivity gains due to compressed hours causing fatigue, task switching overhead, and reduced focus.",
+              "Judge summary: The proposal is coherent and prudent in advocating a controlled, evidence-based four-day-work-week pilot, but it omits many core details needed for credible evaluation and scalable implementation: explicit metrics and data plans, power analysis, regulatory/contractual analysis, operational contingency planning, and concrete equity mitigations. To be credible for adoption, it should provide detailed measurement definitions, an experimental design with controls, regulatory review, transition governance, and robust mitigation strategies for frontline coverage and equity."
+            ],
+            "confidence": 0.7
+          }
+        },
+        "completedAt": "2026-02-17T10:13:14.841Z"
+      },
+      {
+        "id": "step_1771323227692_b4b74ac317366",
+        "agentName": "CounterfactualAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:13:14.841Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a counterfactual analyst. Identify plausible failure modes, trigger conditions, and mitigations for the proposal. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is the four-day work week a good idea?\n\nProposal:\n{\n  \"answer\": \"A four-day work week can be beneficial in some contexts, but it is not universally better. It should be adopted only after a careful, evidence-based pilot. Organizations should run a controlled pilot with precise definitions (4x10 and 4x8 formats), rigorous metrics, governance, and mitigation plans before broad adoption. The pilot should use robust experimental or quasi-experimental designs, collect baseline and follow-up data on productivity, service levels, costs, and well-being, and ensure adequate statistical power. Schedule details, coverage, and contingency plans for frontline work must be defined. Regulatory and contractual constraints must be analyzed. Equity implications require proactive mitigation. Treat it as staged experimentation with ongoing monitoring; long-term effects and scalability remain uncertain.\",\n  \"keyClaims\": [\n    \"Evidence on productivity is not guaranteed and depends on the design; robust pilots are needed to estimate causal effects.\",\n    \"Employee well-being can improve with a four-day week, but outcomes depend on workload management and the specific schedule.\",\n    \"Service levels and coverage are sensitive to schedule design; explicit contingency plans and staffing are essential.\",\n    \"Regulatory and collective bargaining constraints can limit hour reductions and must be analyzed upfront.\",\n    \"Equity effects require proactive mitigation to protect caregivers, part-time workers, and promotion opportunities.\",\n    \"A formal transition plan with governance, training, and independent evaluation is essential.\",\n    \"Long-term effects and scalability are uncertain; rely on scenario analysis and ongoing evaluation, not a single pilot.\",\n    \"Distinguishing between 4x10 and 4x8 schedules and testing both can help identify which brings benefits.\"\n  ],\n  \"assumptions\": [\n    \"Sufficient data infrastructure exists to collect baseline and follow-up metrics.\",\n    \"Jobs considered for compressed schedules can be designed to fit either 4x10 or 4x8.\",\n    \"Legal and regulatory constraints, and union agreements, can be navigated within the pilot.\",\n    \"Stakeholders (management, employees, and unions where applicable) are engaged and supportive of a structured pilot.\",\n    \"Power analysis can determine the necessary sample size and duration to detect meaningful changes in productivity, service, and well-being.\",\n    \"A control or benchmark period can be established for credible causal inference.\"\n  ],\n  \"confidence\": 0.6\n}"
+            }
+          ],
+          "schemaName": "Counterfactual",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "failureModes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "triggerConditions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "mitigations": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "failureModes",
+              "triggerConditions",
+              "mitigations"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "failureModes": [
+              "No or negative productivity gains due to compressed hours causing fatigue, task switching overhead, and reduced focus.",
+              "Service levels or coverage decline, especially for frontline or customer-facing roles, leading to SLA breaches or customer dissatisfaction.",
+              "Higher total costs than savings due to overtime, premium pay, temporary hires, onboarding, and administrative complexity.",
+              "Equity harms where caregivers, part-time workers, or lower-paid staff face reduced opportunities or slower advancement.",
+              "Employee burnout or morale decline from longer workdays or perceived workload pressure, increasing attrition.",
+              "Scheduling and tooling failures: time-tracking, payroll, and benefits systems not adapted to new schedules, causing errors and mispayments.",
+              "Regulatory or union constraints hindering hour reductions, triggering renegotiation, penalties, or forced revert.",
+              "Poor experimental design leading to inconclusive or biased results (e.g., weak control, confounding factors, or underpowered study).",
+              "Demand and capacity misalignment: volume spikes or seasonality negate benefits, harming service and productivity.",
+              "Rebound effects: tasks are compressed but overall workload remains the same, with quality or thoroughness compromised.",
+              "Unequal impacts across departments: heterogeneity limits generalizability and risks misinformed scaling.",
+              "Implementation fatigue and change-management risk: resistance from managers or employees undermines adoption."
+            ],
+            "triggerConditions": [
+              "Early SLA breaches or customer complaints during the pilot that require stopping or redesigning the trial.",
+              "Inadequate coverage due to vacancies, unplanned absences, or poor back-up staffing creating service gaps.",
+              "Overtime or premium-pay costs exceeding budgeted targets due to inefficient scheduling.",
+              "Regulatory restrictions or union actions that block hour reductions or require costly concessions.",
+              "Poor data quality, missing metrics, or insufficient statistical power making results non-credible.",
+              "Pilot limited to a non-representative department or function causing selection bias and non-generalizable results.",
+              "IT or scheduling-tool failures that corrupt time-tracking, shift planning, or payroll integration.",
+              "Demand volatility or seasonality that makes pilot results non-transferable to normal operation.",
+              "Management or employee pushback that undermines adherence to the pilot protocol.",
+              "Pay or benefits misalignment introducing fairness concerns and morale issues.",
+              "Safety or operational incidents caused by fatigue or rushed work planning triggering halt or redesign."
+            ],
+            "mitigations": [
+              "Design the pilot with robust experimental methods (randomized or stepped-wedge, preregistered hypotheses, independent evaluation) and achieve adequate statistical power.",
+              "Test both 4x10 and 4x8 formats across multiple, representative departments to identify where benefits are most likely and ensure generalizability.",
+              "Establish contingency staffing, cross-training, on-call pools, and backup coverage to maintain service levels during any schedule disruption.",
+              "Institute clear governance, pre-defined service-level criteria, and a formal pause/revert mechanism if critical SLA or safety metrics are breached.",
+              "Align compensation, benefits, and promotion pathways to prevent inequitable impacts; monitor and adjust pay or progression rules as needed.",
+              "Engage unions and regulators early; obtain advisory input and secure agreements where possible to minimize later disruption.",
+              "Invest in data infrastructure with reliable time-tracking, payroll integration, privacy safeguards, and real-time dashboards; implement data quality checks.",
+              "Predefine metrics for productivity, well-being, and service levels; use credible causal designs and schedule regular independent evaluations.",
+              "Roll out in phased increments with go/no-go gates; include de-risking steps and transparent reporting to stakeholders.",
+              "Develop department-specific job design guidelines and change-management plans to reduce one-size-fits-all risk and enable smoother scaling.",
+              "Communicate plans clearly, train managers in workload management and scheduling best practices, and provide change-management support to sustain adoption."
+            ]
+          }
+        ],
+        "output": {
+          "kind": "counterfactual",
+          "data": {
+            "failureModes": [
+              "No or negative productivity gains due to compressed hours causing fatigue, task switching overhead, and reduced focus.",
+              "Service levels or coverage decline, especially for frontline or customer-facing roles, leading to SLA breaches or customer dissatisfaction.",
+              "Higher total costs than savings due to overtime, premium pay, temporary hires, onboarding, and administrative complexity.",
+              "Equity harms where caregivers, part-time workers, or lower-paid staff face reduced opportunities or slower advancement.",
+              "Employee burnout or morale decline from longer workdays or perceived workload pressure, increasing attrition.",
+              "Scheduling and tooling failures: time-tracking, payroll, and benefits systems not adapted to new schedules, causing errors and mispayments.",
+              "Regulatory or union constraints hindering hour reductions, triggering renegotiation, penalties, or forced revert.",
+              "Poor experimental design leading to inconclusive or biased results (e.g., weak control, confounding factors, or underpowered study).",
+              "Demand and capacity misalignment: volume spikes or seasonality negate benefits, harming service and productivity.",
+              "Rebound effects: tasks are compressed but overall workload remains the same, with quality or thoroughness compromised.",
+              "Unequal impacts across departments: heterogeneity limits generalizability and risks misinformed scaling.",
+              "Implementation fatigue and change-management risk: resistance from managers or employees undermines adoption."
+            ],
+            "triggerConditions": [
+              "Early SLA breaches or customer complaints during the pilot that require stopping or redesigning the trial.",
+              "Inadequate coverage due to vacancies, unplanned absences, or poor back-up staffing creating service gaps.",
+              "Overtime or premium-pay costs exceeding budgeted targets due to inefficient scheduling.",
+              "Regulatory restrictions or union actions that block hour reductions or require costly concessions.",
+              "Poor data quality, missing metrics, or insufficient statistical power making results non-credible.",
+              "Pilot limited to a non-representative department or function causing selection bias and non-generalizable results.",
+              "IT or scheduling-tool failures that corrupt time-tracking, shift planning, or payroll integration.",
+              "Demand volatility or seasonality that makes pilot results non-transferable to normal operation.",
+              "Management or employee pushback that undermines adherence to the pilot protocol.",
+              "Pay or benefits misalignment introducing fairness concerns and morale issues.",
+              "Safety or operational incidents caused by fatigue or rushed work planning triggering halt or redesign."
+            ],
+            "mitigations": [
+              "Design the pilot with robust experimental methods (randomized or stepped-wedge, preregistered hypotheses, independent evaluation) and achieve adequate statistical power.",
+              "Test both 4x10 and 4x8 formats across multiple, representative departments to identify where benefits are most likely and ensure generalizability.",
+              "Establish contingency staffing, cross-training, on-call pools, and backup coverage to maintain service levels during any schedule disruption.",
+              "Institute clear governance, pre-defined service-level criteria, and a formal pause/revert mechanism if critical SLA or safety metrics are breached.",
+              "Align compensation, benefits, and promotion pathways to prevent inequitable impacts; monitor and adjust pay or progression rules as needed.",
+              "Engage unions and regulators early; obtain advisory input and secure agreements where possible to minimize later disruption.",
+              "Invest in data infrastructure with reliable time-tracking, payroll integration, privacy safeguards, and real-time dashboards; implement data quality checks.",
+              "Predefine metrics for productivity, well-being, and service levels; use credible causal designs and schedule regular independent evaluations.",
+              "Roll out in phased increments with go/no-go gates; include de-risking steps and transparent reporting to stakeholders.",
+              "Develop department-specific job design guidelines and change-management plans to reduce one-size-fits-all risk and enable smoother scaling.",
+              "Communicate plans clearly, train managers in workload management and scheduling best practices, and provide change-management support to sustain adoption."
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T10:13:47.692Z"
+      },
+      {
+        "id": "step_1771323254360_a6b1215c9a8598",
+        "agentName": "CalibrationAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:13:47.692Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a calibration auditor. Set adjusted confidence and claim-level confidences from the proposed answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Proposal JSON:\n{\n  \"answer\": \"A four-day work week can be beneficial in some contexts, but it is not universally better. It should be adopted only after a careful, evidence-based pilot. Organizations should run a controlled pilot with precise definitions (4x10 and 4x8 formats), rigorous metrics, governance, and mitigation plans before broad adoption. The pilot should use robust experimental or quasi-experimental designs, collect baseline and follow-up data on productivity, service levels, costs, and well-being, and ensure adequate statistical power. Schedule details, coverage, and contingency plans for frontline work must be defined. Regulatory and contractual constraints must be analyzed. Equity implications require proactive mitigation. Treat it as staged experimentation with ongoing monitoring; long-term effects and scalability remain uncertain.\",\n  \"keyClaims\": [\n    \"Evidence on productivity is not guaranteed and depends on the design; robust pilots are needed to estimate causal effects.\",\n    \"Employee well-being can improve with a four-day week, but outcomes depend on workload management and the specific schedule.\",\n    \"Service levels and coverage are sensitive to schedule design; explicit contingency plans and staffing are essential.\",\n    \"Regulatory and collective bargaining constraints can limit hour reductions and must be analyzed upfront.\",\n    \"Equity effects require proactive mitigation to protect caregivers, part-time workers, and promotion opportunities.\",\n    \"A formal transition plan with governance, training, and independent evaluation is essential.\",\n    \"Long-term effects and scalability are uncertain; rely on scenario analysis and ongoing evaluation, not a single pilot.\",\n    \"Distinguishing between 4x10 and 4x8 schedules and testing both can help identify which brings benefits.\"\n  ],\n  \"assumptions\": [\n    \"Sufficient data infrastructure exists to collect baseline and follow-up metrics.\",\n    \"Jobs considered for compressed schedules can be designed to fit either 4x10 or 4x8.\",\n    \"Legal and regulatory constraints, and union agreements, can be navigated within the pilot.\",\n    \"Stakeholders (management, employees, and unions where applicable) are engaged and supportive of a structured pilot.\",\n    \"Power analysis can determine the necessary sample size and duration to detect meaningful changes in productivity, service, and well-being.\",\n    \"A control or benchmark period can be established for credible causal inference.\",\n    \"Counterfactual risk: No or negative productivity gains due to compressed hours causing fatigue, task switching overhead, and reduced focus.\"\n  ],\n  \"confidence\": 0.6\n}"
+            }
+          ],
+          "schemaName": "Calibration",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "adjustedConfidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "rationale": {
+                "type": "string"
+              },
+              "claimConfidences": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "claim": {
+                      "type": "string"
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    }
+                  },
+                  "required": [
+                    "claim",
+                    "confidence"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "adjustedConfidence",
+              "rationale",
+              "claimConfidences"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "adjustedConfidence": 0.7,
+            "rationale": "The proposal is cautious and design-driven, emphasizing controlled pilots, robust metrics, governance, and stakeholder considerations. The adjusted confidence reflects moderate-to-high credibility for the guidance given its alignment with standard best practices for evaluating four-day week pilots, while acknowledging persistent uncertainties around long-term effects, scalability, and external constraints.",
+            "claimConfidences": [
+              {
+                "claim": "Evidence on productivity is not guaranteed and depends on the design; robust pilots are needed to estimate causal effects.",
+                "confidence": 0.85
+              },
+              {
+                "claim": "Employee well-being can improve with a four-day week, but outcomes depend on workload management and the specific schedule.",
+                "confidence": 0.75
+              },
+              {
+                "claim": "Service levels and coverage are sensitive to schedule design; explicit contingency plans and staffing are essential.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Regulatory and collective bargaining constraints can limit hour reductions and must be analyzed upfront.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Equity effects require proactive mitigation to protect caregivers, part-time workers, and promotion opportunities.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "A formal transition plan with governance, training, and independent evaluation is essential.",
+                "confidence": 0.85
+              },
+              {
+                "claim": "Long-term effects and scalability are uncertain; rely on scenario analysis and ongoing evaluation, not a single pilot.",
+                "confidence": 0.88
+              },
+              {
+                "claim": "Distinguishing between 4x10 and 4x8 schedules and testing both can help identify which brings benefits.",
+                "confidence": 0.82
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "calibration",
+          "data": {
+            "adjustedConfidence": 0.7,
+            "rationale": "The proposal is cautious and design-driven, emphasizing controlled pilots, robust metrics, governance, and stakeholder considerations. The adjusted confidence reflects moderate-to-high credibility for the guidance given its alignment with standard best practices for evaluating four-day week pilots, while acknowledging persistent uncertainties around long-term effects, scalability, and external constraints.",
+            "claimConfidences": [
+              {
+                "claim": "Evidence on productivity is not guaranteed and depends on the design; robust pilots are needed to estimate causal effects.",
+                "confidence": 0.85
+              },
+              {
+                "claim": "Employee well-being can improve with a four-day week, but outcomes depend on workload management and the specific schedule.",
+                "confidence": 0.75
+              },
+              {
+                "claim": "Service levels and coverage are sensitive to schedule design; explicit contingency plans and staffing are essential.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Regulatory and collective bargaining constraints can limit hour reductions and must be analyzed upfront.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Equity effects require proactive mitigation to protect caregivers, part-time workers, and promotion opportunities.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "A formal transition plan with governance, training, and independent evaluation is essential.",
+                "confidence": 0.85
+              },
+              {
+                "claim": "Long-term effects and scalability are uncertain; rely on scenario analysis and ongoing evaluation, not a single pilot.",
+                "confidence": 0.88
+              },
+              {
+                "claim": "Distinguishing between 4x10 and 4x8 schedules and testing both can help identify which brings benefits.",
+                "confidence": 0.82
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T10:14:14.360Z"
+      },
+      {
+        "id": "step_1771323274630_a11b730ac57af",
+        "agentName": "JudgeAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:14:14.360Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a strict research judge. Score answer quality with rubric scores 1-5. Output only valid JSON matching schema."
+            },
+            {
+              "role": "user",
+              "content": "Final proposal JSON:\n{\n  \"answer\": \"A four-day work week can be beneficial in some contexts, but it is not universally better. It should be adopted only after a careful, evidence-based pilot. Organizations should run a controlled pilot with precise definitions (4x10 and 4x8 formats), rigorous metrics, governance, and mitigation plans before broad adoption. The pilot should use robust experimental or quasi-experimental designs, collect baseline and follow-up data on productivity, service levels, costs, and well-being, and ensure adequate statistical power. Schedule details, coverage, and contingency plans for frontline work must be defined. Regulatory and contractual constraints must be analyzed. Equity implications require proactive mitigation. Treat it as staged experimentation with ongoing monitoring; long-term effects and scalability remain uncertain.\",\n  \"keyClaims\": [\n    \"Evidence on productivity is not guaranteed and depends on the design; robust pilots are needed to estimate causal effects.\",\n    \"Employee well-being can improve with a four-day week, but outcomes depend on workload management and the specific schedule.\",\n    \"Service levels and coverage are sensitive to schedule design; explicit contingency plans and staffing are essential.\",\n    \"Regulatory and collective bargaining constraints can limit hour reductions and must be analyzed upfront.\",\n    \"Equity effects require proactive mitigation to protect caregivers, part-time workers, and promotion opportunities.\",\n    \"A formal transition plan with governance, training, and independent evaluation is essential.\",\n    \"Long-term effects and scalability are uncertain; rely on scenario analysis and ongoing evaluation, not a single pilot.\",\n    \"Distinguishing between 4x10 and 4x8 schedules and testing both can help identify which brings benefits.\"\n  ],\n  \"assumptions\": [\n    \"Sufficient data infrastructure exists to collect baseline and follow-up metrics.\",\n    \"Jobs considered for compressed schedules can be designed to fit either 4x10 or 4x8.\",\n    \"Legal and regulatory constraints, and union agreements, can be navigated within the pilot.\",\n    \"Stakeholders (management, employees, and unions where applicable) are engaged and supportive of a structured pilot.\",\n    \"Power analysis can determine the necessary sample size and duration to detect meaningful changes in productivity, service, and well-being.\",\n    \"A control or benchmark period can be established for credible causal inference.\",\n    \"Counterfactual risk: No or negative productivity gains due to compressed hours causing fatigue, task switching overhead, and reduced focus.\"\n  ],\n  \"confidence\": 0.6\n}\n\nCritiques:\n[\n  {\n    \"targetAgent\": \"SolverAgent\",\n    \"issues\": [\n      {\n        \"severity\": 4,\n        \"type\": \"factual\",\n        \"note\": \"The claim that productivity per employee can be neutral or positive relies on pilots with potential selection bias and non-randomization; may not generalize to other firms or roles.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"logic\",\n        \"note\": \"Causal link between improved well-being and sustained productivity is assumed but not established; risk of diminishing returns if fatigue windows shift or workload spikes persist.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"No explicit metrics, baselines, or power analysis; unclear how 'productivity' and 'well-being' are defined, measured, and benchmarked across time.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"ambiguity\",\n        \"note\": \"Terminology '4x10' vs '4x8 with an extra day off' is ambiguous; schedule definitions affect fatigue, handoffs, and coverage; need precise scheduling models.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"missing\",\n        \"note\": \"Regulatory labor laws, overtime rules, and collective agreements are not analyzed; constraints could prevent reductions in hours or require offsets.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"missing\",\n        \"note\": \"Frontline/customer-facing functions and high-variability demand raises risk of degraded service levels; no contingency plans described.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"No transition plan or capability to manage change; needs governance, training, and management capacity to ensure fidelity.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"Equity concerns are acknowledged but no mitigation; potential adverse effects on caregivers, part-time workers, promotions; lacks strategies.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"overconfidence\",\n        \"note\": \"Long-term effects and scalability rely on pilots; likelihood of publication bias; need uncertainty bounds and scenario analysis rather than a single confidence claim.\"\n      }\n    ]\n  },\n  {\n    \"targetAgent\": \"Candidate answer on four-day work week\",\n    \"issues\": [\n      {\n        \"severity\": 5,\n        \"type\": \"factual\",\n        \"note\": \"Claims of productivity neutrality/positivity rely on limited evidence; no references or meta-analysis cited; risk of overgeneralization.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"missing\",\n        \"note\": \"No explicit metrics, baselines, or data collection plan; no guidance on sample size, control groups, or statistical methods; results may be biased or non-reproducible.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"ambiguity\",\n        \"note\": \"Definitions of '4x10' vs '4x8' and 'an extra day off' are unclear; readers may misinterpret the schedule specifics.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"No consideration of legal, regulatory, and union constraints around hours-reduction and scheduling; could lead to non-compliance or contract disputes.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"Equity discussion is not operationalized; lacks guidance on how to measure and mitigate effects on caregivers, part-time workers, and progression paths.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"logic\",\n        \"note\": \"Risk of selection bias in pilots (high performers or certain departments) skewing results; evaluation design needs controls and independent verification to avoid overoptimistic conclusions.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"Safety-critical or frontline service roles and customer-facing contexts require explicit safeguards; the answer should outline how coverage, service levels, and safety remain acceptable.\"\n      }\n    ]\n  }\n]"
+            }
+          ],
+          "schemaName": "Judgement",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "rubricScores": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "coherence": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "completeness": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "factualRisk": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "uncertaintyHandling": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  }
+                },
+                "required": [
+                  "coherence",
+                  "completeness",
+                  "factualRisk",
+                  "uncertaintyHandling"
+                ]
+              },
+              "strengths": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "weaknesses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "summary": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "rubricScores",
+              "strengths",
+              "weaknesses",
+              "summary"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "rubricScores": {
+              "coherence": 4,
+              "completeness": 2,
+              "factualRisk": 4,
+              "uncertaintyHandling": 3
+            },
+            "strengths": [
+              "Advocates a cautious, evidence-based approach with controlled pilots.",
+              "Distinguishes between 4x10 and 4x8 and suggests testing both to identify benefits.",
+              "Emphasizes governance, training, and independent evaluation.",
+              "Acknowledges regulatory, equity, and service-level considerations upfront.",
+              "Recognizes uncertainty about long-term effects and scalability and recommends scenario analysis."
+            ],
+            "weaknesses": [
+              "Lacks explicit definitions for metrics, baselines, and data collection methods.",
+              "No power analysis or sample-size guidance to ensure credible inference.",
+              "Insufficient treatment of regulatory and union constraints and legal issues.",
+              "No transition/change-management plan or capability-building for implementation.",
+              "Equity mitigation strategies are not operationalized or specified.",
+              "No explicit contingency plans for frontline/service-coverage or safety.",
+              "Potential selection bias and lack of independent verification are not adequately addressed.",
+              "Terminology around schedules (4x10 vs 4x8) remains ambiguous."
+            ],
+            "summary": "The proposal is coherent and prudent in advocating a controlled, evidence-based four-day-work-week pilot, but it omits many core details needed for credible evaluation and scalable implementation: explicit metrics and data plans, power analysis, regulatory/contractual analysis, operational contingency planning, and concrete equity mitigations. To be credible for adoption, it should provide detailed measurement definitions, an experimental design with controls, regulatory review, transition governance, and robust mitigation strategies for frontline coverage and equity."
+          }
+        ],
+        "output": {
+          "kind": "judgement",
+          "data": {
+            "rubricScores": {
+              "coherence": 4,
+              "completeness": 2,
+              "factualRisk": 4,
+              "uncertaintyHandling": 3
+            },
+            "strengths": [
+              "Advocates a cautious, evidence-based approach with controlled pilots.",
+              "Distinguishes between 4x10 and 4x8 and suggests testing both to identify benefits.",
+              "Emphasizes governance, training, and independent evaluation.",
+              "Acknowledges regulatory, equity, and service-level considerations upfront.",
+              "Recognizes uncertainty about long-term effects and scalability and recommends scenario analysis."
+            ],
+            "weaknesses": [
+              "Lacks explicit definitions for metrics, baselines, and data collection methods.",
+              "No power analysis or sample-size guidance to ensure credible inference.",
+              "Insufficient treatment of regulatory and union constraints and legal issues.",
+              "No transition/change-management plan or capability-building for implementation.",
+              "Equity mitigation strategies are not operationalized or specified.",
+              "No explicit contingency plans for frontline/service-coverage or safety.",
+              "Potential selection bias and lack of independent verification are not adequately addressed.",
+              "Terminology around schedules (4x10 vs 4x8) remains ambiguous."
+            ],
+            "summary": "The proposal is coherent and prudent in advocating a controlled, evidence-based four-day-work-week pilot, but it omits many core details needed for credible evaluation and scalable implementation: explicit metrics and data plans, power analysis, regulatory/contractual analysis, operational contingency planning, and concrete equity mitigations. To be credible for adoption, it should provide detailed measurement definitions, an experimental design with controls, regulatory review, transition governance, and robust mitigation strategies for frontline coverage and equity."
+          }
+        },
+        "completedAt": "2026-02-17T10:14:34.630Z"
+      }
+    ],
+    "finalAnswer": "A four-day work week can be beneficial in some contexts, but it is not universally better. It should be adopted only after a careful, evidence-based pilot. Organizations should run a controlled pilot with precise definitions (4x10 and 4x8 formats), rigorous metrics, governance, and mitigation plans before broad adoption. The pilot should use robust experimental or quasi-experimental designs, collect baseline and follow-up data on productivity, service levels, costs, and well-being, and ensure adequate statistical power. Schedule details, coverage, and contingency plans for frontline work must be defined. Regulatory and contractual constraints must be analyzed. Equity implications require proactive mitigation. Treat it as staged experimentation with ongoing monitoring; long-term effects and scalability remain uncertain.",
+    "metrics": {
+      "confidence": {
+        "solver": 0.65,
+        "revision": 0.4,
+        "synthesizer": 0.7,
+        "calibratedAdjusted": 0.7,
+        "solverToRevisionDelta": -0.25,
+        "revisionToSynthesizerDelta": 0.3
+      },
+      "critique": {
+        "maxSeverity": 5,
+        "avgSeverity": 3.938,
+        "byType": {
+          "factual": 2,
+          "logic": 2,
+          "missing": 9,
+          "ambiguity": 2,
+          "overconfidence": 1
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 2,
+        "factualRisk": 4,
+        "uncertaintyHandling": 3
+      },
+      "research": {
+        "evidenceRiskLevel": 3,
+        "counterfactualFailureModeCount": 12,
+        "topCounterfactualFailureMode": "No or negative productivity gains due to compressed hours causing fatigue, task switching overhead, and reduced focus."
+      },
+      "consensus": {
+        "included": [
+          "solver",
+          "revision",
+          "synthesizer"
+        ],
+        "pairs": [
+          {
+            "a": "solver",
+            "b": "revision",
+            "similarity": 0.869
+          },
+          {
+            "a": "solver",
+            "b": "synthesizer",
+            "similarity": 0.884
+          },
+          {
+            "a": "revision",
+            "b": "synthesizer",
+            "similarity": 0.904
+          }
+        ],
+        "strength": 0.886
+      }
+    }
+  },
+  "metadata": {
+    "schemaVersion": 1,
+    "createdAt": "2026-02-17T10:14:34.630Z",
+    "model": "gpt-5-nano-2025-08-07",
+    "fastMode": false,
+    "pipelinePreset": "research_deep",
+    "pipelineVersion": "1.0.0",
+    "source": "cli"
+  }
+}

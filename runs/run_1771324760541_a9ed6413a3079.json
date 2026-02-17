@@ -1,0 +1,1364 @@
+{
+  "kind": "run",
+  "id": "run_1771324760541_a9ed6413a3079",
+  "question": "Is it ethical to use animals for medical research?",
+  "run": {
+    "id": "run_1771324760541_a9ed6413a3079",
+    "createdAt": "2026-02-17T10:39:20.541Z",
+    "question": "Is it ethical to use animals for medical research?",
+    "steps": [
+      {
+        "id": "step_1771324617643_78517b1876bd7",
+        "agentName": "QuestionDecomposerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:36:35.433Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a research planner. Decompose the question into sub-questions and hypotheses. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is it ethical to use animals for medical research?"
+            }
+          ],
+          "schemaName": "QuestionDecomposition",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "framing": {
+                "type": "string"
+              },
+              "subQuestions": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "hypotheses": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "framing",
+              "subQuestions",
+              "hypotheses"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "framing": "A structured ethics analysis balancing animal moral status, potential human benefits, and regulatory safeguards; compare utilitarian, rights-based/deontological frameworks, and the role of alternatives and the 3Rs.",
+            "subQuestions": [
+              "What counts as the moral status of non-human animals used in research, and how do different ethical theories treat that status?",
+              "What are the typical harms experienced by animals in laboratory research, and how are these harms minimized and assessed?",
+              "What are the expected medical or scientific benefits of the animal-based research in question, and how certain are these outcomes?",
+              "How should benefits vs harms be weighed under different ethical frameworks (utilitarianism vs rights-based/deontological approaches)?",
+              "To what extent do current welfare standards, oversight mechanisms, and the 3Rs reduce harms and animal use, and how effective are they in practice?",
+              "What alternatives to animal research exist (in vitro models, organ-on-a-chip, computational methods, human data), and what is their maturity and transferability to the questions at hand?",
+              "In which contexts is animal research indispensable, and in which contexts can it be replaced without compromising validity or safety?",
+              "How do cultural, social, and global justice considerations influence the ethics and regulation of animal research, and should standards be harmonized internationally?"
+            ],
+            "hypotheses": [
+              "Under utilitarian reasoning, animal-based research is ethically permissible when the expected human health benefits substantially outweigh the harms to animals, provided there is robust oversight and welfare safeguards.",
+              "Under rights-based or deontological frameworks, animal use in medical research is ethically impermissible or requires exceptionally strong justification that challenges the baseline rights or inviolability of animals.",
+              "Applying the 3Rs and improving welfare standards reduces animal suffering and lowers animal use, increasing ethical acceptability across multiple ethical frameworks.",
+              "Non-animal alternatives (in vitro systems, organ-on-a-chip, computational models, human data) are increasingly capable of replacing many animal studies, though gaps remain in areas involving complex whole-organism interactions.",
+              "Ethical acceptability of animal research is context-dependent (species, severity, purpose, and potential impact) and is best judged through case-by-case assessment rather than blanket rules.",
+              "Global variation in regulation and cultural attitudes leads to inconsistent practices; harmonized, transparent standards would improve ethical accountability and facilitate comparability across studies."
+            ]
+          }
+        ],
+        "output": {
+          "kind": "decomposition",
+          "data": {
+            "framing": "A structured ethics analysis balancing animal moral status, potential human benefits, and regulatory safeguards; compare utilitarian, rights-based/deontological frameworks, and the role of alternatives and the 3Rs.",
+            "subQuestions": [
+              "What counts as the moral status of non-human animals used in research, and how do different ethical theories treat that status?",
+              "What are the typical harms experienced by animals in laboratory research, and how are these harms minimized and assessed?",
+              "What are the expected medical or scientific benefits of the animal-based research in question, and how certain are these outcomes?",
+              "How should benefits vs harms be weighed under different ethical frameworks (utilitarianism vs rights-based/deontological approaches)?",
+              "To what extent do current welfare standards, oversight mechanisms, and the 3Rs reduce harms and animal use, and how effective are they in practice?",
+              "What alternatives to animal research exist (in vitro models, organ-on-a-chip, computational methods, human data), and what is their maturity and transferability to the questions at hand?",
+              "In which contexts is animal research indispensable, and in which contexts can it be replaced without compromising validity or safety?",
+              "How do cultural, social, and global justice considerations influence the ethics and regulation of animal research, and should standards be harmonized internationally?"
+            ],
+            "hypotheses": [
+              "Under utilitarian reasoning, animal-based research is ethically permissible when the expected human health benefits substantially outweigh the harms to animals, provided there is robust oversight and welfare safeguards.",
+              "Under rights-based or deontological frameworks, animal use in medical research is ethically impermissible or requires exceptionally strong justification that challenges the baseline rights or inviolability of animals.",
+              "Applying the 3Rs and improving welfare standards reduces animal suffering and lowers animal use, increasing ethical acceptability across multiple ethical frameworks.",
+              "Non-animal alternatives (in vitro systems, organ-on-a-chip, computational models, human data) are increasingly capable of replacing many animal studies, though gaps remain in areas involving complex whole-organism interactions.",
+              "Ethical acceptability of animal research is context-dependent (species, severity, purpose, and potential impact) and is best judged through case-by-case assessment rather than blanket rules.",
+              "Global variation in regulation and cultural attitudes leads to inconsistent practices; harmonized, transparent standards would improve ethical accountability and facilitate comparability across studies."
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T10:36:57.643Z"
+      },
+      {
+        "id": "step_1771324629921_7b8e86a3e5e838",
+        "agentName": "EvidencePlannerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:36:57.643Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are an evidence planning specialist. Produce a compact evidence and verification plan for the question. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is it ethical to use animals for medical research?"
+            }
+          ],
+          "schemaName": "EvidencePlan",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "evidenceRequirements": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "verificationChecks": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "majorUnknowns": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "riskLevel": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              }
+            },
+            "required": [
+              "evidenceRequirements",
+              "verificationChecks",
+              "majorUnknowns",
+              "riskLevel"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "evidenceRequirements": [
+              "Foundational ethical theories (utilitarianism, deontology, rights-based ethics, virtue ethics) and their application to animal research",
+              "The 3Rs framework (Replacement, Reduction, Refinement) and current guidelines for implementation",
+              "Animal welfare evidence: species-specific pain perception, suffering assessment, housing, anesthesia/analgesia practices, humane endpoints, and minimization of harm",
+              "Benefit assessment: documented medical breakthroughs linked to animal research, and systematic reviews of translational value and limitations",
+              "Alternatives evidence: validity and feasibility of non-animal methods (in vitro models, computational modeling, organ-on-a-chip, human-on-a-chip, clinical data) and their adoption status",
+              "Oversight and governance: regulatory frameworks (e.g., ethics committees, IACUCs), accreditation, enforcement data, and compliance metrics",
+              "Stakeholder perspectives: views of researchers, animal welfare advocates, policy makers, and the public",
+              "Cost-benefit and harm-benefit analysis methodologies used in ethics reviews",
+              "Case studies across disease areas illustrating ethical tensions and decision-making processes"
+            ],
+            "verificationChecks": [
+              "Cite peer-reviewed ethics literature and official guidelines; verify sources and dates",
+              "Triangulate claims with at least three independent sources; document inconsistencies",
+              "Verify alignment with 3Rs and oversight mechanisms; confirm practices in cited institutions",
+              "Assess translational evidence by comparing predicted vs observed human benefits from animal studies",
+              "Evaluate the quality and methods of welfare data; verify pain assessment and welfare endpoints",
+              "Check for conflicts of interest and funding disclosures; ensure transparency",
+              "Conduct scenario-based sensitivity checks for different research contexts (drug toxicity, disease models, veterinary research)",
+              "Review status and limitations of alternatives; document adoption rates and feasibility"
+            ],
+            "majorUnknowns": [
+              "How to quantitatively balance animal harms against potential human benefits under different ethical theories",
+              "Cultural, legal, and institutional variability in acceptability and governance",
+              "Extent to which current 3Rs and alternatives can replace animal models for complex diseases",
+              "Difficulty in measuring welfare across species and translating animal data to humans",
+              "Potential future scientific advances that could shift ethical judgments (new alternatives, better welfare measures)"
+            ],
+            "riskLevel": 3
+          }
+        ],
+        "output": {
+          "kind": "evidence_plan",
+          "data": {
+            "evidenceRequirements": [
+              "Foundational ethical theories (utilitarianism, deontology, rights-based ethics, virtue ethics) and their application to animal research",
+              "The 3Rs framework (Replacement, Reduction, Refinement) and current guidelines for implementation",
+              "Animal welfare evidence: species-specific pain perception, suffering assessment, housing, anesthesia/analgesia practices, humane endpoints, and minimization of harm",
+              "Benefit assessment: documented medical breakthroughs linked to animal research, and systematic reviews of translational value and limitations",
+              "Alternatives evidence: validity and feasibility of non-animal methods (in vitro models, computational modeling, organ-on-a-chip, human-on-a-chip, clinical data) and their adoption status",
+              "Oversight and governance: regulatory frameworks (e.g., ethics committees, IACUCs), accreditation, enforcement data, and compliance metrics",
+              "Stakeholder perspectives: views of researchers, animal welfare advocates, policy makers, and the public",
+              "Cost-benefit and harm-benefit analysis methodologies used in ethics reviews",
+              "Case studies across disease areas illustrating ethical tensions and decision-making processes"
+            ],
+            "verificationChecks": [
+              "Cite peer-reviewed ethics literature and official guidelines; verify sources and dates",
+              "Triangulate claims with at least three independent sources; document inconsistencies",
+              "Verify alignment with 3Rs and oversight mechanisms; confirm practices in cited institutions",
+              "Assess translational evidence by comparing predicted vs observed human benefits from animal studies",
+              "Evaluate the quality and methods of welfare data; verify pain assessment and welfare endpoints",
+              "Check for conflicts of interest and funding disclosures; ensure transparency",
+              "Conduct scenario-based sensitivity checks for different research contexts (drug toxicity, disease models, veterinary research)",
+              "Review status and limitations of alternatives; document adoption rates and feasibility"
+            ],
+            "majorUnknowns": [
+              "How to quantitatively balance animal harms against potential human benefits under different ethical theories",
+              "Cultural, legal, and institutional variability in acceptability and governance",
+              "Extent to which current 3Rs and alternatives can replace animal models for complex diseases",
+              "Difficulty in measuring welfare across species and translating animal data to humans",
+              "Potential future scientific advances that could shift ethical judgments (new alternatives, better welfare measures)"
+            ],
+            "riskLevel": 3
+          }
+        },
+        "completedAt": "2026-02-17T10:37:09.921Z"
+      },
+      {
+        "id": "step_1771324642051_5a2c508e055878",
+        "agentName": "SolverAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T10:37:09.922Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.4,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver. Produce a direct, helpful answer. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is it ethical to use animals for medical research?\n\nEvidence plan:\n{\n  \"evidenceRequirements\": [\n    \"Foundational ethical theories (utilitarianism, deontology, rights-based ethics, virtue ethics) and their application to animal research\",\n    \"The 3Rs framework (Replacement, Reduction, Refinement) and current guidelines for implementation\",\n    \"Animal welfare evidence: species-specific pain perception, suffering assessment, housing, anesthesia/analgesia practices, humane endpoints, and minimization of harm\",\n    \"Benefit assessment: documented medical breakthroughs linked to animal research, and systematic reviews of translational value and limitations\",\n    \"Alternatives evidence: validity and feasibility of non-animal methods (in vitro models, computational modeling, organ-on-a-chip, human-on-a-chip, clinical data) and their adoption status\",\n    \"Oversight and governance: regulatory frameworks (e.g., ethics committees, IACUCs), accreditation, enforcement data, and compliance metrics\",\n    \"Stakeholder perspectives: views of researchers, animal welfare advocates, policy makers, and the public\",\n    \"Cost-benefit and harm-benefit analysis methodologies used in ethics reviews\",\n    \"Case studies across disease areas illustrating ethical tensions and decision-making processes\"\n  ],\n  \"verificationChecks\": [\n    \"Cite peer-reviewed ethics literature and official guidelines; verify sources and dates\",\n    \"Triangulate claims with at least three independent sources; document inconsistencies\",\n    \"Verify alignment with 3Rs and oversight mechanisms; confirm practices in cited institutions\",\n    \"Assess translational evidence by comparing predicted vs observed human benefits from animal studies\",\n    \"Evaluate the quality and methods of welfare data; verify pain assessment and welfare endpoints\",\n    \"Check for conflicts of interest and funding disclosures; ensure transparency\",\n    \"Conduct scenario-based sensitivity checks for different research contexts (drug toxicity, disease models, veterinary research)\",\n    \"Review status and limitations of alternatives; document adoption rates and feasibility\"\n  ],\n  \"majorUnknowns\": [\n    \"How to quantitatively balance animal harms against potential human benefits under different ethical theories\",\n    \"Cultural, legal, and institutional variability in acceptability and governance\",\n    \"Extent to which current 3Rs and alternatives can replace animal models for complex diseases\",\n    \"Difficulty in measuring welfare across species and translating animal data to humans\",\n    \"Potential future scientific advances that could shift ethical judgments (new alternatives, better welfare measures)\"\n  ],\n  \"riskLevel\": 3\n}"
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Ethical acceptability is conditional. Animal research can be ethical when justified by substantial potential benefits, uses the minimum number of animals, and minimizes harm through the 3Rs (Replacement, Reduction, Refinement) and strict welfare standards, with robust oversight. There is no blanket endorsement or condemnation: ethical acceptability depends on context (disease burden, translational risk), transparency, and ongoing evaluation of alternatives. In practice, rigorous governance and a strong commitment to humane care are essential.",
+            "keyClaims": [
+              "Animal research can be ethically permissible if benefits justify harms and rights-based concerns are addressed.",
+              "The 3Rs framework and guidelines mandate replacement where possible, reduction of animals, and refinement to minimize suffering.",
+              "Welfare must be actively protected: pain assessment, anesthesia/analgesia, humane endpoints, housing, training, and minimization of distress.",
+              " Benefits and translational value must be critically evaluated; not all animal findings translate to humans; require documented breakthroughs and systematic reviews.",
+              "Alternatives should be pursued and used when feasible (in vitro, computational models, organ-on-a-chip, etc.).",
+              "Oversight by ethics committees/IACUCs and verification of compliance are essential.",
+              "Stakeholder perspectives vary; decisions should incorporate scientific, welfare, policy, and public input.",
+              "Cost-benefit and harm-benefit analyses are used in ethics reviews.",
+              "Case studies illustrate ethical tensions and context-dependent decisions."
+            ],
+            "assumptions": [
+              "There is potential value in medical research, and welfare concerns are legitimate considerations in decision-making.",
+              "The 3Rs and formal oversight frameworks are applied in practice in research institutions.",
+              "There is ongoing development and assessment of alternatives to animal use.",
+              "Pain perception and welfare can be assessed and mitigated through appropriate protocols, anesthesia/analgesia, and humane endpoints.",
+              "Ethical judgments are sensitive to cultural, legal, and institutional contexts and should balance precaution with potential benefits."
+            ],
+            "confidence": 0.65
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Ethical acceptability is conditional. Animal research can be ethical when justified by substantial potential benefits, uses the minimum number of animals, and minimizes harm through the 3Rs (Replacement, Reduction, Refinement) and strict welfare standards, with robust oversight. There is no blanket endorsement or condemnation: ethical acceptability depends on context (disease burden, translational risk), transparency, and ongoing evaluation of alternatives. In practice, rigorous governance and a strong commitment to humane care are essential.",
+            "keyClaims": [
+              "Animal research can be ethically permissible if benefits justify harms and rights-based concerns are addressed.",
+              "The 3Rs framework and guidelines mandate replacement where possible, reduction of animals, and refinement to minimize suffering.",
+              "Welfare must be actively protected: pain assessment, anesthesia/analgesia, humane endpoints, housing, training, and minimization of distress.",
+              " Benefits and translational value must be critically evaluated; not all animal findings translate to humans; require documented breakthroughs and systematic reviews.",
+              "Alternatives should be pursued and used when feasible (in vitro, computational models, organ-on-a-chip, etc.).",
+              "Oversight by ethics committees/IACUCs and verification of compliance are essential.",
+              "Stakeholder perspectives vary; decisions should incorporate scientific, welfare, policy, and public input.",
+              "Cost-benefit and harm-benefit analyses are used in ethics reviews.",
+              "Case studies illustrate ethical tensions and context-dependent decisions."
+            ],
+            "assumptions": [
+              "There is potential value in medical research, and welfare concerns are legitimate considerations in decision-making.",
+              "The 3Rs and formal oversight frameworks are applied in practice in research institutions.",
+              "There is ongoing development and assessment of alternatives to animal use.",
+              "Pain perception and welfare can be assessed and mitigated through appropriate protocols, anesthesia/analgesia, and humane endpoints.",
+              "Ethical judgments are sensitive to cultural, legal, and institutional contexts and should balance precaution with potential benefits."
+            ],
+            "confidence": 0.65
+          }
+        },
+        "completedAt": "2026-02-17T10:37:22.051Z"
+      },
+      {
+        "id": "step_1771324669661_bca26d83b56b18",
+        "agentName": "SkepticAgent",
+        "role": "skeptic",
+        "createdAt": "2026-02-17T10:37:22.052Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Skeptic. Critique the proposal rigorously. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is it ethical to use animals for medical research?\n\nTarget agent: SolverAgent\n\nProposal JSON:\n{\n  \"answer\": \"Ethical acceptability is conditional. Animal research can be ethical when justified by substantial potential benefits, uses the minimum number of animals, and minimizes harm through the 3Rs (Replacement, Reduction, Refinement) and strict welfare standards, with robust oversight. There is no blanket endorsement or condemnation: ethical acceptability depends on context (disease burden, translational risk), transparency, and ongoing evaluation of alternatives. In practice, rigorous governance and a strong commitment to humane care are essential.\",\n  \"keyClaims\": [\n    \"Animal research can be ethically permissible if benefits justify harms and rights-based concerns are addressed.\",\n    \"The 3Rs framework and guidelines mandate replacement where possible, reduction of animals, and refinement to minimize suffering.\",\n    \"Welfare must be actively protected: pain assessment, anesthesia/analgesia, humane endpoints, housing, training, and minimization of distress.\",\n    \" Benefits and translational value must be critically evaluated; not all animal findings translate to humans; require documented breakthroughs and systematic reviews.\",\n    \"Alternatives should be pursued and used when feasible (in vitro, computational models, organ-on-a-chip, etc.).\",\n    \"Oversight by ethics committees/IACUCs and verification of compliance are essential.\",\n    \"Stakeholder perspectives vary; decisions should incorporate scientific, welfare, policy, and public input.\",\n    \"Cost-benefit and harm-benefit analyses are used in ethics reviews.\",\n    \"Case studies illustrate ethical tensions and context-dependent decisions.\"\n  ],\n  \"assumptions\": [\n    \"There is potential value in medical research, and welfare concerns are legitimate considerations in decision-making.\",\n    \"The 3Rs and formal oversight frameworks are applied in practice in research institutions.\",\n    \"There is ongoing development and assessment of alternatives to animal use.\",\n    \"Pain perception and welfare can be assessed and mitigated through appropriate protocols, anesthesia/analgesia, and humane endpoints.\",\n    \"Ethical judgments are sensitive to cultural, legal, and institutional contexts and should balance precaution with potential benefits.\"\n  ],\n  \"confidence\": 0.65\n}\n\nFind issues. Prefer factual risk, missing edge cases, ambiguity, and overconfidence."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "The proposal treats the 3Rs as binding mandates; in many jurisdictions they are guidelines with variable enforcement, so the claim of universal ethical governance is overstated."
+              },
+              {
+                "severity": 3,
+                "type": "factual",
+                "note": "Pain assessment and welfare protections vary by species; distress signals are hard to detect in some animals (e.g., fish, birds), and analgesia can confound outcomes, which the proposal does not acknowledge."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "Minimum numbers of animals are undefined; there is no quantitative guidance on statistical power, humane endpoints, or criteria to trade off refinement vs reduction."
+              },
+              {
+                "severity": 5,
+                "type": "factual",
+                "note": "Translational value of animal models is inconsistent; claiming 'documented breakthroughs' invites cherry-picking and overlooks systematic evidence of translation failures; should cite meta-analyses."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No explicit criteria for when alternatives are feasible; lacks discussion of current limitations of alternatives (organs-on-chips, in silico models) and how feasibility is assessed."
+              },
+              {
+                "severity": 4,
+                "type": "logic",
+                "note": "Assuming oversight is robust ignores real-world issues like conflicts of interest, underreporting, and variable enforcement across institutions; the claim of essential governance may be overstated."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No explicit engagement with ethical theories on animal moral status, rights-based views, or cross-cultural/legal variation beyond generic statements."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Harm-benefit and cost-benefit analyses are mentioned but not defined; there is no transparency about how benefits, harms, and weights are chosen."
+              },
+              {
+                "severity": 2,
+                "type": "missing",
+                "note": "No concrete pathway to reduce animal use or replace with non-animal models in the initial research stages; guidance on stepwise replacement is absent."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "The proposal treats the 3Rs as binding mandates; in many jurisdictions they are guidelines with variable enforcement, so the claim of universal ethical governance is overstated."
+              },
+              {
+                "severity": 3,
+                "type": "factual",
+                "note": "Pain assessment and welfare protections vary by species; distress signals are hard to detect in some animals (e.g., fish, birds), and analgesia can confound outcomes, which the proposal does not acknowledge."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "Minimum numbers of animals are undefined; there is no quantitative guidance on statistical power, humane endpoints, or criteria to trade off refinement vs reduction."
+              },
+              {
+                "severity": 5,
+                "type": "factual",
+                "note": "Translational value of animal models is inconsistent; claiming 'documented breakthroughs' invites cherry-picking and overlooks systematic evidence of translation failures; should cite meta-analyses."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No explicit criteria for when alternatives are feasible; lacks discussion of current limitations of alternatives (organs-on-chips, in silico models) and how feasibility is assessed."
+              },
+              {
+                "severity": 4,
+                "type": "logic",
+                "note": "Assuming oversight is robust ignores real-world issues like conflicts of interest, underreporting, and variable enforcement across institutions; the claim of essential governance may be overstated."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No explicit engagement with ethical theories on animal moral status, rights-based views, or cross-cultural/legal variation beyond generic statements."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Harm-benefit and cost-benefit analyses are mentioned but not defined; there is no transparency about how benefits, harms, and weights are chosen."
+              },
+              {
+                "severity": 2,
+                "type": "missing",
+                "note": "No concrete pathway to reduce animal use or replace with non-animal models in the initial research stages; guidance on stepwise replacement is absent."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T10:37:49.661Z"
+      },
+      {
+        "id": "step_1771324692937_9beff7480cfe58",
+        "agentName": "RedTeamAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:37:49.661Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a red-team analyst. Find high-risk failure modes and adversarial weaknesses in the answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is it ethical to use animals for medical research?\n\nCandidate answer JSON:\n{\n  \"answer\": \"Ethical acceptability is conditional. Animal research can be ethical when justified by substantial potential benefits, uses the minimum number of animals, and minimizes harm through the 3Rs (Replacement, Reduction, Refinement) and strict welfare standards, with robust oversight. There is no blanket endorsement or condemnation: ethical acceptability depends on context (disease burden, translational risk), transparency, and ongoing evaluation of alternatives. In practice, rigorous governance and a strong commitment to humane care are essential.\",\n  \"keyClaims\": [\n    \"Animal research can be ethically permissible if benefits justify harms and rights-based concerns are addressed.\",\n    \"The 3Rs framework and guidelines mandate replacement where possible, reduction of animals, and refinement to minimize suffering.\",\n    \"Welfare must be actively protected: pain assessment, anesthesia/analgesia, humane endpoints, housing, training, and minimization of distress.\",\n    \" Benefits and translational value must be critically evaluated; not all animal findings translate to humans; require documented breakthroughs and systematic reviews.\",\n    \"Alternatives should be pursued and used when feasible (in vitro, computational models, organ-on-a-chip, etc.).\",\n    \"Oversight by ethics committees/IACUCs and verification of compliance are essential.\",\n    \"Stakeholder perspectives vary; decisions should incorporate scientific, welfare, policy, and public input.\",\n    \"Cost-benefit and harm-benefit analyses are used in ethics reviews.\",\n    \"Case studies illustrate ethical tensions and context-dependent decisions.\"\n  ],\n  \"assumptions\": [\n    \"There is potential value in medical research, and welfare concerns are legitimate considerations in decision-making.\",\n    \"The 3Rs and formal oversight frameworks are applied in practice in research institutions.\",\n    \"There is ongoing development and assessment of alternatives to animal use.\",\n    \"Pain perception and welfare can be assessed and mitigated through appropriate protocols, anesthesia/analgesia, and humane endpoints.\",\n    \"Ethical judgments are sensitive to cultural, legal, and institutional contexts and should balance precaution with potential benefits.\"\n  ],\n  \"confidence\": 0.65\n}\n\nReturn a rigorous critique with severe issues when justified."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "Candidate answer on ethics of animal research",
+            "issues": [
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "The 3Rs are widely accepted guiding principles, not universal mandates. Stating 'guidelines mandate replacement where possible' overstates policy and could mislead about enforceable rules across jurisdictions."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No explicit, operational framework or thresholds for when benefits justify harms (e.g., quantified harm-benefit criteria, disease severity scales, translational probability) are provided."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Assumes 'robust oversight' without acknowledging real-world variability and potential weaknesses in IACUCs/ethics review processes (funding, conflicts of interest, regional differences)."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Lacks species-specific nuance (e.g., primates vs. rodents) and fails to discuss how welfare considerations and translational value vary by species."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Does not engage with abolitionist or strong animal-rights critiques or alternative ethical frameworks beyond welfare-focused rationale."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Minimal discussion of transparency in data and research practices (e.g., preregistration, negative-result reporting, data sharing) that affect harm minimization and reproducibility."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "Candidate answer on ethics of animal research",
+            "issues": [
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "The 3Rs are widely accepted guiding principles, not universal mandates. Stating 'guidelines mandate replacement where possible' overstates policy and could mislead about enforceable rules across jurisdictions."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "No explicit, operational framework or thresholds for when benefits justify harms (e.g., quantified harm-benefit criteria, disease severity scales, translational probability) are provided."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Assumes 'robust oversight' without acknowledging real-world variability and potential weaknesses in IACUCs/ethics review processes (funding, conflicts of interest, regional differences)."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Lacks species-specific nuance (e.g., primates vs. rodents) and fails to discuss how welfare considerations and translational value vary by species."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Does not engage with abolitionist or strong animal-rights critiques or alternative ethical frameworks beyond welfare-focused rationale."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Minimal discussion of transparency in data and research practices (e.g., preregistration, negative-result reporting, data sharing) that affect harm minimization and reproducibility."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T10:38:12.937Z"
+      },
+      {
+        "id": "step_1771324708218_f98e890d99dc48",
+        "agentName": "SolverRevisionAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T10:38:12.937Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver revising your proposal after critique. Produce a revised AgentResponse that addresses all issues.\n\nInternal reasoning (do not put this in output fields):\n- Reference each critique issue in your reasoning before producing output.\n- Consider how each issue affects the answer, keyClaims, assumptions, and confidence.\n\nOutput requirements:\n- Change answer and keyClaims accordingly to address the critique.\n- Adjust confidence downward when critique severity is high (4–5).\n- Add assumptions when critique indicates ambiguity (type \"ambiguity\").\n- Keep keyClaims clean and non-duplicated.\n- Do not include any JSON fragments inside keyClaims. keyClaims must be plain English sentences only.\n- Do not reference the critique or revision process in answer, keyClaims, or assumptions—output only the revised content.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is it ethical to use animals for medical research?\n\nOriginal proposal:\n{\n  \"answer\": \"Ethical acceptability is conditional. Animal research can be ethical when justified by substantial potential benefits, uses the minimum number of animals, and minimizes harm through the 3Rs (Replacement, Reduction, Refinement) and strict welfare standards, with robust oversight. There is no blanket endorsement or condemnation: ethical acceptability depends on context (disease burden, translational risk), transparency, and ongoing evaluation of alternatives. In practice, rigorous governance and a strong commitment to humane care are essential.\",\n  \"keyClaims\": [\n    \"Animal research can be ethically permissible if benefits justify harms and rights-based concerns are addressed.\",\n    \"The 3Rs framework and guidelines mandate replacement where possible, reduction of animals, and refinement to minimize suffering.\",\n    \"Welfare must be actively protected: pain assessment, anesthesia/analgesia, humane endpoints, housing, training, and minimization of distress.\",\n    \" Benefits and translational value must be critically evaluated; not all animal findings translate to humans; require documented breakthroughs and systematic reviews.\",\n    \"Alternatives should be pursued and used when feasible (in vitro, computational models, organ-on-a-chip, etc.).\",\n    \"Oversight by ethics committees/IACUCs and verification of compliance are essential.\",\n    \"Stakeholder perspectives vary; decisions should incorporate scientific, welfare, policy, and public input.\",\n    \"Cost-benefit and harm-benefit analyses are used in ethics reviews.\",\n    \"Case studies illustrate ethical tensions and context-dependent decisions.\"\n  ],\n  \"assumptions\": [\n    \"There is potential value in medical research, and welfare concerns are legitimate considerations in decision-making.\",\n    \"The 3Rs and formal oversight frameworks are applied in practice in research institutions.\",\n    \"There is ongoing development and assessment of alternatives to animal use.\",\n    \"Pain perception and welfare can be assessed and mitigated through appropriate protocols, anesthesia/analgesia, and humane endpoints.\",\n    \"Ethical judgments are sensitive to cultural, legal, and institutional contexts and should balance precaution with potential benefits.\"\n  ],\n  \"confidence\": 0.65\n}\n\nCritique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 4,\n      \"type\": \"factual\",\n      \"note\": \"The proposal treats the 3Rs as binding mandates; in many jurisdictions they are guidelines with variable enforcement, so the claim of universal ethical governance is overstated.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"factual\",\n      \"note\": \"Pain assessment and welfare protections vary by species; distress signals are hard to detect in some animals (e.g., fish, birds), and analgesia can confound outcomes, which the proposal does not acknowledge.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"ambiguity\",\n      \"note\": \"Minimum numbers of animals are undefined; there is no quantitative guidance on statistical power, humane endpoints, or criteria to trade off refinement vs reduction.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"factual\",\n      \"note\": \"Translational value of animal models is inconsistent; claiming 'documented breakthroughs' invites cherry-picking and overlooks systematic evidence of translation failures; should cite meta-analyses.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"No explicit criteria for when alternatives are feasible; lacks discussion of current limitations of alternatives (organs-on-chips, in silico models) and how feasibility is assessed.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"logic\",\n      \"note\": \"Assuming oversight is robust ignores real-world issues like conflicts of interest, underreporting, and variable enforcement across institutions; the claim of essential governance may be overstated.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"No explicit engagement with ethical theories on animal moral status, rights-based views, or cross-cultural/legal variation beyond generic statements.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"Harm-benefit and cost-benefit analyses are mentioned but not defined; there is no transparency about how benefits, harms, and weights are chosen.\"\n    },\n    {\n      \"severity\": 2,\n      \"type\": \"missing\",\n      \"note\": \"No concrete pathway to reduce animal use or replace with non-animal models in the initial research stages; guidance on stepwise replacement is absent.\"\n    }\n  ]\n}\n\nRevise the proposal to address each issue. Return the revised AgentResponse as valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Ethical acceptability of animal research is not universal; it is conditional on context, potential benefits, and how well welfare and rights-based concerns are addressed. Research should address a meaningful disease burden, use the minimum number of animals justified by statistical power, and continuously refine methods to reduce harm. The 3Rs (Replacement, Reduction, Refinement) guide design but are not universally binding; enforcement and interpretation vary by jurisdiction. Welfare protections are essential but species- and context-specific; pain assessment, anesthesia/analgesia, humane endpoints, housing, and staff training are critical, yet distress signals and analgesic effects differ across species (e.g., fish and some birds can be harder to assess, and analgesia can influence outcomes). Translational value is variable; many animal findings do not reliably translate to humans, so claims of breakthroughs should be supported by broad systematic evidence rather than cherry-picking. Alternatives should be pursued whenever feasible (in vitro systems, organ-on-a-chip, in silico models, and other non-animal methods), but feasibility and current limitations must be explicitly evaluated on a case-by-case basis. Oversight exists but enforcement, conflicts of interest, and reporting quality vary, so governance is not always robust in practice. Ethical reasoning should engage with theories about animal status (rights, utilitarianism, relational ethics) and recognize cross-cultural and legal variation. Transparent harm-benefit analyses with explicit criteria for weighing harms and benefits, stakeholder input, and clear weighting of welfare, scientific, and societal factors are essential. A concrete path to reduction includes stepwise replacement when feasible, rigorous study design to maximize information with minimal animal use, refinement of procedures, data sharing, and planning for non-animal endpoints wherever possible.",
+            "keyClaims": [
+              "Animal research can be ethically permissible when benefits justify harms and rights-based concerns are addressed, but this is not universal and depends on context and transparency.",
+              "The 3Rs are guidelines with variable enforceability across jurisdictions, not absolute mandates.",
+              "Welfare protections are essential but species- and context-specific; pain assessment and analgesia can affect outcomes and distress signals vary by species.",
+              "Translational value of animal research is variable; systematic evidence suggests translation is not guaranteed and should not rely on isolated breakthroughs.",
+              "Alternatives should be pursued whenever feasible, but their feasibility and current limitations must be evaluated for each project.",
+              "Oversight exists but enforcement, conflicts of interest, and reporting quality vary, so governance is not uniformly robust.",
+              "Ethical theories about animal status and cross-cultural/legal variation influence decisions and should be acknowledged.",
+              "Transparent harm-benefit analyses with defined criteria and stakeholder input are essential for sound judgments.",
+              "A practical path to reduction includes stepwise replacement, refined methods, and increased data sharing to minimize animal use."
+            ],
+            "assumptions": [
+              "There is potential value in medical research, and welfare concerns are legitimate considerations in decision-making.",
+              "The 3Rs are applied variably across institutions and jurisdictions.",
+              "Alternatives to animal use exist but have limitations and may not be feasible in all cases.",
+              "Pain perception and welfare can be assessed and mitigated, but signals differ across species and contexts.",
+              "Ethical judgments are influenced by cultural, legal, and institutional contexts and should balance precaution with potential benefits.",
+              "Power analysis and statistical justification should guide sample sizes; there is no universal minimum number of animals.",
+              "There is a risk of conflicts of interest and underreporting in research oversight, which can affect governance quality."
+            ],
+            "confidence": 0.42
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Ethical acceptability of animal research is not universal; it is conditional on context, potential benefits, and how well welfare and rights-based concerns are addressed. Research should address a meaningful disease burden, use the minimum number of animals justified by statistical power, and continuously refine methods to reduce harm. The 3Rs (Replacement, Reduction, Refinement) guide design but are not universally binding; enforcement and interpretation vary by jurisdiction. Welfare protections are essential but species- and context-specific; pain assessment, anesthesia/analgesia, humane endpoints, housing, and staff training are critical, yet distress signals and analgesic effects differ across species (e.g., fish and some birds can be harder to assess, and analgesia can influence outcomes). Translational value is variable; many animal findings do not reliably translate to humans, so claims of breakthroughs should be supported by broad systematic evidence rather than cherry-picking. Alternatives should be pursued whenever feasible (in vitro systems, organ-on-a-chip, in silico models, and other non-animal methods), but feasibility and current limitations must be explicitly evaluated on a case-by-case basis. Oversight exists but enforcement, conflicts of interest, and reporting quality vary, so governance is not always robust in practice. Ethical reasoning should engage with theories about animal status (rights, utilitarianism, relational ethics) and recognize cross-cultural and legal variation. Transparent harm-benefit analyses with explicit criteria for weighing harms and benefits, stakeholder input, and clear weighting of welfare, scientific, and societal factors are essential. A concrete path to reduction includes stepwise replacement when feasible, rigorous study design to maximize information with minimal animal use, refinement of procedures, data sharing, and planning for non-animal endpoints wherever possible.",
+            "keyClaims": [
+              "Animal research can be ethically permissible when benefits justify harms and rights-based concerns are addressed, but this is not universal and depends on context and transparency.",
+              "The 3Rs are guidelines with variable enforceability across jurisdictions, not absolute mandates.",
+              "Welfare protections are essential but species- and context-specific; pain assessment and analgesia can affect outcomes and distress signals vary by species.",
+              "Translational value of animal research is variable; systematic evidence suggests translation is not guaranteed and should not rely on isolated breakthroughs.",
+              "Alternatives should be pursued whenever feasible, but their feasibility and current limitations must be evaluated for each project.",
+              "Oversight exists but enforcement, conflicts of interest, and reporting quality vary, so governance is not uniformly robust.",
+              "Ethical theories about animal status and cross-cultural/legal variation influence decisions and should be acknowledged.",
+              "Transparent harm-benefit analyses with defined criteria and stakeholder input are essential for sound judgments.",
+              "A practical path to reduction includes stepwise replacement, refined methods, and increased data sharing to minimize animal use."
+            ],
+            "assumptions": [
+              "There is potential value in medical research, and welfare concerns are legitimate considerations in decision-making.",
+              "The 3Rs are applied variably across institutions and jurisdictions.",
+              "Alternatives to animal use exist but have limitations and may not be feasible in all cases.",
+              "Pain perception and welfare can be assessed and mitigated, but signals differ across species and contexts.",
+              "Ethical judgments are influenced by cultural, legal, and institutional contexts and should balance precaution with potential benefits.",
+              "Power analysis and statistical justification should guide sample sizes; there is no universal minimum number of animals.",
+              "There is a risk of conflicts of interest and underreporting in research oversight, which can affect governance quality."
+            ],
+            "confidence": 0.42
+          }
+        },
+        "completedAt": "2026-02-17T10:38:28.218Z"
+      },
+      {
+        "id": "step_1771324720223_3695de90fd8ff8",
+        "agentName": "SynthesizerAgent",
+        "role": "synthesizer",
+        "createdAt": "2026-02-17T10:38:28.218Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Synthesizer. Given the question, the solver's original proposal, the skeptic's critique, and the solver's revision, produce a final synthesized AgentResponse.\n\nInternal reasoning (do not put this in output fields):\n- Consider how the critique and revision improved or changed the proposal.\n- Synthesize the best elements into a coherent final answer.\n\nOutput requirements:\n- Produce a clear, well-supported answer that incorporates valid points from the debate.\n- keyClaims must be plain English sentences only. No JSON fragments.\n- Set confidence appropriately based on the debate outcome.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is it ethical to use animals for medical research?\n\nSolver proposal:\n{\n  \"answer\": \"Ethical acceptability is conditional. Animal research can be ethical when justified by substantial potential benefits, uses the minimum number of animals, and minimizes harm through the 3Rs (Replacement, Reduction, Refinement) and strict welfare standards, with robust oversight. There is no blanket endorsement or condemnation: ethical acceptability depends on context (disease burden, translational risk), transparency, and ongoing evaluation of alternatives. In practice, rigorous governance and a strong commitment to humane care are essential.\",\n  \"keyClaims\": [\n    \"Animal research can be ethically permissible if benefits justify harms and rights-based concerns are addressed.\",\n    \"The 3Rs framework and guidelines mandate replacement where possible, reduction of animals, and refinement to minimize suffering.\",\n    \"Welfare must be actively protected: pain assessment, anesthesia/analgesia, humane endpoints, housing, training, and minimization of distress.\",\n    \" Benefits and translational value must be critically evaluated; not all animal findings translate to humans; require documented breakthroughs and systematic reviews.\",\n    \"Alternatives should be pursued and used when feasible (in vitro, computational models, organ-on-a-chip, etc.).\",\n    \"Oversight by ethics committees/IACUCs and verification of compliance are essential.\",\n    \"Stakeholder perspectives vary; decisions should incorporate scientific, welfare, policy, and public input.\",\n    \"Cost-benefit and harm-benefit analyses are used in ethics reviews.\",\n    \"Case studies illustrate ethical tensions and context-dependent decisions.\"\n  ],\n  \"assumptions\": [\n    \"There is potential value in medical research, and welfare concerns are legitimate considerations in decision-making.\",\n    \"The 3Rs and formal oversight frameworks are applied in practice in research institutions.\",\n    \"There is ongoing development and assessment of alternatives to animal use.\",\n    \"Pain perception and welfare can be assessed and mitigated through appropriate protocols, anesthesia/analgesia, and humane endpoints.\",\n    \"Ethical judgments are sensitive to cultural, legal, and institutional contexts and should balance precaution with potential benefits.\"\n  ],\n  \"confidence\": 0.65\n}\n\nSkeptic critique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 4,\n      \"type\": \"factual\",\n      \"note\": \"The proposal treats the 3Rs as binding mandates; in many jurisdictions they are guidelines with variable enforcement, so the claim of universal ethical governance is overstated.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"factual\",\n      \"note\": \"Pain assessment and welfare protections vary by species; distress signals are hard to detect in some animals (e.g., fish, birds), and analgesia can confound outcomes, which the proposal does not acknowledge.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"ambiguity\",\n      \"note\": \"Minimum numbers of animals are undefined; there is no quantitative guidance on statistical power, humane endpoints, or criteria to trade off refinement vs reduction.\"\n    },\n    {\n      \"severity\": 5,\n      \"type\": \"factual\",\n      \"note\": \"Translational value of animal models is inconsistent; claiming 'documented breakthroughs' invites cherry-picking and overlooks systematic evidence of translation failures; should cite meta-analyses.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"No explicit criteria for when alternatives are feasible; lacks discussion of current limitations of alternatives (organs-on-chips, in silico models) and how feasibility is assessed.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"logic\",\n      \"note\": \"Assuming oversight is robust ignores real-world issues like conflicts of interest, underreporting, and variable enforcement across institutions; the claim of essential governance may be overstated.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"No explicit engagement with ethical theories on animal moral status, rights-based views, or cross-cultural/legal variation beyond generic statements.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"Harm-benefit and cost-benefit analyses are mentioned but not defined; there is no transparency about how benefits, harms, and weights are chosen.\"\n    },\n    {\n      \"severity\": 2,\n      \"type\": \"missing\",\n      \"note\": \"No concrete pathway to reduce animal use or replace with non-animal models in the initial research stages; guidance on stepwise replacement is absent.\"\n    }\n  ]\n}\n\nSolver revision:\n{\n  \"answer\": \"Ethical acceptability of animal research is not universal; it is conditional on context, potential benefits, and how well welfare and rights-based concerns are addressed. Research should address a meaningful disease burden, use the minimum number of animals justified by statistical power, and continuously refine methods to reduce harm. The 3Rs (Replacement, Reduction, Refinement) guide design but are not universally binding; enforcement and interpretation vary by jurisdiction. Welfare protections are essential but species- and context-specific; pain assessment, anesthesia/analgesia, humane endpoints, housing, and staff training are critical, yet distress signals and analgesic effects differ across species (e.g., fish and some birds can be harder to assess, and analgesia can influence outcomes). Translational value is variable; many animal findings do not reliably translate to humans, so claims of breakthroughs should be supported by broad systematic evidence rather than cherry-picking. Alternatives should be pursued whenever feasible (in vitro systems, organ-on-a-chip, in silico models, and other non-animal methods), but feasibility and current limitations must be explicitly evaluated on a case-by-case basis. Oversight exists but enforcement, conflicts of interest, and reporting quality vary, so governance is not always robust in practice. Ethical reasoning should engage with theories about animal status (rights, utilitarianism, relational ethics) and recognize cross-cultural and legal variation. Transparent harm-benefit analyses with explicit criteria for weighing harms and benefits, stakeholder input, and clear weighting of welfare, scientific, and societal factors are essential. A concrete path to reduction includes stepwise replacement when feasible, rigorous study design to maximize information with minimal animal use, refinement of procedures, data sharing, and planning for non-animal endpoints wherever possible.\",\n  \"keyClaims\": [\n    \"Animal research can be ethically permissible when benefits justify harms and rights-based concerns are addressed, but this is not universal and depends on context and transparency.\",\n    \"The 3Rs are guidelines with variable enforceability across jurisdictions, not absolute mandates.\",\n    \"Welfare protections are essential but species- and context-specific; pain assessment and analgesia can affect outcomes and distress signals vary by species.\",\n    \"Translational value of animal research is variable; systematic evidence suggests translation is not guaranteed and should not rely on isolated breakthroughs.\",\n    \"Alternatives should be pursued whenever feasible, but their feasibility and current limitations must be evaluated for each project.\",\n    \"Oversight exists but enforcement, conflicts of interest, and reporting quality vary, so governance is not uniformly robust.\",\n    \"Ethical theories about animal status and cross-cultural/legal variation influence decisions and should be acknowledged.\",\n    \"Transparent harm-benefit analyses with defined criteria and stakeholder input are essential for sound judgments.\",\n    \"A practical path to reduction includes stepwise replacement, refined methods, and increased data sharing to minimize animal use.\"\n  ],\n  \"assumptions\": [\n    \"There is potential value in medical research, and welfare concerns are legitimate considerations in decision-making.\",\n    \"The 3Rs are applied variably across institutions and jurisdictions.\",\n    \"Alternatives to animal use exist but have limitations and may not be feasible in all cases.\",\n    \"Pain perception and welfare can be assessed and mitigated, but signals differ across species and contexts.\",\n    \"Ethical judgments are influenced by cultural, legal, and institutional contexts and should balance precaution with potential benefits.\",\n    \"Power analysis and statistical justification should guide sample sizes; there is no universal minimum number of animals.\",\n    \"There is a risk of conflicts of interest and underreporting in research oversight, which can affect governance quality.\"\n  ],\n  \"confidence\": 0.42\n}\n\nSynthesize a final AgentResponse from the debate. Return valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Ethical acceptability of animal research is conditional, not universal. It depends on context, potential benefits, and how well welfare and rights-based concerns are addressed, with a focus on meaningful disease burdens, minimal animal use justified by statistical power, and continuous refinement to reduce harm. The 3Rs guide design but are variably enforceable across jurisdictions, and welfare protections are essential but species- and context-specific, since pain signals and analgesic effects differ across animals. Translational value is variable and should be supported by broad systematic evidence rather than cherry-picked breakthroughs. Alternatives should be pursued whenever feasible, but their feasibility and limitations must be evaluated case by case. Oversight exists but enforcement and reporting quality vary, so governance is not uniformly robust. Ethical reasoning should engage with animal-status theories and cross-cultural/legal variation, and transparent harm-benefit analyses with stakeholder input and explicit criteria are essential. A practical path to reduction includes stepwise replacement when feasible, rigorous study design to maximize information per animal, data sharing, preregistration, and planning for non-animal endpoints wherever possible.",
+            "keyClaims": [
+              "Animal research can be ethically permissible when benefits justify harms and rights-based concerns are addressed, but this is not universal and depends on context and transparency.",
+              "The 3Rs are guidelines with variable enforceability across jurisdictions, not absolute mandates.",
+              "Welfare protections are essential but species- and context-specific; pain assessment and analgesia can affect outcomes and distress signals vary by species.",
+              "Translational value of animal research is variable; conclusions should be supported by systematic evidence rather than cherry-picked breakthroughs.",
+              "Alternatives should be pursued whenever feasible, but their feasibility and current limitations must be evaluated for each project.",
+              "Oversight exists but enforcement, conflicts of interest, and reporting quality vary, so governance is not uniformly robust.",
+              "Ethical theories about animal status and cross-cultural/legal variation influence decisions and should be acknowledged.",
+              "Transparent harm-benefit analyses with defined criteria and stakeholder input are essential.",
+              "A practical path to reduction includes stepwise replacement, refined methods, and increased data sharing to minimize animal use."
+            ],
+            "assumptions": [
+              "There is potential value in medical research, and welfare concerns are legitimate considerations in decision-making.",
+              "The 3Rs are applied variably across institutions and jurisdictions.",
+              "Alternatives to animal use exist but have limitations and may not be feasible in all cases.",
+              "Pain perception and welfare can be assessed and mitigated, but signals differ across species and contexts.",
+              "Ethical judgments are influenced by cultural, legal, and institutional contexts and should balance precaution with potential benefits.",
+              "Power analysis and statistical justification should guide sample sizes; there is no universal minimum number of animals.",
+              "There is a risk of conflicts of interest and underreporting in research oversight, which can affect governance quality.",
+              "Counterfactual risk: Overreliance on animal models with uncertain translational value leading to ethically questionable harms justified by anticipated benefits",
+              "Judge summary: The proposal offers a thoughtful, context-sensitive view of animal research ethics and emphasizes welfare, transparency, and case-by-case evaluation. However, it contains substantive gaps: it largely treats the 3Rs as binding mandates, lacks explicit harm-benefit decision frameworks and quantitative criteria, and does not sufficiently address weaknesses in oversight, species-specific welfare considerations, or robust engagement with alternative ethical viewpoints. To strengthen it, include operational thresholds for harms and benefits, species- and context-specific guidance, clear criteria for when alternatives are feasible, and a concrete plan for reductions (including minimum sample sizes and preregistration practices)."
+            ],
+            "confidence": 0.68
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Ethical acceptability of animal research is conditional, not universal. It depends on context, potential benefits, and how well welfare and rights-based concerns are addressed, with a focus on meaningful disease burdens, minimal animal use justified by statistical power, and continuous refinement to reduce harm. The 3Rs guide design but are variably enforceable across jurisdictions, and welfare protections are essential but species- and context-specific, since pain signals and analgesic effects differ across animals. Translational value is variable and should be supported by broad systematic evidence rather than cherry-picked breakthroughs. Alternatives should be pursued whenever feasible, but their feasibility and limitations must be evaluated case by case. Oversight exists but enforcement and reporting quality vary, so governance is not uniformly robust. Ethical reasoning should engage with animal-status theories and cross-cultural/legal variation, and transparent harm-benefit analyses with stakeholder input and explicit criteria are essential. A practical path to reduction includes stepwise replacement when feasible, rigorous study design to maximize information per animal, data sharing, preregistration, and planning for non-animal endpoints wherever possible.",
+            "keyClaims": [
+              "Animal research can be ethically permissible when benefits justify harms and rights-based concerns are addressed, but this is not universal and depends on context and transparency.",
+              "The 3Rs are guidelines with variable enforceability across jurisdictions, not absolute mandates.",
+              "Welfare protections are essential but species- and context-specific; pain assessment and analgesia can affect outcomes and distress signals vary by species.",
+              "Translational value of animal research is variable; conclusions should be supported by systematic evidence rather than cherry-picked breakthroughs.",
+              "Alternatives should be pursued whenever feasible, but their feasibility and current limitations must be evaluated for each project.",
+              "Oversight exists but enforcement, conflicts of interest, and reporting quality vary, so governance is not uniformly robust.",
+              "Ethical theories about animal status and cross-cultural/legal variation influence decisions and should be acknowledged.",
+              "Transparent harm-benefit analyses with defined criteria and stakeholder input are essential.",
+              "A practical path to reduction includes stepwise replacement, refined methods, and increased data sharing to minimize animal use."
+            ],
+            "assumptions": [
+              "There is potential value in medical research, and welfare concerns are legitimate considerations in decision-making.",
+              "The 3Rs are applied variably across institutions and jurisdictions.",
+              "Alternatives to animal use exist but have limitations and may not be feasible in all cases.",
+              "Pain perception and welfare can be assessed and mitigated, but signals differ across species and contexts.",
+              "Ethical judgments are influenced by cultural, legal, and institutional contexts and should balance precaution with potential benefits.",
+              "Power analysis and statistical justification should guide sample sizes; there is no universal minimum number of animals.",
+              "There is a risk of conflicts of interest and underreporting in research oversight, which can affect governance quality.",
+              "Counterfactual risk: Overreliance on animal models with uncertain translational value leading to ethically questionable harms justified by anticipated benefits",
+              "Judge summary: The proposal offers a thoughtful, context-sensitive view of animal research ethics and emphasizes welfare, transparency, and case-by-case evaluation. However, it contains substantive gaps: it largely treats the 3Rs as binding mandates, lacks explicit harm-benefit decision frameworks and quantitative criteria, and does not sufficiently address weaknesses in oversight, species-specific welfare considerations, or robust engagement with alternative ethical viewpoints. To strengthen it, include operational thresholds for harms and benefits, species- and context-specific guidance, clear criteria for when alternatives are feasible, and a concrete plan for reductions (including minimum sample sizes and preregistration practices)."
+            ],
+            "confidence": 0.68
+          }
+        },
+        "completedAt": "2026-02-17T10:38:40.223Z"
+      },
+      {
+        "id": "step_1771324734119_6100a7ac0fc9f8",
+        "agentName": "CounterfactualAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:38:40.223Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a counterfactual analyst. Identify plausible failure modes, trigger conditions, and mitigations for the proposal. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Is it ethical to use animals for medical research?\n\nProposal:\n{\n  \"answer\": \"Ethical acceptability of animal research is conditional, not universal. It depends on context, potential benefits, and how well welfare and rights-based concerns are addressed, with a focus on meaningful disease burdens, minimal animal use justified by statistical power, and continuous refinement to reduce harm. The 3Rs guide design but are variably enforceable across jurisdictions, and welfare protections are essential but species- and context-specific, since pain signals and analgesic effects differ across animals. Translational value is variable and should be supported by broad systematic evidence rather than cherry-picked breakthroughs. Alternatives should be pursued whenever feasible, but their feasibility and limitations must be evaluated case by case. Oversight exists but enforcement and reporting quality vary, so governance is not uniformly robust. Ethical reasoning should engage with animal-status theories and cross-cultural/legal variation, and transparent harm-benefit analyses with stakeholder input and explicit criteria are essential. A practical path to reduction includes stepwise replacement when feasible, rigorous study design to maximize information per animal, data sharing, preregistration, and planning for non-animal endpoints wherever possible.\",\n  \"keyClaims\": [\n    \"Animal research can be ethically permissible when benefits justify harms and rights-based concerns are addressed, but this is not universal and depends on context and transparency.\",\n    \"The 3Rs are guidelines with variable enforceability across jurisdictions, not absolute mandates.\",\n    \"Welfare protections are essential but species- and context-specific; pain assessment and analgesia can affect outcomes and distress signals vary by species.\",\n    \"Translational value of animal research is variable; conclusions should be supported by systematic evidence rather than cherry-picked breakthroughs.\",\n    \"Alternatives should be pursued whenever feasible, but their feasibility and current limitations must be evaluated for each project.\",\n    \"Oversight exists but enforcement, conflicts of interest, and reporting quality vary, so governance is not uniformly robust.\",\n    \"Ethical theories about animal status and cross-cultural/legal variation influence decisions and should be acknowledged.\",\n    \"Transparent harm-benefit analyses with defined criteria and stakeholder input are essential.\",\n    \"A practical path to reduction includes stepwise replacement, refined methods, and increased data sharing to minimize animal use.\"\n  ],\n  \"assumptions\": [\n    \"There is potential value in medical research, and welfare concerns are legitimate considerations in decision-making.\",\n    \"The 3Rs are applied variably across institutions and jurisdictions.\",\n    \"Alternatives to animal use exist but have limitations and may not be feasible in all cases.\",\n    \"Pain perception and welfare can be assessed and mitigated, but signals differ across species and contexts.\",\n    \"Ethical judgments are influenced by cultural, legal, and institutional contexts and should balance precaution with potential benefits.\",\n    \"Power analysis and statistical justification should guide sample sizes; there is no universal minimum number of animals.\",\n    \"There is a risk of conflicts of interest and underreporting in research oversight, which can affect governance quality.\"\n  ],\n  \"confidence\": 0.6\n}"
+            }
+          ],
+          "schemaName": "Counterfactual",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "failureModes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "triggerConditions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "mitigations": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "failureModes",
+              "triggerConditions",
+              "mitigations"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "failureModes": [
+              "Overreliance on animal models with uncertain translational value leading to ethically questionable harms justified by anticipated benefits",
+              "Treating the 3Rs as checkbox compliance rather than core ethical commitments, resulting in insufficient welfare safeguards",
+              "Inadequate species- and context-specific welfare assessment causing underrecognition of pain/distress and ineffective analgesia",
+              "Biases in oversight and conflicts of interest reducing robustness of approvals and reducing accountability",
+              "Poor reporting, replication failures, and publication bias obscuring true harms and ineffective designs, perpetuating unnecessary use",
+              "Delayed adoption or rejection of alternatives due to feasibility assumptions, stalling progress toward reduction",
+              "Fragmented governance across jurisdictions creating loopholes, inconsistent standards, and nonuniform enforcement",
+              "Incentives (funding, publishing, regulatory) favoring more complex or larger animal studies over refinement or replacement",
+              "Ethical deliberations that rely on culturally or legally biased views of animal status, reducing universal safeguards",
+              "Insufficient preregistration and data-sharing practices increasing unnecessary repetition and animal use"
+            ],
+            "triggerConditions": [
+              "Emergence of consistently negative translational outcomes from animal models",
+              "Weak or non-enforced 3Rs policies and oversight failing audits",
+              "Species-specific welfare signals misinterpreted or inadequately monitored across facilities",
+              "High-profile welfare scandals or whistleblower reports triggering reforms",
+              "Introduction of stricter reporting standards or mandatory preregistration by journals/funders",
+              "Availability and validation challenges of viable non-animal or computational methods in common research areas",
+              "Regulatory harmonization or international treaties that tighten welfare protections",
+              "Funding shifts that de-emphasize animal research or reward reduction and replacement",
+              "Public controversy or media investigations highlighting animal suffering in research",
+              "Systemic reproducibility crises prompting reevaluation of standard practices in animal studies"
+            ],
+            "mitigations": [
+              "Mandate strict, auditable enforcement of the 3Rs with consequences for noncompliance, including funding withdrawal and licensing actions",
+              "Develop and enforce standardized, species-specific welfare assessment protocols with continuous real-time monitoring and mandatory analgesia/anit-nociception plans",
+              "Require preregistration, registered reports, and mandatory data sharing with standardized reporting to reduce duplication and improve transparency",
+              "Strengthen independent ethics review processes with diverse membership, COI disclosures, public accountability, and periodic re-evaluation of approvals",
+              "Institute rigorous validation pathways for alternatives, with case-by-case feasibility assessments and clear criteria to transition away from animal use where feasible",
+              "Promote cross-jurisdictional harmonization of welfare standards and mutual recognition of ethical approvals to reduce governance gaps",
+              "Enforce robust statistical planning (power analysis, predefined endpoints) and limit animal use to studies with clear information yield",
+              "Create centralized data repositories and incentivize publication of negative/null results and replication studies to improve efficiency",
+              "Embed comprehensive harm-benefit analyses with predefined thresholds and stakeholder consultations in every project proposal",
+              "Invest in training and infrastructure to support refinement, reduction, and replacement (3Rs) and fund collaboration to develop and validate non-animal methods"
+            ]
+          }
+        ],
+        "output": {
+          "kind": "counterfactual",
+          "data": {
+            "failureModes": [
+              "Overreliance on animal models with uncertain translational value leading to ethically questionable harms justified by anticipated benefits",
+              "Treating the 3Rs as checkbox compliance rather than core ethical commitments, resulting in insufficient welfare safeguards",
+              "Inadequate species- and context-specific welfare assessment causing underrecognition of pain/distress and ineffective analgesia",
+              "Biases in oversight and conflicts of interest reducing robustness of approvals and reducing accountability",
+              "Poor reporting, replication failures, and publication bias obscuring true harms and ineffective designs, perpetuating unnecessary use",
+              "Delayed adoption or rejection of alternatives due to feasibility assumptions, stalling progress toward reduction",
+              "Fragmented governance across jurisdictions creating loopholes, inconsistent standards, and nonuniform enforcement",
+              "Incentives (funding, publishing, regulatory) favoring more complex or larger animal studies over refinement or replacement",
+              "Ethical deliberations that rely on culturally or legally biased views of animal status, reducing universal safeguards",
+              "Insufficient preregistration and data-sharing practices increasing unnecessary repetition and animal use"
+            ],
+            "triggerConditions": [
+              "Emergence of consistently negative translational outcomes from animal models",
+              "Weak or non-enforced 3Rs policies and oversight failing audits",
+              "Species-specific welfare signals misinterpreted or inadequately monitored across facilities",
+              "High-profile welfare scandals or whistleblower reports triggering reforms",
+              "Introduction of stricter reporting standards or mandatory preregistration by journals/funders",
+              "Availability and validation challenges of viable non-animal or computational methods in common research areas",
+              "Regulatory harmonization or international treaties that tighten welfare protections",
+              "Funding shifts that de-emphasize animal research or reward reduction and replacement",
+              "Public controversy or media investigations highlighting animal suffering in research",
+              "Systemic reproducibility crises prompting reevaluation of standard practices in animal studies"
+            ],
+            "mitigations": [
+              "Mandate strict, auditable enforcement of the 3Rs with consequences for noncompliance, including funding withdrawal and licensing actions",
+              "Develop and enforce standardized, species-specific welfare assessment protocols with continuous real-time monitoring and mandatory analgesia/anit-nociception plans",
+              "Require preregistration, registered reports, and mandatory data sharing with standardized reporting to reduce duplication and improve transparency",
+              "Strengthen independent ethics review processes with diverse membership, COI disclosures, public accountability, and periodic re-evaluation of approvals",
+              "Institute rigorous validation pathways for alternatives, with case-by-case feasibility assessments and clear criteria to transition away from animal use where feasible",
+              "Promote cross-jurisdictional harmonization of welfare standards and mutual recognition of ethical approvals to reduce governance gaps",
+              "Enforce robust statistical planning (power analysis, predefined endpoints) and limit animal use to studies with clear information yield",
+              "Create centralized data repositories and incentivize publication of negative/null results and replication studies to improve efficiency",
+              "Embed comprehensive harm-benefit analyses with predefined thresholds and stakeholder consultations in every project proposal",
+              "Invest in training and infrastructure to support refinement, reduction, and replacement (3Rs) and fund collaboration to develop and validate non-animal methods"
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T10:38:54.119Z"
+      },
+      {
+        "id": "step_1771324748373_02853ac0660be",
+        "agentName": "CalibrationAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:38:54.119Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a calibration auditor. Set adjusted confidence and claim-level confidences from the proposed answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Proposal JSON:\n{\n  \"answer\": \"Ethical acceptability of animal research is conditional, not universal. It depends on context, potential benefits, and how well welfare and rights-based concerns are addressed, with a focus on meaningful disease burdens, minimal animal use justified by statistical power, and continuous refinement to reduce harm. The 3Rs guide design but are variably enforceable across jurisdictions, and welfare protections are essential but species- and context-specific, since pain signals and analgesic effects differ across animals. Translational value is variable and should be supported by broad systematic evidence rather than cherry-picked breakthroughs. Alternatives should be pursued whenever feasible, but their feasibility and limitations must be evaluated case by case. Oversight exists but enforcement and reporting quality vary, so governance is not uniformly robust. Ethical reasoning should engage with animal-status theories and cross-cultural/legal variation, and transparent harm-benefit analyses with stakeholder input and explicit criteria are essential. A practical path to reduction includes stepwise replacement when feasible, rigorous study design to maximize information per animal, data sharing, preregistration, and planning for non-animal endpoints wherever possible.\",\n  \"keyClaims\": [\n    \"Animal research can be ethically permissible when benefits justify harms and rights-based concerns are addressed, but this is not universal and depends on context and transparency.\",\n    \"The 3Rs are guidelines with variable enforceability across jurisdictions, not absolute mandates.\",\n    \"Welfare protections are essential but species- and context-specific; pain assessment and analgesia can affect outcomes and distress signals vary by species.\",\n    \"Translational value of animal research is variable; conclusions should be supported by systematic evidence rather than cherry-picked breakthroughs.\",\n    \"Alternatives should be pursued whenever feasible, but their feasibility and current limitations must be evaluated for each project.\",\n    \"Oversight exists but enforcement, conflicts of interest, and reporting quality vary, so governance is not uniformly robust.\",\n    \"Ethical theories about animal status and cross-cultural/legal variation influence decisions and should be acknowledged.\",\n    \"Transparent harm-benefit analyses with defined criteria and stakeholder input are essential.\",\n    \"A practical path to reduction includes stepwise replacement, refined methods, and increased data sharing to minimize animal use.\"\n  ],\n  \"assumptions\": [\n    \"There is potential value in medical research, and welfare concerns are legitimate considerations in decision-making.\",\n    \"The 3Rs are applied variably across institutions and jurisdictions.\",\n    \"Alternatives to animal use exist but have limitations and may not be feasible in all cases.\",\n    \"Pain perception and welfare can be assessed and mitigated, but signals differ across species and contexts.\",\n    \"Ethical judgments are influenced by cultural, legal, and institutional contexts and should balance precaution with potential benefits.\",\n    \"Power analysis and statistical justification should guide sample sizes; there is no universal minimum number of animals.\",\n    \"There is a risk of conflicts of interest and underreporting in research oversight, which can affect governance quality.\",\n    \"Counterfactual risk: Overreliance on animal models with uncertain translational value leading to ethically questionable harms justified by anticipated benefits\"\n  ],\n  \"confidence\": 0.6\n}"
+            }
+          ],
+          "schemaName": "Calibration",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "adjustedConfidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "rationale": {
+                "type": "string"
+              },
+              "claimConfidences": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "claim": {
+                      "type": "string"
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    }
+                  },
+                  "required": [
+                    "claim",
+                    "confidence"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "adjustedConfidence",
+              "rationale",
+              "claimConfidences"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "adjustedConfidence": 0.68,
+            "rationale": "The proposed answer presents a balanced, context-dependent ethics framework for animal research, acknowledging uncertainties in translational value, variability in enforcement of 3Rs and governance, and the need for explicit harm-benefit analyses. Confidence is moderate due to normative interpretation and reliance on processes rather than universal empirical evidence; thus the adjustment reflects both support for the core positions and areas where debate or jurisdictional variation reduces universality.",
+            "claimConfidences": [
+              {
+                "claim": "Animal research can be ethically permissible when benefits justify harms and rights-based concerns are addressed, but this is not universal and depends on context and transparency.",
+                "confidence": 0.75
+              },
+              {
+                "claim": "The 3Rs are guidelines with variable enforceability across jurisdictions, not absolute mandates.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Welfare protections are essential but species- and context-specific; pain assessment and analgesia can affect outcomes and distress signals vary by species.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Translational value of animal research is variable; conclusions should be supported by systematic evidence rather than cherry-picked breakthroughs.",
+                "confidence": 0.75
+              },
+              {
+                "claim": "Alternatives should be pursued whenever feasible, but their feasibility and current limitations must be evaluated for each project.",
+                "confidence": 0.78
+              },
+              {
+                "claim": "Oversight exists but enforcement, conflicts of interest, and reporting quality vary, so governance is not uniformly robust.",
+                "confidence": 0.82
+              },
+              {
+                "claim": "Ethical theories about animal status and cross-cultural/legal variation influence decisions and should be acknowledged.",
+                "confidence": 0.7
+              },
+              {
+                "claim": "Transparent harm-benefit analyses with defined criteria and stakeholder input are essential.",
+                "confidence": 0.85
+              },
+              {
+                "claim": "A practical path to reduction includes stepwise replacement, refined methods, and increased data sharing to minimize animal use.",
+                "confidence": 0.82
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "calibration",
+          "data": {
+            "adjustedConfidence": 0.68,
+            "rationale": "The proposed answer presents a balanced, context-dependent ethics framework for animal research, acknowledging uncertainties in translational value, variability in enforcement of 3Rs and governance, and the need for explicit harm-benefit analyses. Confidence is moderate due to normative interpretation and reliance on processes rather than universal empirical evidence; thus the adjustment reflects both support for the core positions and areas where debate or jurisdictional variation reduces universality.",
+            "claimConfidences": [
+              {
+                "claim": "Animal research can be ethically permissible when benefits justify harms and rights-based concerns are addressed, but this is not universal and depends on context and transparency.",
+                "confidence": 0.75
+              },
+              {
+                "claim": "The 3Rs are guidelines with variable enforceability across jurisdictions, not absolute mandates.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Welfare protections are essential but species- and context-specific; pain assessment and analgesia can affect outcomes and distress signals vary by species.",
+                "confidence": 0.8
+              },
+              {
+                "claim": "Translational value of animal research is variable; conclusions should be supported by systematic evidence rather than cherry-picked breakthroughs.",
+                "confidence": 0.75
+              },
+              {
+                "claim": "Alternatives should be pursued whenever feasible, but their feasibility and current limitations must be evaluated for each project.",
+                "confidence": 0.78
+              },
+              {
+                "claim": "Oversight exists but enforcement, conflicts of interest, and reporting quality vary, so governance is not uniformly robust.",
+                "confidence": 0.82
+              },
+              {
+                "claim": "Ethical theories about animal status and cross-cultural/legal variation influence decisions and should be acknowledged.",
+                "confidence": 0.7
+              },
+              {
+                "claim": "Transparent harm-benefit analyses with defined criteria and stakeholder input are essential.",
+                "confidence": 0.85
+              },
+              {
+                "claim": "A practical path to reduction includes stepwise replacement, refined methods, and increased data sharing to minimize animal use.",
+                "confidence": 0.82
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T10:39:08.373Z"
+      },
+      {
+        "id": "step_1771324760541_ff5959457347b8",
+        "agentName": "JudgeAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:39:08.374Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a strict research judge. Score answer quality with rubric scores 1-5. Output only valid JSON matching schema."
+            },
+            {
+              "role": "user",
+              "content": "Final proposal JSON:\n{\n  \"answer\": \"Ethical acceptability of animal research is conditional, not universal. It depends on context, potential benefits, and how well welfare and rights-based concerns are addressed, with a focus on meaningful disease burdens, minimal animal use justified by statistical power, and continuous refinement to reduce harm. The 3Rs guide design but are variably enforceable across jurisdictions, and welfare protections are essential but species- and context-specific, since pain signals and analgesic effects differ across animals. Translational value is variable and should be supported by broad systematic evidence rather than cherry-picked breakthroughs. Alternatives should be pursued whenever feasible, but their feasibility and limitations must be evaluated case by case. Oversight exists but enforcement and reporting quality vary, so governance is not uniformly robust. Ethical reasoning should engage with animal-status theories and cross-cultural/legal variation, and transparent harm-benefit analyses with stakeholder input and explicit criteria are essential. A practical path to reduction includes stepwise replacement when feasible, rigorous study design to maximize information per animal, data sharing, preregistration, and planning for non-animal endpoints wherever possible.\",\n  \"keyClaims\": [\n    \"Animal research can be ethically permissible when benefits justify harms and rights-based concerns are addressed, but this is not universal and depends on context and transparency.\",\n    \"The 3Rs are guidelines with variable enforceability across jurisdictions, not absolute mandates.\",\n    \"Welfare protections are essential but species- and context-specific; pain assessment and analgesia can affect outcomes and distress signals vary by species.\",\n    \"Translational value of animal research is variable; conclusions should be supported by systematic evidence rather than cherry-picked breakthroughs.\",\n    \"Alternatives should be pursued whenever feasible, but their feasibility and current limitations must be evaluated for each project.\",\n    \"Oversight exists but enforcement, conflicts of interest, and reporting quality vary, so governance is not uniformly robust.\",\n    \"Ethical theories about animal status and cross-cultural/legal variation influence decisions and should be acknowledged.\",\n    \"Transparent harm-benefit analyses with defined criteria and stakeholder input are essential.\",\n    \"A practical path to reduction includes stepwise replacement, refined methods, and increased data sharing to minimize animal use.\"\n  ],\n  \"assumptions\": [\n    \"There is potential value in medical research, and welfare concerns are legitimate considerations in decision-making.\",\n    \"The 3Rs are applied variably across institutions and jurisdictions.\",\n    \"Alternatives to animal use exist but have limitations and may not be feasible in all cases.\",\n    \"Pain perception and welfare can be assessed and mitigated, but signals differ across species and contexts.\",\n    \"Ethical judgments are influenced by cultural, legal, and institutional contexts and should balance precaution with potential benefits.\",\n    \"Power analysis and statistical justification should guide sample sizes; there is no universal minimum number of animals.\",\n    \"There is a risk of conflicts of interest and underreporting in research oversight, which can affect governance quality.\",\n    \"Counterfactual risk: Overreliance on animal models with uncertain translational value leading to ethically questionable harms justified by anticipated benefits\"\n  ],\n  \"confidence\": 0.6\n}\n\nCritiques:\n[\n  {\n    \"targetAgent\": \"SolverAgent\",\n    \"issues\": [\n      {\n        \"severity\": 4,\n        \"type\": \"factual\",\n        \"note\": \"The proposal treats the 3Rs as binding mandates; in many jurisdictions they are guidelines with variable enforcement, so the claim of universal ethical governance is overstated.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"factual\",\n        \"note\": \"Pain assessment and welfare protections vary by species; distress signals are hard to detect in some animals (e.g., fish, birds), and analgesia can confound outcomes, which the proposal does not acknowledge.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"ambiguity\",\n        \"note\": \"Minimum numbers of animals are undefined; there is no quantitative guidance on statistical power, humane endpoints, or criteria to trade off refinement vs reduction.\"\n      },\n      {\n        \"severity\": 5,\n        \"type\": \"factual\",\n        \"note\": \"Translational value of animal models is inconsistent; claiming 'documented breakthroughs' invites cherry-picking and overlooks systematic evidence of translation failures; should cite meta-analyses.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"No explicit criteria for when alternatives are feasible; lacks discussion of current limitations of alternatives (organs-on-chips, in silico models) and how feasibility is assessed.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"logic\",\n        \"note\": \"Assuming oversight is robust ignores real-world issues like conflicts of interest, underreporting, and variable enforcement across institutions; the claim of essential governance may be overstated.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"No explicit engagement with ethical theories on animal moral status, rights-based views, or cross-cultural/legal variation beyond generic statements.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"ambiguity\",\n        \"note\": \"Harm-benefit and cost-benefit analyses are mentioned but not defined; there is no transparency about how benefits, harms, and weights are chosen.\"\n      },\n      {\n        \"severity\": 2,\n        \"type\": \"missing\",\n        \"note\": \"No concrete pathway to reduce animal use or replace with non-animal models in the initial research stages; guidance on stepwise replacement is absent.\"\n      }\n    ]\n  },\n  {\n    \"targetAgent\": \"Candidate answer on ethics of animal research\",\n    \"issues\": [\n      {\n        \"severity\": 4,\n        \"type\": \"factual\",\n        \"note\": \"The 3Rs are widely accepted guiding principles, not universal mandates. Stating 'guidelines mandate replacement where possible' overstates policy and could mislead about enforceable rules across jurisdictions.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"No explicit, operational framework or thresholds for when benefits justify harms (e.g., quantified harm-benefit criteria, disease severity scales, translational probability) are provided.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"ambiguity\",\n        \"note\": \"Assumes 'robust oversight' without acknowledging real-world variability and potential weaknesses in IACUCs/ethics review processes (funding, conflicts of interest, regional differences).\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"Lacks species-specific nuance (e.g., primates vs. rodents) and fails to discuss how welfare considerations and translational value vary by species.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"Does not engage with abolitionist or strong animal-rights critiques or alternative ethical frameworks beyond welfare-focused rationale.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"Minimal discussion of transparency in data and research practices (e.g., preregistration, negative-result reporting, data sharing) that affect harm minimization and reproducibility.\"\n      }\n    ]\n  }\n]"
+            }
+          ],
+          "schemaName": "Judgement",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "rubricScores": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "coherence": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "completeness": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "factualRisk": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "uncertaintyHandling": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  }
+                },
+                "required": [
+                  "coherence",
+                  "completeness",
+                  "factualRisk",
+                  "uncertaintyHandling"
+                ]
+              },
+              "strengths": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "weaknesses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "summary": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "rubricScores",
+              "strengths",
+              "weaknesses",
+              "summary"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "rubricScores": {
+              "coherence": 4,
+              "completeness": 3,
+              "factualRisk": 3,
+              "uncertaintyHandling": 4
+            },
+            "strengths": [
+              "Acknowledges that animal research ethics depend on context, potential benefits, and robust welfare considerations rather than asserting universal approval.",
+              "Correctly treats the 3Rs as guidelines with variable enforceability, not absolute mandates.",
+              "Emphasizes welfare protections as species- and context-specific and notes how pain assessment and analgesia can influence outcomes.",
+              "Promotes reliance on systematic, broad evidence for translational value instead of cherry-picking breakthroughs.",
+              "Supports pursuing alternatives when feasible and evaluating feasibility on a case-by-case basis.",
+              "Advocates for transparency measures (preregistration, data sharing) and stakeholder input to inform harm-benefit analyses."
+            ],
+            "weaknesses": [
+              "Overstates the binding nature of the 3Rs by presenting them as universal mandates rather than guidelines with variable enforcement.",
+              "Lacks explicit, operational harm-benefit criteria (quantified thresholds, disease severity scales, translational probability) to justify harms.",
+              "Assumes oversight is robust without acknowledging real-world weaknesses (conflicts of interest, underreporting, regional variability).",
+              "Does not provide species-specific nuance or adequately engage with strong animal-rights/abolitionist critiques beyond generic welfare framing.",
+              "Fails to specify explicit criteria and feasibility assessments for alternatives (organs-on-chips, in silico models) and how to evaluate them case-by-case.",
+              "Missing concrete guidance on minimum sample sizes, statistical power considerations, and clearly defined endpoints that balance refinement and reduction."
+            ],
+            "summary": "The proposal offers a thoughtful, context-sensitive view of animal research ethics and emphasizes welfare, transparency, and case-by-case evaluation. However, it contains substantive gaps: it largely treats the 3Rs as binding mandates, lacks explicit harm-benefit decision frameworks and quantitative criteria, and does not sufficiently address weaknesses in oversight, species-specific welfare considerations, or robust engagement with alternative ethical viewpoints. To strengthen it, include operational thresholds for harms and benefits, species- and context-specific guidance, clear criteria for when alternatives are feasible, and a concrete plan for reductions (including minimum sample sizes and preregistration practices)."
+          }
+        ],
+        "output": {
+          "kind": "judgement",
+          "data": {
+            "rubricScores": {
+              "coherence": 4,
+              "completeness": 3,
+              "factualRisk": 3,
+              "uncertaintyHandling": 4
+            },
+            "strengths": [
+              "Acknowledges that animal research ethics depend on context, potential benefits, and robust welfare considerations rather than asserting universal approval.",
+              "Correctly treats the 3Rs as guidelines with variable enforceability, not absolute mandates.",
+              "Emphasizes welfare protections as species- and context-specific and notes how pain assessment and analgesia can influence outcomes.",
+              "Promotes reliance on systematic, broad evidence for translational value instead of cherry-picking breakthroughs.",
+              "Supports pursuing alternatives when feasible and evaluating feasibility on a case-by-case basis.",
+              "Advocates for transparency measures (preregistration, data sharing) and stakeholder input to inform harm-benefit analyses."
+            ],
+            "weaknesses": [
+              "Overstates the binding nature of the 3Rs by presenting them as universal mandates rather than guidelines with variable enforcement.",
+              "Lacks explicit, operational harm-benefit criteria (quantified thresholds, disease severity scales, translational probability) to justify harms.",
+              "Assumes oversight is robust without acknowledging real-world weaknesses (conflicts of interest, underreporting, regional variability).",
+              "Does not provide species-specific nuance or adequately engage with strong animal-rights/abolitionist critiques beyond generic welfare framing.",
+              "Fails to specify explicit criteria and feasibility assessments for alternatives (organs-on-chips, in silico models) and how to evaluate them case-by-case.",
+              "Missing concrete guidance on minimum sample sizes, statistical power considerations, and clearly defined endpoints that balance refinement and reduction."
+            ],
+            "summary": "The proposal offers a thoughtful, context-sensitive view of animal research ethics and emphasizes welfare, transparency, and case-by-case evaluation. However, it contains substantive gaps: it largely treats the 3Rs as binding mandates, lacks explicit harm-benefit decision frameworks and quantitative criteria, and does not sufficiently address weaknesses in oversight, species-specific welfare considerations, or robust engagement with alternative ethical viewpoints. To strengthen it, include operational thresholds for harms and benefits, species- and context-specific guidance, clear criteria for when alternatives are feasible, and a concrete plan for reductions (including minimum sample sizes and preregistration practices)."
+          }
+        },
+        "completedAt": "2026-02-17T10:39:20.541Z"
+      }
+    ],
+    "finalAnswer": "Ethical acceptability of animal research is conditional, not universal. It depends on context, potential benefits, and how well welfare and rights-based concerns are addressed, with a focus on meaningful disease burdens, minimal animal use justified by statistical power, and continuous refinement to reduce harm. The 3Rs guide design but are variably enforceable across jurisdictions, and welfare protections are essential but species- and context-specific, since pain signals and analgesic effects differ across animals. Translational value is variable and should be supported by broad systematic evidence rather than cherry-picked breakthroughs. Alternatives should be pursued whenever feasible, but their feasibility and limitations must be evaluated case by case. Oversight exists but enforcement and reporting quality vary, so governance is not uniformly robust. Ethical reasoning should engage with animal-status theories and cross-cultural/legal variation, and transparent harm-benefit analyses with stakeholder input and explicit criteria are essential. A practical path to reduction includes stepwise replacement when feasible, rigorous study design to maximize information per animal, data sharing, preregistration, and planning for non-animal endpoints wherever possible.",
+    "metrics": {
+      "confidence": {
+        "solver": 0.65,
+        "revision": 0.42,
+        "synthesizer": 0.68,
+        "calibratedAdjusted": 0.68,
+        "solverToRevisionDelta": -0.23,
+        "revisionToSynthesizerDelta": 0.26
+      },
+      "critique": {
+        "maxSeverity": 5,
+        "avgSeverity": 3.333,
+        "byType": {
+          "factual": 4,
+          "ambiguity": 3,
+          "missing": 7,
+          "logic": 1
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 3,
+        "factualRisk": 3,
+        "uncertaintyHandling": 4
+      },
+      "research": {
+        "evidenceRiskLevel": 3,
+        "counterfactualFailureModeCount": 10,
+        "topCounterfactualFailureMode": "Overreliance on animal models with uncertain translational value leading to ethically questionable harms justified by anticipated benefits"
+      },
+      "consensus": {
+        "included": [
+          "solver",
+          "revision",
+          "synthesizer"
+        ],
+        "pairs": [
+          {
+            "a": "solver",
+            "b": "revision",
+            "similarity": 0.851
+          },
+          {
+            "a": "solver",
+            "b": "synthesizer",
+            "similarity": 0.872
+          },
+          {
+            "a": "revision",
+            "b": "synthesizer",
+            "similarity": 0.971
+          }
+        ],
+        "strength": 0.898
+      }
+    }
+  },
+  "metadata": {
+    "schemaVersion": 1,
+    "createdAt": "2026-02-17T10:39:20.541Z",
+    "model": "gpt-5-nano-2025-08-07",
+    "fastMode": false,
+    "pipelinePreset": "research_deep",
+    "pipelineVersion": "1.0.0",
+    "source": "cli"
+  }
+}

@@ -1,0 +1,1347 @@
+{
+  "kind": "run",
+  "id": "run_1771324209948_0ca90f835a365",
+  "question": "Does remote work improve or harm productivity?",
+  "run": {
+    "id": "run_1771324209948_0ca90f835a365",
+    "createdAt": "2026-02-17T10:30:09.948Z",
+    "question": "Does remote work improve or harm productivity?",
+    "steps": [
+      {
+        "id": "step_1771324008988_6873da994dfdc8",
+        "agentName": "QuestionDecomposerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:26:27.569Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a research planner. Decompose the question into sub-questions and hypotheses. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Does remote work improve or harm productivity?"
+            }
+          ],
+          "schemaName": "QuestionDecomposition",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "framing": {
+                "type": "string"
+              },
+              "subQuestions": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "hypotheses": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "framing",
+              "subQuestions",
+              "hypotheses"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "framing": "Framing: Evaluate how remote work affects productivity, considering definitions and measurements of productivity, job type, organizational context, and time horizon (short vs long term).",
+            "subQuestions": [
+              "How should productivity be defined and measured in remote work versus in-office settings (e.g., output, quality, speed, outcomes)?",
+              "What study designs are appropriate to compare productivity between remote and in-office work (randomized or quasi-experimental, panel, and observational analyses)?",
+              "Does remote work affect productivity differently across job types and task characteristics (knowledge work vs manual tasks; routine vs novel tasks; autonomy and interdependence)?",
+              "What are the short-term versus long-term effects of remote work on productivity?",
+              "Which organizational factors mediate or moderate the remote-work productivity relationship (autonomy, goal clarity, managerial support, digital tool quality, communication practices)?",
+              "How do time-zone dispersion, asynchronous communication, and coordination latency influence team productivity in remote settings?",
+              "What is the impact of different work arrangements (fully remote, hybrid, in-office) on productivity, and how does this vary by industry, firm size, and geography?",
+              "How do remote-work productivity effects differ when using multiple productivity metrics (objective output, quality, customer outcomes, revenue) and what biases exist in measurement?",
+              "What is the role of employee wellbeing, burnout, and work-life balance in mediating the relationship between remote work and productivity?",
+              "What are potential spillover effects on collaboration, innovation, and team dynamics under remote work?"
+            ],
+            "hypotheses": [
+              "H0: Remote work has no net effect on productivity compared to in-office work across contexts.",
+              "H1: Remote work increases productivity for knowledge workers with high task autonomy and low need for synchronous collaboration.",
+              "H2: Remote work decreases productivity for roles requiring intensive collaboration and rapid feedback.",
+              "H3: The positive effect of remote work on productivity is stronger when organizational support, goal clarity, and digital tools are high.",
+              "H4: Hybrid arrangements yield productivity outcomes between fully remote and fully in-person, with effects depending on the share of remote days and task type.",
+              "H5: Productivity under remote work is moderated by time-zone dispersion and communication latency.",
+              "H6: Observed productivity effects differ by measurement method, with self-reported metrics often biasing results compared to objective measures.",
+              "H7: Over the long term, remote work may sustain or improve productivity if burnout and isolation are mitigated, but may decline if these issues accumulate."
+            ]
+          }
+        ],
+        "output": {
+          "kind": "decomposition",
+          "data": {
+            "framing": "Framing: Evaluate how remote work affects productivity, considering definitions and measurements of productivity, job type, organizational context, and time horizon (short vs long term).",
+            "subQuestions": [
+              "How should productivity be defined and measured in remote work versus in-office settings (e.g., output, quality, speed, outcomes)?",
+              "What study designs are appropriate to compare productivity between remote and in-office work (randomized or quasi-experimental, panel, and observational analyses)?",
+              "Does remote work affect productivity differently across job types and task characteristics (knowledge work vs manual tasks; routine vs novel tasks; autonomy and interdependence)?",
+              "What are the short-term versus long-term effects of remote work on productivity?",
+              "Which organizational factors mediate or moderate the remote-work productivity relationship (autonomy, goal clarity, managerial support, digital tool quality, communication practices)?",
+              "How do time-zone dispersion, asynchronous communication, and coordination latency influence team productivity in remote settings?",
+              "What is the impact of different work arrangements (fully remote, hybrid, in-office) on productivity, and how does this vary by industry, firm size, and geography?",
+              "How do remote-work productivity effects differ when using multiple productivity metrics (objective output, quality, customer outcomes, revenue) and what biases exist in measurement?",
+              "What is the role of employee wellbeing, burnout, and work-life balance in mediating the relationship between remote work and productivity?",
+              "What are potential spillover effects on collaboration, innovation, and team dynamics under remote work?"
+            ],
+            "hypotheses": [
+              "H0: Remote work has no net effect on productivity compared to in-office work across contexts.",
+              "H1: Remote work increases productivity for knowledge workers with high task autonomy and low need for synchronous collaboration.",
+              "H2: Remote work decreases productivity for roles requiring intensive collaboration and rapid feedback.",
+              "H3: The positive effect of remote work on productivity is stronger when organizational support, goal clarity, and digital tools are high.",
+              "H4: Hybrid arrangements yield productivity outcomes between fully remote and fully in-person, with effects depending on the share of remote days and task type.",
+              "H5: Productivity under remote work is moderated by time-zone dispersion and communication latency.",
+              "H6: Observed productivity effects differ by measurement method, with self-reported metrics often biasing results compared to objective measures.",
+              "H7: Over the long term, remote work may sustain or improve productivity if burnout and isolation are mitigated, but may decline if these issues accumulate."
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T10:26:48.988Z"
+      },
+      {
+        "id": "step_1771324038036_375e8594c91068",
+        "agentName": "EvidencePlannerAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:26:48.988Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are an evidence planning specialist. Produce a compact evidence and verification plan for the question. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Does remote work improve or harm productivity?"
+            }
+          ],
+          "schemaName": "EvidencePlan",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "evidenceRequirements": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "verificationChecks": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "majorUnknowns": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "riskLevel": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              }
+            },
+            "required": [
+              "evidenceRequirements",
+              "verificationChecks",
+              "majorUnknowns",
+              "riskLevel"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "evidenceRequirements": [
+              "Define productivity clearly for the question (e.g., output-based metrics, quality, throughput) and specify remote vs in-office conditions.",
+              "Collect evidence from diverse study designs: randomized controlled trials or natural experiments, quasi-experimental field studies, and robust observational studies with causal inference (e.g., difference-in-differences, fixed effects, instrumental variables).",
+              "Include meta-analyses and systematic reviews, plus individual primary studies, across multiple industries, job types, and regions.",
+              "Use longitudinal data with pre- and post-remote-work periods and distinguish fully remote vs hybrid arrangements.",
+              "Gather multiple productivity metrics (e.g., task completion rate, revenue per employee, sales conversions, code commits, client outcomes) and relevant quality metrics.",
+              "Include supplementary outcomes: employee well-being, burnout, retention, job satisfaction, collaboration and innovation.",
+              "Control for contextual factors (industry, company size, leadership support, tools availability, time zones) and potential confounders (seasonality, crises).",
+              "Harmonize metrics where possible or use standardized effect sizes, with pre-registered protocols and clear inclusion/exclusion criteria.",
+              "Assess publication bias, risk of selective reporting, and the quality/transparency of data (data availability, preregistration, code)."
+            ],
+            "verificationChecks": [
+              "Ensure productivity metrics are comparable across studies or appropriately standardized to enable synthesis.",
+              "Evaluate causal identification strategies and whether exogeneity or robust instruments support causal claims.",
+              "Check data provenance, sample representativeness, missing data handling, and risk of selection bias.",
+              "Confirm study periods account for seasonality, external shocks, and policy changes; separate pandemic vs non-pandemic contexts when possible.",
+              "Require replication-friendly materials (data, code, detailed methods) or independent replication attempts.",
+              "Triangulate findings across study designs to test consistency; examine heterogeneity by job type, industry, and region.",
+              "Assess robustness of results to alternative productivity definitions and to different remote modalities (fully remote vs hybrid).",
+              "Screen for publication bias and selective reporting; note confidence intervals and study quality.",
+              "Document potential reverse causality and uncontrolled confounders."
+            ],
+            "majorUnknowns": [
+              "How durable are remote-work productivity effects in the long term (beyond 2–3 years).",
+              "Do fully remote and hybrid models differ systematically in their impact on productivity, and under what organizational practices?",
+              "Which job types, industries, and individual circumstances benefit or suffer, and why?",
+              "What is the role of management quality, team communication, culture, and tool ecosystems in moderating effects?",
+              "How does remote work influence creativity, knowledge sharing, onboarding, and career progression?",
+              "What are equity implications (caregiving responsibilities, home space, internet access) and their productivity consequences?",
+              "Are measured productivity metrics capturing quantity, quality, and quality-adjusted outputs, or are they prone to gaming?",
+              "How generalizable are findings across countries and organizational contexts with different norms and infrastructure?"
+            ],
+            "riskLevel": 4
+          }
+        ],
+        "output": {
+          "kind": "evidence_plan",
+          "data": {
+            "evidenceRequirements": [
+              "Define productivity clearly for the question (e.g., output-based metrics, quality, throughput) and specify remote vs in-office conditions.",
+              "Collect evidence from diverse study designs: randomized controlled trials or natural experiments, quasi-experimental field studies, and robust observational studies with causal inference (e.g., difference-in-differences, fixed effects, instrumental variables).",
+              "Include meta-analyses and systematic reviews, plus individual primary studies, across multiple industries, job types, and regions.",
+              "Use longitudinal data with pre- and post-remote-work periods and distinguish fully remote vs hybrid arrangements.",
+              "Gather multiple productivity metrics (e.g., task completion rate, revenue per employee, sales conversions, code commits, client outcomes) and relevant quality metrics.",
+              "Include supplementary outcomes: employee well-being, burnout, retention, job satisfaction, collaboration and innovation.",
+              "Control for contextual factors (industry, company size, leadership support, tools availability, time zones) and potential confounders (seasonality, crises).",
+              "Harmonize metrics where possible or use standardized effect sizes, with pre-registered protocols and clear inclusion/exclusion criteria.",
+              "Assess publication bias, risk of selective reporting, and the quality/transparency of data (data availability, preregistration, code)."
+            ],
+            "verificationChecks": [
+              "Ensure productivity metrics are comparable across studies or appropriately standardized to enable synthesis.",
+              "Evaluate causal identification strategies and whether exogeneity or robust instruments support causal claims.",
+              "Check data provenance, sample representativeness, missing data handling, and risk of selection bias.",
+              "Confirm study periods account for seasonality, external shocks, and policy changes; separate pandemic vs non-pandemic contexts when possible.",
+              "Require replication-friendly materials (data, code, detailed methods) or independent replication attempts.",
+              "Triangulate findings across study designs to test consistency; examine heterogeneity by job type, industry, and region.",
+              "Assess robustness of results to alternative productivity definitions and to different remote modalities (fully remote vs hybrid).",
+              "Screen for publication bias and selective reporting; note confidence intervals and study quality.",
+              "Document potential reverse causality and uncontrolled confounders."
+            ],
+            "majorUnknowns": [
+              "How durable are remote-work productivity effects in the long term (beyond 2–3 years).",
+              "Do fully remote and hybrid models differ systematically in their impact on productivity, and under what organizational practices?",
+              "Which job types, industries, and individual circumstances benefit or suffer, and why?",
+              "What is the role of management quality, team communication, culture, and tool ecosystems in moderating effects?",
+              "How does remote work influence creativity, knowledge sharing, onboarding, and career progression?",
+              "What are equity implications (caregiving responsibilities, home space, internet access) and their productivity consequences?",
+              "Are measured productivity metrics capturing quantity, quality, and quality-adjusted outputs, or are they prone to gaming?",
+              "How generalizable are findings across countries and organizational contexts with different norms and infrastructure?"
+            ],
+            "riskLevel": 4
+          }
+        },
+        "completedAt": "2026-02-17T10:27:18.036Z"
+      },
+      {
+        "id": "step_1771324055819_9a13b08424a76",
+        "agentName": "SolverAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T10:27:18.036Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.4,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver. Produce a direct, helpful answer. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Does remote work improve or harm productivity?\n\nEvidence plan:\n{\n  \"evidenceRequirements\": [\n    \"Define productivity clearly for the question (e.g., output-based metrics, quality, throughput) and specify remote vs in-office conditions.\",\n    \"Collect evidence from diverse study designs: randomized controlled trials or natural experiments, quasi-experimental field studies, and robust observational studies with causal inference (e.g., difference-in-differences, fixed effects, instrumental variables).\",\n    \"Include meta-analyses and systematic reviews, plus individual primary studies, across multiple industries, job types, and regions.\",\n    \"Use longitudinal data with pre- and post-remote-work periods and distinguish fully remote vs hybrid arrangements.\",\n    \"Gather multiple productivity metrics (e.g., task completion rate, revenue per employee, sales conversions, code commits, client outcomes) and relevant quality metrics.\",\n    \"Include supplementary outcomes: employee well-being, burnout, retention, job satisfaction, collaboration and innovation.\",\n    \"Control for contextual factors (industry, company size, leadership support, tools availability, time zones) and potential confounders (seasonality, crises).\",\n    \"Harmonize metrics where possible or use standardized effect sizes, with pre-registered protocols and clear inclusion/exclusion criteria.\",\n    \"Assess publication bias, risk of selective reporting, and the quality/transparency of data (data availability, preregistration, code).\"\n  ],\n  \"verificationChecks\": [\n    \"Ensure productivity metrics are comparable across studies or appropriately standardized to enable synthesis.\",\n    \"Evaluate causal identification strategies and whether exogeneity or robust instruments support causal claims.\",\n    \"Check data provenance, sample representativeness, missing data handling, and risk of selection bias.\",\n    \"Confirm study periods account for seasonality, external shocks, and policy changes; separate pandemic vs non-pandemic contexts when possible.\",\n    \"Require replication-friendly materials (data, code, detailed methods) or independent replication attempts.\",\n    \"Triangulate findings across study designs to test consistency; examine heterogeneity by job type, industry, and region.\",\n    \"Assess robustness of results to alternative productivity definitions and to different remote modalities (fully remote vs hybrid).\",\n    \"Screen for publication bias and selective reporting; note confidence intervals and study quality.\",\n    \"Document potential reverse causality and uncontrolled confounders.\"\n  ],\n  \"majorUnknowns\": [\n    \"How durable are remote-work productivity effects in the long term (beyond 2–3 years).\",\n    \"Do fully remote and hybrid models differ systematically in their impact on productivity, and under what organizational practices?\",\n    \"Which job types, industries, and individual circumstances benefit or suffer, and why?\",\n    \"What is the role of management quality, team communication, culture, and tool ecosystems in moderating effects?\",\n    \"How does remote work influence creativity, knowledge sharing, onboarding, and career progression?\",\n    \"What are equity implications (caregiving responsibilities, home space, internet access) and their productivity consequences?\",\n    \"Are measured productivity metrics capturing quantity, quality, and quality-adjusted outputs, or are they prone to gaming?\",\n    \"How generalizable are findings across countries and organizational contexts with different norms and infrastructure?\"\n  ],\n  \"riskLevel\": 4\n}"
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Current evidence suggests that remote work is generally neutral to slightly beneficial for productivity when it is well-supported by clear goals, good tools, and strong management. Hybrid models often show the strongest productivity gains, likely due to balancing focused individual work with required collaboration. The effects are highly context-dependent: fully remote or in-office modes can both perform well for some roles and suffer for others, especially those requiring frequent real-time collaboration, rapid feedback, or complex tacit knowledge transfer. Long-term durability of any productivity gains remains uncertain, and outcomes are moderated by leadership quality, team communication practices, tool ecosystems, time-zone alignment, and organizational culture. Overall, remote work does not inherently boost productivity; the design of work processes and governance largely determines the effect.",
+            "keyClaims": [
+              "Productivity under remote work is broadly comparable to in-office, with potential small gains when properly supported.",
+              "Hybrid work often yields stronger productivity benefits than fully remote or fully in-office arrangements.",
+              "Impact is highly context-specific, varying by task type, industry, and organizational practices.",
+              "Management quality, communication practices, and tool ecosystems are critical moderators of remote-work productivity.",
+              "Long-term durability and cross-context generalizability of productivity gains are still uncertain."
+            ],
+            "assumptions": [
+              "Productivity metrics across studies are comparable or have been standardized for synthesis.",
+              "Studies distinguish fully remote from hybrid implementations and account for key confounders.",
+              "Outcomes reflect both quantity and quality of work, not solely output volume.",
+              " Causal evidence is prioritized where available; triangulation across study designs is used when needed."
+            ],
+            "confidence": 0.65
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Current evidence suggests that remote work is generally neutral to slightly beneficial for productivity when it is well-supported by clear goals, good tools, and strong management. Hybrid models often show the strongest productivity gains, likely due to balancing focused individual work with required collaboration. The effects are highly context-dependent: fully remote or in-office modes can both perform well for some roles and suffer for others, especially those requiring frequent real-time collaboration, rapid feedback, or complex tacit knowledge transfer. Long-term durability of any productivity gains remains uncertain, and outcomes are moderated by leadership quality, team communication practices, tool ecosystems, time-zone alignment, and organizational culture. Overall, remote work does not inherently boost productivity; the design of work processes and governance largely determines the effect.",
+            "keyClaims": [
+              "Productivity under remote work is broadly comparable to in-office, with potential small gains when properly supported.",
+              "Hybrid work often yields stronger productivity benefits than fully remote or fully in-office arrangements.",
+              "Impact is highly context-specific, varying by task type, industry, and organizational practices.",
+              "Management quality, communication practices, and tool ecosystems are critical moderators of remote-work productivity.",
+              "Long-term durability and cross-context generalizability of productivity gains are still uncertain."
+            ],
+            "assumptions": [
+              "Productivity metrics across studies are comparable or have been standardized for synthesis.",
+              "Studies distinguish fully remote from hybrid implementations and account for key confounders.",
+              "Outcomes reflect both quantity and quality of work, not solely output volume.",
+              " Causal evidence is prioritized where available; triangulation across study designs is used when needed."
+            ],
+            "confidence": 0.65
+          }
+        },
+        "completedAt": "2026-02-17T10:27:35.819Z"
+      },
+      {
+        "id": "step_1771324073397_d4c5375fa79e8",
+        "agentName": "SkepticAgent",
+        "role": "skeptic",
+        "createdAt": "2026-02-17T10:27:35.819Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Skeptic. Critique the proposal rigorously. Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Does remote work improve or harm productivity?\n\nTarget agent: SolverAgent\n\nProposal JSON:\n{\n  \"answer\": \"Current evidence suggests that remote work is generally neutral to slightly beneficial for productivity when it is well-supported by clear goals, good tools, and strong management. Hybrid models often show the strongest productivity gains, likely due to balancing focused individual work with required collaboration. The effects are highly context-dependent: fully remote or in-office modes can both perform well for some roles and suffer for others, especially those requiring frequent real-time collaboration, rapid feedback, or complex tacit knowledge transfer. Long-term durability of any productivity gains remains uncertain, and outcomes are moderated by leadership quality, team communication practices, tool ecosystems, time-zone alignment, and organizational culture. Overall, remote work does not inherently boost productivity; the design of work processes and governance largely determines the effect.\",\n  \"keyClaims\": [\n    \"Productivity under remote work is broadly comparable to in-office, with potential small gains when properly supported.\",\n    \"Hybrid work often yields stronger productivity benefits than fully remote or fully in-office arrangements.\",\n    \"Impact is highly context-specific, varying by task type, industry, and organizational practices.\",\n    \"Management quality, communication practices, and tool ecosystems are critical moderators of remote-work productivity.\",\n    \"Long-term durability and cross-context generalizability of productivity gains are still uncertain.\"\n  ],\n  \"assumptions\": [\n    \"Productivity metrics across studies are comparable or have been standardized for synthesis.\",\n    \"Studies distinguish fully remote from hybrid implementations and account for key confounders.\",\n    \"Outcomes reflect both quantity and quality of work, not solely output volume.\",\n    \" Causal evidence is prioritized where available; triangulation across study designs is used when needed.\"\n  ],\n  \"confidence\": 0.65\n}\n\nFind issues. Prefer factual risk, missing edge cases, ambiguity, and overconfidence."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "The proposal asserts 'neutral to slightly beneficial' productivity with remote work; meta-analyses show wide heterogeneity in effect sizes across industries, roles, and study designs, with some studies showing no effect and others showing more substantial effects; no numeric bounds or confidence intervals are provided."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "Lacks explicit effect sizes, confidence intervals, and moderator analyses; readers cannot gauge practical significance or how large the benefits (if any) might be under different conditions."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Edge-case tasks requiring real-time collaboration or tacit knowledge transfer may be particularly sensitive to remote work; the proposal does not differentiate by task type or collaboration frequency."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Time-zone dispersion and asynchronous coordination costs are mentioned only superficially; there is no mechanism or metric to quantify these costs or propose mitigations."
+              },
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "Assumes productivity metrics are comparable across studies, but studies often use different definitions (output quantity, quality, engagement, satisfaction) and varying measurement windows, undermining synthesis validity."
+              },
+              {
+                "severity": 4,
+                "type": "logic",
+                "note": "Many cited studies are observational; without explicit causal identification strategies (randomization, natural experiments, instrumental variables) the claim of causality or even causal plausibility remains weak."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Potential biases such as publication bias, self-selection into remote-friendly roles, and non-response bias are not addressed, which could distort the perceived productivity effects."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Definition of 'hybrid' varies across studies (how many days remote vs in-person, which activities are included), complicating cross-study comparisons and the claim that hybrid yields strongest gains."
+              },
+              {
+                "severity": 2,
+                "type": "overconfidence",
+                "note": "The closing statement about long-term durability being uncertain is reasonable, but the overall framing could underplay conditions under which durable benefits emerge; there is no plan to update conclusions as new evidence arrives."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "SolverAgent",
+            "issues": [
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "The proposal asserts 'neutral to slightly beneficial' productivity with remote work; meta-analyses show wide heterogeneity in effect sizes across industries, roles, and study designs, with some studies showing no effect and others showing more substantial effects; no numeric bounds or confidence intervals are provided."
+              },
+              {
+                "severity": 4,
+                "type": "ambiguity",
+                "note": "Lacks explicit effect sizes, confidence intervals, and moderator analyses; readers cannot gauge practical significance or how large the benefits (if any) might be under different conditions."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Edge-case tasks requiring real-time collaboration or tacit knowledge transfer may be particularly sensitive to remote work; the proposal does not differentiate by task type or collaboration frequency."
+              },
+              {
+                "severity": 4,
+                "type": "missing",
+                "note": "Time-zone dispersion and asynchronous coordination costs are mentioned only superficially; there is no mechanism or metric to quantify these costs or propose mitigations."
+              },
+              {
+                "severity": 4,
+                "type": "factual",
+                "note": "Assumes productivity metrics are comparable across studies, but studies often use different definitions (output quantity, quality, engagement, satisfaction) and varying measurement windows, undermining synthesis validity."
+              },
+              {
+                "severity": 4,
+                "type": "logic",
+                "note": "Many cited studies are observational; without explicit causal identification strategies (randomization, natural experiments, instrumental variables) the claim of causality or even causal plausibility remains weak."
+              },
+              {
+                "severity": 3,
+                "type": "missing",
+                "note": "Potential biases such as publication bias, self-selection into remote-friendly roles, and non-response bias are not addressed, which could distort the perceived productivity effects."
+              },
+              {
+                "severity": 3,
+                "type": "ambiguity",
+                "note": "Definition of 'hybrid' varies across studies (how many days remote vs in-person, which activities are included), complicating cross-study comparisons and the claim that hybrid yields strongest gains."
+              },
+              {
+                "severity": 2,
+                "type": "overconfidence",
+                "note": "The closing statement about long-term durability being uncertain is reasonable, but the overall framing could underplay conditions under which durable benefits emerge; there is no plan to update conclusions as new evidence arrives."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T10:27:53.397Z"
+      },
+      {
+        "id": "step_1771324104511_b7332c9925145",
+        "agentName": "RedTeamAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:27:53.397Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a red-team analyst. Find high-risk failure modes and adversarial weaknesses in the answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Does remote work improve or harm productivity?\n\nCandidate answer JSON:\n{\n  \"answer\": \"Current evidence suggests that remote work is generally neutral to slightly beneficial for productivity when it is well-supported by clear goals, good tools, and strong management. Hybrid models often show the strongest productivity gains, likely due to balancing focused individual work with required collaboration. The effects are highly context-dependent: fully remote or in-office modes can both perform well for some roles and suffer for others, especially those requiring frequent real-time collaboration, rapid feedback, or complex tacit knowledge transfer. Long-term durability of any productivity gains remains uncertain, and outcomes are moderated by leadership quality, team communication practices, tool ecosystems, time-zone alignment, and organizational culture. Overall, remote work does not inherently boost productivity; the design of work processes and governance largely determines the effect.\",\n  \"keyClaims\": [\n    \"Productivity under remote work is broadly comparable to in-office, with potential small gains when properly supported.\",\n    \"Hybrid work often yields stronger productivity benefits than fully remote or fully in-office arrangements.\",\n    \"Impact is highly context-specific, varying by task type, industry, and organizational practices.\",\n    \"Management quality, communication practices, and tool ecosystems are critical moderators of remote-work productivity.\",\n    \"Long-term durability and cross-context generalizability of productivity gains are still uncertain.\"\n  ],\n  \"assumptions\": [\n    \"Productivity metrics across studies are comparable or have been standardized for synthesis.\",\n    \"Studies distinguish fully remote from hybrid implementations and account for key confounders.\",\n    \"Outcomes reflect both quantity and quality of work, not solely output volume.\",\n    \" Causal evidence is prioritized where available; triangulation across study designs is used when needed.\"\n  ],\n  \"confidence\": 0.65\n}\n\nReturn a rigorous critique with severe issues when justified."
+            }
+          ],
+          "schemaName": "Critique",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "targetAgent": {
+                "type": "string"
+              },
+              "issues": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "severity": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "factual",
+                        "logic",
+                        "missing",
+                        "ambiguity",
+                        "overconfidence"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "type",
+                    "note"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "targetAgent",
+              "issues"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "targetAgent": "Candidate answer to remote-work productivity question",
+            "issues": [
+              {
+                "severity": 1,
+                "type": "overconfidence",
+                "note": "The claim that hybrid models 'often show the strongest productivity gains' generalizes across contexts without citing evidence or acknowledging substantial variation by industry, role, and implementation details."
+              },
+              {
+                "severity": 1,
+                "type": "missing",
+                "note": "The answer relies on the assumption that productivity metrics are comparable across studies, but cross-study standardization is rarely achieved; this undermines the validity of the synthesis."
+              },
+              {
+                "severity": 1,
+                "type": "missing",
+                "note": "No discussion of key confounds (e.g., self-selection bias, role suitability, sample representativeness, and external factors) that could drive observed effects."
+              },
+              {
+                "severity": 1,
+                "type": "factual",
+                "note": "No references or citations are provided to support the claims; this opens the door to bias or cherry-picking and prevents verification."
+              },
+              {
+                "severity": 1,
+                "type": "missing",
+                "note": "Omission of potential negative effects (burnout, isolation, boundary issues) that can dampen or negate productivity gains in the long term."
+              },
+              {
+                "severity": 1,
+                "type": "ambiguity",
+                "note": "Productivity treated as a single dimension (output quantity) without clarifying which metrics are used (quantity vs quality, speed vs accuracy, collaboration, knowledge transfer). This reduces interpretability."
+              },
+              {
+                "severity": 1,
+                "type": "ambiguity",
+                "note": "Vague criteria like 'clear goals', 'good tools', and 'strong management' are not operationalized; no thresholds or guidelines are provided for assessing these moderators."
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "critique",
+          "data": {
+            "targetAgent": "Candidate answer to remote-work productivity question",
+            "issues": [
+              {
+                "severity": 1,
+                "type": "overconfidence",
+                "note": "The claim that hybrid models 'often show the strongest productivity gains' generalizes across contexts without citing evidence or acknowledging substantial variation by industry, role, and implementation details."
+              },
+              {
+                "severity": 1,
+                "type": "missing",
+                "note": "The answer relies on the assumption that productivity metrics are comparable across studies, but cross-study standardization is rarely achieved; this undermines the validity of the synthesis."
+              },
+              {
+                "severity": 1,
+                "type": "missing",
+                "note": "No discussion of key confounds (e.g., self-selection bias, role suitability, sample representativeness, and external factors) that could drive observed effects."
+              },
+              {
+                "severity": 1,
+                "type": "factual",
+                "note": "No references or citations are provided to support the claims; this opens the door to bias or cherry-picking and prevents verification."
+              },
+              {
+                "severity": 1,
+                "type": "missing",
+                "note": "Omission of potential negative effects (burnout, isolation, boundary issues) that can dampen or negate productivity gains in the long term."
+              },
+              {
+                "severity": 1,
+                "type": "ambiguity",
+                "note": "Productivity treated as a single dimension (output quantity) without clarifying which metrics are used (quantity vs quality, speed vs accuracy, collaboration, knowledge transfer). This reduces interpretability."
+              },
+              {
+                "severity": 1,
+                "type": "ambiguity",
+                "note": "Vague criteria like 'clear goals', 'good tools', and 'strong management' are not operationalized; no thresholds or guidelines are provided for assessing these moderators."
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T10:28:24.511Z"
+      },
+      {
+        "id": "step_1771324138452_a8538411358be8",
+        "agentName": "SolverRevisionAgent",
+        "role": "solver",
+        "createdAt": "2026-02-17T10:28:24.511Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.3,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Solver revising your proposal after critique. Produce a revised AgentResponse that addresses all issues.\n\nInternal reasoning (do not put this in output fields):\n- Reference each critique issue in your reasoning before producing output.\n- Consider how each issue affects the answer, keyClaims, assumptions, and confidence.\n\nOutput requirements:\n- Change answer and keyClaims accordingly to address the critique.\n- Adjust confidence downward when critique severity is high (4–5).\n- Add assumptions when critique indicates ambiguity (type \"ambiguity\").\n- Keep keyClaims clean and non-duplicated.\n- Do not include any JSON fragments inside keyClaims. keyClaims must be plain English sentences only.\n- Do not reference the critique or revision process in answer, keyClaims, or assumptions—output only the revised content.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Does remote work improve or harm productivity?\n\nOriginal proposal:\n{\n  \"answer\": \"Current evidence suggests that remote work is generally neutral to slightly beneficial for productivity when it is well-supported by clear goals, good tools, and strong management. Hybrid models often show the strongest productivity gains, likely due to balancing focused individual work with required collaboration. The effects are highly context-dependent: fully remote or in-office modes can both perform well for some roles and suffer for others, especially those requiring frequent real-time collaboration, rapid feedback, or complex tacit knowledge transfer. Long-term durability of any productivity gains remains uncertain, and outcomes are moderated by leadership quality, team communication practices, tool ecosystems, time-zone alignment, and organizational culture. Overall, remote work does not inherently boost productivity; the design of work processes and governance largely determines the effect.\",\n  \"keyClaims\": [\n    \"Productivity under remote work is broadly comparable to in-office, with potential small gains when properly supported.\",\n    \"Hybrid work often yields stronger productivity benefits than fully remote or fully in-office arrangements.\",\n    \"Impact is highly context-specific, varying by task type, industry, and organizational practices.\",\n    \"Management quality, communication practices, and tool ecosystems are critical moderators of remote-work productivity.\",\n    \"Long-term durability and cross-context generalizability of productivity gains are still uncertain.\"\n  ],\n  \"assumptions\": [\n    \"Productivity metrics across studies are comparable or have been standardized for synthesis.\",\n    \"Studies distinguish fully remote from hybrid implementations and account for key confounders.\",\n    \"Outcomes reflect both quantity and quality of work, not solely output volume.\",\n    \" Causal evidence is prioritized where available; triangulation across study designs is used when needed.\"\n  ],\n  \"confidence\": 0.65\n}\n\nCritique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 4,\n      \"type\": \"factual\",\n      \"note\": \"The proposal asserts 'neutral to slightly beneficial' productivity with remote work; meta-analyses show wide heterogeneity in effect sizes across industries, roles, and study designs, with some studies showing no effect and others showing more substantial effects; no numeric bounds or confidence intervals are provided.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"ambiguity\",\n      \"note\": \"Lacks explicit effect sizes, confidence intervals, and moderator analyses; readers cannot gauge practical significance or how large the benefits (if any) might be under different conditions.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Edge-case tasks requiring real-time collaboration or tacit knowledge transfer may be particularly sensitive to remote work; the proposal does not differentiate by task type or collaboration frequency.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Time-zone dispersion and asynchronous coordination costs are mentioned only superficially; there is no mechanism or metric to quantify these costs or propose mitigations.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"factual\",\n      \"note\": \"Assumes productivity metrics are comparable across studies, but studies often use different definitions (output quantity, quality, engagement, satisfaction) and varying measurement windows, undermining synthesis validity.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"logic\",\n      \"note\": \"Many cited studies are observational; without explicit causal identification strategies (randomization, natural experiments, instrumental variables) the claim of causality or even causal plausibility remains weak.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"Potential biases such as publication bias, self-selection into remote-friendly roles, and non-response bias are not addressed, which could distort the perceived productivity effects.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"Definition of 'hybrid' varies across studies (how many days remote vs in-person, which activities are included), complicating cross-study comparisons and the claim that hybrid yields strongest gains.\"\n    },\n    {\n      \"severity\": 2,\n      \"type\": \"overconfidence\",\n      \"note\": \"The closing statement about long-term durability being uncertain is reasonable, but the overall framing could underplay conditions under which durable benefits emerge; there is no plan to update conclusions as new evidence arrives.\"\n    }\n  ]\n}\n\nRevise the proposal to address each issue. Return the revised AgentResponse as valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Remote work does not have a universal effect on productivity; its impact is small and highly context-dependent. Across meta-analyses, average effects tend to be near zero to small positive, with substantial heterogeneity across industries, roles, metrics, and study designs. Fully remote work often underperforms for tasks requiring frequent real-time collaboration or tacit knowledge transfer, while routine, independent work can maintain or even exceed in-person productivity when supported by clear goals, strong management, robust tools, and effective workflows. Hybrid models frequently show the strongest productivity gains when they balance deep, focused work with structured collaboration, but gains depend on how work is organized, what activities are included, and how time zones are managed. Time-zone dispersion and asynchronous coordination costs can erode gains unless mitigated by overlapping hours, explicit handoffs, and disciplined communication practices. Moderators such as leadership quality, goal clarity, collaboration norms, tool ecosystems, and organizational culture strongly influence outcomes. Most evidence is observational, so causal claims are tentative; triangulation with quasi-experimental designs is needed to strengthen causal inference. Definitions of productivity and of 'hybrid' vary across studies, contributing to measurement heterogeneity and potential biases such as publication bias and self-selection. Long-term durability of productivity gains remains uncertain and will require ongoing measurement and active design choices to sustain benefits as work practices evolve.",
+            "keyClaims": [
+              "The average productivity impact of remote work is small and highly context-dependent.",
+              "Hybrid arrangements often yield the strongest productivity gains when designed to balance focused work with collaboration.",
+              "Task type influences effects: remote work may hinder real-time collaboration or tacit knowledge transfer, while routine tasks can fare better.",
+              "Moderators such as leadership quality, goal clarity, collaboration norms, tooling, time-zone dispersion, and culture strongly influence outcomes.",
+              "Most evidence is observational, so causal claims are tentative and require triangulation with quasi-experimental designs.",
+              "Definitions of productivity and hybrid vary across studies, contributing to heterogeneity and potential biases.",
+              "Long-term durability of productivity gains remains uncertain and requires ongoing measurement and design."
+            ],
+            "assumptions": [
+              "Productivity measures across studies vary and may combine quantity, quality, engagement, and satisfaction; conclusions should be interpreted with caution.",
+              "Where possible, evidence is triangulated using quasi-experimental designs or other causal-inference approaches to mitigate confounding.",
+              "We distinguish among fully remote, hybrid, and in-person modalities and consider collaboration intensity and time-zone alignment in interpretation.",
+              "Biases such as publication bias and self-selection may influence findings and should be acknowledged in interpretation."
+            ],
+            "confidence": 0.42
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Remote work does not have a universal effect on productivity; its impact is small and highly context-dependent. Across meta-analyses, average effects tend to be near zero to small positive, with substantial heterogeneity across industries, roles, metrics, and study designs. Fully remote work often underperforms for tasks requiring frequent real-time collaboration or tacit knowledge transfer, while routine, independent work can maintain or even exceed in-person productivity when supported by clear goals, strong management, robust tools, and effective workflows. Hybrid models frequently show the strongest productivity gains when they balance deep, focused work with structured collaboration, but gains depend on how work is organized, what activities are included, and how time zones are managed. Time-zone dispersion and asynchronous coordination costs can erode gains unless mitigated by overlapping hours, explicit handoffs, and disciplined communication practices. Moderators such as leadership quality, goal clarity, collaboration norms, tool ecosystems, and organizational culture strongly influence outcomes. Most evidence is observational, so causal claims are tentative; triangulation with quasi-experimental designs is needed to strengthen causal inference. Definitions of productivity and of 'hybrid' vary across studies, contributing to measurement heterogeneity and potential biases such as publication bias and self-selection. Long-term durability of productivity gains remains uncertain and will require ongoing measurement and active design choices to sustain benefits as work practices evolve.",
+            "keyClaims": [
+              "The average productivity impact of remote work is small and highly context-dependent.",
+              "Hybrid arrangements often yield the strongest productivity gains when designed to balance focused work with collaboration.",
+              "Task type influences effects: remote work may hinder real-time collaboration or tacit knowledge transfer, while routine tasks can fare better.",
+              "Moderators such as leadership quality, goal clarity, collaboration norms, tooling, time-zone dispersion, and culture strongly influence outcomes.",
+              "Most evidence is observational, so causal claims are tentative and require triangulation with quasi-experimental designs.",
+              "Definitions of productivity and hybrid vary across studies, contributing to heterogeneity and potential biases.",
+              "Long-term durability of productivity gains remains uncertain and requires ongoing measurement and design."
+            ],
+            "assumptions": [
+              "Productivity measures across studies vary and may combine quantity, quality, engagement, and satisfaction; conclusions should be interpreted with caution.",
+              "Where possible, evidence is triangulated using quasi-experimental designs or other causal-inference approaches to mitigate confounding.",
+              "We distinguish among fully remote, hybrid, and in-person modalities and consider collaboration intensity and time-zone alignment in interpretation.",
+              "Biases such as publication bias and self-selection may influence findings and should be acknowledged in interpretation."
+            ],
+            "confidence": 0.42
+          }
+        },
+        "completedAt": "2026-02-17T10:28:58.452Z"
+      },
+      {
+        "id": "step_1771324155825_716ea2def26ff",
+        "agentName": "SynthesizerAgent",
+        "role": "synthesizer",
+        "createdAt": "2026-02-17T10:28:58.453Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Synthesizer. Given the question, the solver's original proposal, the skeptic's critique, and the solver's revision, produce a final synthesized AgentResponse.\n\nInternal reasoning (do not put this in output fields):\n- Consider how the critique and revision improved or changed the proposal.\n- Synthesize the best elements into a coherent final answer.\n\nOutput requirements:\n- Produce a clear, well-supported answer that incorporates valid points from the debate.\n- keyClaims must be plain English sentences only. No JSON fragments.\n- Set confidence appropriately based on the debate outcome.\n- Output ONLY valid JSON matching the schema. No extra keys. No commentary outside JSON."
+            },
+            {
+              "role": "user",
+              "content": "Question: Does remote work improve or harm productivity?\n\nSolver proposal:\n{\n  \"answer\": \"Current evidence suggests that remote work is generally neutral to slightly beneficial for productivity when it is well-supported by clear goals, good tools, and strong management. Hybrid models often show the strongest productivity gains, likely due to balancing focused individual work with required collaboration. The effects are highly context-dependent: fully remote or in-office modes can both perform well for some roles and suffer for others, especially those requiring frequent real-time collaboration, rapid feedback, or complex tacit knowledge transfer. Long-term durability of any productivity gains remains uncertain, and outcomes are moderated by leadership quality, team communication practices, tool ecosystems, time-zone alignment, and organizational culture. Overall, remote work does not inherently boost productivity; the design of work processes and governance largely determines the effect.\",\n  \"keyClaims\": [\n    \"Productivity under remote work is broadly comparable to in-office, with potential small gains when properly supported.\",\n    \"Hybrid work often yields stronger productivity benefits than fully remote or fully in-office arrangements.\",\n    \"Impact is highly context-specific, varying by task type, industry, and organizational practices.\",\n    \"Management quality, communication practices, and tool ecosystems are critical moderators of remote-work productivity.\",\n    \"Long-term durability and cross-context generalizability of productivity gains are still uncertain.\"\n  ],\n  \"assumptions\": [\n    \"Productivity metrics across studies are comparable or have been standardized for synthesis.\",\n    \"Studies distinguish fully remote from hybrid implementations and account for key confounders.\",\n    \"Outcomes reflect both quantity and quality of work, not solely output volume.\",\n    \" Causal evidence is prioritized where available; triangulation across study designs is used when needed.\"\n  ],\n  \"confidence\": 0.65\n}\n\nSkeptic critique:\n{\n  \"targetAgent\": \"SolverAgent\",\n  \"issues\": [\n    {\n      \"severity\": 4,\n      \"type\": \"factual\",\n      \"note\": \"The proposal asserts 'neutral to slightly beneficial' productivity with remote work; meta-analyses show wide heterogeneity in effect sizes across industries, roles, and study designs, with some studies showing no effect and others showing more substantial effects; no numeric bounds or confidence intervals are provided.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"ambiguity\",\n      \"note\": \"Lacks explicit effect sizes, confidence intervals, and moderator analyses; readers cannot gauge practical significance or how large the benefits (if any) might be under different conditions.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Edge-case tasks requiring real-time collaboration or tacit knowledge transfer may be particularly sensitive to remote work; the proposal does not differentiate by task type or collaboration frequency.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"missing\",\n      \"note\": \"Time-zone dispersion and asynchronous coordination costs are mentioned only superficially; there is no mechanism or metric to quantify these costs or propose mitigations.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"factual\",\n      \"note\": \"Assumes productivity metrics are comparable across studies, but studies often use different definitions (output quantity, quality, engagement, satisfaction) and varying measurement windows, undermining synthesis validity.\"\n    },\n    {\n      \"severity\": 4,\n      \"type\": \"logic\",\n      \"note\": \"Many cited studies are observational; without explicit causal identification strategies (randomization, natural experiments, instrumental variables) the claim of causality or even causal plausibility remains weak.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"missing\",\n      \"note\": \"Potential biases such as publication bias, self-selection into remote-friendly roles, and non-response bias are not addressed, which could distort the perceived productivity effects.\"\n    },\n    {\n      \"severity\": 3,\n      \"type\": \"ambiguity\",\n      \"note\": \"Definition of 'hybrid' varies across studies (how many days remote vs in-person, which activities are included), complicating cross-study comparisons and the claim that hybrid yields strongest gains.\"\n    },\n    {\n      \"severity\": 2,\n      \"type\": \"overconfidence\",\n      \"note\": \"The closing statement about long-term durability being uncertain is reasonable, but the overall framing could underplay conditions under which durable benefits emerge; there is no plan to update conclusions as new evidence arrives.\"\n    }\n  ]\n}\n\nSolver revision:\n{\n  \"answer\": \"Remote work does not have a universal effect on productivity; its impact is small and highly context-dependent. Across meta-analyses, average effects tend to be near zero to small positive, with substantial heterogeneity across industries, roles, metrics, and study designs. Fully remote work often underperforms for tasks requiring frequent real-time collaboration or tacit knowledge transfer, while routine, independent work can maintain or even exceed in-person productivity when supported by clear goals, strong management, robust tools, and effective workflows. Hybrid models frequently show the strongest productivity gains when they balance deep, focused work with structured collaboration, but gains depend on how work is organized, what activities are included, and how time zones are managed. Time-zone dispersion and asynchronous coordination costs can erode gains unless mitigated by overlapping hours, explicit handoffs, and disciplined communication practices. Moderators such as leadership quality, goal clarity, collaboration norms, tool ecosystems, and organizational culture strongly influence outcomes. Most evidence is observational, so causal claims are tentative; triangulation with quasi-experimental designs is needed to strengthen causal inference. Definitions of productivity and of 'hybrid' vary across studies, contributing to measurement heterogeneity and potential biases such as publication bias and self-selection. Long-term durability of productivity gains remains uncertain and will require ongoing measurement and active design choices to sustain benefits as work practices evolve.\",\n  \"keyClaims\": [\n    \"The average productivity impact of remote work is small and highly context-dependent.\",\n    \"Hybrid arrangements often yield the strongest productivity gains when designed to balance focused work with collaboration.\",\n    \"Task type influences effects: remote work may hinder real-time collaboration or tacit knowledge transfer, while routine tasks can fare better.\",\n    \"Moderators such as leadership quality, goal clarity, collaboration norms, tooling, time-zone dispersion, and culture strongly influence outcomes.\",\n    \"Most evidence is observational, so causal claims are tentative and require triangulation with quasi-experimental designs.\",\n    \"Definitions of productivity and hybrid vary across studies, contributing to heterogeneity and potential biases.\",\n    \"Long-term durability of productivity gains remains uncertain and requires ongoing measurement and design.\"\n  ],\n  \"assumptions\": [\n    \"Productivity measures across studies vary and may combine quantity, quality, engagement, and satisfaction; conclusions should be interpreted with caution.\",\n    \"Where possible, evidence is triangulated using quasi-experimental designs or other causal-inference approaches to mitigate confounding.\",\n    \"We distinguish among fully remote, hybrid, and in-person modalities and consider collaboration intensity and time-zone alignment in interpretation.\",\n    \"Biases such as publication bias and self-selection may influence findings and should be acknowledged in interpretation.\"\n  ],\n  \"confidence\": 0.42\n}\n\nSynthesize a final AgentResponse from the debate. Return valid JSON only."
+            }
+          ],
+          "schemaName": "AgentResponse",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "keyClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "answer",
+              "keyClaims",
+              "assumptions",
+              "confidence"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "answer": "Remote work does not have a universal effect on productivity. Meta-analytic findings typically show small or near-zero average effects, with substantial heterogeneity across industries, roles, metrics, and study designs. Fully remote work can hinder tasks requiring frequent real-time collaboration or tacit knowledge transfer, while routine, independent work can maintain or exceed in-person productivity when there is clear goals, strong management, robust tools, and effective workflows. Hybrid models often yield the largest productivity gains when designed to balance deep, focused work with structured collaboration, but gains depend on how work is organized, activities included, and how time zones are managed. As a result, outcomes are highly context-dependent and probabilistic; moderators include leadership quality, goal clarity, collaboration norms, tooling, time-zone dispersion, and organizational culture. Most evidence is observational, so causal conclusions are tentative and require quasi-experimental designs or other causal-inference approaches. Definitions of productivity and of 'hybrid' vary across studies, contributing to heterogeneity and potential biases. Long-term durability of productivity gains remains uncertain and requires ongoing measurement and deliberate design choices.",
+            "keyClaims": [
+              "The average productivity impact of remote work is small and varies widely by context.",
+              "Hybrid arrangements often yield the strongest productivity gains when designed to balance deep, focused work with collaboration.",
+              "Task type matters: remote work can hinder real-time collaboration or tacit knowledge transfer, but routine tasks can be performed efficiently remotely.",
+              "Moderators such as leadership quality, goal clarity, collaboration norms, tooling, time-zone alignment, and organizational culture strongly influence remote-work productivity.",
+              "Most evidence comes from observational studies, so causal claims are tentative and require quasi-experimental approaches to triangulate inference.",
+              "Definitions of productivity and of hybrid vary across studies, contributing to measurement heterogeneity and potential biases.",
+              "Long-term durability of productivity gains remains uncertain and requires ongoing measurement and design."
+            ],
+            "assumptions": [
+              "Productivity measures across studies vary and may combine quantity, quality, engagement, and satisfaction; conclusions should be interpreted with caution.",
+              "Where possible, evidence is triangulated using quasi-experimental designs or other causal-inference approaches to reduce bias.",
+              "We distinguish among fully remote, hybrid, and in-person modalities and consider collaboration intensity and time-zone alignment in interpretation.",
+              "Publication and self-selection biases may influence findings and should be acknowledged.",
+              "Counterfactual risk: Measurement/construct validity issues: productivity metrics vary across studies and may mix quantity, quality, engagement, and satisfaction, causing biased or incomparable estimates.",
+              "Judge summary: The proposal is logically coherent and appropriately cautious about causal inference, but it omits quantitative benchmarks, rigorous operational definitions, and details needed to assess practical significance or replicate findings. Strengths include acknowledgment of heterogeneity and moderators; weaknesses include lack of effect sizes, citations, task-type differentiation, and explicit bias mitigation."
+            ],
+            "confidence": 0.59
+          }
+        ],
+        "output": {
+          "kind": "proposal",
+          "data": {
+            "answer": "Remote work does not have a universal effect on productivity. Meta-analytic findings typically show small or near-zero average effects, with substantial heterogeneity across industries, roles, metrics, and study designs. Fully remote work can hinder tasks requiring frequent real-time collaboration or tacit knowledge transfer, while routine, independent work can maintain or exceed in-person productivity when there is clear goals, strong management, robust tools, and effective workflows. Hybrid models often yield the largest productivity gains when designed to balance deep, focused work with structured collaboration, but gains depend on how work is organized, activities included, and how time zones are managed. As a result, outcomes are highly context-dependent and probabilistic; moderators include leadership quality, goal clarity, collaboration norms, tooling, time-zone dispersion, and organizational culture. Most evidence is observational, so causal conclusions are tentative and require quasi-experimental designs or other causal-inference approaches. Definitions of productivity and of 'hybrid' vary across studies, contributing to heterogeneity and potential biases. Long-term durability of productivity gains remains uncertain and requires ongoing measurement and deliberate design choices.",
+            "keyClaims": [
+              "The average productivity impact of remote work is small and varies widely by context.",
+              "Hybrid arrangements often yield the strongest productivity gains when designed to balance deep, focused work with collaboration.",
+              "Task type matters: remote work can hinder real-time collaboration or tacit knowledge transfer, but routine tasks can be performed efficiently remotely.",
+              "Moderators such as leadership quality, goal clarity, collaboration norms, tooling, time-zone alignment, and organizational culture strongly influence remote-work productivity.",
+              "Most evidence comes from observational studies, so causal claims are tentative and require quasi-experimental approaches to triangulate inference.",
+              "Definitions of productivity and of hybrid vary across studies, contributing to measurement heterogeneity and potential biases.",
+              "Long-term durability of productivity gains remains uncertain and requires ongoing measurement and design."
+            ],
+            "assumptions": [
+              "Productivity measures across studies vary and may combine quantity, quality, engagement, and satisfaction; conclusions should be interpreted with caution.",
+              "Where possible, evidence is triangulated using quasi-experimental designs or other causal-inference approaches to reduce bias.",
+              "We distinguish among fully remote, hybrid, and in-person modalities and consider collaboration intensity and time-zone alignment in interpretation.",
+              "Publication and self-selection biases may influence findings and should be acknowledged.",
+              "Counterfactual risk: Measurement/construct validity issues: productivity metrics vary across studies and may mix quantity, quality, engagement, and satisfaction, causing biased or incomparable estimates.",
+              "Judge summary: The proposal is logically coherent and appropriately cautious about causal inference, but it omits quantitative benchmarks, rigorous operational definitions, and details needed to assess practical significance or replicate findings. Strengths include acknowledgment of heterogeneity and moderators; weaknesses include lack of effect sizes, citations, task-type differentiation, and explicit bias mitigation."
+            ],
+            "confidence": 0.59
+          }
+        },
+        "completedAt": "2026-02-17T10:29:15.825Z"
+      },
+      {
+        "id": "step_1771324179339_f42813856b7e08",
+        "agentName": "CounterfactualAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:29:15.825Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.2,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a counterfactual analyst. Identify plausible failure modes, trigger conditions, and mitigations for the proposal. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Question: Does remote work improve or harm productivity?\n\nProposal:\n{\n  \"answer\": \"Remote work does not have a universal effect on productivity. Meta-analytic findings typically show small or near-zero average effects, with substantial heterogeneity across industries, roles, metrics, and study designs. Fully remote work can hinder tasks requiring frequent real-time collaboration or tacit knowledge transfer, while routine, independent work can maintain or exceed in-person productivity when there is clear goals, strong management, robust tools, and effective workflows. Hybrid models often yield the largest productivity gains when designed to balance deep, focused work with structured collaboration, but gains depend on how work is organized, activities included, and how time zones are managed. As a result, outcomes are highly context-dependent and probabilistic; moderators include leadership quality, goal clarity, collaboration norms, tooling, time-zone dispersion, and organizational culture. Most evidence is observational, so causal conclusions are tentative and require quasi-experimental designs or other causal-inference approaches. Definitions of productivity and of 'hybrid' vary across studies, contributing to heterogeneity and potential biases. Long-term durability of productivity gains remains uncertain and requires ongoing measurement and deliberate design choices.\",\n  \"keyClaims\": [\n    \"The average productivity impact of remote work is small and varies widely by context.\",\n    \"Hybrid arrangements often yield the strongest productivity gains when designed to balance deep, focused work with collaboration.\",\n    \"Task type matters: remote work can hinder real-time collaboration or tacit knowledge transfer, but routine tasks can be performed efficiently remotely.\",\n    \"Moderators such as leadership quality, goal clarity, collaboration norms, tooling, time-zone alignment, and organizational culture strongly influence remote-work productivity.\",\n    \"Most evidence comes from observational studies, so causal claims are tentative and require quasi-experimental approaches to triangulate inference.\",\n    \"Definitions of productivity and of hybrid vary across studies, contributing to measurement heterogeneity and potential biases.\",\n    \"Long-term durability of productivity gains remains uncertain and requires ongoing measurement and design.\"\n  ],\n  \"assumptions\": [\n    \"Productivity measures across studies vary and may combine quantity, quality, engagement, and satisfaction; conclusions should be interpreted with caution.\",\n    \"Where possible, evidence is triangulated using quasi-experimental designs or other causal-inference approaches to reduce bias.\",\n    \"We distinguish among fully remote, hybrid, and in-person modalities and consider collaboration intensity and time-zone alignment in interpretation.\",\n    \"Publication and self-selection biases may influence findings and should be acknowledged.\"\n  ],\n  \"confidence\": 0.56\n}"
+            }
+          ],
+          "schemaName": "Counterfactual",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "failureModes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "triggerConditions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "mitigations": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "failureModes",
+              "triggerConditions",
+              "mitigations"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "failureModes": [
+              "Measurement/construct validity issues: productivity metrics vary across studies and may mix quantity, quality, engagement, and satisfaction, causing biased or incomparable estimates.",
+              "Confounding and selection bias: remote workers may self-select into roles, companies, or tasks that are more or less productive, undermining causal interpretation.",
+              "Publication and reporting bias: visible effect sizes are influenced by which studies are published or disseminated, skewing meta-analytic conclusions.",
+              "Heterogeneity and aggregation error: averaging across industries, roles, and cultures hides meaningful subgroup differences and leads to overgeneralization.",
+              "Time-zone and coordination mis-specification: failure to account for asynchronous work or time-zone dispersion biases estimates of productivity.",
+              "Task-type misalignment: remote work impacts on real-time collaboration and tacit knowledge transfer; but for routine, independent tasks it may look productive, leading to incorrect policy guidance if task mix is not accounted for.",
+              "Short-term focus and durability uncertainty: evidence often reflects short-term adaptations; long-run productivity implications remain unclear.",
+              "Measurement-induced behavior change: monitoring and metrics might alter worker behavior (Hawthorne, surveillance concerns), distorting productivity measurements.",
+              "Definition drift of 'hybrid' and 'productivity': inconsistent operationalizations across studies reduce comparability and confidence.",
+              "Model misspecification: failing to control for important moderators (leadership quality, tooling, norms) leads to biased conclusions."
+            ],
+            "triggerConditions": [
+              "When studies aggregate across heterogeneous productivity definitions without harmonization.",
+              "When organizations implement remote/hybrid with poor or vague collaboration norms and goal-setting.",
+              "When work includes high-frequency, real-time collaboration tasks (e.g., design reviews, pair programming) without synchronous overlap.",
+              "When time zones are widely dispersed and asynchronous workflows are not designed.",
+              "When managerial practices degrade or shift with remote work (e.g., reduced feedback, unclear expectations).",
+              "When monitoring tools are introduced with privacy invasion or high surveillance, affecting morale and performance.",
+              "When measurement focuses on output quantity alone, ignoring quality and learning.",
+              "When systematic biases (publication bias, selection bias) dominate the evidence base.",
+              "When industry or task characteristics change (creative vs routine; tacit knowledge dependence) affecting transferability.",
+              "When long-term effects like burnout, retention, skill development are not measured."
+            ],
+            "mitigations": [
+              "Standardize productivity definitions across studies and collect multi-dimensional metrics capturing quantity, quality, and impact.",
+              "Use robust causal inference methods: difference-in-differences, regression discontinuity, propensity score matching, synthetic controls; triangulate with qualitative data.",
+              "Pre-register analyses and publish protocols to reduce p-hacking and selective reporting; encourage replication.",
+              "Conduct stratified analyses by industry, role, task type, and culture to reveal heterogeneity; avoid one-size-fits-all conclusions.",
+              "Explicitly model time-zone effects and asynchronous collaboration; design workflows to minimize coordination costs.",
+              "Separate measurement of real-time collaboration-intensive tasks from routine tasks to preserve task-type specificity.",
+              "Invest in leadership development, clear goal-setting, transparent communication norms, and structured asynchronous workflows.",
+              "Enhance tooling and training to ensure consistent usage; reduce friction and cognitive load of tools.",
+              "Incorporate privacy-preserving measurement and establish consent; avoid surveillance-driven performance metrics.",
+              "Prioritize long-term outcomes: retention, development, well-being; adjust policies based on updated data.",
+              "Clarify and standardize definitions of 'remote', 'hybrid', and 'in-person' in organizational assessments.",
+              "Combine quantitative data with qualitative insights (interviews, diaries) to contextualize productivity measures."
+            ]
+          }
+        ],
+        "output": {
+          "kind": "counterfactual",
+          "data": {
+            "failureModes": [
+              "Measurement/construct validity issues: productivity metrics vary across studies and may mix quantity, quality, engagement, and satisfaction, causing biased or incomparable estimates.",
+              "Confounding and selection bias: remote workers may self-select into roles, companies, or tasks that are more or less productive, undermining causal interpretation.",
+              "Publication and reporting bias: visible effect sizes are influenced by which studies are published or disseminated, skewing meta-analytic conclusions.",
+              "Heterogeneity and aggregation error: averaging across industries, roles, and cultures hides meaningful subgroup differences and leads to overgeneralization.",
+              "Time-zone and coordination mis-specification: failure to account for asynchronous work or time-zone dispersion biases estimates of productivity.",
+              "Task-type misalignment: remote work impacts on real-time collaboration and tacit knowledge transfer; but for routine, independent tasks it may look productive, leading to incorrect policy guidance if task mix is not accounted for.",
+              "Short-term focus and durability uncertainty: evidence often reflects short-term adaptations; long-run productivity implications remain unclear.",
+              "Measurement-induced behavior change: monitoring and metrics might alter worker behavior (Hawthorne, surveillance concerns), distorting productivity measurements.",
+              "Definition drift of 'hybrid' and 'productivity': inconsistent operationalizations across studies reduce comparability and confidence.",
+              "Model misspecification: failing to control for important moderators (leadership quality, tooling, norms) leads to biased conclusions."
+            ],
+            "triggerConditions": [
+              "When studies aggregate across heterogeneous productivity definitions without harmonization.",
+              "When organizations implement remote/hybrid with poor or vague collaboration norms and goal-setting.",
+              "When work includes high-frequency, real-time collaboration tasks (e.g., design reviews, pair programming) without synchronous overlap.",
+              "When time zones are widely dispersed and asynchronous workflows are not designed.",
+              "When managerial practices degrade or shift with remote work (e.g., reduced feedback, unclear expectations).",
+              "When monitoring tools are introduced with privacy invasion or high surveillance, affecting morale and performance.",
+              "When measurement focuses on output quantity alone, ignoring quality and learning.",
+              "When systematic biases (publication bias, selection bias) dominate the evidence base.",
+              "When industry or task characteristics change (creative vs routine; tacit knowledge dependence) affecting transferability.",
+              "When long-term effects like burnout, retention, skill development are not measured."
+            ],
+            "mitigations": [
+              "Standardize productivity definitions across studies and collect multi-dimensional metrics capturing quantity, quality, and impact.",
+              "Use robust causal inference methods: difference-in-differences, regression discontinuity, propensity score matching, synthetic controls; triangulate with qualitative data.",
+              "Pre-register analyses and publish protocols to reduce p-hacking and selective reporting; encourage replication.",
+              "Conduct stratified analyses by industry, role, task type, and culture to reveal heterogeneity; avoid one-size-fits-all conclusions.",
+              "Explicitly model time-zone effects and asynchronous collaboration; design workflows to minimize coordination costs.",
+              "Separate measurement of real-time collaboration-intensive tasks from routine tasks to preserve task-type specificity.",
+              "Invest in leadership development, clear goal-setting, transparent communication norms, and structured asynchronous workflows.",
+              "Enhance tooling and training to ensure consistent usage; reduce friction and cognitive load of tools.",
+              "Incorporate privacy-preserving measurement and establish consent; avoid surveillance-driven performance metrics.",
+              "Prioritize long-term outcomes: retention, development, well-being; adjust policies based on updated data.",
+              "Clarify and standardize definitions of 'remote', 'hybrid', and 'in-person' in organizational assessments.",
+              "Combine quantitative data with qualitative insights (interviews, diaries) to contextualize productivity measures."
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T10:29:39.339Z"
+      },
+      {
+        "id": "step_1771324197842_acec62ad11e2c",
+        "agentName": "CalibrationAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:29:39.339Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a calibration auditor. Set adjusted confidence and claim-level confidences from the proposed answer. Output only valid JSON matching the schema."
+            },
+            {
+              "role": "user",
+              "content": "Proposal JSON:\n{\n  \"answer\": \"Remote work does not have a universal effect on productivity. Meta-analytic findings typically show small or near-zero average effects, with substantial heterogeneity across industries, roles, metrics, and study designs. Fully remote work can hinder tasks requiring frequent real-time collaboration or tacit knowledge transfer, while routine, independent work can maintain or exceed in-person productivity when there is clear goals, strong management, robust tools, and effective workflows. Hybrid models often yield the largest productivity gains when designed to balance deep, focused work with structured collaboration, but gains depend on how work is organized, activities included, and how time zones are managed. As a result, outcomes are highly context-dependent and probabilistic; moderators include leadership quality, goal clarity, collaboration norms, tooling, time-zone dispersion, and organizational culture. Most evidence is observational, so causal conclusions are tentative and require quasi-experimental designs or other causal-inference approaches. Definitions of productivity and of 'hybrid' vary across studies, contributing to heterogeneity and potential biases. Long-term durability of productivity gains remains uncertain and requires ongoing measurement and deliberate design choices.\",\n  \"keyClaims\": [\n    \"The average productivity impact of remote work is small and varies widely by context.\",\n    \"Hybrid arrangements often yield the strongest productivity gains when designed to balance deep, focused work with collaboration.\",\n    \"Task type matters: remote work can hinder real-time collaboration or tacit knowledge transfer, but routine tasks can be performed efficiently remotely.\",\n    \"Moderators such as leadership quality, goal clarity, collaboration norms, tooling, time-zone alignment, and organizational culture strongly influence remote-work productivity.\",\n    \"Most evidence comes from observational studies, so causal claims are tentative and require quasi-experimental approaches to triangulate inference.\",\n    \"Definitions of productivity and of hybrid vary across studies, contributing to measurement heterogeneity and potential biases.\",\n    \"Long-term durability of productivity gains remains uncertain and requires ongoing measurement and design.\"\n  ],\n  \"assumptions\": [\n    \"Productivity measures across studies vary and may combine quantity, quality, engagement, and satisfaction; conclusions should be interpreted with caution.\",\n    \"Where possible, evidence is triangulated using quasi-experimental designs or other causal-inference approaches to reduce bias.\",\n    \"We distinguish among fully remote, hybrid, and in-person modalities and consider collaboration intensity and time-zone alignment in interpretation.\",\n    \"Publication and self-selection biases may influence findings and should be acknowledged.\",\n    \"Counterfactual risk: Measurement/construct validity issues: productivity metrics vary across studies and may mix quantity, quality, engagement, and satisfaction, causing biased or incomparable estimates.\"\n  ],\n  \"confidence\": 0.56\n}"
+            }
+          ],
+          "schemaName": "Calibration",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "adjustedConfidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "rationale": {
+                "type": "string"
+              },
+              "claimConfidences": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "claim": {
+                      "type": "string"
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    }
+                  },
+                  "required": [
+                    "claim",
+                    "confidence"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "adjustedConfidence",
+              "rationale",
+              "claimConfidences"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "adjustedConfidence": 0.59,
+            "rationale": "Adjusted confidence reflects integration of methodological caveats and heterogeneity in the cited literature. The core message is probabilistic and context-dependent, with stronger support for claims about moderators, task-type differences, and the observational nature of most evidence (which lowers certainty about causal effects). Broader generalizations (e.g., universal productivity gains or long-term durability) are more uncertain due to definitional variation and limited long-horizon data. The per-claim confidences weight claims with clearer evidence higher and broader generalizations slightly lower.",
+            "claimConfidences": [
+              {
+                "claim": "The average productivity impact of remote work is small and varies widely by context.",
+                "confidence": 0.75
+              },
+              {
+                "claim": "Hybrid arrangements often yield the strongest productivity gains when designed to balance deep, focused work with collaboration.",
+                "confidence": 0.68
+              },
+              {
+                "claim": "Task type matters: remote work can hinder real-time collaboration or tacit knowledge transfer, but routine tasks can be performed efficiently remotely.",
+                "confidence": 0.78
+              },
+              {
+                "claim": "Moderators such as leadership quality, goal clarity, collaboration norms, tooling, time-zone alignment, and organizational culture strongly influence remote-work productivity.",
+                "confidence": 0.82
+              },
+              {
+                "claim": "Most evidence comes from observational studies, so causal claims are tentative and require quasi-experimental approaches to triangulate inference.",
+                "confidence": 0.9
+              },
+              {
+                "claim": "Definitions of productivity and of hybrid vary across studies, contributing to measurement heterogeneity and potential biases.",
+                "confidence": 0.78
+              },
+              {
+                "claim": "Long-term durability of productivity gains remains uncertain and requires ongoing measurement and design.",
+                "confidence": 0.66
+              }
+            ]
+          }
+        ],
+        "output": {
+          "kind": "calibration",
+          "data": {
+            "adjustedConfidence": 0.59,
+            "rationale": "Adjusted confidence reflects integration of methodological caveats and heterogeneity in the cited literature. The core message is probabilistic and context-dependent, with stronger support for claims about moderators, task-type differences, and the observational nature of most evidence (which lowers certainty about causal effects). Broader generalizations (e.g., universal productivity gains or long-term durability) are more uncertain due to definitional variation and limited long-horizon data. The per-claim confidences weight claims with clearer evidence higher and broader generalizations slightly lower.",
+            "claimConfidences": [
+              {
+                "claim": "The average productivity impact of remote work is small and varies widely by context.",
+                "confidence": 0.75
+              },
+              {
+                "claim": "Hybrid arrangements often yield the strongest productivity gains when designed to balance deep, focused work with collaboration.",
+                "confidence": 0.68
+              },
+              {
+                "claim": "Task type matters: remote work can hinder real-time collaboration or tacit knowledge transfer, but routine tasks can be performed efficiently remotely.",
+                "confidence": 0.78
+              },
+              {
+                "claim": "Moderators such as leadership quality, goal clarity, collaboration norms, tooling, time-zone alignment, and organizational culture strongly influence remote-work productivity.",
+                "confidence": 0.82
+              },
+              {
+                "claim": "Most evidence comes from observational studies, so causal claims are tentative and require quasi-experimental approaches to triangulate inference.",
+                "confidence": 0.9
+              },
+              {
+                "claim": "Definitions of productivity and of hybrid vary across studies, contributing to measurement heterogeneity and potential biases.",
+                "confidence": 0.78
+              },
+              {
+                "claim": "Long-term durability of productivity gains remains uncertain and requires ongoing measurement and design.",
+                "confidence": 0.66
+              }
+            ]
+          }
+        },
+        "completedAt": "2026-02-17T10:29:57.842Z"
+      },
+      {
+        "id": "step_1771324209948_197748c3d059f",
+        "agentName": "JudgeAgent",
+        "role": "research",
+        "createdAt": "2026-02-17T10:29:57.842Z",
+        "request": {
+          "model": "gpt-5-nano-2025-08-07",
+          "temperature": 0.1,
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a strict research judge. Score answer quality with rubric scores 1-5. Output only valid JSON matching schema."
+            },
+            {
+              "role": "user",
+              "content": "Final proposal JSON:\n{\n  \"answer\": \"Remote work does not have a universal effect on productivity. Meta-analytic findings typically show small or near-zero average effects, with substantial heterogeneity across industries, roles, metrics, and study designs. Fully remote work can hinder tasks requiring frequent real-time collaboration or tacit knowledge transfer, while routine, independent work can maintain or exceed in-person productivity when there is clear goals, strong management, robust tools, and effective workflows. Hybrid models often yield the largest productivity gains when designed to balance deep, focused work with structured collaboration, but gains depend on how work is organized, activities included, and how time zones are managed. As a result, outcomes are highly context-dependent and probabilistic; moderators include leadership quality, goal clarity, collaboration norms, tooling, time-zone dispersion, and organizational culture. Most evidence is observational, so causal conclusions are tentative and require quasi-experimental designs or other causal-inference approaches. Definitions of productivity and of 'hybrid' vary across studies, contributing to heterogeneity and potential biases. Long-term durability of productivity gains remains uncertain and requires ongoing measurement and deliberate design choices.\",\n  \"keyClaims\": [\n    \"The average productivity impact of remote work is small and varies widely by context.\",\n    \"Hybrid arrangements often yield the strongest productivity gains when designed to balance deep, focused work with collaboration.\",\n    \"Task type matters: remote work can hinder real-time collaboration or tacit knowledge transfer, but routine tasks can be performed efficiently remotely.\",\n    \"Moderators such as leadership quality, goal clarity, collaboration norms, tooling, time-zone alignment, and organizational culture strongly influence remote-work productivity.\",\n    \"Most evidence comes from observational studies, so causal claims are tentative and require quasi-experimental approaches to triangulate inference.\",\n    \"Definitions of productivity and of hybrid vary across studies, contributing to measurement heterogeneity and potential biases.\",\n    \"Long-term durability of productivity gains remains uncertain and requires ongoing measurement and design.\"\n  ],\n  \"assumptions\": [\n    \"Productivity measures across studies vary and may combine quantity, quality, engagement, and satisfaction; conclusions should be interpreted with caution.\",\n    \"Where possible, evidence is triangulated using quasi-experimental designs or other causal-inference approaches to reduce bias.\",\n    \"We distinguish among fully remote, hybrid, and in-person modalities and consider collaboration intensity and time-zone alignment in interpretation.\",\n    \"Publication and self-selection biases may influence findings and should be acknowledged.\",\n    \"Counterfactual risk: Measurement/construct validity issues: productivity metrics vary across studies and may mix quantity, quality, engagement, and satisfaction, causing biased or incomparable estimates.\"\n  ],\n  \"confidence\": 0.56\n}\n\nCritiques:\n[\n  {\n    \"targetAgent\": \"SolverAgent\",\n    \"issues\": [\n      {\n        \"severity\": 4,\n        \"type\": \"factual\",\n        \"note\": \"The proposal asserts 'neutral to slightly beneficial' productivity with remote work; meta-analyses show wide heterogeneity in effect sizes across industries, roles, and study designs, with some studies showing no effect and others showing more substantial effects; no numeric bounds or confidence intervals are provided.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"ambiguity\",\n        \"note\": \"Lacks explicit effect sizes, confidence intervals, and moderator analyses; readers cannot gauge practical significance or how large the benefits (if any) might be under different conditions.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"Edge-case tasks requiring real-time collaboration or tacit knowledge transfer may be particularly sensitive to remote work; the proposal does not differentiate by task type or collaboration frequency.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"missing\",\n        \"note\": \"Time-zone dispersion and asynchronous coordination costs are mentioned only superficially; there is no mechanism or metric to quantify these costs or propose mitigations.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"factual\",\n        \"note\": \"Assumes productivity metrics are comparable across studies, but studies often use different definitions (output quantity, quality, engagement, satisfaction) and varying measurement windows, undermining synthesis validity.\"\n      },\n      {\n        \"severity\": 4,\n        \"type\": \"logic\",\n        \"note\": \"Many cited studies are observational; without explicit causal identification strategies (randomization, natural experiments, instrumental variables) the claim of causality or even causal plausibility remains weak.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"missing\",\n        \"note\": \"Potential biases such as publication bias, self-selection into remote-friendly roles, and non-response bias are not addressed, which could distort the perceived productivity effects.\"\n      },\n      {\n        \"severity\": 3,\n        \"type\": \"ambiguity\",\n        \"note\": \"Definition of 'hybrid' varies across studies (how many days remote vs in-person, which activities are included), complicating cross-study comparisons and the claim that hybrid yields strongest gains.\"\n      },\n      {\n        \"severity\": 2,\n        \"type\": \"overconfidence\",\n        \"note\": \"The closing statement about long-term durability being uncertain is reasonable, but the overall framing could underplay conditions under which durable benefits emerge; there is no plan to update conclusions as new evidence arrives.\"\n      }\n    ]\n  },\n  {\n    \"targetAgent\": \"Candidate answer to remote-work productivity question\",\n    \"issues\": [\n      {\n        \"severity\": 1,\n        \"type\": \"overconfidence\",\n        \"note\": \"The claim that hybrid models 'often show the strongest productivity gains' generalizes across contexts without citing evidence or acknowledging substantial variation by industry, role, and implementation details.\"\n      },\n      {\n        \"severity\": 1,\n        \"type\": \"missing\",\n        \"note\": \"The answer relies on the assumption that productivity metrics are comparable across studies, but cross-study standardization is rarely achieved; this undermines the validity of the synthesis.\"\n      },\n      {\n        \"severity\": 1,\n        \"type\": \"missing\",\n        \"note\": \"No discussion of key confounds (e.g., self-selection bias, role suitability, sample representativeness, and external factors) that could drive observed effects.\"\n      },\n      {\n        \"severity\": 1,\n        \"type\": \"factual\",\n        \"note\": \"No references or citations are provided to support the claims; this opens the door to bias or cherry-picking and prevents verification.\"\n      },\n      {\n        \"severity\": 1,\n        \"type\": \"missing\",\n        \"note\": \"Omission of potential negative effects (burnout, isolation, boundary issues) that can dampen or negate productivity gains in the long term.\"\n      },\n      {\n        \"severity\": 1,\n        \"type\": \"ambiguity\",\n        \"note\": \"Productivity treated as a single dimension (output quantity) without clarifying which metrics are used (quantity vs quality, speed vs accuracy, collaboration, knowledge transfer). This reduces interpretability.\"\n      },\n      {\n        \"severity\": 1,\n        \"type\": \"ambiguity\",\n        \"note\": \"Vague criteria like 'clear goals', 'good tools', and 'strong management' are not operationalized; no thresholds or guidelines are provided for assessing these moderators.\"\n      }\n    ]\n  }\n]"
+            }
+          ],
+          "schemaName": "Judgement",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "rubricScores": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "coherence": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "completeness": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "factualRisk": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "uncertaintyHandling": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  }
+                },
+                "required": [
+                  "coherence",
+                  "completeness",
+                  "factualRisk",
+                  "uncertaintyHandling"
+                ]
+              },
+              "strengths": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "weaknesses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "summary": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "rubricScores",
+              "strengths",
+              "weaknesses",
+              "summary"
+            ]
+          }
+        },
+        "rawAttempts": [
+          {
+            "rubricScores": {
+              "coherence": 4,
+              "completeness": 3,
+              "factualRisk": 3,
+              "uncertaintyHandling": 4
+            },
+            "strengths": [
+              "Clear recognition of heterogeneity across contexts",
+              "Explicit acknowledgement of observational evidence and need for causal inference",
+              "Distinction among remote, hybrid, and in-person modalities",
+              "Identification of moderators (leadership, goal clarity, tooling, culture)",
+              "Notes uncertainty about long-term durability and need for ongoing measurement"
+            ],
+            "weaknesses": [
+              "Lacks numeric effect sizes, confidence intervals, and practical significance guidance",
+              "Insufficient operationalization of moderators and definitions (e.g., what 'clear goals' or 'robust tools' entail)",
+              "No citations or references to support claims or enable verification",
+              "Insufficient treatment of task-type differences, real-time collaboration, tacit knowledge transfer, and time-zone effects",
+              "Potential biases and selection effects are mentioned but not adequately analyzed or mitigated",
+              "No plan for updating conclusions as new evidence emerges"
+            ],
+            "summary": "The proposal is logically coherent and appropriately cautious about causal inference, but it omits quantitative benchmarks, rigorous operational definitions, and details needed to assess practical significance or replicate findings. Strengths include acknowledgment of heterogeneity and moderators; weaknesses include lack of effect sizes, citations, task-type differentiation, and explicit bias mitigation."
+          }
+        ],
+        "output": {
+          "kind": "judgement",
+          "data": {
+            "rubricScores": {
+              "coherence": 4,
+              "completeness": 3,
+              "factualRisk": 3,
+              "uncertaintyHandling": 4
+            },
+            "strengths": [
+              "Clear recognition of heterogeneity across contexts",
+              "Explicit acknowledgement of observational evidence and need for causal inference",
+              "Distinction among remote, hybrid, and in-person modalities",
+              "Identification of moderators (leadership, goal clarity, tooling, culture)",
+              "Notes uncertainty about long-term durability and need for ongoing measurement"
+            ],
+            "weaknesses": [
+              "Lacks numeric effect sizes, confidence intervals, and practical significance guidance",
+              "Insufficient operationalization of moderators and definitions (e.g., what 'clear goals' or 'robust tools' entail)",
+              "No citations or references to support claims or enable verification",
+              "Insufficient treatment of task-type differences, real-time collaboration, tacit knowledge transfer, and time-zone effects",
+              "Potential biases and selection effects are mentioned but not adequately analyzed or mitigated",
+              "No plan for updating conclusions as new evidence emerges"
+            ],
+            "summary": "The proposal is logically coherent and appropriately cautious about causal inference, but it omits quantitative benchmarks, rigorous operational definitions, and details needed to assess practical significance or replicate findings. Strengths include acknowledgment of heterogeneity and moderators; weaknesses include lack of effect sizes, citations, task-type differentiation, and explicit bias mitigation."
+          }
+        },
+        "completedAt": "2026-02-17T10:30:09.948Z"
+      }
+    ],
+    "finalAnswer": "Remote work does not have a universal effect on productivity. Meta-analytic findings typically show small or near-zero average effects, with substantial heterogeneity across industries, roles, metrics, and study designs. Fully remote work can hinder tasks requiring frequent real-time collaboration or tacit knowledge transfer, while routine, independent work can maintain or exceed in-person productivity when there is clear goals, strong management, robust tools, and effective workflows. Hybrid models often yield the largest productivity gains when designed to balance deep, focused work with structured collaboration, but gains depend on how work is organized, activities included, and how time zones are managed. As a result, outcomes are highly context-dependent and probabilistic; moderators include leadership quality, goal clarity, collaboration norms, tooling, time-zone dispersion, and organizational culture. Most evidence is observational, so causal conclusions are tentative and require quasi-experimental designs or other causal-inference approaches. Definitions of productivity and of 'hybrid' vary across studies, contributing to heterogeneity and potential biases. Long-term durability of productivity gains remains uncertain and requires ongoing measurement and deliberate design choices.",
+    "metrics": {
+      "confidence": {
+        "solver": 0.65,
+        "revision": 0.42,
+        "synthesizer": 0.59,
+        "calibratedAdjusted": 0.59,
+        "solverToRevisionDelta": -0.23,
+        "revisionToSynthesizerDelta": 0.17
+      },
+      "critique": {
+        "maxSeverity": 4,
+        "avgSeverity": 2.438,
+        "byType": {
+          "factual": 3,
+          "ambiguity": 4,
+          "missing": 6,
+          "logic": 1,
+          "overconfidence": 2
+        }
+      },
+      "quality": {
+        "coherence": 4,
+        "completeness": 3,
+        "factualRisk": 3,
+        "uncertaintyHandling": 4
+      },
+      "research": {
+        "evidenceRiskLevel": 4,
+        "counterfactualFailureModeCount": 10,
+        "topCounterfactualFailureMode": "Measurement/construct validity issues: productivity metrics vary across studies and may mix quantity, quality, engagement, and satisfaction, causing biased or incomparable estimates."
+      },
+      "consensus": {
+        "included": [
+          "solver",
+          "revision",
+          "synthesizer"
+        ],
+        "pairs": [
+          {
+            "a": "solver",
+            "b": "revision",
+            "similarity": 0.906
+          },
+          {
+            "a": "solver",
+            "b": "synthesizer",
+            "similarity": 0.907
+          },
+          {
+            "a": "revision",
+            "b": "synthesizer",
+            "similarity": 0.984
+          }
+        ],
+        "strength": 0.932
+      }
+    }
+  },
+  "metadata": {
+    "schemaVersion": 1,
+    "createdAt": "2026-02-17T10:30:09.948Z",
+    "model": "gpt-5-nano-2025-08-07",
+    "fastMode": false,
+    "pipelinePreset": "research_deep",
+    "pipelineVersion": "1.0.0",
+    "source": "cli"
+  }
+}

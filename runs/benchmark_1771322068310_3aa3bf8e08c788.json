@@ -1,0 +1,245 @@
+{
+  "kind": "benchmark",
+  "id": "benchmark_1771322068310_3aa3bf8e08c788",
+  "question": "Should social media platforms be held liable for user-generated content?",
+  "metadata": {
+    "schemaVersion": 1,
+    "createdAt": "2026-02-17T09:54:28.310Z",
+    "model": "gpt-5-nano-2025-08-07",
+    "fastMode": false,
+    "pipelinePreset": "research_deep",
+    "pipelineVersion": "1.0.0",
+    "source": "cli"
+  },
+  "payload": {
+    "runs": 5,
+    "runIds": [
+      "run_1771321850044_96309600733f5",
+      "run_1771321859430_b64f7f049f233",
+      "run_1771321860507_5ca2ecba1d3cf8",
+      "run_1771322066255_c0c9db8688c238",
+      "run_1771322057837_bb52206c501fc"
+    ],
+    "modeCount": 5,
+    "modeSizes": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "divergenceEntropy": 2.321928094887362,
+    "threshold": 0.9,
+    "modeCountAt0_8": 2,
+    "modeCountAt0_9": 5,
+    "modeCountAt0_95": 5,
+    "modes": [
+      {
+        "size": 1,
+        "members": [
+          0
+        ],
+        "exemplarIndex": 0,
+        "exemplarPreview": "Yes, social media platforms should be held liable to a calibrated degree, with clearly defined safe harbors and robust due-process safeguards. A defensible regime combines jurisdiction-sensitive rules"
+      },
+      {
+        "size": 1,
+        "members": [
+          1
+        ],
+        "exemplarIndex": 1,
+        "exemplarPreview": "A calibrated, multi-layer liability framework that clearly separates illegal or highly harmful content from ordinary user content, with jurisdiction-aware definitions and concrete safeguards. It shoul"
+      },
+      {
+        "size": 1,
+        "members": [
+          2
+        ],
+        "exemplarIndex": 2,
+        "exemplarPreview": "Proposed approach: implement a calibrated liability framework that targets egregious harms and failures to act on clearly defined obligations, while preserving lawful expression and platform viability"
+      },
+      {
+        "size": 1,
+        "members": [
+          3
+        ],
+        "exemplarIndex": 3,
+        "exemplarPreview": "Yes. Platforms should be held liable within a calibrated, jurisdiction-aware framework that clearly distinguishes illegal content, highly harmful content, and general moderation failures. This hybrid "
+      },
+      {
+        "size": 1,
+        "members": [
+          4
+        ],
+        "exemplarIndex": 4,
+        "exemplarPreview": "Yes. Social media platforms should be held liable under a calibrated, tiered framework that protects safety while preserving free expression and innovation. The regime should distinguish illegal conte"
+      }
+    ],
+    "modeCountClaimCentroid": 4,
+    "modeSizesClaimCentroid": [
+      2,
+      1,
+      1,
+      1
+    ],
+    "divergenceEntropyClaimCentroid": 1.9219280948873623,
+    "modeCountClaimCentroidAt0_8": 1,
+    "modeCountClaimCentroidAt0_9": 4,
+    "modeCountClaimCentroidAt0_95": 5,
+    "stabilityClaimCentroid": {
+      "pairwiseMean": 0.885,
+      "pairwiseStddev": 0.012,
+      "minPairwiseSimilarity": 0.869,
+      "maxPairwiseSimilarity": 0.9
+    },
+    "summary": {
+      "question": "Should social media platforms be held liable for user-generated content?",
+      "runs": 5,
+      "runIds": [
+        "run_1771321850044_96309600733f5",
+        "run_1771321859430_b64f7f049f233",
+        "run_1771321860507_5ca2ecba1d3cf8",
+        "run_1771322066255_c0c9db8688c238",
+        "run_1771322057837_bb52206c501fc"
+      ],
+      "consensus": {
+        "mean": 0.869,
+        "stddev": 0.019
+      },
+      "critiqueMaxSeverity": {
+        "mean": 4.6,
+        "stddev": 0.548
+      },
+      "modeCount": 5,
+      "modeSizes": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "divergenceEntropy": 2.321928094887362,
+      "threshold": 0.9,
+      "modeCountAt0_8": 2,
+      "modeCountAt0_9": 5,
+      "modeCountAt0_95": 5,
+      "modes": [
+        {
+          "size": 1,
+          "members": [
+            0
+          ],
+          "exemplarIndex": 0,
+          "exemplarPreview": "Yes, social media platforms should be held liable to a calibrated degree, with clearly defined safe harbors and robust due-process safeguards. A defensible regime combines jurisdiction-sensitive rules"
+        },
+        {
+          "size": 1,
+          "members": [
+            1
+          ],
+          "exemplarIndex": 1,
+          "exemplarPreview": "A calibrated, multi-layer liability framework that clearly separates illegal or highly harmful content from ordinary user content, with jurisdiction-aware definitions and concrete safeguards. It shoul"
+        },
+        {
+          "size": 1,
+          "members": [
+            2
+          ],
+          "exemplarIndex": 2,
+          "exemplarPreview": "Proposed approach: implement a calibrated liability framework that targets egregious harms and failures to act on clearly defined obligations, while preserving lawful expression and platform viability"
+        },
+        {
+          "size": 1,
+          "members": [
+            3
+          ],
+          "exemplarIndex": 3,
+          "exemplarPreview": "Yes. Platforms should be held liable within a calibrated, jurisdiction-aware framework that clearly distinguishes illegal content, highly harmful content, and general moderation failures. This hybrid "
+        },
+        {
+          "size": 1,
+          "members": [
+            4
+          ],
+          "exemplarIndex": 4,
+          "exemplarPreview": "Yes. Social media platforms should be held liable under a calibrated, tiered framework that protects safety while preserving free expression and innovation. The regime should distinguish illegal conte"
+        }
+      ],
+      "stability": {
+        "pairwiseMean": 0.839,
+        "pairwiseStddev": 0.046,
+        "minPairwiseSimilarity": 0.75,
+        "maxPairwiseSimilarity": 0.894,
+        "pairs": [
+          {
+            "i": 0,
+            "j": 1,
+            "similarity": 0.75
+          },
+          {
+            "i": 0,
+            "j": 2,
+            "similarity": 0.779
+          },
+          {
+            "i": 0,
+            "j": 3,
+            "similarity": 0.827
+          },
+          {
+            "i": 0,
+            "j": 4,
+            "similarity": 0.887
+          },
+          {
+            "i": 1,
+            "j": 2,
+            "similarity": 0.846
+          },
+          {
+            "i": 1,
+            "j": 3,
+            "similarity": 0.853
+          },
+          {
+            "i": 1,
+            "j": 4,
+            "similarity": 0.823
+          },
+          {
+            "i": 2,
+            "j": 3,
+            "similarity": 0.863
+          },
+          {
+            "i": 2,
+            "j": 4,
+            "similarity": 0.871
+          },
+          {
+            "i": 3,
+            "j": 4,
+            "similarity": 0.894
+          }
+        ]
+      },
+      "modeCountClaimCentroid": 4,
+      "modeSizesClaimCentroid": [
+        2,
+        1,
+        1,
+        1
+      ],
+      "divergenceEntropyClaimCentroid": 1.9219280948873623,
+      "modeCountClaimCentroidAt0_8": 1,
+      "modeCountClaimCentroidAt0_9": 4,
+      "modeCountClaimCentroidAt0_95": 5,
+      "stabilityClaimCentroid": {
+        "pairwiseMean": 0.885,
+        "pairwiseStddev": 0.012,
+        "minPairwiseSimilarity": 0.869,
+        "maxPairwiseSimilarity": 0.9
+      }
+    }
+  }
+}
