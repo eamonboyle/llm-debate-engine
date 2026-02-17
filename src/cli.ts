@@ -105,7 +105,7 @@ async function runBenchmark(
     console.log(
         `Starting benchmark (${runs} runs, concurrency ${concurrency ?? 3})...`,
     );
-    const { result } = await runner.run(question, runs, {
+    const { result, raw: rawRuns } = await runner.run(question, runs, {
         model: model ?? MODEL,
         verbose,
         quiet: !verbose,
@@ -198,7 +198,36 @@ async function runBenchmark(
         JSON.stringify(benchmarkJson, null, 2),
         "utf-8",
     );
-    console.log("\n(Run details saved to " + outputPath + ")");
+    console.log("\n(Benchmark saved to " + outputPath + ")");
+
+    for (const r of rawRuns) {
+        const runJson: RunArtifactV1 = {
+            kind: "run",
+            id: r.id,
+            question,
+            run: {
+                id: r.id,
+                createdAt: r.createdAt,
+                question: r.question,
+                steps: r.steps,
+                finalAnswer: r.finalAnswer,
+                metrics: r.metrics,
+            },
+            metadata: buildMetadata({
+                createdAt: r.createdAt,
+                model: model ?? MODEL,
+                fastMode: !!fast,
+                pipelinePreset,
+            }),
+        };
+        const runPath = join(RUNS_DIR, `${r.id}.json`);
+        await writeFile(runPath, JSON.stringify(runJson, null, 2), "utf-8");
+    }
+    if (rawRuns.length > 0) {
+        console.log(
+            `(${rawRuns.length} run artifact(s) saved to ${RUNS_DIR}/)`,
+        );
+    }
 }
 
 async function main() {

@@ -371,6 +371,22 @@ export async function loadRunById(id: string) {
     return runs.find((run) => run.id === id) ?? null;
 }
 
+export async function loadRunsByQuestion(
+    question: string,
+    excludeRunId?: string,
+): Promise<RunArtifact[]> {
+    const runs = await loadRunArtifacts();
+    return runs
+        .filter(
+            (r) =>
+                r.question === question &&
+                (excludeRunId == null || r.id !== excludeRunId),
+        )
+        .sort((a, b) =>
+            b.metadata.createdAt.localeCompare(a.metadata.createdAt),
+        );
+}
+
 export async function loadBenchmarkPairsById(id: string): Promise<{
     benchmarkId: string;
     source: "chunk" | "artifact";
