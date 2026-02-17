@@ -153,6 +153,12 @@ export type BenchmarkArtifact = {
     };
 };
 
+const EXCLUDED_ARTIFACT_FILES = new Set([
+    "analysis-index.json",
+    "analysis-bundle.json",
+    "analysis-benchmark-pairs.json",
+]);
+
 function getRunsDir() {
     if (process.env.RUNS_DIR) {
         return resolve(process.env.RUNS_DIR);
@@ -295,7 +301,7 @@ export async function loadRunArtifacts(): Promise<RunArtifact[]> {
 
     const runArtifacts: RunArtifact[] = [];
     for (const file of files) {
-        if (!file.endsWith(".json") || file === "analysis-index.json") continue;
+        if (!file.endsWith(".json") || EXCLUDED_ARTIFACT_FILES.has(file)) continue;
         const parsed = await readJsonIfExists<unknown>(join(runsDir, file));
         if (
             parsed &&
@@ -322,7 +328,7 @@ export async function loadBenchmarkArtifacts(): Promise<BenchmarkArtifact[]> {
 
     const artifacts: BenchmarkArtifact[] = [];
     for (const file of files) {
-        if (!file.endsWith(".json") || file === "analysis-index.json") continue;
+        if (!file.endsWith(".json") || EXCLUDED_ARTIFACT_FILES.has(file)) continue;
         const parsed = await readJsonIfExists<unknown>(join(runsDir, file));
         if (
             parsed &&

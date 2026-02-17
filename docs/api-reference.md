@@ -62,6 +62,11 @@ Example:
 curl "http://localhost:3000/api/runs/compare?left=run_a&right=run_b"
 ```
 
+Error responses:
+
+- `400` when `left` or `right` is missing
+- `404` when either run id does not exist
+
 ## `GET /api/benchmarks`
 
 Returns benchmark artifact list with same filter params and pagination params as
@@ -87,6 +92,11 @@ Example:
 ```bash
 curl "http://localhost:3000/api/benchmarks/compare?left=benchmark_a&right=benchmark_b"
 ```
+
+Error responses:
+
+- `400` when `left` or `right` is missing
+- `404` when either benchmark id does not exist
 
 ## `GET /api/benchmarks/:id`
 

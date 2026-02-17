@@ -504,6 +504,20 @@ describe("web api routes", () => {
         expect(json.delta.stabilityPairwiseMean).toBeCloseTo(-0.3, 3);
     });
 
+    it("returns 400/404 for invalid benchmark compare requests", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        const missingParams = await getBenchmarksCompare(
+            new Request("http://localhost/api/benchmarks/compare"),
+        );
+        expect(missingParams.status).toBe(400);
+
+        const notFound = await getBenchmarksCompare(
+            new Request("http://localhost/api/benchmarks/compare?left=a&right=b"),
+        );
+        expect(notFound.status).toBe(404);
+    });
+
     it("returns run compare deltas", async () => {
         const dir = await makeTempDir();
         process.env.RUNS_DIR = dir;

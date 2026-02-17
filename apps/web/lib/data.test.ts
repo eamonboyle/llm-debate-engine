@@ -187,6 +187,46 @@ describe("web data loader", () => {
         expect(run?.id).toBe("run_old");
     });
 
+    it("ignores derived analysis files when loading run/benchmark artifacts", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-bundle.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "should_not_load_run",
+                question: "bad",
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "analysis-benchmark-pairs.json"),
+            JSON.stringify({
+                kind: "benchmark",
+                id: "should_not_load_benchmark",
+                question: "bad",
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "run_real.json"),
+            JSON.stringify(makeRunArtifact("run_real", "2025-01-03T00:00:00.000Z")),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "bench_real.json"),
+            JSON.stringify(
+                makeBenchmarkArtifact("bench_real", "2025-01-03T00:00:00.000Z"),
+            ),
+            "utf-8",
+        );
+
+        const runs = await loadRunArtifacts();
+        const benchmarks = await loadBenchmarkArtifacts();
+        expect(runs.map((run) => run.id)).toEqual(["run_real"]);
+        expect(benchmarks.map((benchmark) => benchmark.id)).toEqual(["bench_real"]);
+    });
+
     it("loads benchmarks and id filters", async () => {
         const dir = await makeTempDir();
         process.env.RUNS_DIR = dir;
