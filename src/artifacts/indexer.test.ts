@@ -408,4 +408,103 @@ describe("buildAnalysisIndex", () => {
                 .severityVsRevisionToSynthesizerDelta,
         ).toBeCloseTo(1, 3);
     });
+
+    it("supports question substring filtering for analysis output", async () => {
+        const dir = await createTempRunsDir();
+
+        const makeRun = (id: string, question: string) => ({
+            kind: "run",
+            id,
+            question,
+            metadata: {
+                schemaVersion: 1,
+                createdAt: new Date().toISOString(),
+                model: "gpt-test",
+                fastMode: false,
+                pipelinePreset: "standard",
+                pipelineVersion: "1.0.0",
+                source: "cli",
+            },
+            run: {
+                id,
+                createdAt: new Date().toISOString(),
+                question,
+                steps: [],
+                finalAnswer: `answer-${id}`,
+                metrics: {
+                    confidence: {},
+                    critique: {},
+                },
+            },
+        });
+        const makeBenchmark = (id: string, question: string) => ({
+            kind: "benchmark",
+            id,
+            question,
+            metadata: {
+                schemaVersion: 1,
+                createdAt: new Date().toISOString(),
+                model: "gpt-test",
+                fastMode: false,
+                pipelinePreset: "standard",
+                pipelineVersion: "1.0.0",
+                source: "cli",
+            },
+            payload: {
+                runs: 1,
+                runIds: [id],
+                modeCount: 1,
+                modeSizes: [1],
+                divergenceEntropy: 0,
+                summary: {
+                    question,
+                    runs: 1,
+                    runIds: [id],
+                    consensus: { mean: 1, stddev: 0 },
+                    critiqueMaxSeverity: { mean: 0, stddev: 0 },
+                    modeCount: 1,
+                    modeSizes: [1],
+                    divergenceEntropy: 0,
+                    stability: {
+                        pairwiseMean: 1,
+                        pairwiseStddev: 0,
+                        minPairwiseSimilarity: 1,
+                        maxPairwiseSimilarity: 1,
+                        pairs: [],
+                    },
+                },
+            },
+        });
+
+        await writeFile(
+            join(dir, "run_alpha.json"),
+            JSON.stringify(makeRun("run_alpha", "Alpha project analysis")),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "run_beta.json"),
+            JSON.stringify(makeRun("run_beta", "Beta project analysis")),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "benchmark_alpha.json"),
+            JSON.stringify(
+                makeBenchmark("benchmark_alpha", "Alpha project analysis"),
+            ),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "benchmark_beta.json"),
+            JSON.stringify(makeBenchmark("benchmark_beta", "Beta project analysis")),
+            "utf-8",
+        );
+
+        const index = await buildAnalysisIndex(dir, {
+            questionContains: "alpha",
+        });
+        expect(index.totals.runs).toBe(1);
+        expect(index.totals.benchmarks).toBe(1);
+        expect(index.runs[0].id).toBe("run_alpha");
+        expect(index.benchmarks[0].id).toBe("benchmark_alpha");
+    });
 });

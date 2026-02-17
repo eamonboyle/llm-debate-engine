@@ -113,7 +113,7 @@ pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model
 ### `analyze-runs`
 
 ```bash
-pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename]
+pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename]
 ```
 
 ## Artifact model
@@ -144,6 +144,8 @@ Legacy artifacts are still supported by the compatibility loader (`src/artifacts
 - severity-confidence Pearson correlations for stage deltas
 - critique severity vs confidence movement records
 - benchmark mode labels inferred from exemplar previews
+
+Use `--question "text"` to build a focused index over matching artifacts only.
 
 This derived index powers the web dashboard.
 

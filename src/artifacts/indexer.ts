@@ -138,8 +138,24 @@ function toMarkdownReport(index: AnalysisIndex): string {
 
 export async function buildAnalysisIndex(
     runsDir = "runs",
+    opts?: {
+        questionContains?: string;
+    },
 ): Promise<AnalysisIndex> {
     const loaded = await loadRunArtifacts(runsDir);
+    const questionFilter = opts?.questionContains?.trim().toLowerCase();
+    const runs =
+        questionFilter && questionFilter.length > 0
+            ? loaded.runs.filter((artifact) =>
+                  artifact.question.toLowerCase().includes(questionFilter),
+              )
+            : loaded.runs;
+    const benchmarks =
+        questionFilter && questionFilter.length > 0
+            ? loaded.benchmarks.filter((artifact) =>
+                  artifact.question.toLowerCase().includes(questionFilter),
+              )
+            : loaded.benchmarks;
 
     const issueTypeCounts: Record<string, number> = {};
     const issueSeverityByTypeBuckets: Record<string, SeverityBucket> = {};
@@ -153,7 +169,7 @@ export async function buildAnalysisIndex(
         fast_research: 0,
     };
 
-    const runSummaries: AnalysisRunSummary[] = loaded.runs.map((artifact) => {
+    const runSummaries: AnalysisRunSummary[] = runs.map((artifact) => {
         const run = artifact.run;
         const confidence = run.metrics.confidence ?? {};
         const critique = run.metrics.critique ?? {};
@@ -235,7 +251,7 @@ export async function buildAnalysisIndex(
         };
     });
 
-    const benchmarkSummaries: AnalysisBenchmarkSummary[] = loaded.benchmarks.map(
+    const benchmarkSummaries: AnalysisBenchmarkSummary[] = benchmarks.map(
         (artifact) => {
             const payload = artifact.payload;
             const modeLabels = (payload.modes ?? []).map((mode, idx) => ({
@@ -263,7 +279,7 @@ export async function buildAnalysisIndex(
         },
     );
 
-    const outlierRuns = loaded.benchmarks
+    const outlierRuns = benchmarks
         .map((artifact) => {
             const runIds = artifact.payload.runIds;
             const pairs = artifact.payload.summary.stability?.pairs;
@@ -382,6 +398,7 @@ export async function buildAndWriteAnalysisIndex(opts?: {
     markdownFileName?: string;
     writeBundle?: boolean;
     bundleFileName?: string;
+    questionContains?: string;
 }): Promise<{
     path: string;
     index: AnalysisIndex;
@@ -396,7 +413,9 @@ export async function buildAndWriteAnalysisIndex(opts?: {
     const markdownFileName = opts?.markdownFileName ?? "analysis-report.md";
     const writeBundle = opts?.writeBundle ?? false;
     const bundleFileName = opts?.bundleFileName ?? "analysis-bundle.json";
-    const index = await buildAnalysisIndex(runsDir);
+    const index = await buildAnalysisIndex(runsDir, {
+        questionContains: opts?.questionContains,
+    });
 
     await mkdir(runsDir, { recursive: true });
     const outputPath = join(runsDir, outputFileName);

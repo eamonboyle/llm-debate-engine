@@ -29,6 +29,16 @@ function isRecord(value: unknown): value is Record<string, unknown> {
     return typeof value === "object" && value !== null;
 }
 
+function isAnalysisBundle(value: unknown): boolean {
+    if (!isRecord(value)) return false;
+    return (
+        typeof value.generatedAt === "string" &&
+        Array.isArray(value.runs) &&
+        Array.isArray(value.benchmarks) &&
+        isRecord(value.index)
+    );
+}
+
 function defaultMetadata(
     createdAt: string,
     preset: PipelinePreset = "standard",
@@ -221,7 +231,7 @@ export async function loadRunArtifacts(
         return parsed;
     }
 
-    const excludedFiles = new Set(["analysis-index.json"]);
+    const excludedFiles = new Set(["analysis-index.json", "analysis-bundle.json"]);
     const jsonFiles = files
         .filter((f) => f.endsWith(".json") && !excludedFiles.has(f))
         .sort();
@@ -233,6 +243,9 @@ export async function loadRunArtifacts(
                 stat(filePath),
             ]);
             const body = JSON.parse(raw) as unknown;
+            if (isAnalysisBundle(body)) {
+                continue;
+            }
             const artifact = parseArtifact(body, {
                 filePath,
                 mtimeIso: fileStat.mtime.toISOString(),

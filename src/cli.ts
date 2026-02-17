@@ -212,7 +212,7 @@ async function main() {
     const usageBenchmark =
         'Usage: pnpm tsx src/cli.ts benchmark "<question>" [--runs N] [--concurrency N] [--model M] [--preset standard|research_deep|fast_research] [--threshold T] [--fast] [--verbose]';
     const usageAnalyze =
-        'Usage: pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename]';
+        'Usage: pnpm tsx src/cli.ts analyze-runs [--runs-dir path] [--output filename] [--question text] [--csv] [--markdown] [--markdown-file filename] [--bundle] [--bundle-file filename]';
 
     const parseOpt = (flag: string): string | undefined => {
         const idx = rest.indexOf(flag);
@@ -258,10 +258,12 @@ async function main() {
         const markdownFileName = parseOpt("--markdown-file") ?? "analysis-report.md";
         const writeBundle = rest.includes("--bundle");
         const bundleFileName = parseOpt("--bundle-file") ?? "analysis-bundle.json";
+        const questionContains = parseOpt("--question");
         const { path, index, csvPaths, markdownPath, bundlePath } =
             await buildAndWriteAnalysisIndex({
                 runsDir,
                 outputFileName: output,
+                questionContains,
                 writeCsv,
                 writeMarkdown,
                 markdownFileName,

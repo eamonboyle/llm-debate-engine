@@ -24,6 +24,12 @@ Core index:
 pnpm analyze
 ```
 
+Question-focused index (optional):
+
+```bash
+pnpm analyze -- --question "AI safety"
+```
+
 Extended outputs:
 
 ```bash

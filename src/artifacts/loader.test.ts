@@ -117,4 +117,23 @@ describe("loadRunArtifacts", () => {
         expect(loaded.benchmarks).toHaveLength(0);
         expect(loaded.skipped).toHaveLength(0);
     });
+
+    it("ignores analysis bundle artifacts", async () => {
+        const dir = await makeTempRunsDir();
+        await writeFile(
+            join(dir, "analysis-bundle-custom.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                index: { totals: { runs: 0, benchmarks: 0 } },
+                runs: [],
+                benchmarks: [],
+            }),
+            "utf-8",
+        );
+
+        const loaded = await loadRunArtifacts(dir);
+        expect(loaded.runs).toHaveLength(0);
+        expect(loaded.benchmarks).toHaveLength(0);
+        expect(loaded.skipped).toHaveLength(0);
+    });
 });
