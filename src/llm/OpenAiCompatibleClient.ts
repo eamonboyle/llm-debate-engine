@@ -78,7 +78,14 @@ export class OpenAICompatibleClient implements LLMClient {
 
         const res = (await this.client.chat.completions.create(
             body,
-        )) as ChatCompletion;
+        )) as ChatCompletion & { usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number } };
+        if (req.onUsage && res.usage) {
+            req.onUsage({
+                promptTokens: res.usage.prompt_tokens ?? 0,
+                completionTokens: res.usage.completion_tokens ?? 0,
+                totalTokens: res.usage.total_tokens ?? 0,
+            });
+        }
         return res.choices[0].message.content ?? "";
     }
 
@@ -119,7 +126,14 @@ export class OpenAICompatibleClient implements LLMClient {
 
         const res = (await this.client.chat.completions.create(
             body,
-        )) as ChatCompletion;
+        )) as ChatCompletion & { usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number } };
+        if (req.onUsage && res.usage) {
+            req.onUsage({
+                promptTokens: res.usage.prompt_tokens ?? 0,
+                completionTokens: res.usage.completion_tokens ?? 0,
+                totalTokens: res.usage.total_tokens ?? 0,
+            });
+        }
         const raw = res.choices[0].message.content;
         return parseStructuredContent<T>(raw);
     }

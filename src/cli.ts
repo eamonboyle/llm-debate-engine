@@ -2,6 +2,10 @@ import "dotenv/config";
 import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
 import { OpenAICompatibleClient } from "./llm/OpenAiCompatibleClient";
+import {
+    createUsageAccumulator,
+    withUsageTracking,
+} from "./llm/UsageTrackingClient";
 import { OpenAiEmbeddingClient } from "./embedding/OpenAiEmbeddingClient";
 import { DebateEngine } from "./debate/DebateEngine";
 import { BenchmarkRunner } from "./bench/BenchmarkRunner";
@@ -89,10 +93,12 @@ async function runBenchmark(
 ): Promise<void> {
     const { concurrency, model, fast, threshold, pipelinePreset } = opts ?? {};
     const apiKey = requireApiKey();
-    const llm = new OpenAICompatibleClient({
+    const baseLlm = new OpenAICompatibleClient({
         baseURL: BASE_URL,
         apiKey,
     });
+    const usageAccumulator = createUsageAccumulator();
+    const llm = withUsageTracking(baseLlm, usageAccumulator);
 
     const embedding = new OpenAiEmbeddingClient({
         baseURL: BASE_URL,
@@ -157,12 +163,27 @@ async function runBenchmark(
     console.log("modeCountAt0.95:      ", result.modeCountAt0_95 ?? "-");
     console.log("modeSizes:            ", modeSizes);
     console.log("divergenceEntropy:    ", divergenceEntropy);
+    if (usageAccumulator.callCount > 0) {
+        console.log(
+            "tokenUsage:           ",
+            `${usageAccumulator.totalTokens} total (${usageAccumulator.promptTokens} prompt, ${usageAccumulator.completionTokens} completion)`,
+        );
+    }
 
     const benchmarkId = makeId("benchmark");
     const createdAt = new Date().toISOString();
     const payload: BenchmarkArtifactPayload = {
         runs,
         runIds: result.runIds,
+        tokenUsage:
+            usageAccumulator.callCount > 0
+                ? {
+                      promptTokens: usageAccumulator.promptTokens,
+                      completionTokens: usageAccumulator.completionTokens,
+                      totalTokens: usageAccumulator.totalTokens,
+                      callCount: usageAccumulator.callCount,
+                  }
+                : undefined,
         modeCount,
         modeSizes,
         divergenceEntropy,
@@ -425,10 +446,12 @@ async function main() {
         process.exit(1);
     }
 
-    const llm = new OpenAICompatibleClient({
+    const baseLlm = new OpenAICompatibleClient({
         baseURL: BASE_URL,
         apiKey: requireApiKey(),
     });
+    const usageAccumulator = createUsageAccumulator();
+    const llm = withUsageTracking(baseLlm, usageAccumulator);
 
     const embedding = new OpenAiEmbeddingClient({
         baseURL: BASE_URL,
@@ -451,17 +474,32 @@ async function main() {
     );
     const runId = result.id;
 
+    const runWithUsage = {
+        ...result,
+        metrics: {
+            ...result.metrics,
+            tokenUsage:
+                usageAccumulator.callCount > 0
+                    ? {
+                          promptTokens: usageAccumulator.promptTokens,
+                          completionTokens: usageAccumulator.completionTokens,
+                          totalTokens: usageAccumulator.totalTokens,
+                          callCount: usageAccumulator.callCount,
+                      }
+                    : result.metrics.tokenUsage,
+        },
+    };
     const runJson: RunArtifactV1 = {
         kind: "run",
         id: runId,
         question,
         run: {
-            id: result.id,
-            createdAt: result.createdAt,
+            id: runWithUsage.id,
+            createdAt: runWithUsage.createdAt,
             question,
-            steps: result.steps,
-            finalAnswer: result.finalAnswer,
-            metrics: result.metrics,
+            steps: runWithUsage.steps,
+            finalAnswer: runWithUsage.finalAnswer,
+            metrics: runWithUsage.metrics,
         },
         metadata: buildMetadata({
             createdAt: result.createdAt,

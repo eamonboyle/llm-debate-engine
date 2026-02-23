@@ -43,9 +43,17 @@ export type BenchmarkResult = {
     };
 };
 
+export type TokenUsageRecord = {
+    promptTokens: number;
+    completionTokens: number;
+    totalTokens: number;
+    callCount: number;
+};
+
 export type BenchmarkArtifactPayload = {
     runs: number;
     runIds: string[];
+    tokenUsage?: TokenUsageRecord;
     modeCount: number;
     modeSizes: number[];
     divergenceEntropy: number;

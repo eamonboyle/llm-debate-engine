@@ -1,4 +1,8 @@
-import type { ChatMessage, StructuredCompletionRequest } from "./llm";
+import type {
+    ChatMessage,
+    StructuredCompletionRequest,
+    TokenUsage,
+} from "./llm";
 import type { PipelinePreset } from "./artifact";
 
 export type AgentResponse = {
@@ -109,6 +113,7 @@ export type DebateRun = {
             avgSeverity?: number;
             byType?: Record<string, number>;
         };
+        tokenUsage?: TokenUsage & { callCount?: number };
         consensus?: {
             // average pairwise cosine similarity across available answers
             strength?: number;

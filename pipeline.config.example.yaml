@@ -1,0 +1,34 @@
+# Example pipeline configuration for config-driven presets.
+# Copy to pipeline.config.yaml and customize.
+#
+# Presets define the ordered list of agent steps.
+# Each step: name (agent identifier), optional skip condition.
+
+presets:
+  standard:
+    - name: solver
+    - name: skeptic
+    - name: revision
+    - name: synthesizer
+
+  research_deep:
+    - name: decomposer
+    - name: evidence_planner
+    - name: solver
+    - name: skeptic
+    - name: red_team
+    - name: revision
+    - name: synthesizer
+    - name: counterfactual
+    - name: calibration
+    - name: judge
+
+  fast_research:
+    - name: decomposer
+    - name: evidence_planner
+    - name: solver
+    - name: skeptic
+    - name: red_team
+    - name: counterfactual
+    - name: calibration
+    - name: judge

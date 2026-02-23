@@ -3,7 +3,13 @@ import type { DebateRun } from "../types/agent";
 import type { PipelinePreset } from "../types/artifact";
 import type { EmbeddingClient } from "../types/embedding";
 import type { BenchmarkResult } from "../types/benchmark";
-import { cosineSimilarity, vectorMean } from "../core/math";
+import {
+    cosineSimilarity,
+    mean,
+    round3,
+    stddev,
+    vectorMean,
+} from "../core/math";
 import { getProposal } from "../core/extraction";
 
 const MODEL = process.env.OPENAI_MODEL ?? "gpt-5.2";
@@ -388,21 +394,4 @@ export class BenchmarkRunner {
 
         return { result, raw };
     }
-}
-
-/* ---- tiny stats ---- */
-function mean(xs: number[]) {
-    if (!xs.length) return 0;
-    return xs.reduce((a, b) => a + b, 0) / xs.length;
-}
-
-function stddev(xs: number[]) {
-    if (xs.length < 2) return 0;
-    const m = mean(xs);
-    const v = xs.reduce((acc, x) => acc + (x - m) ** 2, 0) / (xs.length - 1);
-    return Math.sqrt(v);
-}
-
-function round3(n: number) {
-    return Math.round(n * 1000) / 1000;
 }

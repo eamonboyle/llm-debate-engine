@@ -1,3 +1,39 @@
+export function mean(values: number[]): number {
+    if (!values.length) return 0;
+    return values.reduce((acc, v) => acc + v, 0) / values.length;
+}
+
+export function stddev(values: number[]): number {
+    if (values.length < 2) return 0;
+    const m = mean(values);
+    const variance =
+        values.reduce((acc, v) => acc + (v - m) ** 2, 0) / (values.length - 1);
+    return Math.sqrt(variance);
+}
+
+export function pearsonCorrelation(xs: number[], ys: number[]): number {
+    if (xs.length !== ys.length || xs.length < 2) return 0;
+    const xMean = mean(xs);
+    const yMean = mean(ys);
+    let num = 0;
+    let xDen = 0;
+    let yDen = 0;
+    for (let i = 0; i < xs.length; i++) {
+        const x = xs[i] - xMean;
+        const y = ys[i] - yMean;
+        num += x * y;
+        xDen += x * x;
+        yDen += y * y;
+    }
+    const den = Math.sqrt(xDen * yDen);
+    if (den === 0) return 0;
+    return num / den;
+}
+
+export function round3(value: number): number {
+    return Math.round(value * 1000) / 1000;
+}
+
 /**
  * Element-wise mean of vectors. All vectors must have the same length.
  */

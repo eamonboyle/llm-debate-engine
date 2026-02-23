@@ -1,5 +1,7 @@
 import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
+import { mean, pearsonCorrelation, round3, stddev } from "../core/math";
+import { computeOutlierRuns } from "./indexerAggregates";
 import { loadRunArtifacts } from "./loader";
 import { inferModeLabel } from "../analysis/modeLabeler";
 import type { PipelinePreset } from "../types/artifact";
@@ -14,44 +16,6 @@ type SeverityBucket = {
     sumSeverity: number;
     maxSeverity: number;
 };
-
-function mean(values: number[]): number {
-    if (!values.length) return 0;
-    return values.reduce((acc, value) => acc + value, 0) / values.length;
-}
-
-function stddev(values: number[]): number {
-    if (values.length < 2) return 0;
-    const m = mean(values);
-    const variance =
-        values.reduce((acc, value) => acc + (value - m) ** 2, 0) /
-        (values.length - 1);
-    return Math.sqrt(variance);
-}
-
-function pearsonCorrelation(xs: number[], ys: number[]): number {
-    if (xs.length !== ys.length || xs.length < 2) return 0;
-    const xMean = mean(xs);
-    const yMean = mean(ys);
-
-    let num = 0;
-    let xDen = 0;
-    let yDen = 0;
-    for (let i = 0; i < xs.length; i++) {
-        const x = xs[i] - xMean;
-        const y = ys[i] - yMean;
-        num += x * y;
-        xDen += x * x;
-        yDen += y * y;
-    }
-    const den = Math.sqrt(xDen * yDen);
-    if (den === 0) return 0;
-    return num / den;
-}
-
-function round3(value: number): number {
-    return Math.round(value * 1000) / 1000;
-}
 
 function csvEscape(value: unknown): string {
     const text = String(value ?? "");
@@ -76,9 +40,9 @@ function toMarkdownReport(index: AnalysisIndex): string {
     const topIssueTypes = Object.entries(index.aggregates.issueTypeCounts)
         .sort((a, b) => b[1] - a[1])
         .slice(0, 5);
-    const topOutliers = index.aggregates.outlierRuns.slice(0, 5);
+    const topOutliers = (index.aggregates.outlierRuns ?? []).slice(0, 5);
     const topCounterfactualFailureModes = Object.entries(
-        index.aggregates.counterfactualFailureModeCounts,
+        index.aggregates.counterfactualFailureModeCounts ?? {},
     )
         .sort((a, b) => b[1] - a[1])
         .slice(0, 5);
@@ -465,54 +429,7 @@ export async function buildAnalysisIndex(
         },
     );
 
-    const outlierRuns = benchmarks
-        .map((artifact) => {
-            const runIds = artifact.payload.runIds;
-            const pairs = artifact.payload.summary.stability?.pairs;
-            if (!runIds?.length || !pairs?.length) return null;
-
-            const sums = new Array(runIds.length).fill(0);
-            const counts = new Array(runIds.length).fill(0);
-            for (const pair of pairs) {
-                if (
-                    typeof pair.i !== "number" ||
-                    typeof pair.j !== "number" ||
-                    typeof pair.similarity !== "number"
-                ) {
-                    continue;
-                }
-                if (pair.i >= runIds.length || pair.j >= runIds.length)
-                    continue;
-                sums[pair.i] += pair.similarity;
-                counts[pair.i] += 1;
-                sums[pair.j] += pair.similarity;
-                counts[pair.j] += 1;
-            }
-
-            const avgByRun = runIds.map((_, idx) =>
-                counts[idx] > 0 ? sums[idx] / counts[idx] : 1,
-            );
-            const meanAvg = mean(avgByRun);
-            const stdevAvg = stddev(avgByRun);
-
-            let minIndex = 0;
-            for (let i = 1; i < avgByRun.length; i++) {
-                if (avgByRun[i] < avgByRun[minIndex]) minIndex = i;
-            }
-
-            const outlierAvg = avgByRun[minIndex];
-            return {
-                benchmarkId: artifact.id,
-                runId: runIds[minIndex],
-                avgSimilarity: round3(outlierAvg),
-                zScore:
-                    stdevAvg === 0
-                        ? 0
-                        : round3((outlierAvg - meanAvg) / stdevAvg),
-            };
-        })
-        .filter((entry): entry is NonNullable<typeof entry> => entry !== null)
-        .sort((a, b) => a.avgSimilarity - b.avgSimilarity);
+    const outlierRuns = computeOutlierRuns(benchmarks);
 
     const issueSeverityByType = Object.entries(issueSeverityByTypeBuckets).map(
         ([type, bucket]) => ({
