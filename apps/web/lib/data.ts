@@ -7,7 +7,12 @@ import type {
     RunArtifact,
 } from "@llm-research/types";
 
-export type { AnalysisIndex, ArtifactFilterParams, BenchmarkArtifact, RunArtifact };
+export type {
+    AnalysisIndex,
+    ArtifactFilterParams,
+    BenchmarkArtifact,
+    RunArtifact,
+};
 
 const ANALYSIS_INDEX_CACHE_MS = 60_000;
 let analysisIndexCache: {
@@ -16,7 +21,9 @@ let analysisIndexCache: {
     expires: number;
 } | null = null;
 
-async function loadAnalysisIndexUncached(runsDir: string): Promise<AnalysisIndex | null> {
+async function loadAnalysisIndexUncached(
+    runsDir: string,
+): Promise<AnalysisIndex | null> {
     const indexPath = join(runsDir, "analysis-index.json");
     const index = await readJsonIfExists<AnalysisIndex>(indexPath);
     if (index) return index;
@@ -192,9 +199,7 @@ export async function loadRunArtifacts(): Promise<RunArtifact[]> {
     }
 
     const runFiles = files.filter(
-        (f) =>
-            f.endsWith(".json") &&
-            !EXCLUDED_ARTIFACT_FILES.has(f),
+        (f) => f.endsWith(".json") && !EXCLUDED_ARTIFACT_FILES.has(f),
     );
     const parsed = await Promise.all(
         runFiles.map((file) =>
@@ -229,9 +234,7 @@ export async function loadBenchmarkArtifacts(): Promise<BenchmarkArtifact[]> {
     }
 
     const benchmarkFiles = files.filter(
-        (f) =>
-            f.endsWith(".json") &&
-            !EXCLUDED_ARTIFACT_FILES.has(f),
+        (f) => f.endsWith(".json") && !EXCLUDED_ARTIFACT_FILES.has(f),
     );
     const parsed = await Promise.all(
         benchmarkFiles.map((file) =>

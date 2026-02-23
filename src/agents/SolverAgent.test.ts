@@ -20,18 +20,16 @@ describe("SolverAgent", () => {
         const llm = createMockLLMClient(validResponse);
         const agent = new SolverAgent();
 
-        const result = await agent.run(
-            { question: "Is X true?" },
-            llm,
-            { model: "gpt-test" },
-        );
+        const result = await agent.run({ question: "Is X true?" }, llm, {
+            model: "gpt-test",
+        });
 
         expect(result.agentName).toBe("SolverAgent");
         expect(result.role).toBe("solver");
         expect(result.output?.kind).toBe("proposal");
-        expect(result.output?.kind === "proposal" && result.output.data).toEqual(
-            validResponse,
-        );
+        expect(
+            result.output?.kind === "proposal" && result.output.data,
+        ).toEqual(validResponse);
         expect(result.error).toBeUndefined();
     });
 
@@ -51,11 +49,10 @@ describe("SolverAgent", () => {
             riskLevel: 2 as const,
         };
 
-        await agent.run(
-            { question: "Q?" },
-            llm,
-            { model: "gpt-test", evidencePlan },
-        );
+        await agent.run({ question: "Q?" }, llm, {
+            model: "gpt-test",
+            evidencePlan,
+        });
 
         expect(llm.completeStructured).toHaveBeenCalledWith(
             expect.objectContaining({

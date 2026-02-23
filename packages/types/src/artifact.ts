@@ -1,7 +1,4 @@
-export type PipelinePreset =
-    | "standard"
-    | "research_deep"
-    | "fast_research";
+export type PipelinePreset = "standard" | "research_deep" | "fast_research";
 
 export type RunArtifact = {
     kind: "run";

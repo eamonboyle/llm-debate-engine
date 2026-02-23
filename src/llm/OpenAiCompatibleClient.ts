@@ -78,7 +78,13 @@ export class OpenAICompatibleClient implements LLMClient {
 
         const res = (await this.client.chat.completions.create(
             body,
-        )) as ChatCompletion & { usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number } };
+        )) as ChatCompletion & {
+            usage?: {
+                prompt_tokens?: number;
+                completion_tokens?: number;
+                total_tokens?: number;
+            };
+        };
         if (req.onUsage && res.usage) {
             req.onUsage({
                 promptTokens: res.usage.prompt_tokens ?? 0,
@@ -126,7 +132,13 @@ export class OpenAICompatibleClient implements LLMClient {
 
         const res = (await this.client.chat.completions.create(
             body,
-        )) as ChatCompletion & { usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number } };
+        )) as ChatCompletion & {
+            usage?: {
+                prompt_tokens?: number;
+                completion_tokens?: number;
+                total_tokens?: number;
+            };
+        };
         if (req.onUsage && res.usage) {
             req.onUsage({
                 promptTokens: res.usage.prompt_tokens ?? 0,

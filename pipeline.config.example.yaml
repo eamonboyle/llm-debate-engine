@@ -5,30 +5,30 @@
 # Each step: name (agent identifier), optional skip condition.
 
 presets:
-  standard:
-    - name: solver
-    - name: skeptic
-    - name: revision
-    - name: synthesizer
+    standard:
+        - name: solver
+        - name: skeptic
+        - name: revision
+        - name: synthesizer
 
-  research_deep:
-    - name: decomposer
-    - name: evidence_planner
-    - name: solver
-    - name: skeptic
-    - name: red_team
-    - name: revision
-    - name: synthesizer
-    - name: counterfactual
-    - name: calibration
-    - name: judge
+    research_deep:
+        - name: decomposer
+        - name: evidence_planner
+        - name: solver
+        - name: skeptic
+        - name: red_team
+        - name: revision
+        - name: synthesizer
+        - name: counterfactual
+        - name: calibration
+        - name: judge
 
-  fast_research:
-    - name: decomposer
-    - name: evidence_planner
-    - name: solver
-    - name: skeptic
-    - name: red_team
-    - name: counterfactual
-    - name: calibration
-    - name: judge
+    fast_research:
+        - name: decomposer
+        - name: evidence_planner
+        - name: solver
+        - name: skeptic
+        - name: red_team
+        - name: counterfactual
+        - name: calibration
+        - name: judge

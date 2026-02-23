@@ -24,26 +24,22 @@ describe("SkepticAgent", () => {
         const llm = createMockLLMClient(validCritique);
         const agent = new SkepticAgent();
 
-        const result = await agent.run(
-            { question: "Is X true?" },
-            llm,
-            {
-                model: "gpt-test",
-                targetAgentName: "SolverAgent",
-                proposal: {
-                    answer: "Yes",
-                    keyClaims: ["C1"],
-                    assumptions: [],
-                    confidence: 0.9,
-                },
+        const result = await agent.run({ question: "Is X true?" }, llm, {
+            model: "gpt-test",
+            targetAgentName: "SolverAgent",
+            proposal: {
+                answer: "Yes",
+                keyClaims: ["C1"],
+                assumptions: [],
+                confidence: 0.9,
             },
-        );
+        });
 
         expect(result.agentName).toBe("SkepticAgent");
         expect(result.role).toBe("skeptic");
         expect(result.output?.kind).toBe("critique");
-        expect(result.output?.kind === "critique" && result.output.data).toEqual(
-            validCritique,
-        );
+        expect(
+            result.output?.kind === "critique" && result.output.data,
+        ).toEqual(validCritique);
     });
 });

@@ -16,7 +16,10 @@ import {
     getJudgement,
     getProposal,
 } from "../core/extraction";
-import { computeBasicMetrics, computeConsensusIfPossible } from "../core/metrics";
+import {
+    computeBasicMetrics,
+    computeConsensusIfPossible,
+} from "../core/metrics";
 import { makeId } from "../core/id";
 import type { DebateEngineDeps } from "./DebateEngine";
 
@@ -81,11 +84,10 @@ async function runDecomposerAndEvidencePlanner(
 
     if (!quiet)
         logger.info("Question decomposer agent is building research framing");
-    const decomposerStep = await deps.agents.decomposer!.run(
-        ctx,
-        deps.llm,
-        { model: pipelineCtx.model, verbose: pipelineCtx.verbose },
-    );
+    const decomposerStep = await deps.agents.decomposer!.run(ctx, deps.llm, {
+        model: pipelineCtx.model,
+        verbose: pipelineCtx.verbose,
+    });
     steps.push(decomposerStep);
     if (pipelineCtx.verbose) {
         logger.debug({ step: decomposerStep }, "Question decomposer step");
@@ -155,8 +157,7 @@ async function runSkeptic(
     const { ctx, proposal, quiet, steps, critiques } = pipelineCtx;
     if (!proposal) return { done: false, continue: true };
 
-    if (!quiet)
-        logger.info("Skeptic agent is now critiquing the proposal");
+    if (!quiet) logger.info("Skeptic agent is now critiquing the proposal");
     const skepticStep = await deps.agents.skeptic!.run(ctx, deps.llm, {
         model: pipelineCtx.model,
         verbose: pipelineCtx.verbose,
@@ -196,10 +197,10 @@ async function runRedTeam(
     pipelineCtx: PipelineContext,
 ): Promise<PipelineStepResult> {
     const { ctx, proposal, preset, quiet, steps, critiques } = pipelineCtx;
-    if (preset === "standard" || !proposal) return { done: false, continue: true };
+    if (preset === "standard" || !proposal)
+        return { done: false, continue: true };
 
-    if (!quiet)
-        logger.info("Red-team agent is stress testing the proposal");
+    if (!quiet) logger.info("Red-team agent is stress testing the proposal");
     const redTeamStep = await deps.agents.redTeam!.run(ctx, deps.llm, {
         model: pipelineCtx.model,
         verbose: pipelineCtx.verbose,
@@ -242,21 +243,17 @@ async function runFastPath(
 
         if (!quiet)
             logger.info("Calibration agent is calibrating fast-mode answer");
-        const calibrationStep = await deps.agents.calibration!.run(
-            deps.llm,
-            {
-                model: pipelineCtx.model,
-                verbose: pipelineCtx.verbose,
-                proposal,
-            },
-        );
+        const calibrationStep = await deps.agents.calibration!.run(deps.llm, {
+            model: pipelineCtx.model,
+            verbose: pipelineCtx.verbose,
+            proposal,
+        });
         steps.push(calibrationStep);
         if (pipelineCtx.verbose) {
             logger.debug({ step: calibrationStep }, "Calibration step");
         }
 
-        if (!quiet)
-            logger.info("Judge agent is scoring fast-mode answer");
+        if (!quiet) logger.info("Judge agent is scoring fast-mode answer");
         const judgeStep = await deps.agents.judge!.run(deps.llm, {
             model: pipelineCtx.model,
             verbose: pipelineCtx.verbose,
@@ -293,16 +290,12 @@ async function runRevision(
 
     if (!quiet)
         logger.info("Solver revision agent is now revising the proposal");
-    const revisionStep = await deps.agents.revision!.run(
-        ctx,
-        deps.llm,
-        {
-            model: pipelineCtx.model,
-            verbose: pipelineCtx.verbose,
-            proposal,
-            critique,
-        },
-    );
+    const revisionStep = await deps.agents.revision!.run(ctx, deps.llm, {
+        model: pipelineCtx.model,
+        verbose: pipelineCtx.verbose,
+        proposal,
+        critique,
+    });
     steps.push(revisionStep);
     if (pipelineCtx.verbose) {
         logger.debug({ step: revisionStep }, "Solver revision step");
@@ -334,21 +327,18 @@ async function runSynthesizer(
 ): Promise<PipelineStepResult> {
     const { ctx, proposal, revision, quiet, steps } = pipelineCtx;
     const critique = pipelineCtx.critique;
-    if (!proposal || !critique || !revision) return { done: false, continue: true };
+    if (!proposal || !critique || !revision)
+        return { done: false, continue: true };
 
     if (!quiet)
         logger.info("Synthesizer agent is now synthesizing the proposal");
-    const synthesizerStep = await deps.agents.synthesizer!.run(
-        ctx,
-        deps.llm,
-        {
-            model: pipelineCtx.model,
-            verbose: pipelineCtx.verbose,
-            proposal,
-            critique,
-            revision,
-        },
-    );
+    const synthesizerStep = await deps.agents.synthesizer!.run(ctx, deps.llm, {
+        model: pipelineCtx.model,
+        verbose: pipelineCtx.verbose,
+        proposal,
+        critique,
+        revision,
+    });
     steps.push(synthesizerStep);
     if (pipelineCtx.verbose) {
         logger.debug({ step: synthesizerStep }, "Synthesizer step");
@@ -367,7 +357,8 @@ async function runResearchTail(
     const { ctx, preset, quiet, steps, critiques } = pipelineCtx;
     const finalProposal =
         pipelineCtx.synthesized ?? pipelineCtx.revision ?? pipelineCtx.proposal;
-    if (preset === "standard" || !finalProposal) return { done: false, continue: true };
+    if (preset === "standard" || !finalProposal)
+        return { done: false, continue: true };
 
     if (!quiet)
         logger.info("Counterfactual agent is probing failure conditions");
@@ -403,8 +394,7 @@ async function runResearchTail(
     steps.push(calibrationStep);
     const calibration = getCalibration(calibrationStep);
 
-    if (!quiet)
-        logger.info("Judge agent is scoring final answer");
+    if (!quiet) logger.info("Judge agent is scoring final answer");
     const judgeStep = await deps.agents.judge!.run(deps.llm, {
         model: pipelineCtx.model,
         verbose: pipelineCtx.verbose,
