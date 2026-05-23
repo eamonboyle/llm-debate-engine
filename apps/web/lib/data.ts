@@ -409,6 +409,17 @@ export async function loadRunsByQuestion(
         );
 }
 
+export async function loadAnalysisReport(): Promise<string | null> {
+    const runsDir = getRunsDir();
+    const reportPath = join(runsDir, "analysis-report.md");
+    try {
+        const content = await readFile(reportPath, "utf-8");
+        return content.trim() ? content : null;
+    } catch {
+        return null;
+    }
+}
+
 export async function loadBenchmarkPairsById(id: string): Promise<{
     benchmarkId: string;
     source: "chunk" | "artifact";

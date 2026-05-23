@@ -1,7 +1,7 @@
 import { loadBenchmarkById } from "../../../../lib/data";
 
 export async function GET(
-    _request: Request,
+    request: Request,
     context: { params: Promise<{ id: string }> },
 ) {
     const { id } = await context.params;
@@ -9,5 +9,11 @@ export async function GET(
     if (!benchmark) {
         return Response.json({ error: "benchmark not found" }, { status: 404 });
     }
-    return Response.json(benchmark);
+    const download = new URL(request.url).searchParams.get("download") === "1";
+    const headers = download
+        ? {
+              "Content-Disposition": `attachment; filename="${id}.json"`,
+          }
+        : undefined;
+    return Response.json(benchmark, { headers });
 }

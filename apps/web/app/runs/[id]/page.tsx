@@ -3,6 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { loadRunById, loadRunsByQuestion } from "../../../lib/data";
 import { TraceStep } from "../../../components/trace/TraceStep";
+import { RunMetricsSummary } from "../../../components/RunMetricsSummary";
+import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
+import { summarizeRun } from "../../../lib/runCompare";
 
 export async function generateMetadata({
     params,
@@ -28,6 +31,7 @@ export default async function RunTracePage({
 
     const steps = run.run.steps;
     const previousRuns = await loadRunsByQuestion(run.question, run.id);
+    const metricsSummary = summarizeRun(run);
 
     return (
         <section className="stack">
@@ -37,7 +41,20 @@ export default async function RunTracePage({
                     {run.id} ·{" "}
                     {new Date(run.metadata.createdAt).toLocaleString()}
                 </p>
-                <div className="page-actions" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                <div
+                    className="page-actions"
+                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                >
+                    <DownloadArtifactLink
+                        href={`/api/runs/${run.id}?download=1`}
+                        filename={`${run.id}.json`}
+                    />
+                    <a
+                        href={`/runs?q=${encodeURIComponent(run.question)}`}
+                        className="button secondary"
+                    >
+                        All runs for question
+                    </a>
                     <a
                         href={`/runs/compare?left=${run.id}`}
                         className="button secondary"
@@ -74,6 +91,15 @@ export default async function RunTracePage({
                         {run.metadata.fastMode ? "true" : "false"}
                     </div>
                 </div>
+            </div>
+
+            <div className="card">
+                <h2 style={{ marginTop: 0 }}>Metrics snapshot</h2>
+                <p className="small muted" style={{ marginBottom: "1rem" }}>
+                    Aggregated confidence, critique, and research signals from
+                    this run artifact.
+                </p>
+                <RunMetricsSummary summary={metricsSummary} />
             </div>
 
             <div className="card trace-final-answer">

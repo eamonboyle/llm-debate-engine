@@ -6,10 +6,12 @@ import { useState, useEffect } from "react";
 
 const NAV_ITEMS = [
     { href: "/", label: "Overview" },
+    { href: "/questions", label: "Questions" },
     { href: "/runs", label: "Runs" },
     { href: "/runs/compare", label: "Compare runs" },
     { href: "/benchmarks", label: "Benchmarks" },
     { href: "/benchmarks/compare", label: "Compare benchmarks" },
+    { href: "/report", label: "Report" },
 ] as const;
 
 function isActive(pathname: string, href: string): boolean {

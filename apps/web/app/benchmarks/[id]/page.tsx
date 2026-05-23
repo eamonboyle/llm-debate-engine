@@ -9,6 +9,7 @@ import { BenchmarkDetailCharts } from "../../../components/charts/BenchmarkDetai
 import { ResponsiveTable } from "../../../components/ResponsiveTable";
 import { TruncateText } from "../../../components/ResponsiveTable";
 import { inferModeLabel } from "../../../lib/modeLabeler";
+import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
 
 export async function generateMetadata({
     params,
@@ -59,6 +60,16 @@ export default async function BenchmarkDetailPage({
                     className="page-actions"
                     style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
                 >
+                    <DownloadArtifactLink
+                        href={`/api/benchmarks/${benchmark.id}?download=1`}
+                        filename={`${benchmark.id}.json`}
+                    />
+                    <Link
+                        href={`/benchmarks?q=${encodeURIComponent(benchmark.question)}`}
+                        className="button secondary"
+                    >
+                        All benchmarks for question
+                    </Link>
                     <Link
                         href={`/benchmarks/compare?left=${benchmark.id}`}
                         className="button secondary"

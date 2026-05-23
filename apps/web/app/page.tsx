@@ -56,6 +56,22 @@ export default async function OverviewPage() {
                     Generated at {new Date(index.generatedAt).toLocaleString()}{" "}
                     from local run artifacts.
                 </p>
+                <div
+                    className="page-actions"
+                    style={{
+                        display: "flex",
+                        gap: 10,
+                        flexWrap: "wrap",
+                        marginTop: 12,
+                    }}
+                >
+                    <a href="/questions" className="button secondary">
+                        Browse questions
+                    </a>
+                    <a href="/report" className="button secondary">
+                        Analysis report
+                    </a>
+                </div>
             </div>
 
             <div className="grid-4">
