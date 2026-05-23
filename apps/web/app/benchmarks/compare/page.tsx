@@ -5,6 +5,7 @@ import { CompareDeltaChart } from "../../../components/charts/CompareDeltaChart"
 import { ModeSizeBar } from "../../../components/benchmark/ModeSizeBar";
 import { buildBenchmarkComparePayload } from "../../../lib/benchmarkCompare";
 import { TruncateText } from "../../../components/ResponsiveTable";
+import { CompareSwapLink } from "../../../components/CompareSwapLink";
 
 export const metadata: Metadata = {
     title: "Benchmark compare",
@@ -109,6 +110,11 @@ export default async function BenchmarkComparePage({
                     <button type="submit" className="button">
                         Compare
                     </button>
+                    <CompareSwapLink
+                        basePath="/benchmarks/compare"
+                        left={params.left}
+                        right={params.right}
+                    />
                     <Link
                         href="/benchmarks/compare"
                         className="button secondary"

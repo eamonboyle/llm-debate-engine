@@ -60,7 +60,11 @@ export const GLOSSARY: Record<string, string> = {
     stepCount:
         "Number of pipeline steps; reflects pipeline depth and additional critique passes.",
     solverConfidence: "Confidence score from the Solver's initial proposal.",
+    revisionConfidence:
+        "Confidence score after the SolverRevision step, following skeptic critique.",
     synthConfidence: "Confidence score from the Synthesizer's final answer.",
+    calibratedConfidence:
+        "Post-calibration confidence score from the Calibration agent.",
     factualRisk: "Quality rubric score for factual risk in the answer.",
     coherence: "Quality rubric score for coherence.",
     completeness: "Quality rubric score for completeness.",

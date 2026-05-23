@@ -3,6 +3,7 @@ import { RunCompareDeltaChart } from "../../../components/charts/RunCompareDelta
 import { InfoTooltip } from "../../../components/InfoTooltip";
 import { loadRunArtifacts } from "../../../lib/data";
 import { buildRunComparePayload } from "../../../lib/runCompare";
+import { CompareSwapLink } from "../../../components/CompareSwapLink";
 
 function MetricCell({
     label,
@@ -134,6 +135,11 @@ export default async function RunsComparePage({
                     <button type="submit" className="button">
                         Compare
                     </button>
+                    <CompareSwapLink
+                        basePath="/runs/compare"
+                        left={params.left}
+                        right={params.right}
+                    />
                     <a href="/runs/compare" className="button secondary">
                         Clear
                     </a>
