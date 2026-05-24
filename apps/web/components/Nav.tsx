@@ -12,6 +12,7 @@ const NAV_ITEMS = [
     { href: "/benchmarks", label: "Benchmarks" },
     { href: "/benchmarks/compare", label: "Compare benchmarks" },
     { href: "/report", label: "Report" },
+    { href: "/status", label: "Status" },
 ] as const;
 
 function isActive(pathname: string, href: string): boolean {

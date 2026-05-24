@@ -5,7 +5,10 @@ import {
     TruncateText,
 } from "../../components/ResponsiveTable";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
-import { groupArtifactsByQuestion } from "../../lib/questionGroups";
+import {
+    groupArtifactsByQuestion,
+    questionHubHref,
+} from "../../lib/questionGroups";
 import {
     buildQueryString,
     paginateItems,
@@ -106,15 +109,18 @@ export default async function QuestionsPage({
                                 key: "question",
                                 label: "Question",
                                 cellClass: "cell-question",
-                                render: (row) => (
-                                    <TruncateText
-                                        text={
-                                            (row as { question: string })
-                                                .question
-                                        }
-                                        maxLength={100}
-                                    />
-                                ),
+                                render: (row) => {
+                                    const q = (row as { question: string })
+                                        .question;
+                                    return (
+                                        <Link href={questionHubHref(q)}>
+                                            <TruncateText
+                                                text={q}
+                                                maxLength={100}
+                                            />
+                                        </Link>
+                                    );
+                                },
                             },
                             { key: "runCount", label: "Runs" },
                             { key: "benchmarkCount", label: "Benchmarks" },
@@ -161,6 +167,7 @@ export default async function QuestionsPage({
                             const encodedQ = encodeURIComponent(group.question);
                             return {
                                 question: group.question,
+                                hubHref: questionHubHref(group.question),
                                 runCount: group.runCount,
                                 benchmarkCount: group.benchmarkCount,
                                 latestCreatedAt: group.latestCreatedAt,
@@ -174,13 +181,19 @@ export default async function QuestionsPage({
                         }
                         renderCardActions={(row) => {
                             const r = row as {
+                                hubHref: string;
                                 runsHref: string;
                                 benchmarksHref: string;
-                                question: string;
                             };
                             return (
                                 <>
-                                    <Link href={r.runsHref} className="button">
+                                    <Link href={r.hubHref} className="button">
+                                        Question hub
+                                    </Link>
+                                    <Link
+                                        href={r.runsHref}
+                                        className="button secondary"
+                                    >
                                         View runs
                                     </Link>
                                     <Link

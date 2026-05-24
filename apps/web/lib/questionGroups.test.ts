@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { BenchmarkArtifact, RunArtifact } from "./data";
-import { groupArtifactsByQuestion } from "./questionGroups";
+import { groupArtifactsByQuestion, questionHubHref } from "./questionGroups";
 
 function makeRun(id: string, question: string, createdAt: string): RunArtifact {
     return {
@@ -45,6 +45,14 @@ function makeBenchmark(
         },
     };
 }
+
+describe("questionHubHref", () => {
+    it("encodes question text in the query string", () => {
+        expect(questionHubHref("Is AI safe?")).toBe(
+            "/questions/view?question=Is+AI+safe%3F",
+        );
+    });
+});
 
 describe("groupArtifactsByQuestion", () => {
     it("groups runs and benchmarks by question", () => {

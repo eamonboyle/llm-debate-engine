@@ -1,4 +1,4 @@
-import { readdir, readFile } from "fs/promises";
+import { access, readdir, readFile } from "fs/promises";
 import { join, resolve } from "path";
 
 export type AnalysisIndex = {
@@ -407,6 +407,72 @@ export async function loadRunsByQuestion(
         .sort((a, b) =>
             b.metadata.createdAt.localeCompare(a.metadata.createdAt),
         );
+}
+
+export async function loadBenchmarksByQuestion(
+    question: string,
+): Promise<BenchmarkArtifact[]> {
+    const benchmarks = await loadBenchmarkArtifacts();
+    return benchmarks
+        .filter((b) => b.question === question)
+        .sort((a, b) =>
+            b.metadata.createdAt.localeCompare(a.metadata.createdAt),
+        );
+}
+
+export type DataStatus = {
+    runsDirLabel: string;
+    hasAnalysisIndex: boolean;
+    hasAnalysisBundle: boolean;
+    hasAnalysisReport: boolean;
+    hasBenchmarkPairs: boolean;
+    analysisGeneratedAt: string | null;
+    artifactCounts: { runs: number; benchmarks: number };
+    indexTotals: AnalysisIndex["totals"] | null;
+    skippedCount: number;
+};
+
+async function pathExists(path: string): Promise<boolean> {
+    try {
+        await access(path);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+export async function loadDataStatus(): Promise<DataStatus> {
+    const runsDir = getRunsDir();
+    const [runs, benchmarks, index, report] = await Promise.all([
+        loadRunArtifacts(),
+        loadBenchmarkArtifacts(),
+        loadAnalysisIndex(),
+        loadAnalysisReport(),
+    ]);
+
+    const [hasAnalysisIndex, hasAnalysisBundle, hasBenchmarkPairs] =
+        await Promise.all([
+            pathExists(join(runsDir, "analysis-index.json")),
+            pathExists(join(runsDir, "analysis-bundle.json")),
+            pathExists(join(runsDir, "analysis-benchmark-pairs.json")),
+        ]);
+
+    return {
+        runsDirLabel: process.env.RUNS_DIR
+            ? "RUNS_DIR environment override"
+            : "repository runs/",
+        hasAnalysisIndex,
+        hasAnalysisBundle,
+        hasAnalysisReport: Boolean(report),
+        hasBenchmarkPairs,
+        analysisGeneratedAt: index?.generatedAt ?? null,
+        artifactCounts: {
+            runs: runs.length,
+            benchmarks: benchmarks.length,
+        },
+        indexTotals: index?.totals ?? null,
+        skippedCount: index?.skipped.length ?? 0,
+    };
 }
 
 export async function loadAnalysisReport(): Promise<string | null> {

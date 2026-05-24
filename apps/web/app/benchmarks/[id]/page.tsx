@@ -9,7 +9,9 @@ import { BenchmarkDetailCharts } from "../../../components/charts/BenchmarkDetai
 import { ResponsiveTable } from "../../../components/ResponsiveTable";
 import { TruncateText } from "../../../components/ResponsiveTable";
 import { inferModeLabel } from "../../../lib/modeLabeler";
+import { questionHubHref } from "../../../lib/questionGroups";
 import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
+import { CopyPageLink } from "../../../components/CopyPageLink";
 
 export async function generateMetadata({
     params,
@@ -64,6 +66,13 @@ export default async function BenchmarkDetailPage({
                         href={`/api/benchmarks/${benchmark.id}?download=1`}
                         filename={`${benchmark.id}.json`}
                     />
+                    <CopyPageLink />
+                    <Link
+                        href={questionHubHref(benchmark.question)}
+                        className="button secondary"
+                    >
+                        Question hub
+                    </Link>
                     <Link
                         href={`/benchmarks?q=${encodeURIComponent(benchmark.question)}`}
                         className="button secondary"

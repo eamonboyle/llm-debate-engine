@@ -4,6 +4,7 @@ import { InfoTooltip } from "../../../components/InfoTooltip";
 import { loadRunArtifacts } from "../../../lib/data";
 import { buildRunComparePayload } from "../../../lib/runCompare";
 import { CompareSwapLink } from "../../../components/CompareSwapLink";
+import { CopyPageLink } from "../../../components/CopyPageLink";
 
 function MetricCell({
     label,
@@ -143,6 +144,7 @@ export default async function RunsComparePage({
                     <a href="/runs/compare" className="button secondary">
                         Clear
                     </a>
+                    <CopyPageLink />
                 </div>
             </form>
 

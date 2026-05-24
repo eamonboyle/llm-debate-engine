@@ -6,6 +6,7 @@ import { ModeSizeBar } from "../../../components/benchmark/ModeSizeBar";
 import { buildBenchmarkComparePayload } from "../../../lib/benchmarkCompare";
 import { TruncateText } from "../../../components/ResponsiveTable";
 import { CompareSwapLink } from "../../../components/CompareSwapLink";
+import { CopyPageLink } from "../../../components/CopyPageLink";
 
 export const metadata: Metadata = {
     title: "Benchmark compare",
@@ -121,6 +122,7 @@ export default async function BenchmarkComparePage({
                     >
                         Clear
                     </Link>
+                    <CopyPageLink />
                 </div>
             </form>
 
