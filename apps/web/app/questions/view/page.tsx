@@ -135,7 +135,7 @@ export default async function QuestionHubPage({
                                 : "—"}
                         </div>
                     </div>
-                    <div>
+                    <div className="breakable-path">
                         <div className="small muted">Share</div>
                         <div style={{ marginTop: 6 }}>
                             <code className="small">
