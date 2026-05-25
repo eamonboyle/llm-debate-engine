@@ -108,7 +108,6 @@ export default async function QuestionHubPage({
                             Compare latest two runs
                         </Link>
                     ) : null}
-                    <CopyPageLink />
                 </div>
             </div>
 
@@ -135,12 +134,13 @@ export default async function QuestionHubPage({
                                 : "—"}
                         </div>
                     </div>
-                    <div className="breakable-path">
+                    <div>
                         <div className="small muted">Share</div>
                         <div style={{ marginTop: 6 }}>
-                            <code className="small">
-                                {questionHubHref(question)}
-                            </code>
+                            <CopyPageLink
+                                path={questionHubHref(question)}
+                                label="Copy URL"
+                            />
                         </div>
                     </div>
                 </div>
