@@ -199,9 +199,14 @@ The `apps/web` dashboard provides:
 
 Data is loaded from local filesystem artifacts in `runs/`. If `analysis-index.json` is missing, the UI falls back to `analysis-bundle.json`. The [live dashboard](https://llm-debate-research.vercel.app/) uses pre-built analysis from the repository.
 
+**Question hub** — `/questions/view?question=...` consolidates all runs and benchmarks for one debate question, with quick compare and filter links.
+
+**Data status** — `/status` shows which artifact and analysis files are present in `runs/`.
+
 **REST API** — Endpoints exposed by the web app:
 
 - `GET /api/analysis`
+- `GET /api/analysis/report` (`?format=json` optional)
 - `GET /api/runs`
 - `GET /api/runs/:id`
 - `GET /api/runs/compare?left=:id&right=:id`

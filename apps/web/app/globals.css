@@ -694,6 +694,42 @@ tbody tr:hover {
     background: var(--color-bg-elevated);
 }
 
+.status-badge {
+    display: inline-block;
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.status-badge.status-ok {
+    background: rgba(52, 211, 153, 0.15);
+    color: var(--color-success);
+}
+
+.status-badge.status-missing {
+    background: rgba(248, 113, 113, 0.12);
+    color: var(--color-error);
+}
+
+.code-block {
+    margin: 0;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border-subtle);
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+}
+
+.code-block code {
+    white-space: pre;
+}
+
 /* Filter form grid */
 .filter-grid {
     display: grid;

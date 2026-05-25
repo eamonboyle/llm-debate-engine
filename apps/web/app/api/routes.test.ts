@@ -3,6 +3,7 @@ import { tmpdir } from "os";
 import { join } from "path";
 import { afterEach, describe, expect, it } from "vitest";
 import { GET as getAnalysis } from "./analysis/route";
+import { GET as getAnalysisReport } from "./analysis/report/route";
 import { GET as getBenchmarks } from "./benchmarks/route";
 import { GET as getBenchmarksCompare } from "./benchmarks/compare/route";
 import { GET as getRunById } from "./runs/[id]/route";
@@ -35,6 +36,39 @@ describe("web api routes", () => {
         process.env.RUNS_DIR = dir;
         const response = await getAnalysis();
         expect(response.status).toBe(404);
+    });
+
+    it("returns 404 when analysis report is missing", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        const response = await getAnalysisReport(
+            new Request("http://localhost/api/analysis/report"),
+        );
+        expect(response.status).toBe(404);
+    });
+
+    it("returns markdown and json analysis report", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-report.md"),
+            "# Summary\n\nFindings here.",
+            "utf-8",
+        );
+
+        const markdown = await getAnalysisReport(
+            new Request("http://localhost/api/analysis/report"),
+        );
+        expect(markdown.status).toBe(200);
+        expect(markdown.headers.get("Content-Type")).toContain("text/markdown");
+        expect(await markdown.text()).toContain("Findings here.");
+
+        const json = await getAnalysisReport(
+            new Request("http://localhost/api/analysis/report?format=json"),
+        );
+        expect(json.status).toBe(200);
+        const body = (await json.json()) as { content: string };
+        expect(body.content).toContain("Findings here.");
     });
 
     it("returns analysis index payload", async () => {

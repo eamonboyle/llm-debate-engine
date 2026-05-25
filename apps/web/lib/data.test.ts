@@ -8,6 +8,7 @@ import {
     loadBenchmarkById,
     loadBenchmarkPairsById,
     loadBenchmarksByIds,
+    loadDataStatus,
     loadRunArtifacts,
     loadRunById,
 } from "./data";
@@ -326,5 +327,46 @@ describe("web data loader", () => {
         expect(fallback.source).toBe("artifact");
         expect(fallback.pairs).toHaveLength(1);
         expect(fallback.pairs[0].similarity).toBe(0.95);
+    });
+
+    it("loadDataStatus reports artifact and analysis file availability", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_a.json"),
+            JSON.stringify(
+                makeRunArtifact("run_a", "2025-06-01T00:00:00.000Z"),
+            ),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: "2025-06-01T12:00:00.000Z",
+                totals: { runs: 1, benchmarks: 0, skippedFiles: 0 },
+                runs: [],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+        await writeFile(join(dir, "analysis-report.md"), "# Report\n", "utf-8");
+
+        const status = await loadDataStatus();
+        expect(status.runArtifactCount).toBe(1);
+        expect(status.analysisIndex.present).toBe(true);
+        expect(status.analysisIndex.source).toBe("index");
+        expect(status.analysisReport.present).toBe(true);
+        expect(status.analysisReport.byteLength).toBeGreaterThan(0);
     });
 });

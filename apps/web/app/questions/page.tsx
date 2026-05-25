@@ -6,6 +6,7 @@ import {
 } from "../../components/ResponsiveTable";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
 import { groupArtifactsByQuestion } from "../../lib/questionGroups";
+import { questionHubHref } from "../../lib/questionHub";
 import {
     buildQueryString,
     paginateItems,
@@ -142,11 +143,14 @@ export default async function QuestionsPage({
                                 cellClass: "cell-actions",
                                 render: (row) => {
                                     const r = row as {
+                                        hubHref: string;
                                         runsHref: string;
                                         benchmarksHref: string;
                                     };
                                     return (
                                         <span className="cell-compare-links">
+                                            <Link href={r.hubHref}>Hub</Link>
+                                            {" · "}
                                             <Link href={r.runsHref}>Runs</Link>
                                             {" · "}
                                             <Link href={r.benchmarksHref}>
@@ -165,6 +169,7 @@ export default async function QuestionsPage({
                                 benchmarkCount: group.benchmarkCount,
                                 latestCreatedAt: group.latestCreatedAt,
                                 models: group.models,
+                                hubHref: questionHubHref(group.question),
                                 runsHref: `/runs?q=${encodedQ}`,
                                 benchmarksHref: `/benchmarks?q=${encodedQ}`,
                             };
@@ -174,13 +179,20 @@ export default async function QuestionsPage({
                         }
                         renderCardActions={(row) => {
                             const r = row as {
+                                hubHref: string;
                                 runsHref: string;
                                 benchmarksHref: string;
                                 question: string;
                             };
                             return (
                                 <>
-                                    <Link href={r.runsHref} className="button">
+                                    <Link href={r.hubHref} className="button">
+                                        Question hub
+                                    </Link>
+                                    <Link
+                                        href={r.runsHref}
+                                        className="button secondary"
+                                    >
                                         View runs
                                     </Link>
                                     <Link

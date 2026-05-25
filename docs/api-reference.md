@@ -19,6 +19,20 @@ Example:
 curl "http://localhost:3000/api/analysis"
 ```
 
+## `GET /api/analysis/report`
+
+Returns the markdown analysis report from `runs/analysis-report.md`.
+
+- Default response: `text/markdown`
+- `?format=json` returns `{ format, content, byteLength }`
+
+Example:
+
+```bash
+curl "http://localhost:3000/api/analysis/report"
+curl "http://localhost:3000/api/analysis/report?format=json"
+```
+
 ## `GET /api/runs`
 
 Returns run artifact list with optional filters.

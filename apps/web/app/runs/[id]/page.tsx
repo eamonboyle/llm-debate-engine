@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import { loadRunById, loadRunsByQuestion } from "../../../lib/data";
 import { TraceStep } from "../../../components/trace/TraceStep";
 import { RunMetricsSummary } from "../../../components/RunMetricsSummary";
+import { CopyPageLink } from "../../../components/CopyPageLink";
 import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
+import { questionHubHref } from "../../../lib/questionHub";
 import { summarizeRun } from "../../../lib/runCompare";
 
 export async function generateMetadata({
@@ -49,6 +51,13 @@ export default async function RunTracePage({
                         href={`/api/runs/${run.id}?download=1`}
                         filename={`${run.id}.json`}
                     />
+                    <CopyPageLink />
+                    <Link
+                        href={questionHubHref(run.question)}
+                        className="button secondary"
+                    >
+                        Question hub
+                    </Link>
                     <a
                         href={`/runs?q=${encodeURIComponent(run.question)}`}
                         className="button secondary"

@@ -1,4 +1,4 @@
-import { readdir, readFile } from "fs/promises";
+import { access, readdir, readFile, stat } from "fs/promises";
 import { join, resolve } from "path";
 
 export type AnalysisIndex = {
@@ -407,6 +407,95 @@ export async function loadRunsByQuestion(
         .sort((a, b) =>
             b.metadata.createdAt.localeCompare(a.metadata.createdAt),
         );
+}
+
+export async function loadBenchmarksByQuestion(
+    question: string,
+): Promise<BenchmarkArtifact[]> {
+    const benchmarks = await loadBenchmarkArtifacts();
+    return benchmarks
+        .filter((b) => b.question === question)
+        .sort((a, b) =>
+            b.metadata.createdAt.localeCompare(a.metadata.createdAt),
+        );
+}
+
+export type DataStatus = {
+    runsDir: string;
+    runArtifactCount: number;
+    benchmarkArtifactCount: number;
+    analysisIndex: {
+        present: boolean;
+        source: "index" | "bundle" | null;
+        generatedAt: string | null;
+    };
+    analysisReport: { present: boolean; byteLength: number | null };
+    analysisBenchmarkPairs: { present: boolean };
+    analysisBundle: { present: boolean };
+    skippedFileCount: number;
+};
+
+async function fileExists(path: string): Promise<boolean> {
+    try {
+        await access(path);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+export async function loadDataStatus(): Promise<DataStatus> {
+    const runsDir = getRunsDir();
+    const [runs, benchmarks, index] = await Promise.all([
+        loadRunArtifacts(),
+        loadBenchmarkArtifacts(),
+        loadAnalysisIndex(),
+    ]);
+
+    const indexPath = join(runsDir, "analysis-index.json");
+    const bundlePath = join(runsDir, "analysis-bundle.json");
+    const hasIndexFile = await fileExists(indexPath);
+    const hasBundleFile = await fileExists(bundlePath);
+
+    let indexSource: DataStatus["analysisIndex"]["source"] = null;
+    if (index) {
+        indexSource = hasIndexFile ? "index" : hasBundleFile ? "bundle" : null;
+    }
+
+    const reportPath = join(runsDir, "analysis-report.md");
+    let reportBytes: number | null = null;
+    if (await fileExists(reportPath)) {
+        try {
+            const s = await stat(reportPath);
+            reportBytes = s.size;
+        } catch {
+            reportBytes = null;
+        }
+    }
+
+    const pairsPath = join(runsDir, "analysis-benchmark-pairs.json");
+    const bundleExists = await fileExists(bundlePath);
+
+    return {
+        runsDir,
+        runArtifactCount: runs.length,
+        benchmarkArtifactCount: benchmarks.length,
+        analysisIndex: {
+            present: index != null,
+            source: indexSource,
+            generatedAt: index?.generatedAt ?? null,
+        },
+        analysisReport: {
+            present: reportBytes != null && reportBytes > 0,
+            byteLength: reportBytes,
+        },
+        analysisBenchmarkPairs: {
+            present: await fileExists(pairsPath),
+        },
+        analysisBundle: { present: bundleExists },
+        skippedFileCount:
+            index?.skipped?.length ?? index?.totals.skippedFiles ?? 0,
+    };
 }
 
 export async function loadAnalysisReport(): Promise<string | null> {

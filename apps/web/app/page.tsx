@@ -71,6 +71,9 @@ export default async function OverviewPage() {
                     <a href="/report" className="button secondary">
                         Analysis report
                     </a>
+                    <a href="/status" className="button secondary">
+                        Data status
+                    </a>
                 </div>
             </div>
 
