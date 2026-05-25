@@ -3,6 +3,7 @@ import { tmpdir } from "os";
 import { join } from "path";
 import { afterEach, describe, expect, it } from "vitest";
 import { GET as getAnalysis } from "./analysis/route";
+import { GET as getAnalysisReport } from "./analysis/report/route";
 import { GET as getBenchmarks } from "./benchmarks/route";
 import { GET as getBenchmarksCompare } from "./benchmarks/compare/route";
 import { GET as getRunById } from "./runs/[id]/route";
@@ -71,6 +72,41 @@ describe("web api routes", () => {
         expect(response.status).toBe(200);
         const json = (await response.json()) as { totals: { runs: number } };
         expect(json.totals.runs).toBe(0);
+    });
+
+    it("returns analysis report markdown or json", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-report.md"),
+            "# Summary\n\nHello",
+            "utf-8",
+        );
+
+        const markdownResponse = await getAnalysisReport(
+            new Request("http://localhost/api/analysis/report"),
+        );
+        expect(markdownResponse.status).toBe(200);
+        expect(markdownResponse.headers.get("content-type")).toContain(
+            "text/markdown",
+        );
+        expect(await markdownResponse.text()).toContain("# Summary");
+
+        const jsonResponse = await getAnalysisReport(
+            new Request("http://localhost/api/analysis/report?format=json"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as { markdown: string };
+        expect(json.markdown).toContain("Hello");
+    });
+
+    it("returns 404 when analysis report is missing", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        const response = await getAnalysisReport(
+            new Request("http://localhost/api/analysis/report"),
+        );
+        expect(response.status).toBe(404);
     });
 
     it("returns run and benchmark resources by id", async () => {

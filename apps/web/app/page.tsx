@@ -22,6 +22,17 @@ export default async function OverviewPage() {
                     to generate the analysis index, or ensure run artifacts are
                     present.
                 </p>
+                <div
+                    className="page-actions"
+                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                >
+                    <a href="/status" className="button">
+                        Check data status
+                    </a>
+                    <a href="/runs" className="button secondary">
+                        Browse runs
+                    </a>
+                </div>
             </section>
         );
     }
@@ -70,6 +81,9 @@ export default async function OverviewPage() {
                     </a>
                     <a href="/report" className="button secondary">
                         Analysis report
+                    </a>
+                    <a href="/status" className="button secondary">
+                        Data status
                     </a>
                 </div>
             </div>

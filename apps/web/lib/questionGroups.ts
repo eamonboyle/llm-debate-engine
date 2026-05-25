@@ -15,6 +15,10 @@ function uniqueSorted(values: string[]): string[] {
     return [...new Set(values)].sort((a, b) => a.localeCompare(b));
 }
 
+export function questionHubHref(question: string): string {
+    return `/questions/view?${new URLSearchParams({ question }).toString()}`;
+}
+
 export function groupArtifactsByQuestion(
     runs: RunArtifact[],
     benchmarks: BenchmarkArtifact[],
