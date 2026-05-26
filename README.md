@@ -201,6 +201,8 @@ Data is loaded from local filesystem artifacts in `runs/`. If `analysis-index.js
 
 **Question hub** — `/questions/view?question=...` groups all runs and benchmarks for one research question with quick compare links.
 
+**Experiment catalog** — `/catalog` summarizes models, presets, and model×preset combinations with links into filtered run and benchmark lists.
+
 **Data status** — `/status` shows artifact counts, analysis index readiness, and skipped-file diagnostics.
 
 **REST API** — Endpoints exposed by the web app:

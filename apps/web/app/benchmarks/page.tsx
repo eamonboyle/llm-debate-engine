@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CollapsibleFilterCard } from "../../components/CollapsibleFilterCard";
+import { ExportFilteredLink } from "../../components/ExportFilteredLink";
+import { PresetFilterSelect } from "../../components/PresetFilterSelect";
 import {
     ResponsiveTable,
     TruncateText,
 } from "../../components/ResponsiveTable";
 import { MetricCard } from "../../components/MetricCard";
+import { collectArtifactFacets } from "../../lib/artifactFacets";
 import {
     filterBenchmarkArtifacts,
     loadBenchmarkArtifacts,
+    loadRunArtifacts,
 } from "../../lib/data";
 import { sortArtifactsByCreatedAt } from "../../lib/artifactSort";
 import {
@@ -38,7 +42,11 @@ export default async function BenchmarksPage({
 }: {
     searchParams: Promise<BenchmarkSearchParams>;
 }) {
-    const benchmarks = await loadBenchmarkArtifacts();
+    const [benchmarks, runs] = await Promise.all([
+        loadBenchmarkArtifacts(),
+        loadRunArtifacts(),
+    ]);
+    const { presets } = collectArtifactFacets(runs, benchmarks);
     const params = await searchParams;
     const filtered = filterBenchmarkArtifacts(benchmarks, {
         q: params.q,
@@ -124,11 +132,9 @@ export default async function BenchmarksPage({
                             defaultValue={params.model ?? ""}
                             className="input"
                         />
-                        <input
-                            name="preset"
-                            placeholder="Preset (standard, research_deep...)"
+                        <PresetFilterSelect
+                            presets={presets}
                             defaultValue={params.preset ?? ""}
-                            className="input"
                         />
                         <select
                             name="fast"
@@ -181,6 +187,18 @@ export default async function BenchmarksPage({
                         <Link href="/benchmarks" className="button secondary">
                             Clear
                         </Link>
+                        <ExportFilteredLink
+                            apiPath="/api/benchmarks"
+                            params={{
+                                q: params.q,
+                                model: params.model,
+                                preset: params.preset,
+                                fast: params.fast,
+                                from: params.from,
+                                to: params.to,
+                                sort,
+                            }}
+                        />
                         <span className="small muted">
                             Showing {paging.startDisplay}-{paging.endDisplay} of{" "}
                             {filtered.length} filtered benchmarks (

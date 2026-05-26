@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { loadRunById, loadRunsByQuestion } from "../../../lib/data";
+import {
+    loadBenchmarksByQuestion,
+    loadRunById,
+    loadRunsByQuestion,
+} from "../../../lib/data";
 import { TraceStep } from "../../../components/trace/TraceStep";
 import { RunMetricsSummary } from "../../../components/RunMetricsSummary";
 import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
@@ -32,7 +36,10 @@ export default async function RunTracePage({
     if (!run) notFound();
 
     const steps = run.run.steps;
-    const previousRuns = await loadRunsByQuestion(run.question, run.id);
+    const [previousRuns, relatedBenchmarks] = await Promise.all([
+        loadRunsByQuestion(run.question, run.id),
+        loadBenchmarksByQuestion(run.question),
+    ]);
     const metricsSummary = summarizeRun(run);
 
     return (
@@ -114,6 +121,85 @@ export default async function RunTracePage({
             <div className="card trace-final-answer">
                 <h2 style={{ marginTop: 0 }}>Final answer</h2>
                 <p>{run.run.finalAnswer}</p>
+            </div>
+
+            <div className="card">
+                <h2 style={{ marginTop: 0 }}>Benchmarks for this question</h2>
+                <p className="small muted" style={{ marginBottom: "1rem" }}>
+                    Multi-run stability experiments on the same research
+                    question.
+                </p>
+                {relatedBenchmarks.length === 0 ? (
+                    <p className="muted">
+                        No benchmarks recorded for this question yet.
+                    </p>
+                ) : (
+                    <div className="previous-answers-list">
+                        {relatedBenchmarks.map((benchmark, idx) => (
+                            <div
+                                key={benchmark.id}
+                                className="previous-answer-item"
+                                style={{
+                                    padding: "0.75rem 0",
+                                    borderBottom:
+                                        idx < relatedBenchmarks.length - 1
+                                            ? "1px solid var(--color-border, #e0e0e0)"
+                                            : undefined,
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        flexWrap: "wrap",
+                                        gap: "0.5rem 1rem",
+                                        alignItems: "baseline",
+                                        marginBottom: 4,
+                                    }}
+                                >
+                                    <Link href={`/benchmarks/${benchmark.id}`}>
+                                        <code className="small">
+                                            {benchmark.id.slice(-20)}
+                                        </code>
+                                    </Link>
+                                    <span className="small muted">
+                                        {new Date(
+                                            benchmark.metadata.createdAt,
+                                        ).toLocaleString()}
+                                    </span>
+                                    <span className="small muted">
+                                        {benchmark.metadata.model} ·{" "}
+                                        {benchmark.metadata.pipelinePreset} ·{" "}
+                                        {benchmark.payload.runs} runs ·{" "}
+                                        {benchmark.payload.modeCount} modes
+                                    </span>
+                                    <Link
+                                        href={`/benchmarks/${benchmark.id}`}
+                                        className="button"
+                                        style={{
+                                            padding: "0.2rem 0.5rem",
+                                            fontSize: "0.75rem",
+                                        }}
+                                    >
+                                        View benchmark
+                                    </Link>
+                                </div>
+                                <p
+                                    className="small muted"
+                                    style={{ margin: 0 }}
+                                >
+                                    Entropy{" "}
+                                    {benchmark.payload.divergenceEntropy.toFixed(
+                                        3,
+                                    )}
+                                    {benchmark.payload.summary?.stability
+                                        ?.pairwiseMean != null
+                                        ? ` · stability ${benchmark.payload.summary.stability.pairwiseMean.toFixed(3)}`
+                                        : null}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
             <div className="card">
