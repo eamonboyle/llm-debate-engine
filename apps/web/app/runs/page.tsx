@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
 import { CollapsibleFilterCard } from "../../components/CollapsibleFilterCard";
+import { ExportFilteredLink } from "../../components/ExportFilteredLink";
+import { PresetFilterSelect } from "../../components/PresetFilterSelect";
 import {
     ResponsiveTable,
     TruncateText,
 } from "../../components/ResponsiveTable";
-import { filterRunArtifacts, loadRunArtifacts } from "../../lib/data";
+import { collectArtifactFacets } from "../../lib/artifactFacets";
+import {
+    filterRunArtifacts,
+    loadBenchmarkArtifacts,
+    loadRunArtifacts,
+} from "../../lib/data";
 import { sortArtifactsByCreatedAt } from "../../lib/artifactSort";
 import {
     buildQueryString,
@@ -34,6 +41,8 @@ export default async function RunsPage({
     searchParams: Promise<RunsSearchParams>;
 }) {
     const runs = await loadRunArtifacts();
+    const benchmarks = await loadBenchmarkArtifacts();
+    const { presets } = collectArtifactFacets(runs, benchmarks);
     const params = await searchParams;
     const filtered = filterRunArtifacts(runs, {
         q: params.q,
@@ -80,11 +89,9 @@ export default async function RunsPage({
                         defaultValue={params.model ?? ""}
                         className="input"
                     />
-                    <input
-                        name="preset"
-                        placeholder="Preset (standard, research_deep...)"
+                    <PresetFilterSelect
+                        presets={presets}
                         defaultValue={params.preset ?? ""}
-                        className="input"
                     />
                     <select name="fast" defaultValue={params.fast ?? ""} className="input">
                         <option value="">Fast mode: any</option>
@@ -129,6 +136,18 @@ export default async function RunsPage({
                     <a href="/runs" className="button secondary">
                         Clear
                     </a>
+                    <ExportFilteredLink
+                        apiPath="/api/runs"
+                        params={{
+                            q: params.q,
+                            model: params.model,
+                            preset: params.preset,
+                            fast: params.fast,
+                            from: params.from,
+                            to: params.to,
+                            sort,
+                        }}
+                    />
                     <span className="small muted">
                         Showing {paging.startDisplay}-{paging.endDisplay} of{" "}
                         {filtered.length} filtered

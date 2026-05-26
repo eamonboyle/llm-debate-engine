@@ -79,6 +79,9 @@ export default async function OverviewPage() {
                     <a href="/questions" className="button secondary">
                         Browse questions
                     </a>
+                    <a href="/catalog" className="button secondary">
+                        Experiment catalog
+                    </a>
                     <a href="/report" className="button secondary">
                         Analysis report
                     </a>
@@ -171,6 +174,18 @@ export default async function OverviewPage() {
                     <ResponsiveTable
                         columns={[
                             { key: "benchmarkId", label: "Benchmark" },
+                            {
+                                key: "benchmarkOpen",
+                                label: "Benchmark",
+                                hideOnMobile: true,
+                                render: (row) => (
+                                    <a
+                                        href={`/benchmarks/${(row as { benchmarkId: string }).benchmarkId}`}
+                                    >
+                                        Open
+                                    </a>
+                                ),
+                            },
                             { key: "runId", label: "Run ID" },
                             {
                                 key: "avgSimilarity",

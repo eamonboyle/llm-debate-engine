@@ -44,6 +44,26 @@ export default async function AnalysisReportPage() {
                         ? ` Index generated ${new Date(index.generatedAt).toLocaleString()}.`
                         : null}
                 </p>
+                <div
+                    className="page-actions"
+                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                >
+                    <a
+                        href="/api/analysis/report"
+                        className="button secondary"
+                        download="analysis-report.md"
+                    >
+                        Download markdown
+                    </a>
+                    <a
+                        href="/api/analysis/report?format=json"
+                        className="button secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        View JSON export
+                    </a>
+                </div>
             </div>
 
             {skipped.length > 0 ? (
