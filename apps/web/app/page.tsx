@@ -76,6 +76,9 @@ export default async function OverviewPage() {
                         marginTop: 12,
                     }}
                 >
+                    <a href="/search" className="button secondary">
+                        Search artifacts
+                    </a>
                     <a href="/questions" className="button secondary">
                         Browse questions
                     </a>

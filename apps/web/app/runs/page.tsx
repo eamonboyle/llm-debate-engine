@@ -12,12 +12,11 @@ import {
     loadBenchmarkArtifacts,
     loadRunArtifacts,
 } from "../../lib/data";
-import { sortArtifactsByCreatedAt } from "../../lib/artifactSort";
 import {
-    buildQueryString,
-    paginateItems,
-    resolveSortOrder,
-} from "../../lib/listPagination";
+    resolveRunSortOrder,
+    sortRunArtifacts,
+} from "../../lib/artifactSort";
+import { buildQueryString, paginateItems } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
     title: "Runs",
@@ -52,8 +51,8 @@ export default async function RunsPage({
         from: params.from,
         to: params.to,
     });
-    const sort = resolveSortOrder(params.sort);
-    const sorted = sortArtifactsByCreatedAt(filtered, sort);
+    const sort = resolveRunSortOrder(params.sort);
+    const sorted = sortRunArtifacts(filtered, sort);
     const paging = paginateItems(sorted, params, {
         defaultPageSize: 25,
         maxPageSize: 200,
@@ -117,6 +116,18 @@ export default async function RunsPage({
                     <select name="sort" defaultValue={sort} className="input">
                         <option value="newest">Sort: newest first</option>
                         <option value="oldest">Sort: oldest first</option>
+                        <option value="issues_desc">
+                            Sort: most critique issues
+                        </option>
+                        <option value="issues_asc">
+                            Sort: fewest critique issues
+                        </option>
+                        <option value="evidence_risk_desc">
+                            Sort: highest evidence risk
+                        </option>
+                        <option value="solver_conf_desc">
+                            Sort: highest solver confidence
+                        </option>
                     </select>
                     <select
                         name="pageSize"

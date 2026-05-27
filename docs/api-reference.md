@@ -6,6 +6,18 @@ Base assumption: API routes read artifacts from local `runs/` (or `RUNS_DIR` ove
 
 ## Endpoints
 
+## `GET /api/status`
+
+Returns artifact store health and analysis readiness (same signals as the `/status` page).
+
+Example:
+
+```bash
+curl "http://localhost:3000/api/status"
+```
+
+Response includes `artifactCounts`, `readiness` flags, and optional `indexGeneratedAt` / `indexTotals` when an analysis index exists.
+
 ## `GET /api/analysis`
 
 Returns the current analysis index.
@@ -45,7 +57,7 @@ Query params:
 - `fast` (`true`/`false`)
 - `from` datetime lower bound (`datetime-local` or ISO-compatible)
 - `to` datetime upper bound
-- `sort` (`newest` default, `oldest`)
+- `sort` (`newest` default, `oldest`, plus metric sorts: `issues_desc`, `issues_asc`, `evidence_risk_desc`, `solver_conf_desc`)
 - ties on `createdAt` are deterministically ordered by `id`
 - `offset` zero-based pagination offset (default `0`)
 - `limit` page size (default `100`, max `500`)
@@ -95,7 +107,8 @@ Error responses:
 ## `GET /api/benchmarks`
 
 Returns benchmark artifact list with same filter params and pagination params as
-`/api/runs`.
+`/api/runs`. Benchmark `sort` also supports `entropy_desc`, `modes_desc`,
+`stability_desc`, and `runs_desc`.
 
 Example:
 

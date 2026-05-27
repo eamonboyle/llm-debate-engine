@@ -976,6 +976,65 @@ pre {
    Trace timeline — step-by-step run visualization
    ========================================================================== */
 
+.trace-step-nav {
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.trace-step-nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.trace-step-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border-subtle);
+    background: var(--color-bg-elevated);
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+    text-decoration: none;
+    transition:
+        border-color var(--duration-fast),
+        color var(--duration-fast),
+        background var(--duration-fast);
+}
+
+.trace-step-nav-link:hover {
+    border-color: var(--color-accent-muted);
+    color: var(--color-text-primary);
+    background: var(--color-bg-card-hover);
+}
+
+.trace-step-nav-num {
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+.trace-step-nav-role {
+    display: none;
+}
+
+@media (min-width: 720px) {
+    .trace-step-nav-role {
+        display: inline;
+    }
+}
+
+.trace-step:target .trace-step-body {
+    outline: 2px solid var(--color-accent-muted);
+    outline-offset: 2px;
+}
+
 .trace-timeline {
     position: relative;
     padding-left: 0;
