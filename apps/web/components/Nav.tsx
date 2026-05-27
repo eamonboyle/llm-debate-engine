@@ -148,6 +148,12 @@ function NavLeafLink({
     );
 }
 
+const HOVER_CLOSE_DELAY_MS = 280;
+
+function prefersHoverOpen() {
+    return window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+}
+
 function NavDropdown({
     label,
     items,
@@ -162,17 +168,47 @@ function NavDropdown({
     const [open, setOpen] = useState(false);
     const panelId = useId();
     const rootRef = useRef<HTMLDivElement>(null);
+    const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const active = isGroupActive(pathname, items);
+
+    const clearCloseTimer = () => {
+        if (closeTimerRef.current != null) {
+            clearTimeout(closeTimerRef.current);
+            closeTimerRef.current = null;
+        }
+    };
+
+    const openMenu = () => {
+        clearCloseTimer();
+        setOpen(true);
+    };
+
+    const scheduleClose = () => {
+        clearCloseTimer();
+        if (!prefersHoverOpen()) return;
+        closeTimerRef.current = setTimeout(() => {
+            setOpen(false);
+            closeTimerRef.current = null;
+        }, HOVER_CLOSE_DELAY_MS);
+    };
+
+    useEffect(() => {
+        return () => clearCloseTimer();
+    }, []);
 
     useEffect(() => {
         if (!open) return;
         const onPointerDown = (event: MouseEvent) => {
             if (!rootRef.current?.contains(event.target as Node)) {
+                clearCloseTimer();
                 setOpen(false);
             }
         };
         const onEscape = (event: KeyboardEvent) => {
-            if (event.key === "Escape") setOpen(false);
+            if (event.key === "Escape") {
+                clearCloseTimer();
+                setOpen(false);
+            }
         };
         document.addEventListener("mousedown", onPointerDown);
         document.addEventListener("keydown", onEscape);
@@ -183,6 +219,7 @@ function NavDropdown({
     }, [open]);
 
     useEffect(() => {
+        clearCloseTimer();
         setOpen(false);
     }, [pathname]);
 
@@ -190,15 +227,11 @@ function NavDropdown({
         <div
             ref={rootRef}
             className={`nav-dropdown ${open ? "nav-dropdown-open" : ""} ${active ? "nav-dropdown-active" : ""}`}
-            onMouseEnter={() => {
-                if (window.matchMedia("(hover: hover)").matches) {
-                    setOpen(true);
-                }
+            onPointerEnter={() => {
+                if (prefersHoverOpen()) openMenu();
             }}
-            onMouseLeave={() => {
-                if (window.matchMedia("(hover: hover)").matches) {
-                    setOpen(false);
-                }
+            onPointerLeave={() => {
+                scheduleClose();
             }}
         >
             <button
@@ -207,38 +240,49 @@ function NavDropdown({
                 aria-expanded={open}
                 aria-haspopup="true"
                 aria-controls={panelId}
-                onClick={() => setOpen((value) => !value)}
+                onClick={() => {
+                    clearCloseTimer();
+                    setOpen((value) => !value);
+                }}
             >
                 <span>{label}</span>
                 <NavChevron open={open} />
             </button>
             <div
-                id={panelId}
-                className="nav-dropdown-panel"
-                role="menu"
-                hidden={!open}
+                className={`nav-dropdown-flyout ${open ? "nav-dropdown-flyout-open" : ""}`}
+                aria-hidden={!open}
             >
-                {items.map((item) => (
-                    <Link
-                        key={item.href}
-                        href={item.href}
-                        role="menuitem"
-                        className={`nav-dropdown-item ${isLeafActive(pathname, item.href) ? "nav-dropdown-item-active" : ""}`}
-                        onClick={() => {
-                            setOpen(false);
-                            onNavigate?.();
-                        }}
-                    >
-                        <span className="nav-dropdown-item-label">
-                            {item.label}
-                        </span>
-                        {item.hint ? (
-                            <span className="nav-dropdown-item-hint">
-                                {item.hint}
+                <div
+                    id={panelId}
+                    className="nav-dropdown-panel"
+                    role="menu"
+                >
+                    {items.map((item) => (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            role="menuitem"
+                            className={`nav-dropdown-item ${isLeafActive(pathname, item.href) ? "nav-dropdown-item-active" : ""}`}
+                            onClick={() => {
+                                clearCloseTimer();
+                                setOpen(false);
+                                onNavigate?.();
+                            }}
+                            onPointerEnter={() => {
+                                if (prefersHoverOpen()) openMenu();
+                            }}
+                        >
+                            <span className="nav-dropdown-item-label">
+                                {item.label}
                             </span>
-                        ) : null}
-                    </Link>
-                ))}
+                            {item.hint ? (
+                                <span className="nav-dropdown-item-hint">
+                                    {item.hint}
+                                </span>
+                            ) : null}
+                        </Link>
+                    ))}
+                </div>
             </div>
         </div>
     );

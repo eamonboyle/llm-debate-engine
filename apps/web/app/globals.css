@@ -296,11 +296,26 @@ a:hover {
     transform: rotate(180deg);
 }
 
-.nav-dropdown-panel {
+/* Flyout sits flush under trigger; padding-top bridges the visual gap for hover */
+.nav-dropdown-flyout {
     position: absolute;
-    top: calc(100% + 0.35rem);
+    top: 100%;
     left: 0;
     z-index: 100;
+    padding-top: 0.4rem;
+    min-width: 13.5rem;
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.nav-dropdown-flyout-open {
+    pointer-events: auto;
+    visibility: visible;
+    opacity: 1;
+}
+
+.nav-dropdown-panel {
     min-width: 13.5rem;
     padding: 0.35rem;
     border-radius: var(--radius-md);
@@ -310,10 +325,6 @@ a:hover {
         0 12px 40px rgba(0, 0, 0, 0.45),
         0 0 0 1px rgba(255, 255, 255, 0.03) inset;
     animation: navDropdownIn var(--duration-fast) var(--ease-out-expo) both;
-}
-
-.nav-dropdown-panel[hidden] {
-    display: none;
 }
 
 @keyframes navDropdownIn {
