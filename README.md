@@ -188,13 +188,15 @@ The `apps/web` dashboard provides:
 
 **Benchmarks** — `/benchmarks` artifact table; `/benchmarks/[id]` deep-dive; `/benchmarks/compare` side-by-side comparison with charted metric deltas.
 
+**Search** — `/search` unified search across runs, benchmarks, and research questions with quick links into filtered lists.
+
 **Filters** — Query parameters for runs and benchmarks:
 
 - full-text question/answer search
 - model filter
 - preset filter
 - fast-mode filter
-- sort order (newest/oldest)
+- sort order (newest/oldest, plus metric sorts on runs and benchmarks)
 - pagination controls (page + page size)
 
 Data is loaded from local filesystem artifacts in `runs/`. If `analysis-index.json` is missing, the UI falls back to `analysis-bundle.json`. The [live dashboard](https://llm-debate-research.vercel.app/) uses pre-built analysis from the repository.
@@ -207,6 +209,7 @@ Data is loaded from local filesystem artifacts in `runs/`. If `analysis-index.js
 
 **REST API** — Endpoints exposed by the web app:
 
+- `GET /api/status`
 - `GET /api/analysis`
 - `GET /api/analysis/report`
 - `GET /api/runs`

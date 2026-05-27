@@ -1,6 +1,8 @@
 import { filterRunArtifacts, loadRunArtifacts } from "../../../lib/data";
-import { sortArtifactsByCreatedAt } from "../../../lib/artifactSort";
-import { resolveSortOrder } from "../../../lib/listPagination";
+import {
+    resolveRunSortOrder,
+    sortRunArtifacts,
+} from "../../../lib/artifactSort";
 import { parseListPagination } from "../_shared/pagination";
 
 export async function GET(request: Request) {
@@ -14,9 +16,9 @@ export async function GET(request: Request) {
         from: url.searchParams.get("from") ?? undefined,
         to: url.searchParams.get("to") ?? undefined,
     });
-    const sort = resolveSortOrder(url.searchParams.get("sort") ?? undefined);
+    const sort = resolveRunSortOrder(url.searchParams.get("sort") ?? undefined);
     const { offset, limit, page } = parseListPagination(url.searchParams);
-    const sorted = sortArtifactsByCreatedAt(filtered, sort);
+    const sorted = sortRunArtifacts(filtered, sort);
     const items = sorted.slice(offset, offset + limit);
     const totalPages = Math.max(1, Math.ceil(sorted.length / limit));
     const prevPage = page > 1 ? page - 1 : null;

@@ -7,6 +7,7 @@ import {
     loadRunsByQuestion,
 } from "../../../lib/data";
 import { TraceStep } from "../../../components/trace/TraceStep";
+import { TraceStepNav } from "../../../components/trace/TraceStepNav";
 import { RunMetricsSummary } from "../../../components/RunMetricsSummary";
 import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
 import { CopyPageLink } from "../../../components/CopyPageLink";
@@ -274,8 +275,15 @@ export default async function RunTracePage({
                 )}
             </div>
 
-            <div className="card">
+            <div className="card trace-steps-card">
                 <h2 style={{ marginTop: 0 }}>Step-by-step outputs</h2>
+                <TraceStepNav
+                    steps={steps.map((step) => ({
+                        id: step.id,
+                        agentName: step.agentName,
+                        role: step.role,
+                    }))}
+                />
                 <div className="trace-timeline">
                     {steps.map((step, idx) => (
                         <TraceStep

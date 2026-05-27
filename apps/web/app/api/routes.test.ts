@@ -2,6 +2,7 @@ import { mkdtemp, rm, writeFile } from "fs/promises";
 import { tmpdir } from "os";
 import { join } from "path";
 import { afterEach, describe, expect, it } from "vitest";
+import { GET as getStatus } from "./status/route";
 import { GET as getAnalysis } from "./analysis/route";
 import { GET as getAnalysisReport } from "./analysis/report/route";
 import { GET as getBenchmarks } from "./benchmarks/route";
@@ -31,6 +32,36 @@ afterEach(async () => {
 });
 
 describe("web api routes", () => {
+    it("returns data status payload", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_1.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_1",
+                question: "Q",
+                metadata: {
+                    createdAt: new Date().toISOString(),
+                    model: "gpt",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: { id: "run_1", finalAnswer: "A", steps: [], metrics: {} },
+            }),
+            "utf-8",
+        );
+
+        const response = await getStatus();
+        expect(response.status).toBe(200);
+        const json = (await response.json()) as {
+            artifactCounts: { runs: number };
+            readiness: { artifacts: boolean };
+        };
+        expect(json.artifactCounts.runs).toBe(1);
+        expect(json.readiness.artifacts).toBe(true);
+    });
+
     it("returns 404 when analysis index is missing", async () => {
         const dir = await makeTempDir();
         process.env.RUNS_DIR = dir;

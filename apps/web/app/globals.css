@@ -189,21 +189,40 @@ a:hover {
 }
 
 .nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem;
     font-family: var(--font-display);
     font-size: 0.8125rem;
     font-weight: 500;
 }
 
+.nav-desktop-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.125rem;
+}
+
+.nav-mobile-stack {
+    display: none;
+}
+
 .nav-link {
+    display: inline-flex;
+    align-items: center;
     color: var(--color-text-secondary);
-    padding: 0.5rem 0.875rem;
+    padding: 0.5rem 0.75rem;
     border-radius: var(--radius-sm);
     text-decoration: none;
     transition: all var(--duration-fast) ease;
     position: relative;
+    border: none;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.nav-link-nested {
+    padding-left: 1.25rem;
 }
 
 .nav-link:hover {
@@ -230,6 +249,161 @@ a:hover {
 
 .nav-link-active:hover {
     color: var(--color-accent-hover);
+}
+
+/* Grouped nav dropdowns (desktop) */
+.nav-dropdown {
+    position: relative;
+}
+
+.nav-dropdown-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--color-text-secondary);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: transparent;
+    font: inherit;
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--duration-fast) ease;
+    position: relative;
+    white-space: nowrap;
+}
+
+.nav-dropdown-trigger:hover,
+.nav-dropdown-open .nav-dropdown-trigger {
+    color: var(--color-text-primary);
+    background: var(--color-accent-subtle);
+}
+
+.nav-dropdown-active .nav-dropdown-trigger,
+.nav-dropdown-trigger.nav-link-active {
+    color: var(--color-accent);
+    background: var(--color-accent-subtle);
+}
+
+.nav-chevron {
+    opacity: 0.65;
+    transition: transform var(--duration-fast) var(--ease-out-expo);
+}
+
+.nav-chevron-open {
+    transform: rotate(180deg);
+}
+
+/* Flyout sits flush under trigger; padding-top bridges the visual gap for hover */
+.nav-dropdown-flyout {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 100;
+    padding-top: 0.4rem;
+    min-width: 13.5rem;
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.nav-dropdown-flyout-open {
+    pointer-events: auto;
+    visibility: visible;
+    opacity: 1;
+}
+
+.nav-dropdown-panel {
+    min-width: 13.5rem;
+    padding: 0.35rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-default);
+    background: var(--color-bg-elevated);
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+    animation: navDropdownIn var(--duration-fast) var(--ease-out-expo) both;
+}
+
+@keyframes navDropdownIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nav-dropdown-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.55rem 0.65rem;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition:
+        background var(--duration-fast) ease,
+        color var(--duration-fast) ease;
+}
+
+.nav-dropdown-item:hover {
+    color: var(--color-text-primary);
+    background: var(--color-accent-subtle);
+}
+
+.nav-dropdown-item-active {
+    color: var(--color-accent);
+    background: var(--color-accent-subtle);
+}
+
+.nav-dropdown-item-label {
+    font-weight: 600;
+    font-size: 0.8125rem;
+}
+
+.nav-dropdown-item-hint {
+    font-size: 0.6875rem;
+    color: var(--color-text-muted);
+    line-height: 1.35;
+}
+
+.nav-dropdown-item-active .nav-dropdown-item-hint {
+    color: var(--color-text-secondary);
+}
+
+/* Mobile nav groups inside drawer */
+.nav-mobile-group {
+    margin-top: 0.35rem;
+    padding-top: 0.35rem;
+    border-top: 1px solid var(--color-border-subtle);
+}
+
+.nav-mobile-group:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+.nav-mobile-group-label {
+    padding: 0.5rem 1rem 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+.nav-mobile-group-active .nav-mobile-group-label {
+    color: var(--color-accent);
+}
+
+.nav-leaf-hint {
+    display: none;
 }
 
 /* Mobile nav toggle — hidden on desktop */
@@ -308,10 +482,7 @@ a:hover {
         top: 0;
         right: 0;
         bottom: 0;
-        width: min(280px, 85vw);
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0;
+        width: min(300px, 88vw);
         padding: 4rem 1rem 1.5rem;
         background: var(--color-bg-elevated);
         border-left: 1px solid var(--color-border-default);
@@ -323,6 +494,17 @@ a:hover {
             box-shadow var(--duration-normal) ease,
             visibility 0s linear var(--duration-normal);
         box-shadow: none;
+        overflow-y: auto;
+    }
+
+    .nav-desktop-row {
+        display: none;
+    }
+
+    .nav-mobile-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
     }
 
     .nav-open {
@@ -343,11 +525,26 @@ a:hover {
         padding: 0.875rem 1rem;
         border-radius: var(--radius-md);
         font-size: 0.9375rem;
+        width: 100%;
     }
 
     .nav-link-active::before {
         left: 1rem;
         right: 1rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1100px) {
+    .site-brand-text {
+        max-width: 9rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .nav-link,
+    .nav-dropdown-trigger {
+        padding: 0.45rem 0.6rem;
+        font-size: 0.75rem;
     }
 }
 
@@ -975,6 +1172,65 @@ pre {
 /* ==========================================================================
    Trace timeline — step-by-step run visualization
    ========================================================================== */
+
+.trace-step-nav {
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.trace-step-nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.trace-step-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border-subtle);
+    background: var(--color-bg-elevated);
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+    text-decoration: none;
+    transition:
+        border-color var(--duration-fast),
+        color var(--duration-fast),
+        background var(--duration-fast);
+}
+
+.trace-step-nav-link:hover {
+    border-color: var(--color-accent-muted);
+    color: var(--color-text-primary);
+    background: var(--color-bg-card-hover);
+}
+
+.trace-step-nav-num {
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+.trace-step-nav-role {
+    display: none;
+}
+
+@media (min-width: 720px) {
+    .trace-step-nav-role {
+        display: inline;
+    }
+}
+
+.trace-step:target .trace-step-body {
+    outline: 2px solid var(--color-accent-muted);
+    outline-offset: 2px;
+}
 
 .trace-timeline {
     position: relative;

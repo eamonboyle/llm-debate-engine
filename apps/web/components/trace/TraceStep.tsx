@@ -251,6 +251,7 @@ export function TraceStep({
 
     return (
         <div
+            id={`step-${step.id}`}
             className={`trace-step ${isLast ? "trace-step-last" : ""}`}
             style={{ animationDelay: `${index * 0.04}s` }}
         >

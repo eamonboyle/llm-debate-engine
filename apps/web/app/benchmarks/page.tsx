@@ -14,12 +14,11 @@ import {
     loadBenchmarkArtifacts,
     loadRunArtifacts,
 } from "../../lib/data";
-import { sortArtifactsByCreatedAt } from "../../lib/artifactSort";
 import {
-    buildQueryString,
-    paginateItems,
-    resolveSortOrder,
-} from "../../lib/listPagination";
+    resolveBenchmarkSortOrder,
+    sortBenchmarkArtifacts,
+} from "../../lib/artifactSort";
+import { buildQueryString, paginateItems } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
     title: "Benchmarks",
@@ -56,8 +55,8 @@ export default async function BenchmarksPage({
         from: params.from,
         to: params.to,
     });
-    const sort = resolveSortOrder(params.sort);
-    const sorted = sortArtifactsByCreatedAt(filtered, sort);
+    const sort = resolveBenchmarkSortOrder(params.sort);
+    const sorted = sortBenchmarkArtifacts(filtered, sort);
     const paging = paginateItems(sorted, params, {
         defaultPageSize: 25,
         maxPageSize: 200,
@@ -168,6 +167,18 @@ export default async function BenchmarksPage({
                         >
                             <option value="newest">Sort: newest first</option>
                             <option value="oldest">Sort: oldest first</option>
+                            <option value="entropy_desc">
+                                Sort: highest entropy
+                            </option>
+                            <option value="modes_desc">
+                                Sort: most answer modes
+                            </option>
+                            <option value="stability_desc">
+                                Sort: highest stability
+                            </option>
+                            <option value="runs_desc">
+                                Sort: most runs per benchmark
+                            </option>
                         </select>
                         <select
                             name="pageSize"
