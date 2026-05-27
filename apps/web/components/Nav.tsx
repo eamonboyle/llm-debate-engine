@@ -252,11 +252,7 @@ function NavDropdown({
                 className={`nav-dropdown-flyout ${open ? "nav-dropdown-flyout-open" : ""}`}
                 aria-hidden={!open}
             >
-                <div
-                    id={panelId}
-                    className="nav-dropdown-panel"
-                    role="menu"
-                >
+                <div id={panelId} className="nav-dropdown-panel" role="menu">
                     {items.map((item) => (
                         <Link
                             key={item.href}
