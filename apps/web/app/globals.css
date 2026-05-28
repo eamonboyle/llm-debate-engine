@@ -1856,3 +1856,69 @@ pre {
 .markdown-report li {
     margin-bottom: 0.35rem;
 }
+
+/* Activity feed */
+.activity-kind {
+    display: inline-block;
+    padding: 0.15rem 0.45rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border-subtle);
+}
+
+.activity-kind-run {
+    color: var(--color-data-cyan);
+    background: rgba(34, 211, 238, 0.08);
+}
+
+.activity-kind-benchmark {
+    color: var(--color-data-violet);
+    background: rgba(167, 139, 250, 0.08);
+}
+
+/* Pipeline reference */
+.pipeline-preset-block {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.pipeline-preset-block:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.pipeline-preset-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+}
+
+.pipeline-preset-title {
+    margin: 0;
+    font-size: 1rem;
+    font-family: var(--font-display);
+}
+
+.pipeline-step-list {
+    margin: 0.5rem 0 0;
+    padding-left: 1.25rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+}
+
+.kbd-hint {
+    display: inline-block;
+    padding: 0.1rem 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-sm);
+}

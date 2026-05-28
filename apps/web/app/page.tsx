@@ -85,6 +85,15 @@ export default async function OverviewPage() {
                     <a href="/catalog" className="button secondary">
                         Experiment catalog
                     </a>
+                    <a href="/activity" className="button secondary">
+                        Activity feed
+                    </a>
+                    <a href="/pipeline" className="button secondary">
+                        Pipeline reference
+                    </a>
+                    <a href="/glossary" className="button secondary">
+                        Glossary
+                    </a>
                     <a href="/report" className="button secondary">
                         Analysis report
                     </a>

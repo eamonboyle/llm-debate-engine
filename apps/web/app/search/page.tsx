@@ -33,7 +33,9 @@ export default async function SearchPage({
                     <h1 className="title">Search artifacts</h1>
                     <p className="subtitle">
                         Search across run traces, benchmarks, and research
-                        questions in one place.
+                        questions in one place. Press{" "}
+                        <kbd className="kbd-hint">/</kbd> from any page to open
+                        search.
                     </p>
                 </div>
                 <form className="card" method="get" action="/search">

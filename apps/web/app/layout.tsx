@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Sora, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import { Nav } from "../components/Nav";
+import { SearchKeyboardShortcut } from "../components/SearchKeyboardShortcut";
 import { TooltipProviderWrapper } from "../components/TooltipProviderWrapper";
 
 const sora = Sora({
@@ -71,6 +72,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
             <body className={ibmPlexSans.className}>
                 <TooltipProviderWrapper>
+                    <SearchKeyboardShortcut />
                     <main className="page-shell">
                         <Nav />
                         {children}

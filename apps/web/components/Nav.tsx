@@ -16,7 +16,11 @@ type NavEntry =
 
 const NAV_ENTRIES: NavEntry[] = [
     { type: "link", href: "/", label: "Overview" },
-    { type: "link", href: "/search", label: "Search" },
+    {
+        type: "link",
+        href: "/search",
+        label: "Search",
+    },
     {
         type: "group",
         label: "Explore",
@@ -31,12 +35,22 @@ const NAV_ENTRIES: NavEntry[] = [
                 label: "Catalog",
                 hint: "Models and presets",
             },
+            {
+                href: "/pipeline",
+                label: "Pipeline",
+                hint: "Presets and agents",
+            },
         ],
     },
     {
         type: "group",
         label: "Runs",
         items: [
+            {
+                href: "/activity",
+                label: "Activity",
+                hint: "Chronological timeline",
+            },
             {
                 href: "/runs",
                 label: "All runs",
@@ -73,6 +87,11 @@ const NAV_ENTRIES: NavEntry[] = [
                 href: "/report",
                 label: "Report",
                 hint: "Markdown analysis export",
+            },
+            {
+                href: "/glossary",
+                label: "Glossary",
+                hint: "Metric definitions",
             },
             {
                 href: "/status",
