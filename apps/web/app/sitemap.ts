@@ -28,6 +28,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             changeFrequency: "weekly",
             priority: 0.85,
         },
+        {
+            url: `${SITE_URL}/pipeline`,
+            changeFrequency: "monthly",
+            priority: 0.75,
+        },
+        {
+            url: `${SITE_URL}/activity`,
+            changeFrequency: "weekly",
+            priority: 0.82,
+        },
+        {
+            url: `${SITE_URL}/glossary`,
+            changeFrequency: "monthly",
+            priority: 0.7,
+        },
         { url: `${SITE_URL}/runs`, changeFrequency: "weekly", priority: 0.9 },
         {
             url: `${SITE_URL}/benchmarks`,

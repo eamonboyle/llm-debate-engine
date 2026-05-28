@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const METRIC_ITEMS = [
     {
         key: "modeCount",
@@ -71,8 +73,8 @@ export function MetricGlossary() {
                 </table>
             </div>
             <p className="small muted" style={{ marginTop: 10 }}>
-                See <code>docs/chart-interpretation.md</code> for deeper
-                guidance.
+                <Link href="/glossary">Full glossary</Link> · see{" "}
+                <code>docs/chart-interpretation.md</code> for deeper guidance.
             </p>
         </div>
     );
