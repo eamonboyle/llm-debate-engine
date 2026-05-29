@@ -207,11 +207,14 @@ Data is loaded from local filesystem artifacts in `runs/`. If `analysis-index.js
 
 **Data status** — `/status` shows artifact counts, analysis index readiness, and skipped-file diagnostics.
 
+**Insights** — `/leaderboard` compares average critique and confidence metrics per model; `/issues` drills into skeptic issue types; `/outliers` lists low-similarity benchmark runs from the analysis index.
+
 **REST API** — Endpoints exposed by the web app:
 
 - `GET /api/status`
 - `GET /api/analysis`
 - `GET /api/analysis/report`
+- `GET /api/analysis/csv/runs` and `GET /api/analysis/csv/benchmarks`
 - `GET /api/runs`
 - `GET /api/runs/:id`
 - `GET /api/runs/compare?left=:id&right=:id`

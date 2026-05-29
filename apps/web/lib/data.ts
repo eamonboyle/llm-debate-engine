@@ -24,15 +24,20 @@ export type AnalysisIndex = {
         pipelinePreset: string;
         fastMode: boolean;
         finalAnswerPreview: string;
+        stepCount?: number;
         confidence: {
             solver?: number;
             revision?: number;
             synthesizer?: number;
             calibratedAdjusted?: number;
+            solverToRevisionDelta?: number;
+            revisionToSynthesizerDelta?: number;
         };
         critique: {
             issueCount: number;
             maxSeverity?: number;
+            avgSeverity?: number;
+            byType?: Record<string, number>;
         };
         research?: {
             evidenceRiskLevel?: number;
@@ -420,11 +425,15 @@ export async function loadBenchmarksByQuestion(
         );
 }
 
+export type AnalysisCsvKind = "runs" | "benchmarks";
+
 export type DataStatus = {
     runsDirLabel: string;
     hasAnalysisIndex: boolean;
     hasAnalysisBundle: boolean;
     hasAnalysisReport: boolean;
+    hasAnalysisRunsCsv: boolean;
+    hasAnalysisBenchmarksCsv: boolean;
     hasBenchmarkPairs: boolean;
     analysisGeneratedAt: string | null;
     artifactCounts: { runs: number; benchmarks: number };
@@ -450,12 +459,19 @@ export async function loadDataStatus(): Promise<DataStatus> {
         loadAnalysisReport(),
     ]);
 
-    const [hasAnalysisIndex, hasAnalysisBundle, hasBenchmarkPairs] =
-        await Promise.all([
-            pathExists(join(runsDir, "analysis-index.json")),
-            pathExists(join(runsDir, "analysis-bundle.json")),
-            pathExists(join(runsDir, "analysis-benchmark-pairs.json")),
-        ]);
+    const [
+        hasAnalysisIndex,
+        hasAnalysisBundle,
+        hasAnalysisRunsCsv,
+        hasAnalysisBenchmarksCsv,
+        hasBenchmarkPairs,
+    ] = await Promise.all([
+        pathExists(join(runsDir, "analysis-index.json")),
+        pathExists(join(runsDir, "analysis-bundle.json")),
+        pathExists(join(runsDir, "analysis-runs.csv")),
+        pathExists(join(runsDir, "analysis-benchmarks.csv")),
+        pathExists(join(runsDir, "analysis-benchmark-pairs.json")),
+    ]);
 
     return {
         runsDirLabel: process.env.RUNS_DIR
@@ -464,6 +480,8 @@ export async function loadDataStatus(): Promise<DataStatus> {
         hasAnalysisIndex,
         hasAnalysisBundle,
         hasAnalysisReport: Boolean(report),
+        hasAnalysisRunsCsv,
+        hasAnalysisBenchmarksCsv,
         hasBenchmarkPairs,
         analysisGeneratedAt: index?.generatedAt ?? null,
         artifactCounts: {
@@ -480,6 +498,24 @@ export async function loadAnalysisReport(): Promise<string | null> {
     const reportPath = join(runsDir, "analysis-report.md");
     try {
         const content = await readFile(reportPath, "utf-8");
+        return content.trim() ? content : null;
+    } catch {
+        return null;
+    }
+}
+
+const ANALYSIS_CSV_FILES: Record<AnalysisCsvKind, string> = {
+    runs: "analysis-runs.csv",
+    benchmarks: "analysis-benchmarks.csv",
+};
+
+export async function loadAnalysisCsv(
+    kind: AnalysisCsvKind,
+): Promise<string | null> {
+    const runsDir = getRunsDir();
+    const csvPath = join(runsDir, ANALYSIS_CSV_FILES[kind]);
+    try {
+        const content = await readFile(csvPath, "utf-8");
         return content.trim() ? content : null;
     } catch {
         return null;

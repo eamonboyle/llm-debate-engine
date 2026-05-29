@@ -84,6 +84,21 @@ const NAV_ENTRIES: NavEntry[] = [
         label: "Insights",
         items: [
             {
+                href: "/leaderboard",
+                label: "Leaderboard",
+                hint: "Per-model run metrics",
+            },
+            {
+                href: "/issues",
+                label: "Critique issues",
+                hint: "Skeptic issue breakdown",
+            },
+            {
+                href: "/outliers",
+                label: "Outliers",
+                hint: "Low-similarity benchmark runs",
+            },
+            {
                 href: "/report",
                 label: "Report",
                 hint: "Markdown analysis export",

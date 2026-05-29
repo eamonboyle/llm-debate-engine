@@ -94,6 +94,15 @@ export default async function OverviewPage() {
                     <a href="/glossary" className="button secondary">
                         Glossary
                     </a>
+                    <a href="/leaderboard" className="button secondary">
+                        Model leaderboard
+                    </a>
+                    <a href="/issues" className="button secondary">
+                        Critique issues
+                    </a>
+                    <a href="/outliers" className="button secondary">
+                        Outlier runs
+                    </a>
                     <a href="/report" className="button secondary">
                         Analysis report
                     </a>

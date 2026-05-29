@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { GET as getStatus } from "./status/route";
 import { GET as getAnalysis } from "./analysis/route";
 import { GET as getAnalysisReport } from "./analysis/report/route";
+import { GET as getAnalysisCsv } from "./analysis/csv/[kind]/route";
 import { GET as getBenchmarks } from "./benchmarks/route";
 import { GET as getBenchmarksCompare } from "./benchmarks/compare/route";
 import { GET as getRunById } from "./runs/[id]/route";
@@ -138,6 +139,28 @@ describe("web api routes", () => {
             new Request("http://localhost/api/analysis/report"),
         );
         expect(response.status).toBe(404);
+    });
+
+    it("returns analysis CSV exports", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-runs.csv"),
+            "id,question\nrun_1,Q\n",
+            "utf-8",
+        );
+
+        const response = await getAnalysisCsv(new Request("http://x"), {
+            params: Promise.resolve({ kind: "runs" }),
+        });
+        expect(response.status).toBe(200);
+        expect(response.headers.get("content-type")).toContain("text/csv");
+        expect(await response.text()).toContain("run_1");
+
+        const badKind = await getAnalysisCsv(new Request("http://x"), {
+            params: Promise.resolve({ kind: "invalid" }),
+        });
+        expect(badKind.status).toBe(400);
     });
 
     it("returns run and benchmark resources by id", async () => {
