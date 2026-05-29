@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { loadAnalysisIndex, loadAnalysisReport } from "../../lib/data";
+import {
+    loadAnalysisIndex,
+    loadAnalysisReport,
+    loadDataStatus,
+} from "../../lib/data";
 import { renderSimpleMarkdown } from "../../lib/simpleMarkdown";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
 
@@ -9,9 +13,10 @@ export const metadata: Metadata = {
 };
 
 export default async function AnalysisReportPage() {
-    const [report, index] = await Promise.all([
+    const [report, index, status] = await Promise.all([
         loadAnalysisReport(),
         loadAnalysisIndex(),
+        loadDataStatus(),
     ]);
 
     if (!report) {
@@ -63,6 +68,24 @@ export default async function AnalysisReportPage() {
                     >
                         View JSON export
                     </a>
+                    {status.hasAnalysisRunsCsv ? (
+                        <a
+                            href="/api/analysis/csv/runs"
+                            className="button secondary"
+                            download="analysis-runs.csv"
+                        >
+                            Download runs CSV
+                        </a>
+                    ) : null}
+                    {status.hasAnalysisBenchmarksCsv ? (
+                        <a
+                            href="/api/analysis/csv/benchmarks"
+                            className="button secondary"
+                            download="analysis-benchmarks.csv"
+                        >
+                            Download benchmarks CSV
+                        </a>
+                    ) : null}
                 </div>
             </div>
 

@@ -16,6 +16,8 @@ export async function GET() {
             artifacts: artifactsReady,
             analysisIndex: indexReady,
             markdownReport: status.hasAnalysisReport,
+            runsCsv: status.hasAnalysisRunsCsv,
+            benchmarksCsv: status.hasAnalysisBenchmarksCsv,
             benchmarkPairs: status.hasBenchmarkPairs,
         },
         indexGeneratedAt: index?.generatedAt ?? null,

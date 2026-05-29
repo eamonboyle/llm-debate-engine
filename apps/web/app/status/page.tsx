@@ -49,6 +49,20 @@ export default async function DataStatusPage() {
                 ? "analysis-benchmark-pairs.json"
                 : "Optional: pnpm analyze -- --chunks",
         },
+        {
+            item: "Run summary CSV",
+            ok: status.hasAnalysisRunsCsv,
+            hint: status.hasAnalysisRunsCsv
+                ? "analysis-runs.csv"
+                : "Optional: pnpm analyze -- --csv",
+        },
+        {
+            item: "Benchmark summary CSV",
+            ok: status.hasAnalysisBenchmarksCsv,
+            hint: status.hasAnalysisBenchmarksCsv
+                ? "analysis-benchmarks.csv"
+                : "Optional: pnpm analyze -- --csv",
+        },
     ];
 
     return (
@@ -158,6 +172,24 @@ export default async function DataStatusPage() {
                                 rel="noopener noreferrer"
                             >
                                 API: report markdown
+                            </a>
+                        ) : null}
+                        {status.hasAnalysisRunsCsv ? (
+                            <a
+                                href="/api/analysis/csv/runs"
+                                className="button secondary"
+                                download="analysis-runs.csv"
+                            >
+                                Download runs CSV
+                            </a>
+                        ) : null}
+                        {status.hasAnalysisBenchmarksCsv ? (
+                            <a
+                                href="/api/analysis/csv/benchmarks"
+                                className="button secondary"
+                                download="analysis-benchmarks.csv"
+                            >
+                                Download benchmarks CSV
                             </a>
                         ) : null}
                     </div>

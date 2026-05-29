@@ -39,6 +39,8 @@ export const GLOSSARY: Record<string, string> = {
     avgSimilarity:
         "Mean cosine similarity of a run to all other runs in the same benchmark.",
     zScore: "How unusual a run is vs peers; more negative = stronger outlier behavior.",
+    outlierRuns:
+        "Runs ranked by lowest average pairwise similarity within their benchmark — candidates for qualitative review.",
     modeStructure:
         "Distribution of runs across discovered answer modes. Highly skewed (e.g. [n-1, 1]) indicates a single outlier.",
     thresholdSensitivity:

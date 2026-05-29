@@ -11,6 +11,7 @@ import { TraceStepNav } from "../../../components/trace/TraceStepNav";
 import { RunMetricsSummary } from "../../../components/RunMetricsSummary";
 import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
 import { CopyPageLink } from "../../../components/CopyPageLink";
+import { CopyTextButton } from "../../../components/CopyTextButton";
 import { summarizeRun } from "../../../lib/runCompare";
 import { questionHubHref } from "../../../lib/questionGroups";
 
@@ -120,8 +121,22 @@ export default async function RunTracePage({
             </div>
 
             <div className="card trace-final-answer">
-                <h2 style={{ marginTop: 0 }}>Final answer</h2>
-                <p>{run.run.finalAnswer}</p>
+                <div
+                    style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 10,
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                    }}
+                >
+                    <h2 style={{ margin: 0 }}>Final answer</h2>
+                    <CopyTextButton
+                        text={run.run.finalAnswer}
+                        label="Copy answer"
+                    />
+                </div>
+                <p style={{ marginTop: "1rem" }}>{run.run.finalAnswer}</p>
             </div>
 
             <div className="card">
