@@ -44,6 +44,12 @@ export type AnalysisIndex = {
             counterfactualFailureModeCount?: number;
             topCounterfactualFailureMode?: string;
         };
+        quality?: {
+            coherence?: number;
+            completeness?: number;
+            factualRisk?: number;
+            uncertaintyHandling?: number;
+        };
     }>;
     benchmarks: Array<{
         id: string;

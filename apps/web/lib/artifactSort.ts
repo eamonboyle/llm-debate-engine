@@ -7,7 +7,8 @@ export type RunSortOrder =
     | "issues_desc"
     | "issues_asc"
     | "evidence_risk_desc"
-    | "solver_conf_desc";
+    | "solver_conf_desc"
+    | "drift_desc";
 
 export type BenchmarkSortOrder =
     | ArtifactSortOrder
@@ -23,6 +24,7 @@ const RUN_SORT_ORDERS = new Set<RunSortOrder>([
     "issues_asc",
     "evidence_risk_desc",
     "solver_conf_desc",
+    "drift_desc",
 ]);
 
 const BENCHMARK_SORT_ORDERS = new Set<BenchmarkSortOrder>([
@@ -80,6 +82,13 @@ function runEvidenceRisk(run: RunArtifact): number | null {
 
 function runSolverConfidence(run: RunArtifact): number | null {
     return toNumberOrNull(run.run.metrics.confidence?.solver);
+}
+
+function runConfidenceDriftMagnitude(run: RunArtifact): number | null {
+    const delta = toNumberOrNull(
+        run.run.metrics.confidence?.solverToRevisionDelta,
+    );
+    return delta == null ? null : Math.abs(delta);
 }
 
 function benchmarkStability(benchmark: BenchmarkArtifact): number | null {
@@ -166,6 +175,12 @@ export function sortRunArtifacts(
             cmp = compareNullableNumbers(
                 runSolverConfidence(a),
                 runSolverConfidence(b),
+                "desc",
+            );
+        } else if (order === "drift_desc") {
+            cmp = compareNullableNumbers(
+                runConfidenceDriftMagnitude(a),
+                runConfidenceDriftMagnitude(b),
                 "desc",
             );
         }

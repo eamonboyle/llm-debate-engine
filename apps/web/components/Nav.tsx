@@ -89,6 +89,16 @@ const NAV_ENTRIES: NavEntry[] = [
                 hint: "Per-model run metrics",
             },
             {
+                href: "/presets",
+                label: "Preset leaderboard",
+                hint: "Per-pipeline preset metrics",
+            },
+            {
+                href: "/quality",
+                label: "Quality insights",
+                hint: "Judge rubric scores",
+            },
+            {
                 href: "/issues",
                 label: "Critique issues",
                 hint: "Skeptic issue breakdown",

@@ -98,6 +98,22 @@ describe("artifact sort helpers", () => {
         expect(sorted.map((r) => r.id)).toEqual(["high", "low"]);
     });
 
+    it("sorts runs by absolute confidence drift descending", () => {
+        const runs = [
+            makeRun("small", "2025-01-01T00:00:00.000Z", {
+                confidence: { solverToRevisionDelta: -0.05 },
+            }),
+            makeRun("large", "2025-01-01T00:00:00.000Z", {
+                confidence: { solverToRevisionDelta: 0.4 },
+            }),
+            makeRun("mid", "2025-01-01T00:00:00.000Z", {
+                confidence: { solverToRevisionDelta: -0.25 },
+            }),
+        ];
+        const sorted = sortRunArtifacts(runs, "drift_desc");
+        expect(sorted.map((r) => r.id)).toEqual(["large", "mid", "small"]);
+    });
+
     it("sorts benchmarks by entropy descending", () => {
         const benchmarks = [
             makeBenchmark("low", "2025-01-01T00:00:00.000Z", {

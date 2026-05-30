@@ -97,6 +97,12 @@ export default async function OverviewPage() {
                     <a href="/leaderboard" className="button secondary">
                         Model leaderboard
                     </a>
+                    <a href="/presets" className="button secondary">
+                        Preset leaderboard
+                    </a>
+                    <a href="/quality" className="button secondary">
+                        Quality insights
+                    </a>
                     <a href="/issues" className="button secondary">
                         Critique issues
                     </a>
