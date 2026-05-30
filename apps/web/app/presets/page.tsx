@@ -2,25 +2,25 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
 import { loadAnalysisIndex } from "../../lib/data";
-import { buildModelLeaderboard } from "../../lib/modelLeaderboard";
+import { buildPresetLeaderboard } from "../../lib/presetLeaderboard";
 
 export const metadata: Metadata = {
-    title: "Model leaderboard",
+    title: "Preset leaderboard",
 };
 
 function formatMetric(value: number | null, digits = 2) {
     return typeof value === "number" ? value.toFixed(digits) : "—";
 }
 
-export default async function ModelLeaderboardPage() {
+export default async function PresetLeaderboardPage() {
     const index = await loadAnalysisIndex();
 
     if (!index) {
         return (
             <section className="stack">
-                <h1 className="title">Model leaderboard</h1>
+                <h1 className="title">Preset leaderboard</h1>
                 <p className="subtitle">
-                    Aggregated run metrics require an analysis index. Run{" "}
+                    Pipeline preset comparisons require an analysis index. Run{" "}
                     <code>pnpm analyze</code> after adding run artifacts.
                 </p>
                 <Link href="/status" className="button">
@@ -30,32 +30,29 @@ export default async function ModelLeaderboardPage() {
         );
     }
 
-    const rows = buildModelLeaderboard(index);
+    const rows = buildPresetLeaderboard(index);
 
     return (
         <section className="stack">
             <div>
-                <h1 className="title">Model leaderboard</h1>
+                <h1 className="title">Preset leaderboard</h1>
                 <p className="subtitle">
-                    Average critique pressure and confidence drift per model
-                    across {index.totals.runs} indexed runs. Use the catalog for
-                    raw artifact counts.
+                    Average critique pressure, confidence drift, and judge
+                    rubric scores per pipeline preset across {index.totals.runs}{" "}
+                    indexed runs.
                 </p>
                 <div
                     className="page-actions"
                     style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
                 >
+                    <Link href="/leaderboard" className="button secondary">
+                        Model leaderboard
+                    </Link>
+                    <Link href="/pipeline" className="button secondary">
+                        Pipeline reference
+                    </Link>
                     <Link href="/catalog" className="button secondary">
                         Experiment catalog
-                    </Link>
-                    <Link href="/presets" className="button secondary">
-                        Preset leaderboard
-                    </Link>
-                    <Link href="/quality" className="button secondary">
-                        Quality insights
-                    </Link>
-                    <Link href="/issues" className="button secondary">
-                        Critique issues
                     </Link>
                 </div>
             </div>
@@ -66,7 +63,11 @@ export default async function ModelLeaderboardPage() {
                 ) : (
                     <ResponsiveTable
                         columns={[
-                            { key: "model", label: "Model", helpKey: "model" },
+                            {
+                                key: "preset",
+                                label: "Preset",
+                                helpKey: "preset",
+                            },
                             { key: "runCount", label: "Runs" },
                             {
                                 key: "avgIssueCount",
@@ -84,18 +85,14 @@ export default async function ModelLeaderboardPage() {
                                 helpKey: "solverToRevisionDelta",
                             },
                             {
-                                key: "avgEvidenceRisk",
-                                label: "Avg evidence risk",
-                                helpKey: "evidenceRiskLevel",
-                            },
-                            {
-                                key: "avgSolverConfidence",
-                                label: "Avg solver conf.",
-                                helpKey: "solverConfidence",
+                                key: "avgCoherence",
+                                label: "Avg coherence",
+                                helpKey: "coherence",
                             },
                             {
                                 key: "explore",
                                 label: "Explore",
+                                cellClass: "cell-actions",
                                 render: (row) => (
                                     <Link
                                         href={
@@ -109,20 +106,17 @@ export default async function ModelLeaderboardPage() {
                             },
                         ]}
                         data={rows.map((row) => ({
-                            ...row,
+                            preset: row.preset,
+                            runCount: row.runCount,
                             avgIssueCount: formatMetric(row.avgIssueCount),
                             avgMaxSeverity: formatMetric(row.avgMaxSeverity),
                             avgSolverToRevisionDelta: formatMetric(
                                 row.avgSolverToRevisionDelta,
-                                3,
                             ),
-                            avgEvidenceRisk: formatMetric(row.avgEvidenceRisk),
-                            avgSolverConfidence: formatMetric(
-                                row.avgSolverConfidence,
-                                3,
-                            ),
+                            avgCoherence: formatMetric(row.avgCoherence),
+                            runsHref: row.runsHref,
                         }))}
-                        getRowId={(row) => (row as { model: string }).model}
+                        getRowId={(row) => (row as { preset: string }).preset}
                         renderCardActions={(row) => (
                             <Link
                                 href={(row as { runsHref: string }).runsHref}

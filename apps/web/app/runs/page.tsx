@@ -128,6 +128,9 @@ export default async function RunsPage({
                         <option value="solver_conf_desc">
                             Sort: highest solver confidence
                         </option>
+                        <option value="drift_desc">
+                            Sort: largest confidence drift
+                        </option>
                     </select>
                     <select
                         name="pageSize"

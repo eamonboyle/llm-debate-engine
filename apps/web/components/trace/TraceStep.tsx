@@ -10,7 +10,27 @@ type Step = {
     output?: unknown;
     error?: string;
     createdAt?: string;
+    completedAt?: string;
 };
+
+function formatStepDuration(
+    createdAt: string | undefined,
+    completedAt: string | undefined,
+): string | null {
+    if (!createdAt || !completedAt) return null;
+    const start = Date.parse(createdAt);
+    const end = Date.parse(completedAt);
+    if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) {
+        return null;
+    }
+    const ms = end - start;
+    if (ms < 1000) return `${ms}ms`;
+    const seconds = ms / 1000;
+    if (seconds < 60) return `${seconds.toFixed(1)}s`;
+    const minutes = Math.floor(seconds / 60);
+    const remainder = Math.round(seconds % 60);
+    return `${minutes}m ${remainder}s`;
+}
 
 function isRecord(v: unknown): v is Record<string, unknown> {
     return typeof v === "object" && v !== null;
@@ -248,6 +268,7 @@ export function TraceStep({
     const [jsonOpen, setJsonOpen] = useState(false);
     const kind = getStepKind(step.output);
     const kindColor = kind ? getKindColor(kind) : "var(--color-text-muted)";
+    const duration = formatStepDuration(step.createdAt, step.completedAt);
 
     return (
         <div
@@ -314,6 +335,11 @@ export function TraceStep({
                                 {new Date(step.createdAt).toLocaleString()}
                             </span>
                         )}
+                        {duration ? (
+                            <span className="trace-step-duration">
+                                {duration}
+                            </span>
+                        ) : null}
                         {step.error && (
                             <span className="trace-step-error">
                                 {step.error}
