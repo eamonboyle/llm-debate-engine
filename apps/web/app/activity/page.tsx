@@ -107,7 +107,11 @@ export default async function ActivityPage({
                         <option value="run">Runs only</option>
                         <option value="benchmark">Benchmarks only</option>
                     </select>
-                    <select name="fast" defaultValue={params.fast ?? ""} className="input">
+                    <select
+                        name="fast"
+                        defaultValue={params.fast ?? ""}
+                        className="input"
+                    >
                         <option value="">Fast mode: any</option>
                         <option value="true">Fast only</option>
                         <option value="false">Non-fast only</option>

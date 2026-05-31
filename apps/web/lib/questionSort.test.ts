@@ -43,11 +43,19 @@ describe("questionSort", () => {
 
     it("sorts by most runs", () => {
         const sorted = sortQuestionGroups(groups, "most-runs");
-        expect(sorted.map((g) => g.question)).toEqual(["Beta", "Alpha", "Gamma"]);
+        expect(sorted.map((g) => g.question)).toEqual([
+            "Beta",
+            "Alpha",
+            "Gamma",
+        ]);
     });
 
     it("sorts by most experiments", () => {
         const sorted = sortQuestionGroups(groups, "most-experiments");
-        expect(sorted.map((g) => g.question)).toEqual(["Beta", "Gamma", "Alpha"]);
+        expect(sorted.map((g) => g.question)).toEqual([
+            "Beta",
+            "Gamma",
+            "Alpha",
+        ]);
     });
 });

@@ -1,6 +1,7 @@
-export function filterByQuestionScope<
-    T extends { question: string },
->(items: T[], question: string | undefined): T[] {
+export function filterByQuestionScope<T extends { question: string }>(
+    items: T[],
+    question: string | undefined,
+): T[] {
     const needle = (question ?? "").trim().toLowerCase();
     if (!needle) return items;
     return items.filter((item) => item.question.toLowerCase().includes(needle));
