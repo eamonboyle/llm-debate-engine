@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CollapsibleFilterCard } from "../../components/CollapsibleFilterCard";
 import { ExportFilteredLink } from "../../components/ExportFilteredLink";
+import { ModelFilterSelect } from "../../components/ModelFilterSelect";
 import { PresetFilterSelect } from "../../components/PresetFilterSelect";
 import {
     ResponsiveTable,
@@ -41,7 +42,7 @@ export default async function RunsPage({
 }) {
     const runs = await loadRunArtifacts();
     const benchmarks = await loadBenchmarkArtifacts();
-    const { presets } = collectArtifactFacets(runs, benchmarks);
+    const { models, presets } = collectArtifactFacets(runs, benchmarks);
     const params = await searchParams;
     const filtered = filterRunArtifacts(runs, {
         q: params.q,
@@ -82,11 +83,9 @@ export default async function RunsPage({
                         defaultValue={params.q ?? ""}
                         className="input"
                     />
-                    <input
-                        name="model"
-                        placeholder="Model contains..."
+                    <ModelFilterSelect
+                        models={models}
                         defaultValue={params.model ?? ""}
-                        className="input"
                     />
                     <PresetFilterSelect
                         presets={presets}

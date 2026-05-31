@@ -102,10 +102,18 @@ export default async function QuestionHubPage({
                     </Link>
                     {compareLeft && compareRight ? (
                         <Link
-                            href={`/runs/compare?left=${compareLeft}&right=${compareRight}`}
+                            href={`/runs/compare?left=${compareLeft}&right=${compareRight}&question=${encodeURIComponent(question)}`}
                             className="button secondary"
                         >
                             Compare latest two runs
+                        </Link>
+                    ) : null}
+                    {runs.length >= 2 ? (
+                        <Link
+                            href={`/runs/compare?question=${encodeURIComponent(question)}`}
+                            className="button secondary"
+                        >
+                            Compare runs (picker)
                         </Link>
                     ) : null}
                 </div>

@@ -65,4 +65,17 @@ describe("buildActivityFeed", () => {
         });
         expect(alpha.map((e) => e.id)).toEqual(["bench_a", "run_a"]);
     });
+
+    it("filters by model, preset, and fast mode", () => {
+        const deepFast = buildActivityFeed([runA, runB], [benchmarkA], {
+            preset: "research_deep",
+            fast: "true",
+        });
+        expect(deepFast.map((e) => e.id)).toEqual(["bench_a"]);
+
+        const gptA = buildActivityFeed([runA, runB], [benchmarkA], {
+            model: "gpt-a",
+        });
+        expect(gptA.map((e) => e.id)).toEqual(["bench_a", "run_b", "run_a"]);
+    });
 });

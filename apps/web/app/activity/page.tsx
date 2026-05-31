@@ -4,7 +4,10 @@ import {
     ResponsiveTable,
     TruncateText,
 } from "../../components/ResponsiveTable";
+import { PresetFilterSelect } from "../../components/PresetFilterSelect";
+import { ModelFilterSelect } from "../../components/ModelFilterSelect";
 import { buildActivityFeed } from "../../lib/activityFeed";
+import { collectArtifactFacets } from "../../lib/artifactFacets";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
 import { buildQueryString, paginateItems } from "../../lib/listPagination";
 
@@ -15,6 +18,11 @@ export const metadata: Metadata = {
 type ActivitySearchParams = {
     q?: string;
     kind?: string;
+    model?: string;
+    preset?: string;
+    fast?: string;
+    from?: string;
+    to?: string;
     page?: string;
     pageSize?: string;
 };
@@ -35,9 +43,15 @@ export default async function ActivityPage({
         loadRunArtifacts(),
         loadBenchmarkArtifacts(),
     ]);
+    const { models, presets } = collectArtifactFacets(runs, benchmarks);
     const feed = buildActivityFeed(runs, benchmarks, {
         kind,
         q: params.q,
+        model: params.model,
+        preset: params.preset,
+        fast: params.fast,
+        from: params.from,
+        to: params.to,
     });
     const paging = paginateItems(feed, params, {
         defaultPageSize: 25,
@@ -79,11 +93,43 @@ export default async function ActivityPage({
                         defaultValue={params.q ?? ""}
                         className="input"
                     />
+                    <ModelFilterSelect
+                        models={models}
+                        defaultValue={params.model ?? ""}
+                        listId="activity-model-filter-options"
+                    />
+                    <PresetFilterSelect
+                        presets={presets}
+                        defaultValue={params.preset ?? ""}
+                    />
                     <select name="kind" defaultValue={kind} className="input">
                         <option value="all">All activity</option>
                         <option value="run">Runs only</option>
                         <option value="benchmark">Benchmarks only</option>
                     </select>
+                    <select
+                        name="fast"
+                        defaultValue={params.fast ?? ""}
+                        className="input"
+                    >
+                        <option value="">Fast mode: any</option>
+                        <option value="true">Fast only</option>
+                        <option value="false">Non-fast only</option>
+                    </select>
+                    <input
+                        type="datetime-local"
+                        name="from"
+                        defaultValue={params.from ?? ""}
+                        className="input"
+                        title="Created at or after"
+                    />
+                    <input
+                        type="datetime-local"
+                        name="to"
+                        defaultValue={params.to ?? ""}
+                        className="input"
+                        title="Created at or before"
+                    />
                     <select
                         name="pageSize"
                         defaultValue={String(paging.pageSize)}
@@ -211,6 +257,11 @@ export default async function ActivityPage({
                         paging.hasPrev
                             ? buildQueryString(params, {
                                   kind,
+                                  model: params.model,
+                                  preset: params.preset,
+                                  fast: params.fast,
+                                  from: params.from,
+                                  to: params.to,
                                   pageSize: String(paging.pageSize),
                                   page: String(paging.page - 1),
                               })
@@ -235,6 +286,11 @@ export default async function ActivityPage({
                         paging.hasNext
                             ? buildQueryString(params, {
                                   kind,
+                                  model: params.model,
+                                  preset: params.preset,
+                                  fast: params.fast,
+                                  from: params.from,
+                                  to: params.to,
                                   pageSize: String(paging.pageSize),
                                   page: String(paging.page + 1),
                               })
