@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { loadBenchmarkArtifacts, loadBenchmarksByIds } from "../../../lib/data";
+import {
+    compareScopeQuery,
+    filterByQuestionScope,
+} from "../../../lib/compareScope";
 import { CompareDeltaChart } from "../../../components/charts/CompareDeltaChart";
 import { ModeSizeBar } from "../../../components/benchmark/ModeSizeBar";
 import { buildBenchmarkComparePayload } from "../../../lib/benchmarkCompare";
@@ -15,6 +19,7 @@ export const metadata: Metadata = {
 type CompareSearchParams = {
     left?: string;
     right?: string;
+    question?: string;
 };
 
 function formatDelta(value: number | null | undefined): string {
@@ -29,7 +34,9 @@ export default async function BenchmarkComparePage({
     searchParams: Promise<CompareSearchParams>;
 }) {
     const params = await searchParams;
-    const artifacts = await loadBenchmarkArtifacts();
+    const allArtifacts = await loadBenchmarkArtifacts();
+    const artifacts = filterByQuestionScope(allArtifacts, params.question);
+    const scopeParams = compareScopeQuery(params.question);
     const selectedIds = [params.left, params.right].filter(
         (v): v is string => typeof v === "string" && v.length > 0,
     );
@@ -52,6 +59,14 @@ export default async function BenchmarkComparePage({
             </div>
 
             <form className="card" method="get">
+                <div className="filter-grid" style={{ marginBottom: 12 }}>
+                    <input
+                        name="question"
+                        className="input"
+                        placeholder="Limit to question (optional)"
+                        defaultValue={params.question ?? ""}
+                    />
+                </div>
                 <div className="compare-select-grid">
                     <div>
                         <label
@@ -115,6 +130,7 @@ export default async function BenchmarkComparePage({
                         basePath="/benchmarks/compare"
                         left={params.left}
                         right={params.right}
+                        extraParams={scopeParams}
                     />
                     <Link
                         href="/benchmarks/compare"

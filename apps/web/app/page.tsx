@@ -4,14 +4,25 @@ import { ResponsiveTable } from "../components/ResponsiveTable";
 import { OverviewCharts } from "../components/charts/OverviewCharts";
 import { ResearchTrendCharts } from "../components/charts/ResearchTrendCharts";
 import { MetricGlossary } from "../components/MetricGlossary";
-import { loadAnalysisIndex } from "../lib/data";
+import Link from "next/link";
+import { buildActivityFeed } from "../lib/activityFeed";
+import {
+    loadAnalysisIndex,
+    loadBenchmarkArtifacts,
+    loadRunArtifacts,
+} from "../lib/data";
 
 export const metadata: Metadata = {
     title: "Overview",
 };
 
 export default async function OverviewPage() {
-    const index = await loadAnalysisIndex();
+    const [index, runs, benchmarks] = await Promise.all([
+        loadAnalysisIndex(),
+        loadRunArtifacts(),
+        loadBenchmarkArtifacts(),
+    ]);
+    const recentActivity = buildActivityFeed(runs, benchmarks).slice(0, 6);
 
     if (!index) {
         return (
@@ -142,6 +153,70 @@ export default async function OverviewPage() {
                     helpKey="solverToRevisionDelta"
                 />
             </div>
+
+            {recentActivity.length > 0 ? (
+                <div className="card">
+                    <div
+                        style={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: 10,
+                            alignItems: "baseline",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        <h2 style={{ margin: 0 }}>Recent activity</h2>
+                        <Link href="/activity" className="button secondary">
+                            Full timeline
+                        </Link>
+                    </div>
+                    <ResponsiveTable
+                        columns={[
+                            {
+                                key: "kind",
+                                label: "Type",
+                                render: (row) => {
+                                    const k = (row as { kind: string }).kind;
+                                    return k === "run" ? "Run" : "Benchmark";
+                                },
+                            },
+                            {
+                                key: "createdAt",
+                                label: "When",
+                                render: (row) =>
+                                    new Date(
+                                        (row as { createdAt: string })
+                                            .createdAt,
+                                    ).toLocaleString(),
+                            },
+                            {
+                                key: "question",
+                                label: "Question",
+                                render: (row) => {
+                                    const q = (row as { question: string })
+                                        .question;
+                                    return q.length > 72
+                                        ? `${q.slice(0, 72)}…`
+                                        : q;
+                                },
+                            },
+                            {
+                                key: "open",
+                                label: "Open",
+                                render: (row) => (
+                                    <Link href={(row as { href: string }).href}>
+                                        View
+                                    </Link>
+                                ),
+                            },
+                        ]}
+                        data={recentActivity}
+                        getRowId={(row) =>
+                            `${(row as { kind: string }).kind}-${(row as { id: string }).id}`
+                        }
+                    />
+                </div>
+            ) : null}
 
             <div className="grid-4">
                 <MetricCard

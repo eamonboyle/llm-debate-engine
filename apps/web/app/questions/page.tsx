@@ -9,11 +9,11 @@ import {
     groupArtifactsByQuestion,
     questionHubHref,
 } from "../../lib/questionGroups";
+import { buildQueryString, paginateItems } from "../../lib/listPagination";
 import {
-    buildQueryString,
-    paginateItems,
-    resolveSortOrder,
-} from "../../lib/listPagination";
+    resolveQuestionSortOrder,
+    sortQuestionGroups,
+} from "../../lib/questionSort";
 
 export const metadata: Metadata = {
     title: "Questions",
@@ -41,11 +41,8 @@ export default async function QuestionsPage({
         ? groups.filter((group) => group.question.toLowerCase().includes(q))
         : groups;
 
-    const sort = resolveSortOrder(params.sort);
-    const sorted = [...filtered].sort((a, b) => {
-        const cmp = a.latestCreatedAt.localeCompare(b.latestCreatedAt);
-        return sort === "newest" ? -cmp : cmp;
-    });
+    const sort = resolveQuestionSortOrder(params.sort);
+    const sorted = sortQuestionGroups(filtered, sort);
 
     const paging = paginateItems(sorted, params, {
         defaultPageSize: 20,
@@ -73,6 +70,10 @@ export default async function QuestionsPage({
                     <select name="sort" defaultValue={sort} className="input">
                         <option value="newest">Sort: recently updated</option>
                         <option value="oldest">Sort: oldest first</option>
+                        <option value="most-runs">Sort: most runs</option>
+                        <option value="most-experiments">
+                            Sort: most experiments
+                        </option>
                     </select>
                     <select
                         name="pageSize"

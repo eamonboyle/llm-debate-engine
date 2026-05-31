@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { RunCompareDeltaChart } from "../../../components/charts/RunCompareDeltaChart";
 import { InfoTooltip } from "../../../components/InfoTooltip";
 import { loadRunArtifacts } from "../../../lib/data";
+import {
+    compareScopeQuery,
+    filterByQuestionScope,
+} from "../../../lib/compareScope";
 import { buildRunComparePayload } from "../../../lib/runCompare";
 import { CompareSwapLink } from "../../../components/CompareSwapLink";
 import { CopyPageLink } from "../../../components/CopyPageLink";
@@ -30,6 +34,7 @@ export const metadata: Metadata = {
 type CompareSearchParams = {
     left?: string;
     right?: string;
+    question?: string;
 };
 
 function formatMetric(value: number | null) {
@@ -42,7 +47,9 @@ export default async function RunsComparePage({
     searchParams: Promise<CompareSearchParams>;
 }) {
     const params = await searchParams;
-    const runs = await loadRunArtifacts();
+    const allRuns = await loadRunArtifacts();
+    const runs = filterByQuestionScope(allRuns, params.question);
+    const scopeParams = compareScopeQuery(params.question);
     const left = runs.find((run) => run.id === params.left) ?? null;
     const right = runs.find((run) => run.id === params.right) ?? null;
     const compare = left && right ? buildRunComparePayload(left, right) : null;
@@ -94,6 +101,14 @@ export default async function RunsComparePage({
             </div>
 
             <form className="card" method="get">
+                <div className="filter-grid" style={{ marginBottom: 12 }}>
+                    <input
+                        name="question"
+                        className="input"
+                        placeholder="Limit to question (optional)"
+                        defaultValue={params.question ?? ""}
+                    />
+                </div>
                 <div className="two-col" style={{ maxWidth: "100%" }}>
                     <div>
                         <label className="small muted" htmlFor="left" style={{ display: "block", marginBottom: 4 }}>
@@ -140,6 +155,7 @@ export default async function RunsComparePage({
                         basePath="/runs/compare"
                         left={params.left}
                         right={params.right}
+                        extraParams={scopeParams}
                     />
                     <a href="/runs/compare" className="button secondary">
                         Clear
