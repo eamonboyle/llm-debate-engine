@@ -70,6 +70,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             priority: 0.76,
         },
         {
+            url: `${SITE_URL}/counterfactual`,
+            changeFrequency: "weekly",
+            priority: 0.75,
+        },
+        {
+            url: `${SITE_URL}/drift`,
+            changeFrequency: "weekly",
+            priority: 0.75,
+        },
+        {
             url: `${SITE_URL}/outliers`,
             changeFrequency: "weekly",
             priority: 0.74,

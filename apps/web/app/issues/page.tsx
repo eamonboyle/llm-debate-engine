@@ -78,6 +78,25 @@ export default async function IssuesExplorerPage({
                             { key: "totalCount", label: "Total issues" },
                             { key: "runCount", label: "Runs affected" },
                             {
+                                key: "avgSeverity",
+                                label: "Avg severity",
+                                helpKey: "avgSeverity",
+                                hideOnMobile: true,
+                                render: (row) =>
+                                    typeof (row as { avgSeverity?: number })
+                                        .avgSeverity === "number"
+                                        ? (
+                                              row as { avgSeverity: number }
+                                          ).avgSeverity.toFixed(2)
+                                        : "—",
+                            },
+                            {
+                                key: "maxSeverity",
+                                label: "Max severity",
+                                helpKey: "maxSeverity",
+                                hideOnMobile: true,
+                            },
+                            {
                                 key: "explore",
                                 label: "Explore",
                                 render: (row) => {

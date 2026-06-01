@@ -72,6 +72,12 @@ export type AnalysisIndex = {
     }>;
     aggregates: {
         issueTypeCounts: Record<string, number>;
+        issueSeverityByType?: Array<{
+            type: string;
+            count: number;
+            avgSeverity: number;
+            maxSeverity: number;
+        }>;
         confidenceDrift: {
             solverToRevisionMean: number;
             revisionToSynthesizerMean: number;

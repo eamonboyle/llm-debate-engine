@@ -39,6 +39,10 @@ function makeIndex(): AnalysisIndex {
         benchmarks: [],
         aggregates: {
             issueTypeCounts: { factual: 3, logic: 1 },
+            issueSeverityByType: [
+                { type: "factual", count: 3, avgSeverity: 3.5, maxSeverity: 5 },
+                { type: "logic", count: 1, avgSeverity: 2, maxSeverity: 2 },
+            ],
             confidenceDrift: {
                 solverToRevisionMean: 0,
                 revisionToSynthesizerMean: 0,
@@ -58,6 +62,8 @@ describe("issueExplorer", () => {
             type: "factual",
             totalCount: 3,
             runCount: 2,
+            avgSeverity: 3.5,
+            maxSeverity: 5,
         });
     });
 
