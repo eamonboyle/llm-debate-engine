@@ -104,6 +104,16 @@ const NAV_ENTRIES: NavEntry[] = [
                 hint: "Skeptic issue breakdown",
             },
             {
+                href: "/counterfactual",
+                label: "Counterfactual",
+                hint: "Failure mode explorer",
+            },
+            {
+                href: "/drift",
+                label: "Confidence drift",
+                hint: "Stage-to-stage deltas",
+            },
+            {
                 href: "/outliers",
                 label: "Outliers",
                 hint: "Low-similarity benchmark runs",

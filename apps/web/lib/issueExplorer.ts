@@ -4,6 +4,8 @@ export type IssueTypeSummary = {
     type: string;
     totalCount: number;
     runCount: number;
+    avgSeverity?: number;
+    maxSeverity?: number;
 };
 
 export type RunIssueRow = {
@@ -31,12 +33,24 @@ export function buildIssueTypeSummaries(
         }
     }
 
+    const severityByType = new Map(
+        (index.aggregates.issueSeverityByType ?? []).map((entry) => [
+            entry.type,
+            entry,
+        ]),
+    );
+
     return Object.entries(index.aggregates.issueTypeCounts)
-        .map(([type, totalCount]) => ({
-            type,
-            totalCount,
-            runCount: runCounts.get(type) ?? 0,
-        }))
+        .map(([type, totalCount]) => {
+            const severity = severityByType.get(type);
+            return {
+                type,
+                totalCount,
+                runCount: runCounts.get(type) ?? 0,
+                avgSeverity: severity?.avgSeverity,
+                maxSeverity: severity?.maxSeverity,
+            };
+        })
         .sort((a, b) => b.totalCount - a.totalCount);
 }
 

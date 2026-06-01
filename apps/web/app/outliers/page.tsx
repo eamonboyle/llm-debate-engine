@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { MetricCard } from "../../components/MetricCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
-import { loadAnalysisIndex } from "../../lib/data";
+import { findMostSimilarPeerRunId } from "../../lib/benchmarkPeers";
+import { loadAnalysisIndex, loadBenchmarkPairsById } from "../../lib/data";
 
 export const metadata: Metadata = {
     title: "Outlier runs",
@@ -30,6 +31,24 @@ export default async function OutliersPage() {
     const outliers = index.aggregates.outlierRuns ?? [];
     const sorted = [...outliers].sort(
         (a, b) => a.avgSimilarity - b.avgSimilarity,
+    );
+
+    const rows = await Promise.all(
+        sorted.map(async (row) => {
+            const pairsData = await loadBenchmarkPairsById(row.benchmarkId);
+            const peerRunId = findMostSimilarPeerRunId(
+                row.runId,
+                pairsData.runIds,
+                pairsData.pairs,
+            );
+            return {
+                ...row,
+                peerRunId,
+                peerCompareHref: peerRunId
+                    ? `/runs/compare?left=${row.runId}&right=${peerRunId}`
+                    : null,
+            };
+        }),
     );
 
     return (
@@ -85,7 +104,7 @@ export default async function OutliersPage() {
 
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>Ranked outlier list</h2>
-                {sorted.length === 0 ? (
+                {rows.length === 0 ? (
                     <p className="muted">
                         No outlier data in the current index. Re-run analysis
                         after benchmarks with stability pairs are available, or
@@ -131,25 +150,43 @@ export default async function OutliersPage() {
                                 ),
                             },
                             {
+                                key: "peerCompare",
+                                label: "vs peer",
+                                hideOnMobile: true,
+                                render: (row) => {
+                                    const r = row as {
+                                        peerCompareHref: string | null;
+                                        peerRunId: string | null;
+                                    };
+                                    if (!r.peerCompareHref || !r.peerRunId) {
+                                        return (
+                                            <span className="muted">—</span>
+                                        );
+                                    }
+                                    return (
+                                        <Link href={r.peerCompareHref}>
+                                            {r.peerRunId.slice(-8)}
+                                        </Link>
+                                    );
+                                },
+                            },
+                            {
                                 key: "compare",
                                 label: "Compare",
                                 hideOnMobile: true,
                                 render: (row) => {
                                     const r = row as {
-                                        benchmarkId: string;
                                         runId: string;
+                                        peerCompareHref: string | null;
                                     };
-                                    return (
-                                        <Link
-                                            href={`/runs/compare?left=${r.runId}`}
-                                        >
-                                            Compare
-                                        </Link>
-                                    );
+                                    const href =
+                                        r.peerCompareHref ??
+                                        `/runs/compare?left=${r.runId}`;
+                                    return <Link href={href}>Compare</Link>;
                                 },
                             },
                         ]}
-                        data={sorted}
+                        data={rows}
                         getRowId={(row) =>
                             `${(row as { benchmarkId: string }).benchmarkId}-${(row as { runId: string }).runId}`
                         }
@@ -157,6 +194,7 @@ export default async function OutliersPage() {
                             const r = row as {
                                 benchmarkId: string;
                                 runId: string;
+                                peerCompareHref: string | null;
                             };
                             return (
                                 <>
@@ -166,12 +204,21 @@ export default async function OutliersPage() {
                                     >
                                         View trace
                                     </Link>
-                                    <Link
-                                        href={`/benchmarks/${r.benchmarkId}`}
-                                        className="button secondary"
-                                    >
-                                        Benchmark
-                                    </Link>
+                                    {r.peerCompareHref ? (
+                                        <Link
+                                            href={r.peerCompareHref}
+                                            className="button secondary"
+                                        >
+                                            Compare to peer
+                                        </Link>
+                                    ) : (
+                                        <Link
+                                            href={`/benchmarks/${r.benchmarkId}`}
+                                            className="button secondary"
+                                        >
+                                            Benchmark
+                                        </Link>
+                                    )}
                                 </>
                             );
                         }}

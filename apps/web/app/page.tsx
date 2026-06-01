@@ -117,6 +117,12 @@ export default async function OverviewPage() {
                     <a href="/issues" className="button secondary">
                         Critique issues
                     </a>
+                    <a href="/counterfactual" className="button secondary">
+                        Counterfactual modes
+                    </a>
+                    <a href="/drift" className="button secondary">
+                        Confidence drift
+                    </a>
                     <a href="/outliers" className="button secondary">
                         Outlier runs
                     </a>
