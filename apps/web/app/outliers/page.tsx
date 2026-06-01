@@ -159,9 +159,7 @@ export default async function OutliersPage() {
                                         peerRunId: string | null;
                                     };
                                     if (!r.peerCompareHref || !r.peerRunId) {
-                                        return (
-                                            <span className="muted">—</span>
-                                        );
+                                        return <span className="muted">—</span>;
                                     }
                                     return (
                                         <Link href={r.peerCompareHref}>

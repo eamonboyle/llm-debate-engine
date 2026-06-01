@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ResponsiveTable, TruncateText } from "../../components/ResponsiveTable";
+import {
+    ResponsiveTable,
+    TruncateText,
+} from "../../components/ResponsiveTable";
 import { loadAnalysisIndex } from "../../lib/data";
 import {
     buildFailureModeSummaries,
@@ -189,7 +192,10 @@ export default async function CounterfactualExplorerPage({
                         />
                     )}
                     <div className="filter-actions" style={{ marginTop: 16 }}>
-                        <Link href="/counterfactual" className="button secondary">
+                        <Link
+                            href="/counterfactual"
+                            className="button secondary"
+                        >
                             Clear selection
                         </Link>
                     </div>

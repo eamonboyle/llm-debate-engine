@@ -5,9 +5,7 @@ import {
     listRunsForFailureMode,
 } from "./counterfactualExplorer";
 
-function makeIndex(
-    overrides: Partial<AnalysisIndex> = {},
-): AnalysisIndex {
+function makeIndex(overrides: Partial<AnalysisIndex> = {}): AnalysisIndex {
     return {
         generatedAt: "2026-01-01T00:00:00.000Z",
         totals: { runs: 2, benchmarks: 0, skippedFiles: 0 },

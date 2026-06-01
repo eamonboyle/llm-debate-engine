@@ -65,10 +65,7 @@ export default async function ConfidenceDriftPage() {
             </div>
 
             <div className="grid-4">
-                <MetricCard
-                    label="Indexed runs"
-                    value={summary.runCount}
-                />
+                <MetricCard label="Indexed runs" value={summary.runCount} />
                 <MetricCard
                     label="Avg |Δ| (solver→revision)"
                     value={summary.solverToRevisionMean.toFixed(3)}
@@ -123,8 +120,11 @@ export default async function ConfidenceDriftPage() {
                                 helpKey: "solverToRevisionDelta",
                                 render: (row) =>
                                     formatDelta(
-                                        (row as { solverToRevisionDelta?: number })
-                                            .solverToRevisionDelta,
+                                        (
+                                            row as {
+                                                solverToRevisionDelta?: number;
+                                            }
+                                        ).solverToRevisionDelta,
                                     ),
                             },
                             {
@@ -146,8 +146,9 @@ export default async function ConfidenceDriftPage() {
                                 label: "|Δ| sum",
                                 hideOnMobile: true,
                                 render: (row) => {
-                                    const v = (row as { driftMagnitude: number | null })
-                                        .driftMagnitude;
+                                    const v = (
+                                        row as { driftMagnitude: number | null }
+                                    ).driftMagnitude;
                                     return v == null ? "—" : v.toFixed(3);
                                 },
                             },
@@ -193,7 +194,9 @@ export default async function ConfidenceDriftPage() {
                         renderCardActions={(row) => (
                             <>
                                 <Link
-                                    href={(row as { traceHref: string }).traceHref}
+                                    href={
+                                        (row as { traceHref: string }).traceHref
+                                    }
                                     className="button"
                                 >
                                     Trace

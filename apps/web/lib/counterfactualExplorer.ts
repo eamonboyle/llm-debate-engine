@@ -24,7 +24,9 @@ export function buildFailureModeSummaries(
     const counts = index.aggregates.counterfactualFailureModeCounts ?? {};
     return Object.entries(counts)
         .map(([mode, runCount]) => ({ mode, runCount }))
-        .sort((a, b) => b.runCount - a.runCount || a.mode.localeCompare(b.mode));
+        .sort(
+            (a, b) => b.runCount - a.runCount || a.mode.localeCompare(b.mode),
+        );
 }
 
 export function listRunsForFailureMode(
@@ -45,8 +47,7 @@ export function listRunsForFailureMode(
             question: run.question,
             model: run.model,
             pipelinePreset: run.pipelinePreset,
-            failureModeCount:
-                run.research?.counterfactualFailureModeCount ?? 0,
+            failureModeCount: run.research?.counterfactualFailureModeCount ?? 0,
             href: `/runs/${run.id}`,
         });
     }
