@@ -102,6 +102,9 @@ export default async function OverviewPage() {
                     <a href="/pipeline" className="button secondary">
                         Pipeline reference
                     </a>
+                    <a href="/agents" className="button secondary">
+                        Agent stats
+                    </a>
                     <a href="/glossary" className="button secondary">
                         Glossary
                     </a>

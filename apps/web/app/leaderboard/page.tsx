@@ -8,11 +8,27 @@ export const metadata: Metadata = {
     title: "Model leaderboard",
 };
 
+type LeaderboardSearchParams = {
+    fast?: string;
+};
+
+function resolveFastMode(value: string | undefined): boolean | undefined {
+    if (value === "true") return true;
+    if (value === "false") return false;
+    return undefined;
+}
+
 function formatMetric(value: number | null, digits = 2) {
     return typeof value === "number" ? value.toFixed(digits) : "—";
 }
 
-export default async function ModelLeaderboardPage() {
+export default async function ModelLeaderboardPage({
+    searchParams,
+}: {
+    searchParams: Promise<LeaderboardSearchParams>;
+}) {
+    const params = await searchParams;
+    const fastMode = resolveFastMode(params.fast);
     const index = await loadAnalysisIndex();
 
     if (!index) {
@@ -30,7 +46,11 @@ export default async function ModelLeaderboardPage() {
         );
     }
 
-    const rows = buildModelLeaderboard(index);
+    const filteredRunCount =
+        fastMode === undefined
+            ? index.runs.length
+            : index.runs.filter((run) => run.fastMode === fastMode).length;
+    const rows = buildModelLeaderboard(index, { fastMode });
 
     return (
         <section className="stack">
@@ -38,8 +58,14 @@ export default async function ModelLeaderboardPage() {
                 <h1 className="title">Model leaderboard</h1>
                 <p className="subtitle">
                     Average critique pressure and confidence drift per model
-                    across {index.totals.runs} indexed runs. Use the catalog for
-                    raw artifact counts.
+                    across {filteredRunCount} indexed run
+                    {filteredRunCount === 1 ? "" : "s"}
+                    {fastMode === undefined
+                        ? ""
+                        : fastMode
+                          ? " (fast mode only)"
+                          : " (non-fast only)"}
+                    . Use the catalog for raw artifact counts.
                 </p>
                 <div
                     className="page-actions"
@@ -59,6 +85,28 @@ export default async function ModelLeaderboardPage() {
                     </Link>
                 </div>
             </div>
+
+            <form className="card" method="get">
+                <div className="filter-grid">
+                    <select
+                        name="fast"
+                        defaultValue={params.fast ?? ""}
+                        className="input"
+                    >
+                        <option value="">Fast mode: any</option>
+                        <option value="true">Fast only</option>
+                        <option value="false">Non-fast only</option>
+                    </select>
+                </div>
+                <div className="filter-actions">
+                    <button type="submit" className="button">
+                        Apply
+                    </button>
+                    <Link href="/leaderboard" className="button secondary">
+                        Clear
+                    </Link>
+                </div>
+            </form>
 
             <div className="card">
                 {rows.length === 0 ? (

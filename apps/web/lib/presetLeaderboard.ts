@@ -16,12 +16,30 @@ function mean(values: number[]): number | null {
     return values.reduce((sum, value) => sum + value, 0) / values.length;
 }
 
+export type PresetLeaderboardFilterOptions = {
+    fastMode?: boolean;
+};
+
+function runsHref(preset: string, fastMode?: boolean): string {
+    const params = new URLSearchParams({ preset });
+    if (fastMode !== undefined) {
+        params.set("fast", String(fastMode));
+    }
+    return `/runs?${params.toString()}`;
+}
+
 export function buildPresetLeaderboard(
     index: AnalysisIndex,
+    opts: PresetLeaderboardFilterOptions = {},
 ): PresetLeaderboardRow[] {
+    const sourceRuns =
+        opts.fastMode === undefined
+            ? index.runs
+            : index.runs.filter((run) => run.fastMode === opts.fastMode);
+
     const byPreset = new Map<string, AnalysisIndex["runs"]>();
 
-    for (const run of index.runs) {
+    for (const run of sourceRuns) {
         const bucket = byPreset.get(run.pipelinePreset) ?? [];
         bucket.push(run);
         byPreset.set(run.pipelinePreset, bucket);
@@ -52,7 +70,7 @@ export function buildPresetLeaderboard(
             avgSolverToRevisionDelta: mean(solverDeltas),
             avgEvidenceRisk: mean(evidenceRisks),
             avgCoherence: mean(coherenceScores),
-            runsHref: `/runs?preset=${encodeURIComponent(preset)}`,
+            runsHref: runsHref(preset, opts.fastMode),
         });
     }
 

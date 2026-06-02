@@ -207,7 +207,7 @@ Data is loaded from local filesystem artifacts in `runs/`. If `analysis-index.js
 
 **Data status** — `/status` shows artifact counts, analysis index readiness, and skipped-file diagnostics.
 
-**Insights** — `/leaderboard` compares average critique and confidence metrics per model; `/issues` drills into skeptic issue types (with severity aggregates); `/counterfactual` explores counterfactual failure modes; `/drift` lists per-run confidence stage deltas; `/outliers` lists low-similarity benchmark runs with one-click compare-to-peer links.
+**Insights** — `/leaderboard` compares average critique and confidence metrics per model (optional fast-mode filter); `/presets` does the same per pipeline preset; `/agents` summarizes step counts and errors per debate agent across run traces; `/issues` drills into skeptic issue types (with severity aggregates); `/counterfactual` explores counterfactual failure modes; `/drift` lists per-run confidence stage deltas; `/outliers` lists low-similarity benchmark runs with one-click compare-to-peer links.
 
 **REST API** — Endpoints exposed by the web app:
 
@@ -222,6 +222,7 @@ Data is loaded from local filesystem artifacts in `runs/`. If `analysis-index.js
 - `GET /api/benchmarks/compare?left=:id&right=:id`
 - `GET /api/benchmarks/:id`
 - `GET /api/benchmarks/:id/pairs`
+- `GET /api/search?q=:text&limit=:n`
 
 List routes support query filters (`q`, `model`, `preset`, `fast`, `from`, `to`) and pagination/sort parameters (`sort`, `offset`, `limit`, `page`, `pageSize`). Responses include pagination metadata (`page`, `totalPages`, `prevPage`, `nextPage`, `offset`, `limit`, `hasMore`). The benchmark pairs endpoint prefers `analysis-benchmark-pairs.json` when available.
 
