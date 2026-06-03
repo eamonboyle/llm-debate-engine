@@ -40,6 +40,11 @@ const NAV_ENTRIES: NavEntry[] = [
                 label: "Pipeline",
                 hint: "Presets and agents",
             },
+            {
+                href: "/agents",
+                label: "Agent stats",
+                hint: "Step counts per agent",
+            },
         ],
     },
     {

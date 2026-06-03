@@ -16,12 +16,30 @@ function mean(values: number[]): number | null {
     return values.reduce((sum, value) => sum + value, 0) / values.length;
 }
 
+export type LeaderboardFilterOptions = {
+    fastMode?: boolean;
+};
+
+function runsHref(model: string, fastMode?: boolean): string {
+    const params = new URLSearchParams({ model });
+    if (fastMode !== undefined) {
+        params.set("fast", String(fastMode));
+    }
+    return `/runs?${params.toString()}`;
+}
+
 export function buildModelLeaderboard(
     index: AnalysisIndex,
+    opts: LeaderboardFilterOptions = {},
 ): ModelLeaderboardRow[] {
+    const sourceRuns =
+        opts.fastMode === undefined
+            ? index.runs
+            : index.runs.filter((run) => run.fastMode === opts.fastMode);
+
     const byModel = new Map<string, AnalysisIndex["runs"]>();
 
-    for (const run of index.runs) {
+    for (const run of sourceRuns) {
         const bucket = byModel.get(run.model) ?? [];
         bucket.push(run);
         byModel.set(run.model, bucket);
@@ -54,7 +72,7 @@ export function buildModelLeaderboard(
             avgSolverToRevisionDelta: mean(solverDeltas),
             avgEvidenceRisk: mean(evidenceRisks),
             avgSolverConfidence: mean(solverConfs),
-            runsHref: `/runs?model=${encodeURIComponent(model)}`,
+            runsHref: runsHref(model, opts.fastMode),
         });
     }
 

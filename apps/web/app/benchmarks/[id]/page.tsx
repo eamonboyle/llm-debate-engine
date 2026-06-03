@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { loadBenchmarkById } from "../../../lib/data";
+import { loadBenchmarkById, loadBenchmarkPairsById } from "../../../lib/data";
+import { buildBenchmarkRunRoster } from "../../../lib/benchmarkRunRoster";
 import { MetricCard } from "../../../components/MetricCard";
 import { InfoTooltip } from "../../../components/InfoTooltip";
 import { ModeSizeBar } from "../../../components/benchmark/ModeSizeBar";
@@ -39,7 +40,16 @@ export default async function BenchmarkDetailPage({
     }
 
     const runIds = benchmark.payload.runIds ?? [];
-    const pairs = benchmark.payload.summary?.stability?.pairs ?? [];
+    const pairsData = await loadBenchmarkPairsById(id);
+    const pairs =
+        pairsData.pairs.length > 0
+            ? pairsData.pairs
+            : (benchmark.payload.summary?.stability?.pairs ?? []);
+    const runRoster = buildBenchmarkRunRoster({
+        runIds: pairsData.runIds.length > 0 ? pairsData.runIds : runIds,
+        pairs,
+        modes: benchmark.payload.modes,
+    });
     const thresholdCounts = [
         { threshold: "0.8", modeCount: benchmark.payload.modeCountAt0_8 ?? 0 },
         { threshold: "0.9", modeCount: benchmark.payload.modeCountAt0_9 ?? 0 },
@@ -139,6 +149,83 @@ export default async function BenchmarkDetailPage({
                 similarityPairs={pairs}
                 runs={benchmark.payload.runs}
             />
+
+            <div className="card">
+                <h2 style={{ marginTop: 0 }}>Member runs</h2>
+                <p className="small muted" style={{ marginBottom: "1rem" }}>
+                    Each row is a run in this benchmark. Average similarity is
+                    the mean pairwise score against other runs when stability
+                    pairs are available.
+                </p>
+                {runRoster.length === 0 ? (
+                    <p className="muted">No member run IDs in this artifact.</p>
+                ) : (
+                    <ResponsiveTable
+                        columns={[
+                            { key: "runIndex", label: "#" },
+                            {
+                                key: "runId",
+                                label: "Run ID",
+                                render: (row) => (
+                                    <Link
+                                        href={`/runs/${(row as { runId: string }).runId}`}
+                                    >
+                                        <code className="small">
+                                            {(
+                                                row as { runId: string }
+                                            ).runId.slice(-20)}
+                                        </code>
+                                    </Link>
+                                ),
+                            },
+                            {
+                                key: "modeIndex",
+                                label: "Mode",
+                                render: (row) => {
+                                    const mode = (
+                                        row as { modeIndex: number | null }
+                                    ).modeIndex;
+                                    return mode == null ? "—" : String(mode);
+                                },
+                            },
+                            {
+                                key: "avgSimilarity",
+                                label: "Avg similarity",
+                                helpKey: "avgSimilarity",
+                                render: (row) => {
+                                    const value = (
+                                        row as { avgSimilarity: number | null }
+                                    ).avgSimilarity;
+                                    return value == null
+                                        ? "—"
+                                        : value.toFixed(3);
+                                },
+                            },
+                            {
+                                key: "open",
+                                label: "Open",
+                                render: (row) => (
+                                    <Link
+                                        href={`/runs/${(row as { runId: string }).runId}`}
+                                    >
+                                        Trace
+                                    </Link>
+                                ),
+                            },
+                        ]}
+                        data={runRoster}
+                        getRowId={(row) => (row as { runId: string }).runId}
+                        renderCardActions={(row) => (
+                            <Link
+                                href={`/runs/${(row as { runId: string }).runId}`}
+                                className="button"
+                            >
+                                View trace
+                            </Link>
+                        )}
+                    />
+                )}
+            </div>
 
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>
