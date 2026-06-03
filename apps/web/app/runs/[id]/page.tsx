@@ -9,6 +9,8 @@ import {
 import { TraceStep } from "../../../components/trace/TraceStep";
 import { TraceStepNav } from "../../../components/trace/TraceStepNav";
 import { RunMetricsSummary } from "../../../components/RunMetricsSummary";
+import { CritiqueBreakdown } from "../../../components/CritiqueBreakdown";
+import { extractCritiqueByType } from "../../../lib/critiqueBreakdown";
 import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
 import { CopyPageLink } from "../../../components/CopyPageLink";
 import { CopyTextButton } from "../../../components/CopyTextButton";
@@ -43,6 +45,7 @@ export default async function RunTracePage({
         loadBenchmarksByQuestion(run.question),
     ]);
     const metricsSummary = summarizeRun(run);
+    const critiqueByType = extractCritiqueByType(run);
 
     return (
         <section className="stack">
@@ -118,6 +121,14 @@ export default async function RunTracePage({
                     this run artifact.
                 </p>
                 <RunMetricsSummary summary={metricsSummary} />
+            </div>
+
+            <div className="card">
+                <h2 style={{ marginTop: 0 }}>Critique by issue type</h2>
+                <p className="small muted" style={{ marginBottom: "1rem" }}>
+                    Skeptic issue counts grouped by type for this trace.
+                </p>
+                <CritiqueBreakdown entries={critiqueByType} />
             </div>
 
             <div className="card trace-final-answer">

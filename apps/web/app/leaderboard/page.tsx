@@ -83,6 +83,12 @@ export default async function ModelLeaderboardPage({
                     <Link href="/issues" className="button secondary">
                         Critique issues
                     </Link>
+                    <Link
+                        href="/leaderboard/compare"
+                        className="button secondary"
+                    >
+                        Compare models
+                    </Link>
                 </div>
             </div>
 

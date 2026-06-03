@@ -94,6 +94,21 @@ const NAV_ENTRIES: NavEntry[] = [
                 hint: "Per-model run metrics",
             },
             {
+                href: "/leaderboard/compare",
+                label: "Compare models",
+                hint: "Side-by-side model averages",
+            },
+            {
+                href: "/evidence",
+                label: "Evidence planning",
+                hint: "EvidencePlanner risk levels",
+            },
+            {
+                href: "/timing",
+                label: "Pipeline timing",
+                hint: "Per-agent step durations",
+            },
+            {
                 href: "/presets",
                 label: "Preset leaderboard",
                 hint: "Per-pipeline preset metrics",
