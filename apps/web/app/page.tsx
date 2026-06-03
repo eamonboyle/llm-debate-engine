@@ -120,8 +120,17 @@ export default async function OverviewPage() {
                     <a href="/counterfactual" className="button secondary">
                         Counterfactual modes
                     </a>
+                    <a href="/evidence" className="button secondary">
+                        Evidence planning
+                    </a>
                     <a href="/drift" className="button secondary">
                         Confidence drift
+                    </a>
+                    <a href="/timing" className="button secondary">
+                        Pipeline timing
+                    </a>
+                    <a href="/leaderboard/compare" className="button secondary">
+                        Compare models
                     </a>
                     <a href="/outliers" className="button secondary">
                         Outlier runs

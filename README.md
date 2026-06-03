@@ -207,7 +207,7 @@ Data is loaded from local filesystem artifacts in `runs/`. If `analysis-index.js
 
 **Data status** — `/status` shows artifact counts, analysis index readiness, and skipped-file diagnostics.
 
-**Insights** — `/leaderboard` compares average critique and confidence metrics per model; `/issues` drills into skeptic issue types (with severity aggregates); `/counterfactual` explores counterfactual failure modes; `/drift` lists per-run confidence stage deltas; `/outliers` lists low-similarity benchmark runs with one-click compare-to-peer links.
+**Insights** — `/leaderboard` compares average critique and confidence metrics per model; `/leaderboard/compare` side-by-side model averages; `/issues` drills into skeptic issue types (with severity aggregates); `/counterfactual` explores counterfactual failure modes; `/evidence` explores EvidencePlanner risk levels; `/drift` lists per-run confidence stage deltas; `/timing` aggregates per-agent step durations from trace timestamps; `/outliers` lists low-similarity benchmark runs with one-click compare-to-peer links.
 
 **REST API** — Endpoints exposed by the web app:
 
