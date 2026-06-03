@@ -156,6 +156,17 @@ Error responses:
 
 Returns a single benchmark artifact or 404.
 
+## `GET /api/search`
+
+Unified search across runs, benchmarks, and grouped research questions.
+
+Query parameters:
+
+- `q` — Search text (matches question, answer preview, IDs, model). Empty returns empty result sections with store totals.
+- `limit` — Max items per section (default `12`, max `50`).
+
+Response includes `totals`, `runs`, `benchmarks`, `questions`, and `storeTotals` (full artifact counts).
+
 ## `GET /api/benchmarks/:id/pairs`
 
 Returns benchmark pairwise similarity payload:

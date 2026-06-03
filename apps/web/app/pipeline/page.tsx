@@ -45,6 +45,9 @@ export default async function PipelineReferencePage() {
                     <Link href="/runs" className="button secondary">
                         Browse runs
                     </Link>
+                    <Link href="/agents" className="button secondary">
+                        Agent stats
+                    </Link>
                 </div>
             </div>
 

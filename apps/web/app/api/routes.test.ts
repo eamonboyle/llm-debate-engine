@@ -13,6 +13,7 @@ import { GET as getRunsCompare } from "./runs/compare/route";
 import { GET as getRuns } from "./runs/route";
 import { GET as getBenchmarkById } from "./benchmarks/[id]/route";
 import { GET as getBenchmarkPairsById } from "./benchmarks/[id]/pairs/route";
+import { GET as getSearch } from "./search/route";
 
 const tempDirs: string[] = [];
 const originalRunsDir = process.env.RUNS_DIR;
@@ -139,6 +140,47 @@ describe("web api routes", () => {
             new Request("http://localhost/api/analysis/report"),
         );
         expect(response.status).toBe(404);
+    });
+
+    it("returns global search results", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_1.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_1",
+                question: "Climate policy tradeoffs",
+                metadata: {
+                    createdAt: new Date().toISOString(),
+                    model: "gpt",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run_1",
+                    finalAnswer: "Balanced growth",
+                    steps: [],
+                    metrics: {},
+                },
+            }),
+            "utf-8",
+        );
+
+        const response = await getSearch(
+            new Request("http://localhost/api/search?q=climate&limit=5"),
+        );
+        expect(response.status).toBe(200);
+        const json = (await response.json()) as {
+            query: string;
+            totals: { runs: number };
+            runs: Array<{ id: string }>;
+            storeTotals: { runs: number };
+        };
+        expect(json.query).toBe("climate");
+        expect(json.totals.runs).toBe(1);
+        expect(json.runs[0].id).toBe("run_1");
+        expect(json.storeTotals.runs).toBe(1);
     });
 
     it("returns analysis CSV exports", async () => {
