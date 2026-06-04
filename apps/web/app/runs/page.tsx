@@ -10,9 +10,11 @@ import {
 import { collectArtifactFacets } from "../../lib/artifactFacets";
 import {
     filterRunArtifacts,
+    loadAnalysisIndex,
     loadBenchmarkArtifacts,
     loadRunArtifacts,
 } from "../../lib/data";
+import { buildIndexRunLookup } from "../../lib/indexRunLookup";
 import {
     resolveRunSortOrder,
     sortRunArtifacts,
@@ -40,8 +42,12 @@ export default async function RunsPage({
 }: {
     searchParams: Promise<RunsSearchParams>;
 }) {
-    const runs = await loadRunArtifacts();
-    const benchmarks = await loadBenchmarkArtifacts();
+    const [runs, benchmarks, index] = await Promise.all([
+        loadRunArtifacts(),
+        loadBenchmarkArtifacts(),
+        loadAnalysisIndex(),
+    ]);
+    const indexLookup = index ? buildIndexRunLookup(index) : null;
     const { models, presets } = collectArtifactFacets(runs, benchmarks);
     const params = await searchParams;
     const filtered = filterRunArtifacts(runs, {
@@ -224,6 +230,36 @@ export default async function RunsPage({
                             render: (row) =>
                                 (row as { fast: boolean }).fast ? "yes" : "no",
                         },
+                        ...(indexLookup
+                            ? [
+                                  {
+                                      key: "issues",
+                                      label: "Issues",
+                                      helpKey: "issueCount",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const issues = (
+                                              row as { issues?: number }
+                                          ).issues;
+                                          return issues == null ? "—" : issues;
+                                      },
+                                  },
+                                  {
+                                      key: "solverConf",
+                                      label: "Solver conf.",
+                                      helpKey: "solverConfidence",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const value = (
+                                              row as { solverConf?: number }
+                                          ).solverConf;
+                                          return value == null
+                                              ? "—"
+                                              : value.toFixed(2);
+                                      },
+                                  },
+                              ]
+                            : []),
                         {
                             key: "finalAnswer",
                             label: "Final answer",
@@ -267,15 +303,20 @@ export default async function RunsPage({
                             ),
                         },
                     ]}
-                    data={paging.paged.map((run) => ({
-                        id: run.id,
-                        createdAt: run.metadata.createdAt,
-                        question: run.question,
-                        model: run.metadata.model,
-                        preset: run.metadata.pipelinePreset,
-                        fast: run.metadata.fastMode,
-                        finalAnswer: run.run.finalAnswer,
-                    }))}
+                    data={paging.paged.map((run) => {
+                        const indexed = indexLookup?.get(run.id);
+                        return {
+                            id: run.id,
+                            createdAt: run.metadata.createdAt,
+                            question: run.question,
+                            model: run.metadata.model,
+                            preset: run.metadata.pipelinePreset,
+                            fast: run.metadata.fastMode,
+                            finalAnswer: run.run.finalAnswer,
+                            issues: indexed?.issueCount,
+                            solverConf: indexed?.solverConfidence,
+                        };
+                    })}
                     getRowId={(row) => (row as { id: string }).id}
                     renderCardActions={(row) => (
                         <>

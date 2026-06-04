@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
 import { loadAnalysisIndex } from "../../lib/data";
+import { IssueSeverityChart } from "../../components/charts/IssueSeverityChart";
 import {
     buildIssueTypeSummaries,
     listRunsForIssueType,
@@ -65,6 +66,10 @@ export default async function IssuesExplorerPage({
                         Model leaderboard
                     </Link>
                 </div>
+            </div>
+
+            <div className="card">
+                <IssueSeverityChart rows={summaries} />
             </div>
 
             <div className="card">

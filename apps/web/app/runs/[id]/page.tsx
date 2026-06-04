@@ -286,6 +286,16 @@ export default async function RunTracePage({
                                     >
                                         View trace
                                     </Link>
+                                    <Link
+                                        href={`/runs/compare?left=${run.id}&right=${r.id}`}
+                                        className="button secondary"
+                                        style={{
+                                            padding: "0.2rem 0.5rem",
+                                            fontSize: "0.75rem",
+                                        }}
+                                    >
+                                        Compare
+                                    </Link>
                                 </div>
                                 <p
                                     className="small muted"

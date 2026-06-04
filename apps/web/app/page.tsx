@@ -6,6 +6,7 @@ import { ResearchTrendCharts } from "../components/charts/ResearchTrendCharts";
 import { MetricGlossary } from "../components/MetricGlossary";
 import Link from "next/link";
 import { buildActivityFeed } from "../lib/activityFeed";
+import { buildCatalogStats } from "../lib/catalogStats";
 import {
     loadAnalysisIndex,
     loadBenchmarkArtifacts,
@@ -25,13 +26,18 @@ export default async function OverviewPage() {
     const recentActivity = buildActivityFeed(runs, benchmarks).slice(0, 6);
 
     if (!index) {
+        const hasArtifacts = runs.length > 0 || benchmarks.length > 0;
+        const catalog = hasArtifacts
+            ? buildCatalogStats(runs, benchmarks)
+            : null;
+
         return (
             <section className="stack">
                 <h1 className="title">LLM Research Dashboard</h1>
                 <p className="subtitle">
-                    No data available yet. Run <code>pnpm analyze</code> locally
-                    to generate the analysis index, or ensure run artifacts are
-                    present.
+                    {hasArtifacts
+                        ? "Artifacts are loaded but no analysis index is available yet. Browse raw runs and benchmarks, or generate an index for charts and KPIs."
+                        : "No data available yet. Run debate experiments locally, then run pnpm analyze to build the analysis index."}
                 </p>
                 <div
                     className="page-actions"
@@ -43,7 +49,50 @@ export default async function OverviewPage() {
                     <a href="/runs" className="button secondary">
                         Browse runs
                     </a>
+                    {hasArtifacts ? (
+                        <>
+                            <a href="/catalog" className="button secondary">
+                                Experiment catalog
+                            </a>
+                            <a href="/questions" className="button secondary">
+                                Browse questions
+                            </a>
+                        </>
+                    ) : null}
                 </div>
+                {catalog ? (
+                    <div className="grid-4">
+                        <MetricCard
+                            label="Run artifacts"
+                            value={catalog.totals.runs}
+                            helpKey="runArtifacts"
+                        />
+                        <MetricCard
+                            label="Benchmark artifacts"
+                            value={catalog.totals.benchmarks}
+                            helpKey="benchmarkArtifacts"
+                        />
+                        <MetricCard
+                            label="Unique models"
+                            value={catalog.totals.uniqueModels}
+                        />
+                        <MetricCard
+                            label="Unique presets"
+                            value={catalog.totals.uniquePresets}
+                            helpKey="preset"
+                        />
+                    </div>
+                ) : null}
+                {hasArtifacts ? (
+                    <div className="card">
+                        <p className="muted" style={{ margin: 0 }}>
+                            Run <code>pnpm analyze</code> to unlock overview
+                            charts, leaderboards, and insight pages. See the{" "}
+                            <Link href="/status">data status</Link> page for the
+                            full readiness checklist.
+                        </p>
+                    </div>
+                ) : null}
             </section>
         );
     }

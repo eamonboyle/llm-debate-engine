@@ -323,19 +323,28 @@ async function readJsonIfExists<T>(path: string): Promise<T | null> {
     }
 }
 
+export type AnalysisBundle = {
+    index: AnalysisIndex;
+    runs?: RunArtifact[];
+    benchmarks?: BenchmarkArtifact[];
+};
+
 export async function loadAnalysisIndex(): Promise<AnalysisIndex | null> {
     const runsDir = getRunsDir();
     const indexPath = join(runsDir, "analysis-index.json");
     const index = await readJsonIfExists<AnalysisIndex>(indexPath);
     if (index) return index;
 
-    const bundlePath = join(runsDir, "analysis-bundle.json");
-    const bundle = await readJsonIfExists<{
-        index?: AnalysisIndex;
-    }>(bundlePath);
-    if (bundle?.index) return bundle.index;
+    const bundle = await loadAnalysisBundle();
+    return bundle?.index ?? null;
+}
 
-    return null;
+export async function loadAnalysisBundle(): Promise<AnalysisBundle | null> {
+    const runsDir = getRunsDir();
+    const bundlePath = join(runsDir, "analysis-bundle.json");
+    const bundle = await readJsonIfExists<AnalysisBundle>(bundlePath);
+    if (!bundle?.index) return null;
+    return bundle;
 }
 
 export async function loadRunArtifacts(): Promise<RunArtifact[]> {
