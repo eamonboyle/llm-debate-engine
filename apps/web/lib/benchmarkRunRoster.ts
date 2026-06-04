@@ -67,3 +67,20 @@ export function buildBenchmarkRunRoster(input: {
         modeIndex: modeIndexForRun(runIndex, modes),
     }));
 }
+
+/** Lowest average similarity first — surfaces divergent runs within a benchmark. */
+export function sortBenchmarkRunRoster(
+    roster: BenchmarkRunRosterRow[],
+): BenchmarkRunRosterRow[] {
+    return roster.slice().sort((a, b) => {
+        if (a.avgSimilarity == null && b.avgSimilarity == null) {
+            return a.runIndex - b.runIndex;
+        }
+        if (a.avgSimilarity == null) return 1;
+        if (b.avgSimilarity == null) return -1;
+        if (a.avgSimilarity !== b.avgSimilarity) {
+            return a.avgSimilarity - b.avgSimilarity;
+        }
+        return a.runIndex - b.runIndex;
+    });
+}

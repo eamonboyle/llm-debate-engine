@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { loadBenchmarkById, loadBenchmarkPairsById } from "../../../lib/data";
-import { buildBenchmarkRunRoster } from "../../../lib/benchmarkRunRoster";
+import {
+    buildBenchmarkRunRoster,
+    sortBenchmarkRunRoster,
+} from "../../../lib/benchmarkRunRoster";
 import { MetricCard } from "../../../components/MetricCard";
 import { InfoTooltip } from "../../../components/InfoTooltip";
 import { ModeSizeBar } from "../../../components/benchmark/ModeSizeBar";
@@ -45,11 +48,13 @@ export default async function BenchmarkDetailPage({
         pairsData.pairs.length > 0
             ? pairsData.pairs
             : (benchmark.payload.summary?.stability?.pairs ?? []);
-    const runRoster = buildBenchmarkRunRoster({
-        runIds: pairsData.runIds.length > 0 ? pairsData.runIds : runIds,
-        pairs,
-        modes: benchmark.payload.modes,
-    });
+    const runRoster = sortBenchmarkRunRoster(
+        buildBenchmarkRunRoster({
+            runIds: pairsData.runIds.length > 0 ? pairsData.runIds : runIds,
+            pairs,
+            modes: benchmark.payload.modes,
+        }),
+    );
     const thresholdCounts = [
         { threshold: "0.8", modeCount: benchmark.payload.modeCountAt0_8 ?? 0 },
         { threshold: "0.9", modeCount: benchmark.payload.modeCountAt0_9 ?? 0 },
@@ -155,7 +160,8 @@ export default async function BenchmarkDetailPage({
                 <p className="small muted" style={{ marginBottom: "1rem" }}>
                     Each row is a run in this benchmark. Average similarity is
                     the mean pairwise score against other runs when stability
-                    pairs are available.
+                    pairs are available. Sorted lowest similarity first to
+                    highlight divergent members.
                 </p>
                 {runRoster.length === 0 ? (
                     <p className="muted">No member run IDs in this artifact.</p>

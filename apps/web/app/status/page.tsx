@@ -192,6 +192,25 @@ export default async function DataStatusPage() {
                                 Download benchmarks CSV
                             </a>
                         ) : null}
+                        {status.hasAnalysisBundle ? (
+                            <a
+                                href="/api/analysis/bundle?download=1"
+                                className="button secondary"
+                                download="analysis-bundle.json"
+                            >
+                                Download analysis bundle
+                            </a>
+                        ) : null}
+                        {status.hasAnalysisBundle ? (
+                            <a
+                                href="/api/analysis/bundle"
+                                className="button secondary"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                API: analysis bundle
+                            </a>
+                        ) : null}
                     </div>
                 </div>
             ) : (

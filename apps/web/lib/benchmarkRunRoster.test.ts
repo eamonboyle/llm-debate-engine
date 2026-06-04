@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { buildBenchmarkRunRoster } from "./benchmarkRunRoster";
+import {
+    buildBenchmarkRunRoster,
+    sortBenchmarkRunRoster,
+} from "./benchmarkRunRoster";
 
 describe("buildBenchmarkRunRoster", () => {
     it("computes average pairwise similarity per run", () => {
@@ -27,5 +30,20 @@ describe("buildBenchmarkRunRoster", () => {
             pairs: [],
         });
         expect(roster[0].avgSimilarity).toBeNull();
+    });
+});
+
+describe("sortBenchmarkRunRoster", () => {
+    it("orders runs by ascending average similarity", () => {
+        const roster = buildBenchmarkRunRoster({
+            runIds: ["a", "b", "c"],
+            pairs: [
+                { i: 0, j: 1, similarity: 0.8 },
+                { i: 0, j: 2, similarity: 0.6 },
+                { i: 1, j: 2, similarity: 0.9 },
+            ],
+        });
+        const sorted = sortBenchmarkRunRoster(roster);
+        expect(sorted.map((row) => row.runId)).toEqual(["a", "c", "b"]);
     });
 });

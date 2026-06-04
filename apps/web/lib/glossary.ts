@@ -57,6 +57,8 @@ export const GLOSSARY: Record<string, string> = {
         "Scatter: X = critique max severity, Y = solver→revision confidence delta. Lower points at high severity = model calibrating downward.",
     issueCount: "Number of issues raised by the skeptic's critique.",
     maxSeverity: "Highest severity level among critique issues.",
+    issueSeverityByType:
+        "Average and maximum skeptic severity per issue type across indexed runs.",
 
     // Run compare metrics
     stepCount:

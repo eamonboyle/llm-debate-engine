@@ -4,6 +4,7 @@ import { join } from "path";
 import { afterEach, describe, expect, it } from "vitest";
 import { GET as getStatus } from "./status/route";
 import { GET as getAnalysis } from "./analysis/route";
+import { GET as getAnalysisBundle } from "./analysis/bundle/route";
 import { GET as getAnalysisReport } from "./analysis/report/route";
 import { GET as getAnalysisCsv } from "./analysis/csv/[kind]/route";
 import { GET as getBenchmarks } from "./benchmarks/route";
@@ -105,6 +106,58 @@ describe("web api routes", () => {
         expect(response.status).toBe(200);
         const json = (await response.json()) as { totals: { runs: number } };
         expect(json.totals.runs).toBe(0);
+    });
+
+    it("returns 404 when analysis bundle is missing", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        const response = await getAnalysisBundle();
+        expect(response.status).toBe(404);
+    });
+
+    it("returns analysis bundle payload and supports download", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        const bundle = {
+            index: {
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 1, benchmarks: 0, skippedFiles: 0 },
+                runs: [],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            },
+            runs: [],
+        };
+        await writeFile(
+            join(dir, "analysis-bundle.json"),
+            JSON.stringify(bundle),
+            "utf-8",
+        );
+
+        const jsonResponse = await getAnalysisBundle();
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            index: { totals: { runs: number } };
+        };
+        expect(json.index.totals.runs).toBe(1);
+
+        const downloadResponse = await getAnalysisBundle(
+            new Request("http://localhost/api/analysis/bundle?download=1"),
+        );
+        expect(downloadResponse.status).toBe(200);
+        expect(downloadResponse.headers.get("Content-Disposition")).toContain(
+            "analysis-bundle.json",
+        );
     });
 
     it("returns analysis report markdown or json", async () => {
