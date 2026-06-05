@@ -9,7 +9,9 @@ import {
 import { TraceStep } from "../../../components/trace/TraceStep";
 import { TraceStepNav } from "../../../components/trace/TraceStepNav";
 import { RunMetricsSummary } from "../../../components/RunMetricsSummary";
+import { ConsensusSummary } from "../../../components/ConsensusSummary";
 import { CritiqueBreakdown } from "../../../components/CritiqueBreakdown";
+import { extractConsensusSummary } from "../../../lib/consensusSummary";
 import { extractCritiqueByType } from "../../../lib/critiqueBreakdown";
 import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
 import { CopyPageLink } from "../../../components/CopyPageLink";
@@ -45,7 +47,9 @@ export default async function RunTracePage({
         loadBenchmarksByQuestion(run.question),
     ]);
     const metricsSummary = summarizeRun(run);
+    const consensusSummary = extractConsensusSummary(run);
     const critiqueByType = extractCritiqueByType(run);
+    const { schemaVersion, pipelineVersion } = run.metadata;
 
     return (
         <section className="stack">
@@ -112,6 +116,20 @@ export default async function RunTracePage({
                         {run.metadata.fastMode ? "true" : "false"}
                     </div>
                 </div>
+                {schemaVersion != null ? (
+                    <div className="card">
+                        <div className="small muted">Schema version</div>
+                        <div style={{ marginTop: 6 }}>{schemaVersion}</div>
+                    </div>
+                ) : null}
+                {pipelineVersion ? (
+                    <div className="card">
+                        <div className="small muted">Pipeline version</div>
+                        <div style={{ marginTop: 6 }}>
+                            <code className="small">{pipelineVersion}</code>
+                        </div>
+                    </div>
+                ) : null}
             </div>
 
             <div className="card">
@@ -122,6 +140,20 @@ export default async function RunTracePage({
                 </p>
                 <RunMetricsSummary summary={metricsSummary} />
             </div>
+
+            {consensusSummary ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>Answer consensus</h2>
+                    <p
+                        className="small muted"
+                        style={{ marginBottom: "1rem" }}
+                    >
+                        Embedding-based agreement between solver, revision, and
+                        synthesizer proposals in this run.
+                    </p>
+                    <ConsensusSummary consensus={consensusSummary} />
+                </div>
+            ) : null}
 
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>Critique by issue type</h2>

@@ -68,6 +68,9 @@ function StructuredSummary({ output }: { output: unknown }) {
         const keyClaims = Array.isArray(data.keyClaims)
             ? data.keyClaims.filter((v): v is string => typeof v === "string")
             : [];
+        const assumptions = Array.isArray(data.assumptions)
+            ? data.assumptions.filter((v): v is string => typeof v === "string")
+            : [];
         return (
             <div className="trace-summary">
                 <p className="trace-summary-main">{answer}</p>
@@ -77,11 +80,24 @@ function StructuredSummary({ output }: { output: unknown }) {
                     </p>
                 )}
                 {keyClaims.length > 0 && (
-                    <ul className="trace-summary-list">
-                        {keyClaims.slice(0, 6).map((claim, idx) => (
-                            <li key={idx}>{claim}</li>
-                        ))}
-                    </ul>
+                    <div className="trace-summary-block">
+                        <span className="trace-summary-label">Key claims</span>
+                        <ul className="trace-summary-list">
+                            {keyClaims.slice(0, 6).map((claim, idx) => (
+                                <li key={idx}>{claim}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+                {assumptions.length > 0 && (
+                    <div className="trace-summary-block">
+                        <span className="trace-summary-label">Assumptions</span>
+                        <ul className="trace-summary-list">
+                            {assumptions.slice(0, 6).map((item, idx) => (
+                                <li key={idx}>{item}</li>
+                            ))}
+                        </ul>
+                    </div>
                 )}
             </div>
         );
@@ -117,6 +133,12 @@ function StructuredSummary({ output }: { output: unknown }) {
 
     if (kind === "judgement") {
         const rubric = isRecord(data.rubricScores) ? data.rubricScores : {};
+        const strengths = Array.isArray(data.strengths)
+            ? data.strengths.filter((v): v is string => typeof v === "string")
+            : [];
+        const weaknesses = Array.isArray(data.weaknesses)
+            ? data.weaknesses.filter((v): v is string => typeof v === "string")
+            : [];
         return (
             <div className="trace-summary">
                 <p className="trace-summary-meta">
@@ -127,6 +149,26 @@ function StructuredSummary({ output }: { output: unknown }) {
                 </p>
                 {data.summary && (
                     <p className="trace-summary-main">{String(data.summary)}</p>
+                )}
+                {strengths.length > 0 && (
+                    <div className="trace-summary-block">
+                        <span className="trace-summary-label">Strengths</span>
+                        <ul className="trace-summary-list">
+                            {strengths.slice(0, 5).map((item, idx) => (
+                                <li key={idx}>{item}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+                {weaknesses.length > 0 && (
+                    <div className="trace-summary-block">
+                        <span className="trace-summary-label">Weaknesses</span>
+                        <ul className="trace-summary-list">
+                            {weaknesses.slice(0, 5).map((item, idx) => (
+                                <li key={idx}>{item}</li>
+                            ))}
+                        </ul>
+                    </div>
                 )}
             </div>
         );
@@ -189,6 +231,87 @@ function StructuredSummary({ output }: { output: unknown }) {
                         <ul className="trace-summary-list">
                             {majorUnknowns.map((item, idx) => (
                                 <li key={idx}>{item}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+            </div>
+        );
+    }
+
+    if (kind === "decomposition") {
+        const framing =
+            typeof data.framing === "string" ? data.framing : undefined;
+        const subQuestions = Array.isArray(data.subQuestions)
+            ? data.subQuestions
+                  .filter((v): v is string => typeof v === "string")
+                  .slice(0, 6)
+            : [];
+        const hypotheses = Array.isArray(data.hypotheses)
+            ? data.hypotheses
+                  .filter((v): v is string => typeof v === "string")
+                  .slice(0, 6)
+            : [];
+        return (
+            <div className="trace-summary">
+                {framing && <p className="trace-summary-main">{framing}</p>}
+                {subQuestions.length > 0 && (
+                    <div className="trace-summary-block">
+                        <span className="trace-summary-label">
+                            Sub-questions
+                        </span>
+                        <ul className="trace-summary-list">
+                            {subQuestions.map((item, idx) => (
+                                <li key={idx}>{item}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+                {hypotheses.length > 0 && (
+                    <div className="trace-summary-block">
+                        <span className="trace-summary-label">Hypotheses</span>
+                        <ul className="trace-summary-list">
+                            {hypotheses.map((item, idx) => (
+                                <li key={idx}>{item}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+            </div>
+        );
+    }
+
+    if (kind === "calibration") {
+        const adjustedConfidence =
+            typeof data.adjustedConfidence === "number"
+                ? data.adjustedConfidence
+                : undefined;
+        const rationale =
+            typeof data.rationale === "string" ? data.rationale : undefined;
+        const claimConfidences = Array.isArray(data.claimConfidences)
+            ? data.claimConfidences
+                  .filter((v): v is Record<string, unknown> => isRecord(v))
+                  .slice(0, 6)
+            : [];
+        return (
+            <div className="trace-summary">
+                {adjustedConfidence != null && (
+                    <p className="trace-summary-meta">
+                        Adjusted confidence: {adjustedConfidence}
+                    </p>
+                )}
+                {rationale && <p className="trace-summary-main">{rationale}</p>}
+                {claimConfidences.length > 0 && (
+                    <div className="trace-summary-block">
+                        <span className="trace-summary-label">
+                            Claim confidences
+                        </span>
+                        <ul className="trace-summary-list">
+                            {claimConfidences.map((item, idx) => (
+                                <li key={idx}>
+                                    {String(item.claim ?? "claim")} —{" "}
+                                    {String(item.confidence ?? "-")}
+                                </li>
                             ))}
                         </ul>
                     </div>

@@ -118,6 +118,8 @@ export type RunArtifact = {
         model: string;
         pipelinePreset: string;
         fastMode: boolean;
+        schemaVersion?: number;
+        pipelineVersion?: string;
     };
     run: {
         id: string;
