@@ -5,12 +5,23 @@ function formatMetric(value: number | null) {
     return typeof value === "number" ? value.toFixed(3) : "—";
 }
 
+function formatQualityScore(value: number | null) {
+    return typeof value === "number" ? value.toFixed(1) : "—";
+}
+
 type RunMetricsSummaryProps = {
     summary: RunCompareSummary;
 };
 
+function hasQualityScores(
+    quality: RunCompareSummary["metrics"]["quality"],
+): boolean {
+    return Object.values(quality).some((value) => typeof value === "number");
+}
+
 export function RunMetricsSummary({ summary }: RunMetricsSummaryProps) {
     const { metrics } = summary;
+    const showQuality = hasQualityScores(metrics.quality);
 
     return (
         <div className="stack">
@@ -68,6 +79,41 @@ export function RunMetricsSummary({ summary }: RunMetricsSummaryProps) {
                     <p style={{ marginTop: 6, marginBottom: 0 }}>
                         {metrics.research.topCounterfactualFailureMode}
                     </p>
+                </div>
+            ) : null}
+            {showQuality ? (
+                <div>
+                    <div className="small muted" style={{ marginBottom: 8 }}>
+                        Judge rubric scores (1–5)
+                    </div>
+                    <div className="grid-4">
+                        <MetricCard
+                            label="Coherence"
+                            value={formatQualityScore(metrics.quality.coherence)}
+                            helpKey="coherence"
+                        />
+                        <MetricCard
+                            label="Completeness"
+                            value={formatQualityScore(
+                                metrics.quality.completeness,
+                            )}
+                            helpKey="completeness"
+                        />
+                        <MetricCard
+                            label="Factual risk"
+                            value={formatQualityScore(
+                                metrics.quality.factualRisk,
+                            )}
+                            helpKey="factualRisk"
+                        />
+                        <MetricCard
+                            label="Uncertainty handling"
+                            value={formatQualityScore(
+                                metrics.quality.uncertaintyHandling,
+                            )}
+                            helpKey="uncertaintyHandling"
+                        />
+                    </div>
                 </div>
             ) : null}
         </div>

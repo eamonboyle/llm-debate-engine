@@ -76,5 +76,20 @@ describe("confidenceDrift", () => {
         expect(summary.runCount).toBe(2);
         expect(summary.solverToRevisionMean).toBe(-0.3);
         expect(summary.severityVsSolverToRevision).toBe(0.5);
+        expect(summary.calibratedMinusSynthMean).toBe(0);
+    });
+
+    it("computes per-run calibrated minus synthesizer delta", () => {
+        const index = makeIndex();
+        index.runs[0]!.confidence = {
+            ...index.runs[0]!.confidence,
+            calibratedAdjusted: 0.8,
+            synthesizer: 0.7,
+        };
+        const rows = buildConfidenceDriftRows(index);
+        expect(rows.find((row) => row.runId === "run-low")?.calibratedMinusSynthDelta).toBeCloseTo(
+            0.1,
+            5,
+        );
     });
 });

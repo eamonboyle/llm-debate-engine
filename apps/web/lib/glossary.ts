@@ -15,6 +15,8 @@ export const GLOSSARY: Record<string, string> = {
         "Confidence change after the skeptic's critique; often negative when the model recalibrates.",
     revisionToSynthesizerDelta:
         "Confidence change from revised proposal to final synthesized answer.",
+    calibratedMinusSynthDelta:
+        "Difference between calibrated confidence and synthesizer confidence. Positive = calibration raised confidence; negative = calibration tempered optimism.",
     severityVsSolverToRevisionDelta:
         "Correlation: harsher critique drives stronger confidence reductions. Strong negative = good calibration.",
     severityVsRevisionToSynthesizerDelta:
@@ -69,6 +71,12 @@ export const GLOSSARY: Record<string, string> = {
     synthConfidence: "Confidence score from the Synthesizer's final answer.",
     calibratedConfidence:
         "Post-calibration confidence score from the Calibration agent.",
+    consensusStrength:
+        "Mean pairwise cosine similarity across solver, revision, and synthesizer answers. Higher = more agreement between debate stages.",
+    consensusIncluded:
+        "Which pipeline answers were embedded and compared for consensus.",
+    consensusPairs:
+        "Number of pairwise similarity comparisons in the consensus metric.",
     factualRisk: "Quality rubric score for factual risk in the answer.",
     coherence: "Quality rubric score for coherence.",
     completeness: "Quality rubric score for completeness.",

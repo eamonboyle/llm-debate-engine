@@ -77,6 +77,11 @@ export default async function ConfidenceDriftPage() {
                     helpKey="revisionToSynthesizerDelta"
                 />
                 <MetricCard
+                    label="Avg calibrated−synth Δ"
+                    value={formatDelta(summary.calibratedMinusSynthMean)}
+                    helpKey="calibratedMinusSynthDelta"
+                />
+                <MetricCard
                     label="corr(severity, solver→revision Δ)"
                     value={formatDelta(summary.severityVsSolverToRevision)}
                     helpKey="severityVsSolverToRevisionDelta"
@@ -139,6 +144,20 @@ export default async function ConfidenceDriftPage() {
                                                 revisionToSynthesizerDelta?: number;
                                             }
                                         ).revisionToSynthesizerDelta,
+                                    ),
+                            },
+                            {
+                                key: "calibratedMinusSynthDelta",
+                                label: "Calibrated−synth Δ",
+                                helpKey: "calibratedMinusSynthDelta",
+                                hideOnMobile: true,
+                                render: (row) =>
+                                    formatDelta(
+                                        (
+                                            row as {
+                                                calibratedMinusSynthDelta?: number;
+                                            }
+                                        ).calibratedMinusSynthDelta,
                                     ),
                             },
                             {

@@ -8,10 +8,24 @@ export type ConfidenceDriftRow = {
     maxSeverity?: number;
     solverToRevisionDelta?: number;
     revisionToSynthesizerDelta?: number;
+    calibratedMinusSynthDelta?: number;
     driftMagnitude: number | null;
     traceHref: string;
     compareHref: string;
 };
+
+function calibratedMinusSynthDelta(
+    calibratedAdjusted?: number,
+    synthesizer?: number,
+): number | undefined {
+    if (
+        typeof calibratedAdjusted !== "number" ||
+        typeof synthesizer !== "number"
+    ) {
+        return undefined;
+    }
+    return calibratedAdjusted - synthesizer;
+}
 
 function driftMagnitude(
     solverToRevision?: number,
@@ -41,6 +55,11 @@ export function buildConfidenceDriftRows(
                 run.confidence.revisionToSynthesizerDelta ??
                 critique?.revisionToSynthesizerDelta;
 
+            const calibratedDelta = calibratedMinusSynthDelta(
+                run.confidence.calibratedAdjusted,
+                run.confidence.synthesizer,
+            );
+
             return {
                 runId: run.id,
                 question: run.question,
@@ -49,6 +68,7 @@ export function buildConfidenceDriftRows(
                 maxSeverity: run.critique.maxSeverity ?? critique?.maxSeverity,
                 solverToRevisionDelta: solverToRevision,
                 revisionToSynthesizerDelta: revisionToSynthesizer,
+                calibratedMinusSynthDelta: calibratedDelta,
                 driftMagnitude: driftMagnitude(
                     solverToRevision,
                     revisionToSynthesizer,
@@ -88,5 +108,7 @@ export function summarizeConfidenceDrift(index: AnalysisIndex) {
         severityVsRevisionToSynthesizer:
             index.aggregates.confidenceCorrelation
                 ?.severityVsRevisionToSynthesizerDelta,
+        calibratedMinusSynthMean:
+            index.aggregates.confidenceDrift.calibratedMinusSynthMean,
     };
 }
