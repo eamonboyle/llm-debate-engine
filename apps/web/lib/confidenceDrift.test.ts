@@ -87,9 +87,9 @@ describe("confidenceDrift", () => {
             synthesizer: 0.7,
         };
         const rows = buildConfidenceDriftRows(index);
-        expect(rows.find((row) => row.runId === "run-low")?.calibratedMinusSynthDelta).toBeCloseTo(
-            0.1,
-            5,
-        );
+        expect(
+            rows.find((row) => row.runId === "run-low")
+                ?.calibratedMinusSynthDelta,
+        ).toBeCloseTo(0.1, 5);
     });
 });

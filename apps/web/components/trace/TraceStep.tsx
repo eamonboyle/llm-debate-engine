@@ -254,9 +254,7 @@ function StructuredSummary({ output }: { output: unknown }) {
             : [];
         return (
             <div className="trace-summary">
-                {framing && (
-                    <p className="trace-summary-main">{framing}</p>
-                )}
+                {framing && <p className="trace-summary-main">{framing}</p>}
                 {subQuestions.length > 0 && (
                     <div className="trace-summary-block">
                         <span className="trace-summary-label">
@@ -302,9 +300,7 @@ function StructuredSummary({ output }: { output: unknown }) {
                         Adjusted confidence: {adjustedConfidence}
                     </p>
                 )}
-                {rationale && (
-                    <p className="trace-summary-main">{rationale}</p>
-                )}
+                {rationale && <p className="trace-summary-main">{rationale}</p>}
                 {claimConfidences.length > 0 && (
                     <div className="trace-summary-block">
                         <span className="trace-summary-label">

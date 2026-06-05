@@ -89,7 +89,9 @@ export function RunMetricsSummary({ summary }: RunMetricsSummaryProps) {
                     <div className="grid-4">
                         <MetricCard
                             label="Coherence"
-                            value={formatQualityScore(metrics.quality.coherence)}
+                            value={formatQualityScore(
+                                metrics.quality.coherence,
+                            )}
                             helpKey="coherence"
                         />
                         <MetricCard
