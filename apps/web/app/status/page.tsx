@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ApiStatusPanel } from "../../components/ApiStatusPanel";
 import { MetricCard } from "../../components/MetricCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
 import { loadAnalysisIndex, loadDataStatus } from "../../lib/data";
@@ -135,6 +136,8 @@ export default async function DataStatusPage() {
                     getRowId={(row) => (row as { item: string }).item}
                 />
             </div>
+
+            <ApiStatusPanel />
 
             {status.analysisGeneratedAt ? (
                 <div className="card">

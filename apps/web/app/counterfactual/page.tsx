@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { InsightFilterCard } from "../../components/InsightFilterCard";
 import {
     ResponsiveTable,
     TruncateText,
@@ -9,6 +10,8 @@ import {
     buildFailureModeSummaries,
     listRunsForFailureMode,
 } from "../../lib/counterfactualExplorer";
+import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
+import { buildQueryString } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
     title: "Counterfactual modes",
@@ -16,6 +19,12 @@ export const metadata: Metadata = {
 
 type CounterfactualSearchParams = {
     mode?: string;
+    q?: string;
+    model?: string;
+    preset?: string;
+    fast?: string;
+    from?: string;
+    to?: string;
 };
 
 export default async function CounterfactualExplorerPage({
@@ -24,9 +33,9 @@ export default async function CounterfactualExplorerPage({
     searchParams: Promise<CounterfactualSearchParams>;
 }) {
     const params = await searchParams;
-    const index = await loadAnalysisIndex();
+    const rawIndex = await loadAnalysisIndex();
 
-    if (!index) {
+    if (!rawIndex) {
         return (
             <section className="stack">
                 <h1 className="title">Counterfactual failure modes</h1>
@@ -42,6 +51,8 @@ export default async function CounterfactualExplorerPage({
         );
     }
 
+    const { models, presets } = collectIndexFacets(rawIndex);
+    const index = applyIndexFilters(rawIndex, params);
     const summaries = buildFailureModeSummaries(index);
     const selectedMode = (params.mode ?? "").trim();
     const selectedRuns = selectedMode
@@ -53,7 +64,7 @@ export default async function CounterfactualExplorerPage({
             <div>
                 <h1 className="title">Counterfactual failure modes</h1>
                 <p className="subtitle">
-                    Top counterfactual failure modes from {index.totals.runs}{" "}
+                    Top counterfactual failure modes from {rawIndex.totals.runs}{" "}
                     indexed runs. Select a mode to see which traces reported it
                     as the primary failure mode.
                 </p>
@@ -72,6 +83,16 @@ export default async function CounterfactualExplorerPage({
                     </Link>
                 </div>
             </div>
+
+            <InsightFilterCard
+                action="/counterfactual"
+                models={models}
+                presets={presets}
+                params={params}
+                totalRuns={rawIndex.runs.length}
+                filteredRuns={index.runs.length}
+                preserveKeys={["mode"]}
+            />
 
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>Failure modes</h2>
@@ -104,7 +125,7 @@ export default async function CounterfactualExplorerPage({
                                         selectedMode.toLowerCase();
                                     return (
                                         <Link
-                                            href={`/counterfactual?mode=${encodeURIComponent(mode)}`}
+                                            href={`/counterfactual${buildQueryString(params, { mode })}`}
                                             aria-current={
                                                 active ? "page" : undefined
                                             }
@@ -119,7 +140,12 @@ export default async function CounterfactualExplorerPage({
                         getRowId={(row) => (row as { mode: string }).mode}
                         renderCardActions={(row) => (
                             <Link
-                                href={`/counterfactual?mode=${encodeURIComponent((row as { mode: string }).mode)}`}
+                                href={`/counterfactual${buildQueryString(
+                                    params,
+                                    {
+                                        mode: (row as { mode: string }).mode,
+                                    },
+                                )}`}
                                 className="button"
                             >
                                 View runs
@@ -193,7 +219,7 @@ export default async function CounterfactualExplorerPage({
                     )}
                     <div className="filter-actions" style={{ marginTop: 16 }}>
                         <Link
-                            href="/counterfactual"
+                            href={`/counterfactual${buildQueryString(params, { mode: undefined })}`}
                             className="button secondary"
                         >
                             Clear selection

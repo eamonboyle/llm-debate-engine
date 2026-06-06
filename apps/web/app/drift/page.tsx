@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { MetricCard } from "../../components/MetricCard";
 import {
     ResponsiveTable,
@@ -10,19 +11,34 @@ import {
     buildConfidenceDriftRows,
     summarizeConfidenceDrift,
 } from "../../lib/confidenceDrift";
+import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
 
 export const metadata: Metadata = {
     title: "Confidence drift",
+};
+
+type DriftSearchParams = {
+    q?: string;
+    model?: string;
+    preset?: string;
+    fast?: string;
+    from?: string;
+    to?: string;
 };
 
 function formatDelta(value: number | undefined) {
     return typeof value === "number" ? value.toFixed(3) : "—";
 }
 
-export default async function ConfidenceDriftPage() {
-    const index = await loadAnalysisIndex();
+export default async function ConfidenceDriftPage({
+    searchParams,
+}: {
+    searchParams: Promise<DriftSearchParams>;
+}) {
+    const params = await searchParams;
+    const rawIndex = await loadAnalysisIndex();
 
-    if (!index) {
+    if (!rawIndex) {
         return (
             <section className="stack">
                 <h1 className="title">Confidence drift</h1>
@@ -37,6 +53,8 @@ export default async function ConfidenceDriftPage() {
         );
     }
 
+    const { models, presets } = collectIndexFacets(rawIndex);
+    const index = applyIndexFilters(rawIndex, params);
     const summary = summarizeConfidenceDrift(index);
     const rows = buildConfidenceDriftRows(index);
 
@@ -63,6 +81,15 @@ export default async function ConfidenceDriftPage() {
                     </Link>
                 </div>
             </div>
+
+            <InsightFilterCard
+                action="/drift"
+                models={models}
+                presets={presets}
+                params={params}
+                totalRuns={rawIndex.runs.length}
+                filteredRuns={index.runs.length}
+            />
 
             <div className="grid-4">
                 <MetricCard label="Indexed runs" value={summary.runCount} />

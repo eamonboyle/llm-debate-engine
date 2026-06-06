@@ -1929,3 +1929,119 @@ pre {
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-sm);
 }
+
+/* Global search typeahead */
+.search-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 10vh 1rem 2rem;
+    background: rgba(8, 10, 14, 0.72);
+    backdrop-filter: blur(6px);
+}
+
+.search-dialog {
+    width: min(720px, 100%);
+    max-height: min(70vh, 640px);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    overflow: hidden;
+}
+
+.search-dialog-input-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.search-dialog-input {
+    flex: 1 1 240px;
+}
+
+.search-dialog-results {
+    overflow: auto;
+    padding-right: 0.25rem;
+}
+
+.search-dialog-section + .search-dialog-section {
+    margin-top: 1rem;
+}
+
+.search-dialog-section-title {
+    margin: 0 0 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+}
+
+.search-dialog-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.search-dialog-item {
+    display: block;
+    padding: 0.55rem 0.65rem;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: inherit;
+}
+
+.search-dialog-item:hover,
+.search-dialog-item:focus-visible {
+    background: var(--color-bg-elevated);
+    outline: none;
+}
+
+.search-dialog-item-title {
+    display: block;
+    font-size: 0.9rem;
+    line-height: 1.35;
+}
+
+.search-dialog-item-meta {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+}
+
+.search-dialog-footer {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-border-subtle);
+}
+
+.search-dialog kbd {
+    display: inline-block;
+    padding: 0.05rem 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-elevated);
+}
+
+.api-status-json {
+    margin: 0.75rem 0 0;
+    padding: 0.85rem 1rem;
+    max-height: 320px;
+    overflow: auto;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+    white-space: pre-wrap;
+    word-break: break-word;
+}

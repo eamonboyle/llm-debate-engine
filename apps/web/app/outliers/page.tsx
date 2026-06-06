@@ -1,18 +1,34 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { MetricCard } from "../../components/MetricCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
 import { findMostSimilarPeerRunId } from "../../lib/benchmarkPeers";
 import { loadAnalysisIndex, loadBenchmarkPairsById } from "../../lib/data";
+import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
 
 export const metadata: Metadata = {
     title: "Outlier runs",
 };
 
-export default async function OutliersPage() {
-    const index = await loadAnalysisIndex();
+type OutliersSearchParams = {
+    q?: string;
+    model?: string;
+    preset?: string;
+    fast?: string;
+    from?: string;
+    to?: string;
+};
 
-    if (!index) {
+export default async function OutliersPage({
+    searchParams,
+}: {
+    searchParams: Promise<OutliersSearchParams>;
+}) {
+    const params = await searchParams;
+    const rawIndex = await loadAnalysisIndex();
+
+    if (!rawIndex) {
         return (
             <section className="stack">
                 <h1 className="title">Outlier runs</h1>
@@ -28,6 +44,8 @@ export default async function OutliersPage() {
         );
     }
 
+    const { models, presets } = collectIndexFacets(rawIndex);
+    const index = applyIndexFilters(rawIndex, params);
     const outliers = index.aggregates.outlierRuns ?? [];
     const sorted = [...outliers].sort(
         (a, b) => a.avgSimilarity - b.avgSimilarity,
@@ -73,6 +91,15 @@ export default async function OutliersPage() {
                 </div>
             </div>
 
+            <InsightFilterCard
+                action="/outliers"
+                models={models}
+                presets={presets}
+                params={params}
+                totalRuns={rawIndex.runs.length}
+                filteredRuns={index.runs.length}
+            />
+
             <div className="grid-4">
                 <MetricCard
                     label="Outliers indexed"
@@ -81,7 +108,7 @@ export default async function OutliersPage() {
                 />
                 <MetricCard
                     label="Benchmark artifacts"
-                    value={index.totals.benchmarks}
+                    value={rawIndex.totals.benchmarks}
                     helpKey="benchmarkArtifacts"
                 />
                 <MetricCard
