@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { CollapsibleFilterCard } from "../components/CollapsibleFilterCard";
 import { MetricCard } from "../components/MetricCard";
+import { PresetFilterSelect } from "../components/PresetFilterSelect";
 import { ResponsiveTable } from "../components/ResponsiveTable";
 import { OverviewCharts } from "../components/charts/OverviewCharts";
 import { ResearchTrendCharts } from "../components/charts/ResearchTrendCharts";
@@ -12,12 +14,31 @@ import {
     loadBenchmarkArtifacts,
     loadRunArtifacts,
 } from "../lib/data";
+import {
+    buildEvidenceRiskDistribution,
+    buildPresetCountsFromRuns,
+    collectIndexFacets,
+    filterIndexBenchmarks,
+    filterIndexRuns,
+    hasActiveIndexFilters,
+} from "../lib/indexFilters";
 
 export const metadata: Metadata = {
     title: "Overview",
 };
 
-export default async function OverviewPage() {
+type OverviewSearchParams = {
+    preset?: string;
+    from?: string;
+    to?: string;
+};
+
+export default async function OverviewPage({
+    searchParams,
+}: {
+    searchParams: Promise<OverviewSearchParams>;
+}) {
+    const params = await searchParams;
     const [index, runs, benchmarks] = await Promise.all([
         loadAnalysisIndex(),
         loadRunArtifacts(),
@@ -118,6 +139,18 @@ export default async function OverviewPage() {
     const filterEntries = Object.entries(index.filterContext ?? {}).filter(
         ([, value]) => value !== undefined && value !== null && value !== "",
     );
+    const { presets } = collectIndexFacets(index);
+    const trendFilters = {
+        preset: params.preset,
+        from: params.from,
+        to: params.to,
+    };
+    const filteredTrendRuns = filterIndexRuns(index.runs, trendFilters);
+    const filteredTrendBenchmarks = filterIndexBenchmarks(
+        index.benchmarks,
+        trendFilters,
+    );
+    const trendFiltersActive = hasActiveIndexFilters(trendFilters);
 
     return (
         <section className="stack">
@@ -431,17 +464,68 @@ export default async function OverviewPage() {
                 critiqueVsConfidence={index.aggregates.critiqueVsConfidence}
             />
 
-            <ResearchTrendCharts
-                presets={index.aggregates.presets}
-                evidenceRiskDistribution={
-                    evidencePlanning.riskLevelDistribution ?? {}
+            <CollapsibleFilterCard
+                summaryLabel="Trend filters"
+                resultsSummary={
+                    trendFiltersActive ? (
+                        <>
+                            {filteredTrendRuns.length} runs ·{" "}
+                            {filteredTrendBenchmarks.length} benchmarks
+                        </>
+                    ) : (
+                        <>All indexed artifacts</>
+                    )
                 }
-                runs={index.runs.map((run) => ({
+            >
+                <form method="get">
+                    <div className="filter-grid">
+                        <PresetFilterSelect
+                            presets={presets}
+                            defaultValue={params.preset ?? ""}
+                        />
+                        <input
+                            type="datetime-local"
+                            name="from"
+                            defaultValue={params.from ?? ""}
+                            className="input"
+                            title="Created at or after"
+                        />
+                        <input
+                            type="datetime-local"
+                            name="to"
+                            defaultValue={params.to ?? ""}
+                            className="input"
+                            title="Created at or before"
+                        />
+                    </div>
+                    <div className="filter-actions">
+                        <button type="submit" className="button">
+                            Apply trend filters
+                        </button>
+                        <a href="/" className="button secondary">
+                            Clear
+                        </a>
+                    </div>
+                </form>
+            </CollapsibleFilterCard>
+
+            <ResearchTrendCharts
+                presets={
+                    trendFiltersActive
+                        ? buildPresetCountsFromRuns(filteredTrendRuns)
+                        : index.aggregates.presets
+                }
+                evidenceRiskDistribution={
+                    trendFiltersActive
+                        ? buildEvidenceRiskDistribution(filteredTrendRuns)
+                        : (evidencePlanning.riskLevelDistribution ?? {})
+                }
+                runs={filteredTrendRuns.map((run) => ({
                     id: run.id,
                     createdAt: run.createdAt,
                     evidenceRiskLevel: run.research?.evidenceRiskLevel,
                 }))}
-                benchmarks={index.benchmarks.map((benchmark) => ({
+                benchmarks={filteredTrendBenchmarks.map((benchmark) => ({
                     id: benchmark.id,
                     createdAt: benchmark.createdAt,
                     divergenceEntropy: benchmark.divergenceEntropy,

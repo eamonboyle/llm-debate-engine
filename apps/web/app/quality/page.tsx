@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { MetricCard } from "../../components/MetricCard";
 import {
     ResponsiveTable,
     TruncateText,
 } from "../../components/ResponsiveTable";
 import { loadAnalysisIndex } from "../../lib/data";
+import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
 import {
     buildQualityRunRows,
     summarizeQuality,
@@ -15,14 +17,28 @@ export const metadata: Metadata = {
     title: "Quality insights",
 };
 
+type QualitySearchParams = {
+    q?: string;
+    model?: string;
+    preset?: string;
+    fast?: string;
+    from?: string;
+    to?: string;
+};
+
 function formatScore(value: number | null) {
     return typeof value === "number" ? value.toFixed(1) : "—";
 }
 
-export default async function QualityInsightsPage() {
-    const index = await loadAnalysisIndex();
+export default async function QualityInsightsPage({
+    searchParams,
+}: {
+    searchParams: Promise<QualitySearchParams>;
+}) {
+    const params = await searchParams;
+    const rawIndex = await loadAnalysisIndex();
 
-    if (!index) {
+    if (!rawIndex) {
         return (
             <section className="stack">
                 <h1 className="title">Quality insights</h1>
@@ -38,6 +54,8 @@ export default async function QualityInsightsPage() {
         );
     }
 
+    const { models, presets } = collectIndexFacets(rawIndex);
+    const index = applyIndexFilters(rawIndex, params);
     const summary = summarizeQuality(index);
     const rows = buildQualityRunRows(index);
 
@@ -64,6 +82,15 @@ export default async function QualityInsightsPage() {
                     </Link>
                 </div>
             </div>
+
+            <InsightFilterCard
+                action="/quality"
+                models={models}
+                presets={presets}
+                params={params}
+                totalRuns={rawIndex.runs.length}
+                filteredRuns={index.runs.length}
+            />
 
             <div className="grid-4">
                 <MetricCard

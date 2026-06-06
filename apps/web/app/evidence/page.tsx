@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { MetricCard } from "../../components/MetricCard";
 import {
     ResponsiveTable,
@@ -11,6 +12,8 @@ import {
     listRunsForEvidenceRisk,
     summarizeEvidencePlanning,
 } from "../../lib/evidenceExplorer";
+import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
+import { buildQueryString } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
     title: "Evidence planning",
@@ -18,6 +21,12 @@ export const metadata: Metadata = {
 
 type EvidenceSearchParams = {
     level?: string;
+    q?: string;
+    model?: string;
+    preset?: string;
+    fast?: string;
+    from?: string;
+    to?: string;
 };
 
 export default async function EvidenceExplorerPage({
@@ -26,9 +35,9 @@ export default async function EvidenceExplorerPage({
     searchParams: Promise<EvidenceSearchParams>;
 }) {
     const params = await searchParams;
-    const index = await loadAnalysisIndex();
+    const rawIndex = await loadAnalysisIndex();
 
-    if (!index) {
+    if (!rawIndex) {
         return (
             <section className="stack">
                 <h1 className="title">Evidence planning</h1>
@@ -44,6 +53,8 @@ export default async function EvidenceExplorerPage({
         );
     }
 
+    const { models, presets } = collectIndexFacets(rawIndex);
+    const index = applyIndexFilters(rawIndex, params);
     const summary = summarizeEvidencePlanning(index);
     const riskSummaries = buildEvidenceRiskSummaries(index);
     const selectedLevel = Number((params.level ?? "").trim());
@@ -56,9 +67,9 @@ export default async function EvidenceExplorerPage({
             <div>
                 <h1 className="title">Evidence planning</h1>
                 <p className="subtitle">
-                    EvidencePlanner risk levels (1–5) across {index.totals.runs}{" "}
-                    indexed runs. Select a level to see which traces reported
-                    it.
+                    EvidencePlanner risk levels (1–5) across{" "}
+                    {rawIndex.totals.runs} indexed runs. Select a level to see
+                    which traces reported it.
                 </p>
                 <div
                     className="page-actions"
@@ -75,6 +86,16 @@ export default async function EvidenceExplorerPage({
                     </Link>
                 </div>
             </div>
+
+            <InsightFilterCard
+                action="/evidence"
+                models={models}
+                presets={presets}
+                params={params}
+                totalRuns={rawIndex.runs.length}
+                filteredRuns={index.runs.length}
+                preserveKeys={["level"]}
+            />
 
             <div className="grid-4">
                 <MetricCard
@@ -123,7 +144,18 @@ export default async function EvidenceExplorerPage({
                                 label: "Explore",
                                 render: (row) => (
                                     <Link
-                                        href={`/evidence?level=${(row as { riskLevel: number }).riskLevel}`}
+                                        href={`/evidence${buildQueryString(
+                                            params,
+                                            {
+                                                level: String(
+                                                    (
+                                                        row as {
+                                                            riskLevel: number;
+                                                        }
+                                                    ).riskLevel,
+                                                ),
+                                            },
+                                        )}`}
                                     >
                                         View runs
                                     </Link>

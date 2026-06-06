@@ -85,6 +85,11 @@ export function buildConfidenceDriftRows(
         });
 }
 
+function mean(values: number[]): number | null {
+    if (values.length === 0) return null;
+    return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
 export function summarizeConfidenceDrift(index: AnalysisIndex) {
     const rows = buildConfidenceDriftRows(index);
     const withDrift = rows.filter((row) => row.driftMagnitude != null);
@@ -94,13 +99,25 @@ export function summarizeConfidenceDrift(index: AnalysisIndex) {
               withDrift.length
             : null;
 
+    const solverDeltas = rows
+        .map((row) => row.solverToRevisionDelta)
+        .filter((value): value is number => typeof value === "number");
+    const revisionDeltas = rows
+        .map((row) => row.revisionToSynthesizerDelta)
+        .filter((value): value is number => typeof value === "number");
+    const calibratedDeltas = rows
+        .map((row) => row.calibratedMinusSynthDelta)
+        .filter((value): value is number => typeof value === "number");
+
     return {
         runCount: rows.length,
         withDriftCount: withDrift.length,
         avgDriftMagnitude: avgDrift,
         solverToRevisionMean:
+            mean(solverDeltas) ??
             index.aggregates.confidenceDrift.solverToRevisionMean,
         revisionToSynthesizerMean:
+            mean(revisionDeltas) ??
             index.aggregates.confidenceDrift.revisionToSynthesizerMean,
         severityVsSolverToRevision:
             index.aggregates.confidenceCorrelation
@@ -109,6 +126,7 @@ export function summarizeConfidenceDrift(index: AnalysisIndex) {
             index.aggregates.confidenceCorrelation
                 ?.severityVsRevisionToSynthesizerDelta,
         calibratedMinusSynthMean:
+            mean(calibratedDeltas) ??
             index.aggregates.confidenceDrift.calibratedMinusSynthMean,
     };
 }
