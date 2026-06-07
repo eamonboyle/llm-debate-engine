@@ -545,6 +545,23 @@ export async function loadAnalysisCsv(
     }
 }
 
+export type BenchmarkPairsExport = {
+    generatedAt?: string;
+    pairwise: Array<{
+        benchmarkId: string;
+        runIds?: string[];
+        pairs?: Array<{ i: number; j: number; similarity: number }>;
+    }>;
+};
+
+export async function loadBenchmarkPairsExport(): Promise<BenchmarkPairsExport | null> {
+    const runsDir = getRunsDir();
+    const pairwisePath = join(runsDir, "analysis-benchmark-pairs.json");
+    const chunk = await readJsonIfExists<BenchmarkPairsExport>(pairwisePath);
+    if (!chunk?.pairwise?.length) return null;
+    return chunk;
+}
+
 export async function loadBenchmarkPairsById(id: string): Promise<{
     benchmarkId: string;
     source: "chunk" | "artifact";

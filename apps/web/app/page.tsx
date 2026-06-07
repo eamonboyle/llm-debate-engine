@@ -104,6 +104,76 @@ export default async function OverviewPage({
                         />
                     </div>
                 ) : null}
+                {recentActivity.length > 0 ? (
+                    <div className="card">
+                        <div
+                            style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: 10,
+                                alignItems: "baseline",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <h2 style={{ margin: 0 }}>Recent activity</h2>
+                            <Link href="/activity" className="button secondary">
+                                Full timeline
+                            </Link>
+                        </div>
+                        <ResponsiveTable
+                            columns={[
+                                {
+                                    key: "kind",
+                                    label: "Type",
+                                    render: (row) => {
+                                        const k = (row as { kind: string })
+                                            .kind;
+                                        return k === "run"
+                                            ? "Run"
+                                            : "Benchmark";
+                                    },
+                                },
+                                {
+                                    key: "createdAt",
+                                    label: "When",
+                                    render: (row) =>
+                                        new Date(
+                                            (row as { createdAt: string })
+                                                .createdAt,
+                                        ).toLocaleString(),
+                                },
+                                {
+                                    key: "question",
+                                    label: "Question",
+                                    render: (row) => {
+                                        const q = (row as { question: string })
+                                            .question;
+                                        return q.length > 72
+                                            ? `${q.slice(0, 72)}…`
+                                            : q;
+                                    },
+                                },
+                                {
+                                    key: "open",
+                                    label: "Open",
+                                    render: (row) => (
+                                        <Link
+                                            href={
+                                                (row as { href: string }).href
+                                            }
+                                        >
+                                            View
+                                        </Link>
+                                    ),
+                                },
+                            ]}
+                            data={recentActivity}
+                            getRowId={(row) =>
+                                `${(row as { kind: string }).kind}-${(row as { id: string }).id}`
+                            }
+                        />
+                    </div>
+                ) : null}
                 {hasArtifacts ? (
                     <div className="card">
                         <p className="muted" style={{ margin: 0 }}>

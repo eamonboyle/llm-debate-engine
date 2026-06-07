@@ -59,6 +59,38 @@ curl -O "http://localhost:3000/api/analysis/csv/runs"
 curl -O "http://localhost:3000/api/analysis/csv/benchmarks"
 ```
 
+## `GET /api/analysis/pairs`
+
+Returns the full benchmark pairwise similarity export from `runs/analysis-benchmark-pairs.json`.
+
+- Pass `?download=1` to receive a download attachment.
+
+Example:
+
+```bash
+curl "http://localhost:3000/api/analysis/pairs"
+curl -O "http://localhost:3000/api/analysis/pairs?download=1"
+```
+
+## `GET /api/activity`
+
+Returns a filtered chronological activity feed (runs and benchmarks).
+
+Query params:
+
+- `q` full-text query
+- `kind` (`all`, `run`, `benchmark`)
+- `model`, `preset`, `fast`, `from`, `to` — same semantics as the `/activity` page
+- `offset`, `limit`, `page`, `pageSize` — pagination
+- `format=csv` — CSV export instead of JSON
+
+Example:
+
+```bash
+curl "http://localhost:3000/api/activity?kind=run&limit=50"
+curl -O "http://localhost:3000/api/activity?format=csv"
+```
+
 ## `GET /api/runs`
 
 Returns run artifact list with optional filters.

@@ -214,6 +214,25 @@ export default async function DataStatusPage() {
                                 API: analysis bundle
                             </a>
                         ) : null}
+                        {status.hasBenchmarkPairs ? (
+                            <a
+                                href="/api/analysis/pairs?download=1"
+                                className="button secondary"
+                                download="analysis-benchmark-pairs.json"
+                            >
+                                Download benchmark pairs
+                            </a>
+                        ) : null}
+                        {status.hasBenchmarkPairs ? (
+                            <a
+                                href="/api/analysis/pairs"
+                                className="button secondary"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                API: benchmark pairs
+                            </a>
+                        ) : null}
                     </div>
                 </div>
             ) : (
