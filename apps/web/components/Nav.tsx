@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useSearch } from "./SearchProvider";
 
 type NavLeaf = {
     href: string;
@@ -436,8 +437,43 @@ function renderMobileNav(pathname: string, onNavigate: () => void): ReactNode {
     });
 }
 
+function NavSearchButton() {
+    const { openSearch } = useSearch();
+
+    return (
+        <button
+            type="button"
+            className="nav-search-button"
+            aria-label="Search artifacts"
+            title="Search ( / )"
+            onClick={openSearch}
+        >
+            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                <circle
+                    cx="6.5"
+                    cy="6.5"
+                    r="4.25"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                />
+                <path
+                    d="M10 10L14 14"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                />
+            </svg>
+            <span className="nav-search-button-label">Search</span>
+            <kbd className="nav-search-kbd">/</kbd>
+        </button>
+    );
+}
+
 export function Nav() {
     const pathname = usePathname();
+    const { openSearch } = useSearch();
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
     useEffect(() => {
@@ -473,6 +509,7 @@ export function Nav() {
                     <span className="nav-toggle-bar" />
                     <span className="nav-toggle-bar" />
                 </button>
+                <NavSearchButton />
                 <nav
                     className={`nav nav-desktop ${mobileNavOpen ? "nav-open" : ""}`}
                     aria-label="Primary"
@@ -481,6 +518,19 @@ export function Nav() {
                         {renderDesktopNav(pathname)}
                     </div>
                     <div className="nav-mobile-stack">
+                        <button
+                            type="button"
+                            className="nav-link nav-mobile-search"
+                            onClick={() => {
+                                setMobileNavOpen(false);
+                                openSearch();
+                            }}
+                        >
+                            <span className="nav-leaf-label">Search</span>
+                            <span className="nav-leaf-hint">
+                                Runs, benchmarks, questions
+                            </span>
+                        </button>
                         {renderMobileNav(pathname, () =>
                             setMobileNavOpen(false),
                         )}

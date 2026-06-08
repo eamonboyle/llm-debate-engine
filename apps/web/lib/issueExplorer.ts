@@ -21,14 +21,17 @@ export type RunIssueRow = {
 
 export function buildIssueTypeSummaries(
     index: AnalysisIndex,
+    options?: { useAggregateSeverity?: boolean },
 ): IssueTypeSummary[] {
     const runCounts = new Map<string, number>();
+    const totalCounts = new Map<string, number>();
 
     for (const run of index.runs) {
         const byType = run.critique.byType ?? {};
         for (const [type, count] of Object.entries(byType)) {
             if (count > 0) {
                 runCounts.set(type, (runCounts.get(type) ?? 0) + 1);
+                totalCounts.set(type, (totalCounts.get(type) ?? 0) + count);
             }
         }
     }
@@ -40,15 +43,42 @@ export function buildIssueTypeSummaries(
         ]),
     );
 
-    return Object.entries(index.aggregates.issueTypeCounts)
+    const useAggregateSeverity = options?.useAggregateSeverity ?? true;
+
+    return [...totalCounts.entries()]
         .map(([type, totalCount]) => {
-            const severity = severityByType.get(type);
+            const aggregateSeverity = severityByType.get(type);
+            let avgSeverity = aggregateSeverity?.avgSeverity;
+            let maxSeverity = aggregateSeverity?.maxSeverity;
+
+            if (!useAggregateSeverity) {
+                const severities: number[] = [];
+                for (const run of index.runs) {
+                    const byType = run.critique.byType ?? {};
+                    const countForType = Object.entries(byType).find(
+                        ([issueType]) =>
+                            issueType.toLowerCase() === type.toLowerCase(),
+                    )?.[1];
+                    if (!countForType || countForType <= 0) continue;
+                    if (typeof run.critique.maxSeverity === "number") {
+                        severities.push(run.critique.maxSeverity);
+                    }
+                }
+                avgSeverity =
+                    severities.length > 0
+                        ? severities.reduce((sum, value) => sum + value, 0) /
+                          severities.length
+                        : undefined;
+                maxSeverity =
+                    severities.length > 0 ? Math.max(...severities) : undefined;
+            }
+
             return {
                 type,
                 totalCount,
                 runCount: runCounts.get(type) ?? 0,
-                avgSeverity: severity?.avgSeverity,
-                maxSeverity: severity?.maxSeverity,
+                avgSeverity,
+                maxSeverity,
             };
         })
         .sort((a, b) => b.totalCount - a.totalCount);

@@ -64,6 +64,10 @@ export default async function BenchmarkDetailPage({
         },
     ];
     const modes = benchmark.payload.modes ?? [];
+    const summary = benchmark.payload.summary;
+    const stability = summary?.stability;
+    const hasClaimCentroid =
+        typeof benchmark.payload.modeCountClaimCentroid === "number";
 
     return (
         <section className="stack">
@@ -135,6 +139,125 @@ export default async function BenchmarkDetailPage({
                     helpKey="divergenceEntropy"
                 />
             </div>
+
+            {summary ? (
+                <div className="grid-4">
+                    <MetricCard
+                        label="Consensus strength"
+                        value={
+                            typeof summary.consensus?.mean === "number"
+                                ? summary.consensus.mean.toFixed(3)
+                                : "—"
+                        }
+                        helper={
+                            typeof summary.consensus?.stddev === "number"
+                                ? `σ ${summary.consensus.stddev.toFixed(3)}`
+                                : undefined
+                        }
+                        helpKey="consensusStrength"
+                    />
+                    <MetricCard
+                        label="Critique max severity"
+                        value={
+                            typeof summary.critiqueMaxSeverity?.mean ===
+                            "number"
+                                ? summary.critiqueMaxSeverity.mean.toFixed(2)
+                                : "—"
+                        }
+                        helper={
+                            typeof summary.critiqueMaxSeverity?.stddev ===
+                            "number"
+                                ? `σ ${summary.critiqueMaxSeverity.stddev.toFixed(2)}`
+                                : undefined
+                        }
+                        helpKey="critiqueMaxSeverityMean"
+                    />
+                    <MetricCard
+                        label="Clustering threshold"
+                        value={
+                            typeof benchmark.payload.threshold === "number"
+                                ? benchmark.payload.threshold.toFixed(2)
+                                : "—"
+                        }
+                        helpKey="clusteringThreshold"
+                    />
+                    <MetricCard
+                        label="Stability (pairwise mean)"
+                        value={
+                            typeof stability?.pairwiseMean === "number"
+                                ? stability.pairwiseMean.toFixed(3)
+                                : "—"
+                        }
+                        helper={
+                            stability &&
+                            typeof stability.pairwiseStddev === "number"
+                                ? `σ ${stability.pairwiseStddev.toFixed(3)} · min ${stability.minPairwiseSimilarity.toFixed(3)} · max ${stability.maxPairwiseSimilarity.toFixed(3)}`
+                                : undefined
+                        }
+                        helpKey="stabilityPairwiseMean"
+                    />
+                </div>
+            ) : null}
+
+            {hasClaimCentroid ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>
+                        Claim-centroid clustering
+                        <InfoTooltip helpKey="claimCentroidClustering" />
+                    </h2>
+                    <p className="small muted" style={{ marginBottom: "1rem" }}>
+                        Secondary mode detection using claim-centroid embeddings
+                        (when key claims are available). Compare with
+                        final-answer embedding clustering above.
+                    </p>
+                    <div className="grid-4">
+                        <MetricCard
+                            label="Centroid mode count"
+                            value={
+                                benchmark.payload.modeCountClaimCentroid ?? "—"
+                            }
+                            helpKey="modeCount"
+                        />
+                        <MetricCard
+                            label="Centroid entropy"
+                            value={
+                                typeof benchmark.payload
+                                    .divergenceEntropyClaimCentroid === "number"
+                                    ? benchmark.payload.divergenceEntropyClaimCentroid.toFixed(
+                                          3,
+                                      )
+                                    : "—"
+                            }
+                            helpKey="divergenceEntropy"
+                        />
+                        <MetricCard
+                            label="Centroid stability"
+                            value={
+                                typeof benchmark.payload.stabilityClaimCentroid
+                                    ?.pairwiseMean === "number"
+                                    ? benchmark.payload.stabilityClaimCentroid.pairwiseMean.toFixed(
+                                          3,
+                                      )
+                                    : "—"
+                            }
+                            helper={
+                                benchmark.payload.stabilityClaimCentroid &&
+                                typeof benchmark.payload.stabilityClaimCentroid
+                                    .pairwiseStddev === "number"
+                                    ? `σ ${benchmark.payload.stabilityClaimCentroid.pairwiseStddev.toFixed(3)}`
+                                    : undefined
+                            }
+                            helpKey="stabilityPairwiseMean"
+                        />
+                        <MetricCard
+                            label="Embedding vs centroid modes"
+                            value={`${benchmark.payload.modeCount} → ${benchmark.payload.modeCountClaimCentroid}`}
+                            helper="final-answer modes → claim-centroid modes"
+                            helpKey="claimCentroidModeDelta"
+                        />
+                    </div>
+                </div>
+            ) : null}
 
             <div className="card benchmark-mode-structure">
                 <h2 style={{ marginTop: 0 }}>

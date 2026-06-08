@@ -174,9 +174,26 @@ export type BenchmarkArtifact = {
             exemplarIndex: number;
             exemplarPreview: string;
         }>;
+        modeCountClaimCentroid?: number;
+        modeSizesClaimCentroid?: number[];
+        divergenceEntropyClaimCentroid?: number;
+        modeCountClaimCentroidAt0_8?: number;
+        modeCountClaimCentroidAt0_9?: number;
+        modeCountClaimCentroidAt0_95?: number;
+        stabilityClaimCentroid?: {
+            pairwiseMean: number;
+            pairwiseStddev: number;
+            minPairwiseSimilarity: number;
+            maxPairwiseSimilarity: number;
+        };
         summary?: {
+            consensus?: { mean: number; stddev: number };
+            critiqueMaxSeverity?: { mean: number; stddev: number };
             stability?: {
                 pairwiseMean?: number;
+                pairwiseStddev?: number;
+                minPairwiseSimilarity?: number;
+                maxPairwiseSimilarity?: number;
                 pairs?: Array<{ i: number; j: number; similarity: number }>;
             };
         };

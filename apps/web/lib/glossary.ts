@@ -51,6 +51,14 @@ export const GLOSSARY: Record<string, string> = {
         "Similarity between each pair of runs. Darker red = low similarity; green = high. Green blocks indicate consistent sub-clusters.",
     modeExplorer:
         "Each mode's exemplar and inferred label. Useful for qualitatively naming divergence patterns.",
+    clusteringThreshold:
+        "Cosine similarity threshold used when clustering final-answer embeddings into modes.",
+    critiqueMaxSeverityMean:
+        "Mean of each run's highest skeptic severity score across benchmark members.",
+    claimCentroidClustering:
+        "Alternative clustering using claim-centroid embeddings instead of final-answer text. Surfaces divergence in underlying claims even when final wording converges.",
+    claimCentroidModeDelta:
+        "Comparison of mode counts between final-answer embedding clustering and claim-centroid clustering.",
 
     // Critique & issues
     critiqueIssueTypes:

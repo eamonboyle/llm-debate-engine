@@ -67,6 +67,34 @@ describe("issueExplorer", () => {
         });
     });
 
+    it("recomputes summaries from filtered runs", () => {
+        const index = makeIndex();
+        const filtered = {
+            ...index,
+            runs: index.runs.filter((run) => run.id === "run_a"),
+            totals: { ...index.totals, runs: 1 },
+        };
+        const summaries = buildIssueTypeSummaries(filtered, {
+            useAggregateSeverity: false,
+        });
+        expect(summaries).toEqual([
+            {
+                type: "factual",
+                totalCount: 2,
+                runCount: 1,
+                avgSeverity: undefined,
+                maxSeverity: undefined,
+            },
+            {
+                type: "logic",
+                totalCount: 1,
+                runCount: 1,
+                avgSeverity: undefined,
+                maxSeverity: undefined,
+            },
+        ]);
+    });
+
     it("lists runs for a selected issue type", () => {
         const rows = listRunsForIssueType(makeIndex(), "factual");
         expect(rows).toHaveLength(2);

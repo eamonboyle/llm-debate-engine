@@ -245,6 +245,34 @@ export default async function RunsPage({
                                       },
                                   },
                                   {
+                                      key: "maxSeverity",
+                                      label: "Max severity",
+                                      helpKey: "maxSeverity",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const value = (
+                                              row as { maxSeverity?: number }
+                                          ).maxSeverity;
+                                          return value == null
+                                              ? "—"
+                                              : value.toFixed(1);
+                                      },
+                                  },
+                                  {
+                                      key: "evidenceRisk",
+                                      label: "Evidence risk",
+                                      helpKey: "evidenceRiskLevel",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const value = (
+                                              row as { evidenceRisk?: number }
+                                          ).evidenceRisk;
+                                          return value == null
+                                              ? "—"
+                                              : value.toFixed(1);
+                                      },
+                                  },
+                                  {
                                       key: "solverConf",
                                       label: "Solver conf.",
                                       helpKey: "solverConfidence",
@@ -314,6 +342,8 @@ export default async function RunsPage({
                             fast: run.metadata.fastMode,
                             finalAnswer: run.run.finalAnswer,
                             issues: indexed?.issueCount,
+                            maxSeverity: indexed?.maxSeverity,
+                            evidenceRisk: indexed?.evidenceRiskLevel,
                             solverConf: indexed?.solverConfidence,
                         };
                     })}

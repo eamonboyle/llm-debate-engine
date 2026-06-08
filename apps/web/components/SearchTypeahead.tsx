@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useSearch } from "./SearchProvider";
 
 type SearchApiResult = {
     query: string;
@@ -35,7 +36,7 @@ function isEditableTarget(target: EventTarget | null): boolean {
 }
 
 export function SearchTypeahead() {
-    const [open, setOpen] = useState(false);
+    const { open, openSearch, closeSearch } = useSearch();
     const [query, setQuery] = useState("");
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState<SearchApiResult | null>(null);
@@ -43,11 +44,11 @@ export function SearchTypeahead() {
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const close = useCallback(() => {
-        setOpen(false);
+        closeSearch();
         setQuery("");
         setResult(null);
         setLoading(false);
-    }, []);
+    }, [closeSearch]);
 
     const fetchResults = useCallback(async (value: string) => {
         const trimmed = value.trim();
@@ -92,12 +93,12 @@ export function SearchTypeahead() {
             }
             if (isEditableTarget(event.target)) return;
             event.preventDefault();
-            setOpen(true);
+            openSearch();
         };
 
         window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
-    }, [close, open]);
+    }, [close, open, openSearch]);
 
     useEffect(() => {
         if (!open) return;
