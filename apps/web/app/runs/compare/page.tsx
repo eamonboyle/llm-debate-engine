@@ -7,6 +7,7 @@ import {
     filterByQuestionScope,
 } from "../../../lib/compareScope";
 import { buildRunComparePayload } from "../../../lib/runCompare";
+import { buildCompareSuggestions } from "../../../lib/compareSuggestions";
 import { CompareSwapLink } from "../../../components/CompareSwapLink";
 import { CopyPageLink } from "../../../components/CopyPageLink";
 
@@ -53,6 +54,11 @@ export default async function RunsComparePage({
     const left = runs.find((run) => run.id === params.left) ?? null;
     const right = runs.find((run) => run.id === params.right) ?? null;
     const compare = left && right ? buildRunComparePayload(left, right) : null;
+    const suggestions = buildCompareSuggestions(allRuns, {
+        left: params.left,
+        right: params.right,
+        question: params.question,
+    });
     const leftSnapshot = compare?.left ?? null;
     const rightSnapshot = compare?.right ?? null;
 
@@ -163,6 +169,32 @@ export default async function RunsComparePage({
                     <CopyPageLink />
                 </div>
             </form>
+
+            {suggestions.length > 0 ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>Suggested comparisons</h2>
+                    <p className="small muted" style={{ marginBottom: "1rem" }}>
+                        One-click pairings for the selected{" "}
+                        {params.left && !params.right ? "left" : "right"} run.
+                    </p>
+                    <ul className="compare-suggestions-list">
+                        {suggestions.map((suggestion) => (
+                            <li key={suggestion.id}>
+                                <a href={suggestion.href} className="button secondary">
+                                    Compare with {suggestion.id.slice(-16)}
+                                </a>
+                                <span className="small muted">
+                                    {suggestion.reason} · {suggestion.model} ·{" "}
+                                    {suggestion.pipelinePreset} ·{" "}
+                                    {new Date(
+                                        suggestion.createdAt,
+                                    ).toLocaleString()}
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ) : null}
 
             <div className="two-col">
                 <div className="card">

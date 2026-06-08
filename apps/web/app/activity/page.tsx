@@ -4,6 +4,7 @@ import {
     ResponsiveTable,
     TruncateText,
 } from "../../components/ResponsiveTable";
+import { ExportFilteredLink } from "../../components/ExportFilteredLink";
 import { PresetFilterSelect } from "../../components/PresetFilterSelect";
 import { ModelFilterSelect } from "../../components/ModelFilterSelect";
 import { buildActivityFeed } from "../../lib/activityFeed";
@@ -147,6 +148,35 @@ export default async function ActivityPage({
                     <Link href="/activity" className="button secondary">
                         Clear
                     </Link>
+                    <ExportFilteredLink
+                        apiPath="/api/activity"
+                        params={{
+                            q: params.q,
+                            kind: kind === "all" ? undefined : kind,
+                            model: params.model,
+                            preset: params.preset,
+                            fast: params.fast,
+                            from: params.from,
+                            to: params.to,
+                        }}
+                        label="Export filtered JSON"
+                    />
+                    <a
+                        href={`/api/activity${buildQueryString(params, {
+                            kind: kind === "all" ? undefined : kind,
+                            model: params.model,
+                            preset: params.preset,
+                            fast: params.fast,
+                            from: params.from,
+                            to: params.to,
+                            pageSize: "500",
+                            page: "1",
+                        })}&format=csv`}
+                        className="button secondary"
+                        download="activity-feed.csv"
+                    >
+                        Export CSV
+                    </a>
                     <span className="small muted">
                         {feed.length} event{feed.length === 1 ? "" : "s"}
                     </span>

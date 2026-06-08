@@ -11,8 +11,10 @@ import { TraceStepNav } from "../../../components/trace/TraceStepNav";
 import { RunMetricsSummary } from "../../../components/RunMetricsSummary";
 import { ConsensusSummary } from "../../../components/ConsensusSummary";
 import { CritiqueBreakdown } from "../../../components/CritiqueBreakdown";
+import { CritiqueByAgent } from "../../../components/CritiqueByAgent";
 import { extractConsensusSummary } from "../../../lib/consensusSummary";
 import { extractCritiqueByType } from "../../../lib/critiqueBreakdown";
+import { extractCritiqueByAgent } from "../../../lib/critiqueByAgent";
 import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
 import { CopyPageLink } from "../../../components/CopyPageLink";
 import { CopyTextButton } from "../../../components/CopyTextButton";
@@ -49,6 +51,7 @@ export default async function RunTracePage({
     const metricsSummary = summarizeRun(run);
     const consensusSummary = extractConsensusSummary(run);
     const critiqueByType = extractCritiqueByType(run);
+    const critiqueByAgent = extractCritiqueByAgent(run);
     const { schemaVersion, pipelineVersion } = run.metadata;
 
     return (
@@ -154,6 +157,15 @@ export default async function RunTracePage({
                     <ConsensusSummary consensus={consensusSummary} />
                 </div>
             ) : null}
+
+            <div className="card">
+                <h2 style={{ marginTop: 0 }}>Critique by agent</h2>
+                <p className="small muted" style={{ marginBottom: "1rem" }}>
+                    Issue counts from each critique step — Skeptic and Red team
+                    when the deep research preset ran both.
+                </p>
+                <CritiqueByAgent entries={critiqueByAgent} />
+            </div>
 
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>Critique by issue type</h2>

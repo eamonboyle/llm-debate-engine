@@ -7,6 +7,8 @@ import { GET as getAnalysis } from "./analysis/route";
 import { GET as getAnalysisBundle } from "./analysis/bundle/route";
 import { GET as getAnalysisReport } from "./analysis/report/route";
 import { GET as getAnalysisCsv } from "./analysis/csv/[kind]/route";
+import { GET as getAnalysisPairs } from "./analysis/pairs/route";
+import { GET as getActivity } from "./activity/route";
 import { GET as getBenchmarks } from "./benchmarks/route";
 import { GET as getBenchmarksCompare } from "./benchmarks/compare/route";
 import { GET as getRunById } from "./runs/[id]/route";
@@ -1023,5 +1025,73 @@ describe("web api routes", () => {
             new Request("http://localhost/api/runs/compare?left=a&right=b"),
         );
         expect(notFound.status).toBe(404);
+    });
+
+    it("returns benchmark pairs export payload", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-benchmark-pairs.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                pairwise: [
+                    {
+                        benchmarkId: "benchmark_1",
+                        runIds: ["r1", "r2"],
+                        pairs: [{ i: 0, j: 1, similarity: 0.9 }],
+                    },
+                ],
+            }),
+            "utf-8",
+        );
+
+        const response = await getAnalysisPairs(
+            new Request("http://localhost/api/analysis/pairs"),
+        );
+        expect(response.status).toBe(200);
+        const json = (await response.json()) as {
+            pairwise: Array<{ benchmarkId: string }>;
+        };
+        expect(json.pairwise[0].benchmarkId).toBe("benchmark_1");
+    });
+
+    it("returns filtered activity feed as JSON and CSV", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_a.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_a",
+                question: "Alpha",
+                metadata: {
+                    createdAt: "2026-01-02T00:00:00.000Z",
+                    model: "gpt-a",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: { id: "run_a", finalAnswer: "A", steps: [], metrics: {} },
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getActivity(
+            new Request("http://localhost/api/activity?kind=run"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            total: number;
+            items: Array<{ id: string }>;
+        };
+        expect(json.total).toBe(1);
+        expect(json.items[0].id).toBe("run_a");
+
+        const csvResponse = await getActivity(
+            new Request("http://localhost/api/activity?format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(csvResponse.headers.get("Content-Type")).toContain("text/csv");
+        const csv = await csvResponse.text();
+        expect(csv).toContain("run_a");
     });
 });
