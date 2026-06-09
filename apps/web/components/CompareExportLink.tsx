@@ -17,7 +17,10 @@ export function CompareExportLink({
 }: CompareExportLinkProps) {
     if (!left || !right) return null;
 
-    const href = `${apiPath}${buildQueryString({ left, right, ...extraParams })}`;
+    const href = `${apiPath}${buildQueryString(
+        { left, right, ...extraParams },
+        {},
+    )}`;
 
     return (
         <a

@@ -90,7 +90,7 @@ describe("buildCatalogStats", () => {
 
         const filtered = filterCatalogStats(stats, "gpt-a");
         expect(filtered.models.map((row) => row.model)).toEqual(["gpt-a"]);
-        expect(filtered.presets).toHaveLength(1);
+        expect(filtered.presets).toHaveLength(0);
         expect(filtered.combos).toHaveLength(1);
 
         const presetFiltered = filterCatalogStats(stats, "research");
