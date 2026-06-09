@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CollapsibleFilterCard } from "../../components/CollapsibleFilterCard";
 import { MetricCard } from "../../components/MetricCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
-import { buildCatalogStats } from "../../lib/catalogStats";
+import {
+    buildCatalogStats,
+    filterCatalogStats,
+} from "../../lib/catalogStats";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
 
 export const metadata: Metadata = {
     title: "Experiment catalog",
+};
+
+type CatalogSearchParams = {
+    q?: string;
 };
 
 function filterHref(
@@ -17,13 +25,26 @@ function filterHref(
     return `${base}?${params.toString()}`;
 }
 
-export default async function CatalogPage() {
+export default async function CatalogPage({
+    searchParams,
+}: {
+    searchParams: Promise<CatalogSearchParams>;
+}) {
+    const params = await searchParams;
     const [runs, benchmarks] = await Promise.all([
         loadRunArtifacts(),
         loadBenchmarkArtifacts(),
     ]);
-    const stats = buildCatalogStats(runs, benchmarks);
+    const rawStats = buildCatalogStats(runs, benchmarks);
+    const stats = filterCatalogStats(rawStats, params.q);
+    const query = (params.q ?? "").trim();
     const empty = runs.length === 0 && benchmarks.length === 0;
+    const filteredCount =
+        stats.models.length + stats.presets.length + stats.combos.length;
+    const totalCount =
+        rawStats.models.length +
+        rawStats.presets.length +
+        rawStats.combos.length;
 
     if (empty) {
         return (
@@ -51,6 +72,41 @@ export default async function CatalogPage() {
                 </p>
             </div>
 
+            <CollapsibleFilterCard
+                resultsSummary={
+                    query ? (
+                        <>
+                            {filteredCount} of {totalCount} catalog rows match
+                            &ldquo;{query}&rdquo;
+                        </>
+                    ) : (
+                        <>
+                            {totalCount} catalog rows across models, presets,
+                            and combinations
+                        </>
+                    )
+                }
+            >
+                <form method="get" action="/catalog">
+                    <div className="filter-grid">
+                        <input
+                            name="q"
+                            placeholder="Search models, presets, or combinations"
+                            defaultValue={params.q ?? ""}
+                            className="input"
+                        />
+                    </div>
+                    <div className="filter-actions">
+                        <button type="submit" className="button">
+                            Search catalog
+                        </button>
+                        <Link href="/catalog" className="button secondary">
+                            Clear
+                        </Link>
+                    </div>
+                </form>
+            </CollapsibleFilterCard>
+
             <div className="grid-4">
                 <MetricCard
                     label="Run artifacts"
@@ -76,7 +132,11 @@ export default async function CatalogPage() {
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>By model</h2>
                 {stats.models.length === 0 ? (
-                    <p className="muted">No models recorded.</p>
+                    <p className="muted">
+                        {query
+                            ? "No models match your search."
+                            : "No models recorded."}
+                    </p>
                 ) : (
                     <ResponsiveTable
                         columns={[
@@ -144,7 +204,11 @@ export default async function CatalogPage() {
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>By preset</h2>
                 {stats.presets.length === 0 ? (
-                    <p className="muted">No presets recorded.</p>
+                    <p className="muted">
+                        {query
+                            ? "No presets match your search."
+                            : "No presets recorded."}
+                    </p>
                 ) : (
                     <ResponsiveTable
                         columns={[
@@ -220,7 +284,11 @@ export default async function CatalogPage() {
                     in your artifact store.
                 </p>
                 {stats.combos.length === 0 ? (
-                    <p className="muted">No combinations yet.</p>
+                    <p className="muted">
+                        {query
+                            ? "No model × preset combinations match your search."
+                            : "No combinations yet."}
+                    </p>
                 ) : (
                     <ResponsiveTable
                         columns={[

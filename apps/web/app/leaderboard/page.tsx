@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
 import { loadAnalysisIndex } from "../../lib/data";
+import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
 import { buildModelLeaderboard } from "../../lib/modelLeaderboard";
 
 export const metadata: Metadata = {
@@ -9,14 +11,13 @@ export const metadata: Metadata = {
 };
 
 type LeaderboardSearchParams = {
+    q?: string;
+    model?: string;
+    preset?: string;
     fast?: string;
+    from?: string;
+    to?: string;
 };
-
-function resolveFastMode(value: string | undefined): boolean | undefined {
-    if (value === "true") return true;
-    if (value === "false") return false;
-    return undefined;
-}
 
 function formatMetric(value: number | null, digits = 2) {
     return typeof value === "number" ? value.toFixed(digits) : "—";
@@ -28,10 +29,9 @@ export default async function ModelLeaderboardPage({
     searchParams: Promise<LeaderboardSearchParams>;
 }) {
     const params = await searchParams;
-    const fastMode = resolveFastMode(params.fast);
-    const index = await loadAnalysisIndex();
+    const rawIndex = await loadAnalysisIndex();
 
-    if (!index) {
+    if (!rawIndex) {
         return (
             <section className="stack">
                 <h1 className="title">Model leaderboard</h1>
@@ -46,11 +46,10 @@ export default async function ModelLeaderboardPage({
         );
     }
 
-    const filteredRunCount =
-        fastMode === undefined
-            ? index.runs.length
-            : index.runs.filter((run) => run.fastMode === fastMode).length;
-    const rows = buildModelLeaderboard(index, { fastMode });
+    const { models, presets } = collectIndexFacets(rawIndex);
+    const index = applyIndexFilters(rawIndex, params);
+    const filteredRunCount = index.totals.runs;
+    const rows = buildModelLeaderboard(index, { linkFilters: params });
 
     return (
         <section className="stack">
@@ -60,11 +59,9 @@ export default async function ModelLeaderboardPage({
                     Average critique pressure and confidence drift per model
                     across {filteredRunCount} indexed run
                     {filteredRunCount === 1 ? "" : "s"}
-                    {fastMode === undefined
-                        ? ""
-                        : fastMode
-                          ? " (fast mode only)"
-                          : " (non-fast only)"}
+                    {filteredRunCount !== rawIndex.totals.runs
+                        ? ` (${rawIndex.totals.runs} total)`
+                        : ""}
                     . Use the catalog for raw artifact counts.
                 </p>
                 <div
@@ -92,27 +89,14 @@ export default async function ModelLeaderboardPage({
                 </div>
             </div>
 
-            <form className="card" method="get">
-                <div className="filter-grid">
-                    <select
-                        name="fast"
-                        defaultValue={params.fast ?? ""}
-                        className="input"
-                    >
-                        <option value="">Fast mode: any</option>
-                        <option value="true">Fast only</option>
-                        <option value="false">Non-fast only</option>
-                    </select>
-                </div>
-                <div className="filter-actions">
-                    <button type="submit" className="button">
-                        Apply
-                    </button>
-                    <Link href="/leaderboard" className="button secondary">
-                        Clear
-                    </Link>
-                </div>
-            </form>
+            <InsightFilterCard
+                action="/leaderboard"
+                models={models}
+                presets={presets}
+                params={params}
+                totalRuns={rawIndex.totals.runs}
+                filteredRuns={filteredRunCount}
+            />
 
             <div className="card">
                 {rows.length === 0 ? (

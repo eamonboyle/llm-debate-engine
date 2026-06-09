@@ -1,4 +1,4 @@
-import type { AnalysisIndex } from "./data";
+import type { AnalysisIndex, ArtifactFilterParams } from "./data";
 
 export type ModelLeaderboardRow = {
     model: string;
@@ -18,12 +18,32 @@ function mean(values: number[]): number | null {
 
 export type LeaderboardFilterOptions = {
     fastMode?: boolean;
+    linkFilters?: ArtifactFilterParams;
 };
 
-function runsHref(model: string, fastMode?: boolean): string {
+function runsHref(
+    model: string,
+    fastMode?: boolean,
+    linkFilters?: ArtifactFilterParams,
+): string {
     const params = new URLSearchParams({ model });
     if (fastMode !== undefined) {
         params.set("fast", String(fastMode));
+    }
+    if (linkFilters?.preset) {
+        params.set("preset", linkFilters.preset);
+    }
+    if (linkFilters?.fast && fastMode === undefined) {
+        params.set("fast", linkFilters.fast);
+    }
+    if (linkFilters?.q) {
+        params.set("q", linkFilters.q);
+    }
+    if (linkFilters?.from) {
+        params.set("from", linkFilters.from);
+    }
+    if (linkFilters?.to) {
+        params.set("to", linkFilters.to);
     }
     return `/runs?${params.toString()}`;
 }
@@ -72,7 +92,7 @@ export function buildModelLeaderboard(
             avgSolverToRevisionDelta: mean(solverDeltas),
             avgEvidenceRisk: mean(evidenceRisks),
             avgSolverConfidence: mean(solverConfs),
-            runsHref: runsHref(model, opts.fastMode),
+            runsHref: runsHref(model, opts.fastMode, opts.linkFilters),
         });
     }
 
