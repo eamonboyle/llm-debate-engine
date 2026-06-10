@@ -44,6 +44,40 @@ function bump(
     map.set(key, entry);
 }
 
+function matchesCatalogQuery(
+    haystack: string,
+    query: string | undefined,
+): boolean {
+    const q = (query ?? "").trim().toLowerCase();
+    if (!q) return true;
+    return haystack.toLowerCase().includes(q);
+}
+
+export function filterCatalogStats(
+    stats: CatalogStats,
+    query: string | undefined,
+): CatalogStats {
+    const models = stats.models.filter((row) =>
+        matchesCatalogQuery(row.model, query),
+    );
+    const presets = stats.presets.filter((row) =>
+        matchesCatalogQuery(row.preset, query),
+    );
+    const combos = stats.combos.filter(
+        (row) =>
+            matchesCatalogQuery(row.model, query) ||
+            matchesCatalogQuery(row.preset, query) ||
+            matchesCatalogQuery(`${row.model} ${row.preset}`, query),
+    );
+
+    return {
+        models,
+        presets,
+        combos,
+        totals: stats.totals,
+    };
+}
+
 export function buildCatalogStats(
     runs: RunArtifact[],
     benchmarks: BenchmarkArtifact[],

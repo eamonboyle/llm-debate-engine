@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
 import { loadAnalysisIndex } from "../../lib/data";
 import { IssueSeverityChart } from "../../components/charts/IssueSeverityChart";
+import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
 import {
     buildIssueTypeSummaries,
     listRunsForIssueType,
@@ -14,6 +16,12 @@ export const metadata: Metadata = {
 
 type IssuesSearchParams = {
     type?: string;
+    q?: string;
+    model?: string;
+    preset?: string;
+    fast?: string;
+    from?: string;
+    to?: string;
 };
 
 export default async function IssuesExplorerPage({
@@ -39,10 +47,12 @@ export default async function IssuesExplorerPage({
         );
     }
 
-    const summaries = buildIssueTypeSummaries(index);
+    const { models, presets } = collectIndexFacets(index);
+    const filteredIndex = applyIndexFilters(index, params);
+    const summaries = buildIssueTypeSummaries(filteredIndex);
     const selectedType = (params.type ?? "").trim();
     const selectedRuns = selectedType
-        ? listRunsForIssueType(index, selectedType)
+        ? listRunsForIssueType(filteredIndex, selectedType)
         : [];
 
     return (
@@ -50,10 +60,13 @@ export default async function IssuesExplorerPage({
             <div>
                 <h1 className="title">Critique issues</h1>
                 <p className="subtitle">
-                    Skeptic issue types aggregated from {index.totals.runs}{" "}
-                    indexed run
-                    {index.totals.runs === 1 ? "" : "s"}. Select a type to see
-                    which traces contributed.
+                    Skeptic issue types aggregated from{" "}
+                    {filteredIndex.totals.runs} indexed run
+                    {filteredIndex.totals.runs === 1 ? "" : "s"}
+                    {filteredIndex.totals.runs !== index.totals.runs
+                        ? ` (${index.totals.runs} total)`
+                        : ""}
+                    . Select a type to see which traces contributed.
                 </p>
                 <div
                     className="page-actions"
@@ -67,6 +80,16 @@ export default async function IssuesExplorerPage({
                     </Link>
                 </div>
             </div>
+
+            <InsightFilterCard
+                action="/issues"
+                models={models}
+                presets={presets}
+                params={params}
+                totalRuns={index.totals.runs}
+                filteredRuns={filteredIndex.totals.runs}
+                preserveKeys={["type"]}
+            />
 
             <div className="card">
                 <IssueSeverityChart rows={summaries} />
@@ -109,9 +132,22 @@ export default async function IssuesExplorerPage({
                                     const active =
                                         type.toLowerCase() ===
                                         selectedType.toLowerCase();
+                                    const query = new URLSearchParams();
+                                    for (const [key, value] of Object.entries(
+                                        params,
+                                    )) {
+                                        if (
+                                            typeof value === "string" &&
+                                            value.length > 0 &&
+                                            key !== "type"
+                                        ) {
+                                            query.set(key, value);
+                                        }
+                                    }
+                                    query.set("type", type);
                                     return (
                                         <Link
-                                            href={`/issues?type=${encodeURIComponent(type)}`}
+                                            href={`/issues?${query.toString()}`}
                                             aria-current={
                                                 active ? "page" : undefined
                                             }
@@ -126,9 +162,20 @@ export default async function IssuesExplorerPage({
                         getRowId={(row) => (row as { type: string }).type}
                         renderCardActions={(row) => {
                             const type = (row as { type: string }).type;
+                            const query = new URLSearchParams();
+                            for (const [key, value] of Object.entries(params)) {
+                                if (
+                                    typeof value === "string" &&
+                                    value.length > 0 &&
+                                    key !== "type"
+                                ) {
+                                    query.set(key, value);
+                                }
+                            }
+                            query.set("type", type);
                             return (
                                 <Link
-                                    href={`/issues?type=${encodeURIComponent(type)}`}
+                                    href={`/issues?${query.toString()}`}
                                     className="button"
                                 >
                                     View runs
@@ -190,7 +237,25 @@ export default async function IssuesExplorerPage({
                         />
                     )}
                     <div className="filter-actions" style={{ marginTop: 16 }}>
-                        <Link href="/issues" className="button secondary">
+                        <Link
+                            href={(() => {
+                                const query = new URLSearchParams();
+                                for (const [key, value] of Object.entries(
+                                    params,
+                                )) {
+                                    if (
+                                        key !== "type" &&
+                                        typeof value === "string" &&
+                                        value.length > 0
+                                    ) {
+                                        query.set(key, value);
+                                    }
+                                }
+                                const suffix = query.toString();
+                                return suffix ? `/issues?${suffix}` : "/issues";
+                            })()}
+                            className="button secondary"
+                        >
                             Clear selection
                         </Link>
                     </div>

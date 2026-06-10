@@ -8,6 +8,7 @@ import {
 } from "../../../lib/compareScope";
 import { buildRunComparePayload } from "../../../lib/runCompare";
 import { buildCompareSuggestions } from "../../../lib/compareSuggestions";
+import { CompareExportLink } from "../../../components/CompareExportLink";
 import { CompareSwapLink } from "../../../components/CompareSwapLink";
 import { CopyPageLink } from "../../../components/CopyPageLink";
 
@@ -167,6 +168,12 @@ export default async function RunsComparePage({
                         Clear
                     </a>
                     <CopyPageLink />
+                    <CompareExportLink
+                        apiPath="/api/runs/compare"
+                        left={params.left}
+                        right={params.right}
+                        extraParams={scopeParams}
+                    />
                 </div>
             </form>
 

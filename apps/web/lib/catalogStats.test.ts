@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildCatalogStats } from "./catalogStats";
+import { buildCatalogStats, filterCatalogStats } from "./catalogStats";
 import type { BenchmarkArtifact, RunArtifact } from "./data";
 
 function makeRun(model: string, preset: string): RunArtifact {
@@ -77,5 +77,24 @@ describe("buildCatalogStats", () => {
             benchmarkCount: 1,
             total: 2,
         });
+    });
+
+    it("filters catalog rows by search query", () => {
+        const stats = buildCatalogStats(
+            [makeRun("gpt-a", "standard"), makeRun("gpt-b", "research_deep")],
+            [makeBenchmark("gpt-a", "standard")],
+        );
+
+        const filtered = filterCatalogStats(stats, "gpt-a");
+        expect(filtered.models.map((row) => row.model)).toEqual(["gpt-a"]);
+        expect(filtered.presets).toHaveLength(0);
+        expect(filtered.combos).toHaveLength(1);
+
+        const presetFiltered = filterCatalogStats(stats, "research");
+        expect(presetFiltered.models).toHaveLength(0);
+        expect(presetFiltered.presets.map((row) => row.preset)).toEqual([
+            "research_deep",
+        ]);
+        expect(presetFiltered.combos).toHaveLength(1);
     });
 });

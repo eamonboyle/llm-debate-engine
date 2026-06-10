@@ -18,6 +18,7 @@ function makeIndex(): AnalysisIndex {
                 confidence: {},
                 critique: {
                     issueCount: 3,
+                    maxSeverity: 5,
                     byType: { factual: 2, logic: 1 },
                 },
             },
@@ -32,6 +33,7 @@ function makeIndex(): AnalysisIndex {
                 confidence: {},
                 critique: {
                     issueCount: 1,
+                    maxSeverity: 4,
                     byType: { factual: 1 },
                 },
             },
@@ -62,7 +64,7 @@ describe("issueExplorer", () => {
             type: "factual",
             totalCount: 3,
             runCount: 2,
-            avgSeverity: 3.5,
+            avgSeverity: 4.5,
             maxSeverity: 5,
         });
     });

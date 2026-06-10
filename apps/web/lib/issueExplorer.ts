@@ -19,36 +19,42 @@ export type RunIssueRow = {
     href: string;
 };
 
+function mean(values: number[]): number | undefined {
+    if (values.length === 0) return undefined;
+    return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
 export function buildIssueTypeSummaries(
     index: AnalysisIndex,
 ): IssueTypeSummary[] {
+    const totalCounts = new Map<string, number>();
     const runCounts = new Map<string, number>();
+    const severitiesByType = new Map<string, number[]>();
 
     for (const run of index.runs) {
         const byType = run.critique.byType ?? {};
         for (const [type, count] of Object.entries(byType)) {
-            if (count > 0) {
-                runCounts.set(type, (runCounts.get(type) ?? 0) + 1);
+            if (count <= 0) continue;
+            totalCounts.set(type, (totalCounts.get(type) ?? 0) + count);
+            runCounts.set(type, (runCounts.get(type) ?? 0) + 1);
+            if (typeof run.critique.maxSeverity === "number") {
+                const bucket = severitiesByType.get(type) ?? [];
+                bucket.push(run.critique.maxSeverity);
+                severitiesByType.set(type, bucket);
             }
         }
     }
 
-    const severityByType = new Map(
-        (index.aggregates.issueSeverityByType ?? []).map((entry) => [
-            entry.type,
-            entry,
-        ]),
-    );
-
-    return Object.entries(index.aggregates.issueTypeCounts)
+    return [...totalCounts.entries()]
         .map(([type, totalCount]) => {
-            const severity = severityByType.get(type);
+            const severities = severitiesByType.get(type) ?? [];
             return {
                 type,
                 totalCount,
                 runCount: runCounts.get(type) ?? 0,
-                avgSeverity: severity?.avgSeverity,
-                maxSeverity: severity?.maxSeverity,
+                avgSeverity: mean(severities),
+                maxSeverity:
+                    severities.length > 0 ? Math.max(...severities) : undefined,
             };
         })
         .sort((a, b) => b.totalCount - a.totalCount);

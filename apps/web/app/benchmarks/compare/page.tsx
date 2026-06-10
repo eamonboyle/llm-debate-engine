@@ -9,6 +9,7 @@ import { CompareDeltaChart } from "../../../components/charts/CompareDeltaChart"
 import { ModeSizeBar } from "../../../components/benchmark/ModeSizeBar";
 import { buildBenchmarkComparePayload } from "../../../lib/benchmarkCompare";
 import { TruncateText } from "../../../components/ResponsiveTable";
+import { CompareExportLink } from "../../../components/CompareExportLink";
 import { CompareSwapLink } from "../../../components/CompareSwapLink";
 import { CopyPageLink } from "../../../components/CopyPageLink";
 
@@ -139,6 +140,12 @@ export default async function BenchmarkComparePage({
                         Clear
                     </Link>
                     <CopyPageLink />
+                    <CompareExportLink
+                        apiPath="/api/benchmarks/compare"
+                        left={params.left}
+                        right={params.right}
+                        extraParams={scopeParams}
+                    />
                 </div>
             </form>
 
