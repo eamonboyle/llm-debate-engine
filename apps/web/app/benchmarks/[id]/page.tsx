@@ -12,6 +12,7 @@ import { ModeSizeBar } from "../../../components/benchmark/ModeSizeBar";
 import { BenchmarkDetailCharts } from "../../../components/charts/BenchmarkDetailCharts";
 import { ResponsiveTable } from "../../../components/ResponsiveTable";
 import { TruncateText } from "../../../components/ResponsiveTable";
+import { findMostSimilarPeerRunId } from "../../../lib/benchmarkPeers";
 import { inferModeLabel } from "../../../lib/modeLabeler";
 import { questionHubHref } from "../../../lib/questionGroups";
 import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
@@ -48,13 +49,28 @@ export default async function BenchmarkDetailPage({
         pairsData.pairs.length > 0
             ? pairsData.pairs
             : (benchmark.payload.summary?.stability?.pairs ?? []);
+    const rosterRunIds =
+        pairsData.runIds.length > 0 ? pairsData.runIds : runIds;
     const runRoster = sortBenchmarkRunRoster(
         buildBenchmarkRunRoster({
-            runIds: pairsData.runIds.length > 0 ? pairsData.runIds : runIds,
+            runIds: rosterRunIds,
             pairs,
             modes: benchmark.payload.modes,
         }),
-    );
+    ).map((row) => {
+        const peerRunId = findMostSimilarPeerRunId(
+            row.runId,
+            rosterRunIds,
+            pairs,
+        );
+        return {
+            ...row,
+            peerRunId,
+            peerCompareHref: peerRunId
+                ? `/runs/compare?left=${row.runId}&right=${peerRunId}`
+                : null,
+        };
+    });
     const thresholdCounts = [
         { threshold: "0.8", modeCount: benchmark.payload.modeCountAt0_8 ?? 0 },
         { threshold: "0.9", modeCount: benchmark.payload.modeCountAt0_9 ?? 0 },
@@ -134,6 +150,13 @@ export default async function BenchmarkDetailPage({
                     value={benchmark.payload.divergenceEntropy}
                     helpKey="divergenceEntropy"
                 />
+                {typeof benchmark.payload.threshold === "number" ? (
+                    <MetricCard
+                        label="Cluster threshold"
+                        value={benchmark.payload.threshold.toFixed(2)}
+                        helpKey="benchmarkThreshold"
+                    />
+                ) : null}
             </div>
 
             <div className="card benchmark-mode-structure">
@@ -218,17 +241,49 @@ export default async function BenchmarkDetailPage({
                                     </Link>
                                 ),
                             },
+                            {
+                                key: "peer",
+                                label: "Peer",
+                                hideOnMobile: true,
+                                render: (row) => {
+                                    const peerCompareHref = (
+                                        row as { peerCompareHref: string | null }
+                                    ).peerCompareHref;
+                                    if (!peerCompareHref) return "—";
+                                    return (
+                                        <Link href={peerCompareHref}>
+                                            Compare
+                                        </Link>
+                                    );
+                                },
+                            },
                         ]}
                         data={runRoster}
                         getRowId={(row) => (row as { runId: string }).runId}
-                        renderCardActions={(row) => (
-                            <Link
-                                href={`/runs/${(row as { runId: string }).runId}`}
-                                className="button"
-                            >
-                                View trace
-                            </Link>
-                        )}
+                        renderCardActions={(row) => {
+                            const r = row as {
+                                runId: string;
+                                peerCompareHref: string | null;
+                            };
+                            return (
+                                <>
+                                    <Link
+                                        href={`/runs/${r.runId}`}
+                                        className="button"
+                                    >
+                                        View trace
+                                    </Link>
+                                    {r.peerCompareHref ? (
+                                        <Link
+                                            href={r.peerCompareHref}
+                                            className="button secondary"
+                                        >
+                                            Compare peer
+                                        </Link>
+                                    ) : null}
+                                </>
+                            );
+                        }}
                     />
                 )}
             </div>

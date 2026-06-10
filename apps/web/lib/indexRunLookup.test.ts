@@ -15,6 +15,7 @@ function sampleIndex(): AnalysisIndex {
                 pipelinePreset: "standard",
                 fastMode: false,
                 finalAnswerPreview: "A",
+                stepCount: 10,
                 confidence: { solver: 0.8 },
                 critique: {
                     issueCount: 5,
@@ -44,6 +45,7 @@ describe("buildIndexRunLookup", () => {
         const lookup = buildIndexRunLookup(sampleIndex());
         expect(lookup.get("run_a")).toEqual({
             issueCount: 5,
+            stepCount: 10,
             maxSeverity: 4,
             solverConfidence: 0.8,
             evidenceRiskLevel: 3,

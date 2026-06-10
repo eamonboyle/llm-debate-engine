@@ -113,6 +113,11 @@ export default async function ConfidenceDriftPage({
                     value={formatDelta(summary.severityVsSolverToRevision)}
                     helpKey="severityVsSolverToRevisionDelta"
                 />
+                <MetricCard
+                    label="corr(severity, revision→synth Δ)"
+                    value={formatDelta(summary.severityVsRevisionToSynthesizer)}
+                    helpKey="severityVsRevisionToSynthesizerDelta"
+                />
             </div>
 
             {rows.length === 0 ? (
