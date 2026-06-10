@@ -3,10 +3,7 @@ import Link from "next/link";
 import { CollapsibleFilterCard } from "../../components/CollapsibleFilterCard";
 import { MetricCard } from "../../components/MetricCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
-import {
-    buildCatalogStats,
-    filterCatalogStats,
-} from "../../lib/catalogStats";
+import { buildCatalogStats, filterCatalogStats } from "../../lib/catalogStats";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
 
 export const metadata: Metadata = {

@@ -81,10 +81,7 @@ describe("buildCatalogStats", () => {
 
     it("filters catalog rows by search query", () => {
         const stats = buildCatalogStats(
-            [
-                makeRun("gpt-a", "standard"),
-                makeRun("gpt-b", "research_deep"),
-            ],
+            [makeRun("gpt-a", "standard"), makeRun("gpt-b", "research_deep")],
             [makeBenchmark("gpt-a", "standard")],
         );
 
