@@ -247,7 +247,9 @@ export default async function BenchmarkDetailPage({
                                 hideOnMobile: true,
                                 render: (row) => {
                                     const peerCompareHref = (
-                                        row as { peerCompareHref: string | null }
+                                        row as {
+                                            peerCompareHref: string | null;
+                                        }
                                     ).peerCompareHref;
                                     if (!peerCompareHref) return "—";
                                     return (
