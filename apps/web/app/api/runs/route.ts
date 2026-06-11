@@ -3,10 +3,12 @@ import {
     resolveRunSortOrder,
     sortRunArtifacts,
 } from "../../../lib/artifactSort";
+import { runArtifactsToCsv } from "../../../lib/listExport";
 import { parseListPagination } from "../_shared/pagination";
 
 export async function GET(request: Request) {
     const url = new URL(request.url);
+    const format = url.searchParams.get("format") ?? "json";
     const runs = await loadRunArtifacts();
     const filtered = filterRunArtifacts(runs, {
         q: url.searchParams.get("q") ?? undefined,
@@ -23,6 +25,17 @@ export async function GET(request: Request) {
     const totalPages = Math.max(1, Math.ceil(sorted.length / limit));
     const prevPage = page > 1 ? page - 1 : null;
     const nextPage = page < totalPages ? page + 1 : null;
+
+    if (format === "csv") {
+        const csv = runArtifactsToCsv(items);
+        return new Response(csv, {
+            headers: {
+                "Content-Type": "text/csv; charset=utf-8",
+                "Content-Disposition": 'attachment; filename="runs.csv"',
+                "Cache-Control": "public, max-age=60",
+            },
+        });
+    }
 
     return Response.json({
         total: runs.length,

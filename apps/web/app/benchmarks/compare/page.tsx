@@ -8,6 +8,7 @@ import {
 import { CompareDeltaChart } from "../../../components/charts/CompareDeltaChart";
 import { ModeSizeBar } from "../../../components/benchmark/ModeSizeBar";
 import { buildBenchmarkComparePayload } from "../../../lib/benchmarkCompare";
+import { buildBenchmarkCompareSuggestions } from "../../../lib/benchmarkCompareSuggestions";
 import { TruncateText } from "../../../components/ResponsiveTable";
 import { CompareExportLink } from "../../../components/CompareExportLink";
 import { CompareSwapLink } from "../../../components/CompareSwapLink";
@@ -46,6 +47,11 @@ export default async function BenchmarkComparePage({
     const right = selected.find((b) => b.id === params.right) ?? null;
     const compare =
         left && right ? buildBenchmarkComparePayload(left, right) : null;
+    const suggestions = buildBenchmarkCompareSuggestions(allArtifacts, {
+        left: params.left,
+        right: params.right,
+        question: params.question,
+    });
     const leftLabel = left ? left.id.slice(-12) : "left";
     const rightLabel = right ? right.id.slice(-12) : "right";
 
@@ -148,6 +154,36 @@ export default async function BenchmarkComparePage({
                     />
                 </div>
             </form>
+
+            {suggestions.length > 0 ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>Suggested comparisons</h2>
+                    <p className="small muted" style={{ marginBottom: "1rem" }}>
+                        One-click pairings for the selected{" "}
+                        {params.left && !params.right ? "left" : "right"}{" "}
+                        benchmark.
+                    </p>
+                    <ul className="compare-suggestions-list">
+                        {suggestions.map((suggestion) => (
+                            <li key={suggestion.id}>
+                                <a
+                                    href={suggestion.href}
+                                    className="button secondary"
+                                >
+                                    Compare with {suggestion.id.slice(-16)}
+                                </a>
+                                <span className="small muted">
+                                    {suggestion.reason} · {suggestion.model} ·{" "}
+                                    {suggestion.pipelinePreset} ·{" "}
+                                    {new Date(
+                                        suggestion.createdAt,
+                                    ).toLocaleString()}
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ) : null}
 
             <div className="compare-panels">
                 <div

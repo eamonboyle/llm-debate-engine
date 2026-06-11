@@ -6,11 +6,14 @@ import {
     TruncateText,
 } from "../../../components/ResponsiveTable";
 import { CopyPageLink } from "../../../components/CopyPageLink";
+import { MetricCard } from "../../../components/MetricCard";
 import {
+    loadAnalysisIndex,
     loadBenchmarksByQuestion,
     loadRunsByQuestion,
 } from "../../../lib/data";
 import { questionHubHref } from "../../../lib/questionGroups";
+import { summarizeQuestionHubMetrics } from "../../../lib/questionHubMetrics";
 
 export const metadata: Metadata = {
     title: "Question hub",
@@ -40,10 +43,14 @@ export default async function QuestionHubPage({
         );
     }
 
-    const [runs, benchmarks] = await Promise.all([
+    const [runs, benchmarks, index] = await Promise.all([
         loadRunsByQuestion(question),
         loadBenchmarksByQuestion(question),
+        loadAnalysisIndex(),
     ]);
+    const indexMetrics = index
+        ? summarizeQuestionHubMetrics(index, question)
+        : null;
 
     if (runs.length === 0 && benchmarks.length === 0) {
         notFound();
@@ -153,6 +160,43 @@ export default async function QuestionHubPage({
                     </div>
                 </div>
             </div>
+
+            {indexMetrics ? (
+                <div className="grid-4">
+                    <MetricCard
+                        label="Indexed runs"
+                        value={indexMetrics.indexedRunCount}
+                        helpKey="runArtifacts"
+                    />
+                    <MetricCard
+                        label="Avg critique issues"
+                        value={
+                            indexMetrics.avgIssueCount == null
+                                ? "—"
+                                : indexMetrics.avgIssueCount.toFixed(1)
+                        }
+                        helpKey="issueCount"
+                    />
+                    <MetricCard
+                        label="Avg solver confidence"
+                        value={
+                            indexMetrics.avgSolverConfidence == null
+                                ? "—"
+                                : indexMetrics.avgSolverConfidence.toFixed(2)
+                        }
+                        helpKey="solverConfidence"
+                    />
+                    <MetricCard
+                        label="Avg evidence risk"
+                        value={
+                            indexMetrics.avgEvidenceRisk == null
+                                ? "—"
+                                : indexMetrics.avgEvidenceRisk.toFixed(1)
+                        }
+                        helpKey="evidenceRiskLevel"
+                    />
+                </div>
+            ) : null}
 
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>Runs</h2>
