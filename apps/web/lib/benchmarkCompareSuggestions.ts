@@ -32,6 +32,9 @@ export function buildBenchmarkCompareSuggestions(
     const questionNeedle = (selected.question ?? anchor.question)
         .trim()
         .toLowerCase();
+    const scopeQuery = selected.question
+        ? `&question=${encodeURIComponent(selected.question)}`
+        : "";
 
     const candidates = benchmarks
         .filter((benchmark) => benchmark.id !== anchorId)
@@ -60,10 +63,6 @@ export function buildBenchmarkCompareSuggestions(
         seen.add(benchmark.id);
 
         const sameQ = benchmark.question === anchor.question;
-        const scopeQuery = selected.question
-            ? `&question=${encodeURIComponent(selected.question)}`
-            : "";
-
         suggestions.push({
             id: benchmark.id,
             question: benchmark.question,

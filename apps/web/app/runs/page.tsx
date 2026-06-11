@@ -167,6 +167,23 @@ export default async function RunsPage({
                             sort,
                         }}
                     />
+                    <a
+                        href={`/api/runs${buildQueryString(params, {
+                            q: params.q,
+                            model: params.model,
+                            preset: params.preset,
+                            fast: params.fast,
+                            from: params.from,
+                            to: params.to,
+                            sort,
+                            pageSize: "500",
+                            page: "1",
+                        })}&format=csv`}
+                        className="button secondary"
+                        download="runs.csv"
+                    >
+                        Export CSV
+                    </a>
                     <span className="small muted">
                         Showing {paging.startDisplay}-{paging.endDisplay} of{" "}
                         {filtered.length} filtered

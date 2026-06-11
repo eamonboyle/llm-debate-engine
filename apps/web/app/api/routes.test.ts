@@ -17,6 +17,7 @@ import { GET as getRuns } from "./runs/route";
 import { GET as getBenchmarkById } from "./benchmarks/[id]/route";
 import { GET as getBenchmarkPairsById } from "./benchmarks/[id]/pairs/route";
 import { GET as getSearch } from "./search/route";
+import { GET as getQuestions } from "./questions/route";
 
 const tempDirs: string[] = [];
 const originalRunsDir = process.env.RUNS_DIR;
@@ -1053,6 +1054,130 @@ describe("web api routes", () => {
             pairwise: Array<{ benchmarkId: string }>;
         };
         expect(json.pairwise[0].benchmarkId).toBe("benchmark_1");
+    });
+
+    it("returns filtered runs as CSV", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_a.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_a",
+                question: "Alpha",
+                metadata: {
+                    createdAt: "2026-01-01T00:00:00.000Z",
+                    model: "gpt-a",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: { id: "run_a", finalAnswer: "A", steps: [], metrics: {} },
+            }),
+            "utf-8",
+        );
+
+        const response = await getRuns(
+            new Request("http://localhost/api/runs?format=csv"),
+        );
+        expect(response.status).toBe(200);
+        expect(response.headers.get("Content-Type")).toContain("text/csv");
+        expect(await response.text()).toContain("run_a");
+    });
+
+    it("returns filtered benchmarks as CSV", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "benchmark_a.json"),
+            JSON.stringify({
+                kind: "benchmark",
+                id: "benchmark_a",
+                question: "Alpha benchmark",
+                metadata: {
+                    createdAt: "2026-01-01T00:00:00.000Z",
+                    model: "gpt-a",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                payload: {
+                    runs: 2,
+                    modeCount: 1,
+                    modeSizes: [2],
+                    divergenceEntropy: 0.2,
+                    summary: { stability: { pairwiseMean: 0.9, pairs: [] } },
+                },
+            }),
+            "utf-8",
+        );
+
+        const response = await getBenchmarks(
+            new Request("http://localhost/api/benchmarks?format=csv"),
+        );
+        expect(response.status).toBe(200);
+        expect(response.headers.get("Content-Type")).toContain("text/csv");
+        expect(await response.text()).toContain("benchmark_a");
+    });
+
+    it("returns question groups as JSON and CSV", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_a.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_a",
+                question: "Shared topic",
+                metadata: {
+                    createdAt: "2026-01-02T00:00:00.000Z",
+                    model: "gpt-a",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: { id: "run_a", finalAnswer: "A", steps: [], metrics: {} },
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "benchmark_a.json"),
+            JSON.stringify({
+                kind: "benchmark",
+                id: "benchmark_a",
+                question: "Shared topic",
+                metadata: {
+                    createdAt: "2026-01-01T00:00:00.000Z",
+                    model: "gpt-a",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                payload: {
+                    runs: 2,
+                    modeCount: 1,
+                    modeSizes: [2],
+                    divergenceEntropy: 0.2,
+                    summary: { stability: { pairwiseMean: 0.9, pairs: [] } },
+                },
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getQuestions(
+            new Request("http://localhost/api/questions?q=shared"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            filtered: number;
+            items: Array<{ question: string; runCount: number }>;
+        };
+        expect(json.filtered).toBe(1);
+        expect(json.items[0].question).toBe("Shared topic");
+        expect(json.items[0].runCount).toBe(1);
+
+        const csvResponse = await getQuestions(
+            new Request("http://localhost/api/questions?format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(csvResponse.headers.get("Content-Type")).toContain("text/csv");
+        expect(await csvResponse.text()).toContain("Shared topic");
     });
 
     it("returns filtered activity feed as JSON and CSV", async () => {

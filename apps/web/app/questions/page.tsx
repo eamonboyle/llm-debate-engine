@@ -9,6 +9,7 @@ import {
     groupArtifactsByQuestion,
     questionHubHref,
 } from "../../lib/questionGroups";
+import { ExportFilteredLink } from "../../components/ExportFilteredLink";
 import { buildQueryString, paginateItems } from "../../lib/listPagination";
 import {
     resolveQuestionSortOrder,
@@ -91,6 +92,25 @@ export default async function QuestionsPage({
                     </button>
                     <a href="/questions" className="button secondary">
                         Clear
+                    </a>
+                    <ExportFilteredLink
+                        apiPath="/api/questions"
+                        params={{
+                            q: params.q,
+                            sort,
+                        }}
+                    />
+                    <a
+                        href={`/api/questions${buildQueryString(params, {
+                            q: params.q,
+                            sort,
+                            pageSize: "500",
+                            page: "1",
+                        })}&format=csv`}
+                        className="button secondary"
+                        download="questions.csv"
+                    >
+                        Export CSV
                     </a>
                     <span className="small muted">
                         {filtered.length} question

@@ -6,10 +6,12 @@ import {
     resolveBenchmarkSortOrder,
     sortBenchmarkArtifacts,
 } from "../../../lib/artifactSort";
+import { benchmarkArtifactsToCsv } from "../../../lib/listExport";
 import { parseListPagination } from "../_shared/pagination";
 
 export async function GET(request: Request) {
     const url = new URL(request.url);
+    const format = url.searchParams.get("format") ?? "json";
     const benchmarks = await loadBenchmarkArtifacts();
     const filtered = filterBenchmarkArtifacts(benchmarks, {
         q: url.searchParams.get("q") ?? undefined,
@@ -28,6 +30,17 @@ export async function GET(request: Request) {
     const totalPages = Math.max(1, Math.ceil(sorted.length / limit));
     const prevPage = page > 1 ? page - 1 : null;
     const nextPage = page < totalPages ? page + 1 : null;
+
+    if (format === "csv") {
+        const csv = benchmarkArtifactsToCsv(items);
+        return new Response(csv, {
+            headers: {
+                "Content-Type": "text/csv; charset=utf-8",
+                "Content-Disposition": 'attachment; filename="benchmarks.csv"',
+                "Cache-Control": "public, max-age=60",
+            },
+        });
+    }
 
     return Response.json({
         total: benchmarks.length,
