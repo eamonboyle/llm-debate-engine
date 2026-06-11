@@ -47,6 +47,8 @@ export const GLOSSARY: Record<string, string> = {
         "Distribution of runs across discovered answer modes. Highly skewed (e.g. [n-1, 1]) indicates a single outlier.",
     thresholdSensitivity:
         "Mode count at similarity thresholds 0.8, 0.9, 0.95. Large increase as threshold tightens implies nuanced variation.",
+    benchmarkThreshold:
+        "Cosine similarity threshold used when clustering final answers into modes during benchmark generation.",
     pairwiseSimilarityHeatmap:
         "Similarity between each pair of runs. Darker red = low similarity; green = high. Green blocks indicate consistent sub-clusters.",
     modeExplorer:

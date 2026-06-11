@@ -166,12 +166,12 @@ export default async function BenchmarkComparePage({
                     <ul className="compare-suggestions-list">
                         {suggestions.map((suggestion) => (
                             <li key={suggestion.id}>
-                                <a
+                                <Link
                                     href={suggestion.href}
                                     className="button secondary"
                                 >
                                     Compare with {suggestion.id.slice(-16)}
-                                </a>
+                                </Link>
                                 <span className="small muted">
                                     {suggestion.reason} · {suggestion.model} ·{" "}
                                     {suggestion.pipelinePreset} ·{" "}

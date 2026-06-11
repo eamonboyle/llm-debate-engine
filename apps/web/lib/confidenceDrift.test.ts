@@ -76,6 +76,7 @@ describe("confidenceDrift", () => {
         expect(summary.runCount).toBe(2);
         expect(summary.solverToRevisionMean).toBe(-0.3);
         expect(summary.severityVsSolverToRevision).toBe(0.5);
+        expect(summary.severityVsRevisionToSynthesizer).toBe(0.1);
         expect(summary.calibratedMinusSynthMean).toBe(0);
     });
 

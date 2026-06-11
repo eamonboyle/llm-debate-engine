@@ -250,6 +250,18 @@ export default async function RunsPage({
                         ...(indexLookup
                             ? [
                                   {
+                                      key: "steps",
+                                      label: "Steps",
+                                      helpKey: "stepCount",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const steps = (
+                                              row as { steps?: number }
+                                          ).steps;
+                                          return steps == null ? "—" : steps;
+                                      },
+                                  },
+                                  {
                                       key: "issues",
                                       label: "Issues",
                                       helpKey: "issueCount",
@@ -330,6 +342,7 @@ export default async function RunsPage({
                             preset: run.metadata.pipelinePreset,
                             fast: run.metadata.fastMode,
                             finalAnswer: run.run.finalAnswer,
+                            steps: indexed?.stepCount,
                             issues: indexed?.issueCount,
                             solverConf: indexed?.solverConfidence,
                         };
