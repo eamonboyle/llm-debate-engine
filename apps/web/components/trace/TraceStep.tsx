@@ -1,17 +1,96 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { InfoTooltip } from "../InfoTooltip";
+
+type StepRequest = {
+    model?: string;
+    temperature?: number;
+    schemaName?: string;
+    messages?: Array<{ role?: string; content?: string }>;
+};
 
 type Step = {
     id: string;
     agentName: string;
     role: string;
     output?: unknown;
+    request?: StepRequest;
+    rawAttempts?: unknown[];
     error?: string;
     createdAt?: string;
     completedAt?: string;
 };
+
+function formatMessageContent(content: string | undefined, max = 280): string {
+    if (!content) return "";
+    const normalized = content.replace(/\s+/g, " ").trim();
+    if (normalized.length <= max) return normalized;
+    return `${normalized.slice(0, max)}…`;
+}
+
+function RequestSummary({ request }: { request: StepRequest }) {
+    const messages = request.messages ?? [];
+    const metaParts = [
+        request.model ? `model: ${request.model}` : null,
+        request.temperature != null
+            ? `temperature: ${request.temperature}`
+            : null,
+        request.schemaName ? `schema: ${request.schemaName}` : null,
+    ].filter(Boolean);
+
+    return (
+        <div className="trace-summary">
+            {metaParts.length > 0 ? (
+                <p className="trace-summary-meta">{metaParts.join(" · ")}</p>
+            ) : null}
+            {messages.length > 0 ? (
+                <div className="trace-summary-block">
+                    <span className="trace-summary-label">
+                        Messages ({messages.length})
+                    </span>
+                    <ul className="trace-summary-list">
+                        {messages.map((message, idx) => (
+                            <li key={idx}>
+                                <strong>{message.role ?? "unknown"}:</strong>{" "}
+                                {formatMessageContent(message.content)}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ) : null}
+        </div>
+    );
+}
+
+function CollapsibleTracePanel({
+    label,
+    children,
+    defaultOpen = false,
+}: {
+    label: string;
+    children: ReactNode;
+    defaultOpen?: boolean;
+}) {
+    const [open, setOpen] = useState(defaultOpen);
+
+    return (
+        <div className="trace-json-wrap">
+            <button
+                type="button"
+                className="trace-json-toggle"
+                onClick={() => setOpen((value) => !value)}
+                aria-expanded={open}
+            >
+                <span className="trace-json-toggle-icon">
+                    {open ? "▼" : "▶"}
+                </span>
+                {label}
+            </button>
+            {open ? children : null}
+        </div>
+    );
+}
 
 function formatStepDuration(
     createdAt: string | undefined,
@@ -473,6 +552,29 @@ export function TraceStep({
 
                 <div className="trace-step-content">
                     <StructuredSummary output={step.output} />
+
+                    {step.request ? (
+                        <CollapsibleTracePanel label="LLM request (prompt)">
+                            <RequestSummary request={step.request} />
+                            <pre className="trace-json-pre">
+                                {JSON.stringify(step.request, null, 2)}
+                            </pre>
+                        </CollapsibleTracePanel>
+                    ) : null}
+
+                    {step.rawAttempts && step.rawAttempts.length > 0 ? (
+                        <CollapsibleTracePanel
+                            label={`Parse retries (${step.rawAttempts.length})`}
+                        >
+                            <p className="trace-summary-meta">
+                                Structured output attempts before the final
+                                parsed response.
+                            </p>
+                            <pre className="trace-json-pre">
+                                {JSON.stringify(step.rawAttempts, null, 2)}
+                            </pre>
+                        </CollapsibleTracePanel>
+                    ) : null}
 
                     <div className="trace-json-wrap">
                         <button
