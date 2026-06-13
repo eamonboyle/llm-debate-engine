@@ -7,7 +7,7 @@ import {
 import { ExportFilteredLink } from "../../components/ExportFilteredLink";
 import { PresetFilterSelect } from "../../components/PresetFilterSelect";
 import { ModelFilterSelect } from "../../components/ModelFilterSelect";
-import { buildActivityFeed } from "../../lib/activityFeed";
+import { buildActivityFeed, resolveActivitySortOrder } from "../../lib/activityFeed";
 import { collectArtifactFacets } from "../../lib/artifactFacets";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
 import { buildQueryString, paginateItems } from "../../lib/listPagination";
@@ -24,6 +24,7 @@ type ActivitySearchParams = {
     fast?: string;
     from?: string;
     to?: string;
+    sort?: string;
     page?: string;
     pageSize?: string;
 };
@@ -40,6 +41,7 @@ export default async function ActivityPage({
 }) {
     const params = await searchParams;
     const kind = resolveKind(params.kind);
+    const sort = resolveActivitySortOrder(params.sort);
     const [runs, benchmarks] = await Promise.all([
         loadRunArtifacts(),
         loadBenchmarkArtifacts(),
@@ -53,6 +55,7 @@ export default async function ActivityPage({
         fast: params.fast,
         from: params.from,
         to: params.to,
+        sort,
     });
     const paging = paginateItems(feed, params, {
         defaultPageSize: 25,
@@ -81,8 +84,8 @@ export default async function ActivityPage({
             <div>
                 <h1 className="title">Activity feed</h1>
                 <p className="subtitle">
-                    Chronological timeline of run traces and benchmarks — newest
-                    experiments first.
+                    Chronological timeline of run traces and benchmarks —{" "}
+                    {sort === "oldest" ? "oldest experiments first" : "newest experiments first"}.
                 </p>
             </div>
 
@@ -140,6 +143,14 @@ export default async function ActivityPage({
                         <option value="25">25 per page</option>
                         <option value="50">50 per page</option>
                     </select>
+                    <select
+                        name="sort"
+                        defaultValue={sort}
+                        className="input"
+                    >
+                        <option value="newest">Sort: newest first</option>
+                        <option value="oldest">Sort: oldest first</option>
+                    </select>
                 </div>
                 <div className="filter-actions">
                     <button type="submit" className="button">
@@ -158,6 +169,7 @@ export default async function ActivityPage({
                             fast: params.fast,
                             from: params.from,
                             to: params.to,
+                            sort,
                         }}
                         label="Export filtered JSON"
                     />
@@ -169,6 +181,7 @@ export default async function ActivityPage({
                             fast: params.fast,
                             from: params.from,
                             to: params.to,
+                            sort,
                             pageSize: "500",
                             page: "1",
                         })}&format=csv`}
@@ -292,6 +305,7 @@ export default async function ActivityPage({
                                   fast: params.fast,
                                   from: params.from,
                                   to: params.to,
+                                  sort,
                                   pageSize: String(paging.pageSize),
                                   page: String(paging.page - 1),
                               })
@@ -321,6 +335,7 @@ export default async function ActivityPage({
                                   fast: params.fast,
                                   from: params.from,
                                   to: params.to,
+                                  sort,
                                   pageSize: String(paging.pageSize),
                                   page: String(paging.page + 1),
                               })

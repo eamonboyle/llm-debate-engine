@@ -15,6 +15,10 @@ import { TruncateText } from "../../../components/ResponsiveTable";
 import { findMostSimilarPeerRunId } from "../../../lib/benchmarkPeers";
 import { inferModeLabel } from "../../../lib/modeLabeler";
 import { questionHubHref } from "../../../lib/questionGroups";
+import {
+    extractBenchmarkSummaryDisplay,
+    formatSummaryMetric,
+} from "../../../lib/benchmarkSummaryMetrics";
 import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
 import { CopyPageLink } from "../../../components/CopyPageLink";
 
@@ -80,6 +84,7 @@ export default async function BenchmarkDetailPage({
         },
     ];
     const modes = benchmark.payload.modes ?? [];
+    const summaryDisplay = extractBenchmarkSummaryDisplay(benchmark);
 
     return (
         <section className="stack">
@@ -158,6 +163,70 @@ export default async function BenchmarkDetailPage({
                     />
                 ) : null}
             </div>
+
+            {summaryDisplay.hasAny ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>
+                        Run-level aggregates
+                        <InfoTooltip helpKey="benchmarkRunAggregates" />
+                    </h2>
+                    <p className="small muted" style={{ marginBottom: "1rem" }}>
+                        Mean and spread of per-run metrics across all members of
+                        this benchmark — consensus strength, critique severity,
+                        and answer stability.
+                    </p>
+                    <div className="grid-4">
+                        <MetricCard
+                            label="Consensus mean"
+                            value={formatSummaryMetric(
+                                summaryDisplay.consensusMean,
+                            )}
+                            helper={
+                                summaryDisplay.consensusStddev != null
+                                    ? `σ ${formatSummaryMetric(summaryDisplay.consensusStddev)}`
+                                    : undefined
+                            }
+                            helpKey="consensusStrength"
+                        />
+                        <MetricCard
+                            label="Critique severity mean"
+                            value={formatSummaryMetric(
+                                summaryDisplay.critiqueMean,
+                                1,
+                            )}
+                            helper={
+                                summaryDisplay.critiqueStddev != null
+                                    ? `σ ${formatSummaryMetric(summaryDisplay.critiqueStddev, 2)}`
+                                    : undefined
+                            }
+                            helpKey="maxSeverity"
+                        />
+                        <MetricCard
+                            label="Stability mean"
+                            value={formatSummaryMetric(
+                                summaryDisplay.stabilityMean,
+                            )}
+                            helper={
+                                summaryDisplay.stabilityStddev != null
+                                    ? `σ ${formatSummaryMetric(summaryDisplay.stabilityStddev)}`
+                                    : undefined
+                            }
+                            helpKey="stabilityPairwiseMean"
+                        />
+                        <MetricCard
+                            label="Stability range"
+                            value={
+                                summaryDisplay.stabilityMin != null &&
+                                summaryDisplay.stabilityMax != null
+                                    ? `${formatSummaryMetric(summaryDisplay.stabilityMin)} – ${formatSummaryMetric(summaryDisplay.stabilityMax)}`
+                                    : "—"
+                            }
+                            helper="min–max pairwise similarity"
+                            helpKey="stabilityPairwiseMean"
+                        />
+                    </div>
+                </div>
+            ) : null}
 
             <div className="card benchmark-mode-structure">
                 <h2 style={{ marginTop: 0 }}>

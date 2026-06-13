@@ -1,17 +1,56 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ModelFilterSelect } from "../../components/ModelFilterSelect";
+import { PresetFilterSelect } from "../../components/PresetFilterSelect";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
 import { buildAgentStats, formatAgentDuration } from "../../lib/agentStats";
-import { loadRunArtifacts } from "../../lib/data";
+import { collectArtifactFacets } from "../../lib/artifactFacets";
+import {
+    filterRunArtifacts,
+    loadBenchmarkArtifacts,
+    loadRunArtifacts,
+} from "../../lib/data";
+import { buildQueryString } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
     title: "Agent pipeline stats",
 };
 
-export default async function AgentStatsPage() {
-    const runs = await loadRunArtifacts();
+type AgentSearchParams = {
+    model?: string;
+    preset?: string;
+    fast?: string;
+    from?: string;
+    to?: string;
+};
 
-    if (runs.length === 0) {
+export default async function AgentStatsPage({
+    searchParams,
+}: {
+    searchParams: Promise<AgentSearchParams>;
+}) {
+    const params = await searchParams;
+    const [allRuns, benchmarks] = await Promise.all([
+        loadRunArtifacts(),
+        loadBenchmarkArtifacts(),
+    ]);
+    const { models, presets } = collectArtifactFacets(allRuns, benchmarks);
+    const runs = filterRunArtifacts(allRuns, {
+        model: params.model,
+        preset: params.preset,
+        fast: params.fast,
+        from: params.from,
+        to: params.to,
+    });
+    const hasFilters = Boolean(
+        params.model ||
+            params.preset ||
+            params.fast ||
+            params.from ||
+            params.to,
+    );
+
+    if (allRuns.length === 0) {
         return (
             <section className="stack">
                 <h1 className="title">Agent pipeline stats</h1>
@@ -35,9 +74,11 @@ export default async function AgentStatsPage() {
             <div>
                 <h1 className="title">Agent pipeline stats</h1>
                 <p className="subtitle">
-                    How often each debate agent appears across {runs.length} run
-                    traces — step counts, participating runs, errors, and
-                    average step duration when timestamps are available.
+                    How often each debate agent appears across {runs.length}{" "}
+                    run trace{runs.length === 1 ? "" : "s"}
+                    {hasFilters ? ` (filtered from ${allRuns.length} total)` : ""}
+                    — step counts, participating runs, errors, and average step
+                    duration when timestamps are available.
                 </p>
                 <div
                     className="page-actions"
@@ -51,6 +92,54 @@ export default async function AgentStatsPage() {
                     </Link>
                 </div>
             </div>
+
+            <form className="card" method="get">
+                <div className="filter-grid">
+                    <ModelFilterSelect
+                        models={models}
+                        defaultValue={params.model ?? ""}
+                        listId="agents-model-filter-options"
+                    />
+                    <PresetFilterSelect
+                        presets={presets}
+                        defaultValue={params.preset ?? ""}
+                    />
+                    <select
+                        name="fast"
+                        defaultValue={params.fast ?? ""}
+                        className="input"
+                    >
+                        <option value="">Fast mode: any</option>
+                        <option value="true">Fast only</option>
+                        <option value="false">Non-fast only</option>
+                    </select>
+                    <input
+                        type="datetime-local"
+                        name="from"
+                        defaultValue={params.from ?? ""}
+                        className="input"
+                        title="Created at or after"
+                    />
+                    <input
+                        type="datetime-local"
+                        name="to"
+                        defaultValue={params.to ?? ""}
+                        className="input"
+                        title="Created at or before"
+                    />
+                </div>
+                <div className="filter-actions">
+                    <button type="submit" className="button">
+                        Apply filters
+                    </button>
+                    <Link href="/agents" className="button secondary">
+                        Clear
+                    </Link>
+                    <span className="small muted">
+                        {runs.length} run{runs.length === 1 ? "" : "s"} in scope
+                    </span>
+                </div>
+            </form>
 
             <div className="grid-4">
                 <div className="card">
@@ -80,9 +169,14 @@ export default async function AgentStatsPage() {
             </div>
 
             <div className="card">
-                {rows.length === 0 ? (
+                {runs.length === 0 ? (
                     <p className="muted">
-                        No agent steps found in run artifacts.
+                        No runs match your filters. Try broadening model, preset,
+                        or date range.
+                    </p>
+                ) : rows.length === 0 ? (
+                    <p className="muted">
+                        No agent steps found in the filtered run artifacts.
                     </p>
                 ) : (
                     <ResponsiveTable
@@ -121,6 +215,15 @@ export default async function AgentStatsPage() {
                     />
                 )}
             </div>
+
+            {hasFilters ? (
+                <p className="small muted">
+                    Filtered view.{" "}
+                    <Link href={`/runs${buildQueryString(params, {})}`}>
+                        Browse matching runs
+                    </Link>
+                </p>
+            ) : null}
         </section>
     );
 }

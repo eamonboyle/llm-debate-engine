@@ -175,8 +175,19 @@ export type BenchmarkArtifact = {
             exemplarPreview: string;
         }>;
         summary?: {
+            consensus?: {
+                mean?: number;
+                stddev?: number;
+            };
+            critiqueMaxSeverity?: {
+                mean?: number;
+                stddev?: number;
+            };
             stability?: {
                 pairwiseMean?: number;
+                pairwiseStddev?: number;
+                minPairwiseSimilarity?: number;
+                maxPairwiseSimilarity?: number;
                 pairs?: Array<{ i: number; j: number; similarity: number }>;
             };
         };

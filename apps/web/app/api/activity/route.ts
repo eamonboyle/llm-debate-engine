@@ -1,5 +1,6 @@
 import {
     buildActivityFeed,
+    resolveActivitySortOrder,
     type ActivityFeedFilters,
 } from "../../../lib/activityFeed";
 import { activityEntriesToCsv } from "../../../lib/activityExport";
@@ -27,6 +28,9 @@ export async function GET(request: Request) {
         fast: url.searchParams.get("fast") ?? undefined,
         from: url.searchParams.get("from") ?? undefined,
         to: url.searchParams.get("to") ?? undefined,
+        sort: resolveActivitySortOrder(
+            url.searchParams.get("sort") ?? undefined,
+        ),
     };
 
     const feed = buildActivityFeed(runs, benchmarks, filters);

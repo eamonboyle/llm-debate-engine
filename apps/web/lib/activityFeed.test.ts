@@ -78,4 +78,11 @@ describe("buildActivityFeed", () => {
         });
         expect(gptA.map((e) => e.id)).toEqual(["bench_a", "run_b", "run_a"]);
     });
+
+    it("sorts oldest first when requested", () => {
+        const feed = buildActivityFeed([runA, runB], [benchmarkA], {
+            sort: "oldest",
+        });
+        expect(feed.map((e) => e.id)).toEqual(["run_a", "run_b", "bench_a"]);
+    });
 });

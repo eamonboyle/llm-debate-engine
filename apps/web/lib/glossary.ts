@@ -49,6 +49,8 @@ export const GLOSSARY: Record<string, string> = {
         "Mode count at similarity thresholds 0.8, 0.9, 0.95. Large increase as threshold tightens implies nuanced variation.",
     benchmarkThreshold:
         "Cosine similarity threshold used when clustering final answers into modes during benchmark generation.",
+    benchmarkRunAggregates:
+        "Aggregate statistics across member runs: mean consensus strength between debate stages, mean max critique severity, and answer-embedding stability distribution.",
     pairwiseSimilarityHeatmap:
         "Similarity between each pair of runs. Darker red = low similarity; green = high. Green blocks indicate consistent sub-clusters.",
     modeExplorer:

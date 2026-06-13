@@ -1,18 +1,39 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ModelFilterSelect } from "../../components/ModelFilterSelect";
+import { PresetFilterSelect } from "../../components/PresetFilterSelect";
 import {
     ResponsiveTable,
     TruncateText,
 } from "../../components/ResponsiveTable";
+import { collectArtifactFacets } from "../../lib/artifactFacets";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
+import { buildQueryString } from "../../lib/listPagination";
 import { searchArtifacts, questionHubHref } from "../../lib/globalSearch";
+
 export const metadata: Metadata = {
     title: "Search",
 };
 
 type SearchParams = {
     q?: string;
+    model?: string;
+    preset?: string;
+    fast?: string;
+    from?: string;
+    to?: string;
 };
+
+function hasActiveSearch(params: SearchParams): boolean {
+    return Boolean(
+        (params.q ?? "").trim() ||
+            params.model ||
+            params.preset ||
+            params.fast ||
+            params.from ||
+            params.to,
+    );
+}
 
 export default async function SearchPage({
     searchParams,
@@ -25,8 +46,10 @@ export default async function SearchPage({
         loadRunArtifacts(),
         loadBenchmarkArtifacts(),
     ]);
+    const { models, presets } = collectArtifactFacets(runs, benchmarks);
+    const active = hasActiveSearch(params);
 
-    if (!query) {
+    if (!active) {
         return (
             <section className="stack">
                 <div>
@@ -39,16 +62,38 @@ export default async function SearchPage({
                     </p>
                 </div>
                 <form className="card" method="get" action="/search">
-                    <label className="small muted" htmlFor="search-q">
-                        Search query
-                    </label>
-                    <input
-                        id="search-q"
-                        name="q"
-                        className="input"
-                        placeholder="Question, answer, run ID, model..."
-                        autoFocus
-                    />
+                    <div className="filter-grid">
+                        <input
+                            id="search-q"
+                            name="q"
+                            className="input"
+                            placeholder="Question, answer, run ID, model..."
+                            autoFocus
+                        />
+                        <ModelFilterSelect
+                            models={models}
+                            defaultValue=""
+                            listId="search-model-filter-options"
+                        />
+                        <PresetFilterSelect presets={presets} defaultValue="" />
+                        <select name="fast" defaultValue="" className="input">
+                            <option value="">Fast mode: any</option>
+                            <option value="true">Fast only</option>
+                            <option value="false">Non-fast only</option>
+                        </select>
+                        <input
+                            type="datetime-local"
+                            name="from"
+                            className="input"
+                            title="Created at or after"
+                        />
+                        <input
+                            type="datetime-local"
+                            name="to"
+                            className="input"
+                            title="Created at or before"
+                        />
+                    </div>
                     <div className="filter-actions" style={{ marginTop: 12 }}>
                         <button type="submit" className="button">
                             Search
@@ -63,19 +108,40 @@ export default async function SearchPage({
         );
     }
 
-    const results = searchArtifacts(runs, benchmarks, query);
+    const results = searchArtifacts(runs, benchmarks, query, {
+        filters: {
+            model: params.model,
+            preset: params.preset,
+            fast: params.fast,
+            from: params.from,
+            to: params.to,
+        },
+    });
     const encodedQ = encodeURIComponent(query);
     const hasResults =
         results.totals.runs > 0 ||
         results.totals.benchmarks > 0 ||
         results.totals.questions > 0;
+    const filterSummary = [
+        query ? `“${query}”` : null,
+        params.model ? `model: ${params.model}` : null,
+        params.preset ? `preset: ${params.preset}` : null,
+        params.fast === "true"
+            ? "fast mode"
+            : params.fast === "false"
+              ? "non-fast"
+              : null,
+    ]
+        .filter(Boolean)
+        .join(" · ");
 
     return (
         <section className="stack">
             <div>
                 <h1 className="title">Search results</h1>
                 <p className="subtitle">
-                    Matches for &ldquo;{query}&rdquo; across the artifact store.
+                    Matches for {filterSummary || "your filters"} across the
+                    artifact store.
                 </p>
             </div>
 
@@ -86,6 +152,38 @@ export default async function SearchPage({
                         className="input"
                         defaultValue={query}
                         placeholder="Question, answer, run ID, model..."
+                    />
+                    <ModelFilterSelect
+                        models={models}
+                        defaultValue={params.model ?? ""}
+                        listId="search-model-filter-options-results"
+                    />
+                    <PresetFilterSelect
+                        presets={presets}
+                        defaultValue={params.preset ?? ""}
+                    />
+                    <select
+                        name="fast"
+                        defaultValue={params.fast ?? ""}
+                        className="input"
+                    >
+                        <option value="">Fast mode: any</option>
+                        <option value="true">Fast only</option>
+                        <option value="false">Non-fast only</option>
+                    </select>
+                    <input
+                        type="datetime-local"
+                        name="from"
+                        defaultValue={params.from ?? ""}
+                        className="input"
+                        title="Created at or after"
+                    />
+                    <input
+                        type="datetime-local"
+                        name="to"
+                        defaultValue={params.to ?? ""}
+                        className="input"
+                        title="Created at or before"
                     />
                 </div>
                 <div className="filter-actions">
@@ -106,7 +204,7 @@ export default async function SearchPage({
                     </div>
                     {results.totals.runs > 0 ? (
                         <Link
-                            href={`/runs?q=${encodedQ}`}
+                            href={`/runs${buildQueryString(params, { q: query || undefined })}`}
                             className="small"
                             style={{ display: "inline-block", marginTop: 8 }}
                         >
@@ -121,7 +219,7 @@ export default async function SearchPage({
                     </div>
                     {results.totals.benchmarks > 0 ? (
                         <Link
-                            href={`/benchmarks?q=${encodedQ}`}
+                            href={`/benchmarks${buildQueryString(params, { q: query || undefined })}`}
                             className="small"
                             style={{ display: "inline-block", marginTop: 8 }}
                         >
@@ -134,7 +232,7 @@ export default async function SearchPage({
                     <div style={{ marginTop: 6, fontSize: "1.25rem" }}>
                         {results.totals.questions}
                     </div>
-                    {results.totals.questions > 0 ? (
+                    {results.totals.questions > 0 && query ? (
                         <Link
                             href={`/questions?q=${encodedQ}`}
                             className="small"
@@ -155,8 +253,9 @@ export default async function SearchPage({
             {!hasResults ? (
                 <div className="card">
                     <p className="muted">
-                        No runs, benchmarks, or questions matched your query.
-                        Try a shorter phrase or check spelling.
+                        No runs, benchmarks, or questions matched your search.
+                        Try a shorter phrase, broaden filters, or check
+                        spelling.
                     </p>
                 </div>
             ) : null}

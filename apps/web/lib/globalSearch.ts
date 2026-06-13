@@ -42,11 +42,17 @@ export function searchArtifacts(
     runs: RunArtifact[],
     benchmarks: BenchmarkArtifact[],
     query: string,
-    opts: { limitPerSection?: number } = {},
+    opts: {
+        limitPerSection?: number;
+        filters?: Omit<ArtifactFilterParams, "q">;
+    } = {},
 ): GlobalSearchResult {
     const limit = opts.limitPerSection ?? 12;
     const trimmed = query.trim();
-    const filters: ArtifactFilterParams = trimmed ? { q: trimmed } : {};
+    const filters: ArtifactFilterParams = {
+        q: trimmed || undefined,
+        ...opts.filters,
+    };
 
     const matchedRuns = filterRunArtifacts(runs, filters);
     const matchedBenchmarks = filterBenchmarkArtifacts(benchmarks, filters);
@@ -55,7 +61,7 @@ export function searchArtifacts(
               (group) =>
                   group.question.toLowerCase().includes(trimmed.toLowerCase()),
           )
-        : groupArtifactsByQuestion(runs, benchmarks);
+        : groupArtifactsByQuestion(matchedRuns, matchedBenchmarks);
 
     return {
         query: trimmed,
