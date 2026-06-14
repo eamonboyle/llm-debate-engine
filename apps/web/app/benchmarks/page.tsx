@@ -12,9 +12,14 @@ import { MetricCard } from "../../components/MetricCard";
 import { collectArtifactFacets } from "../../lib/artifactFacets";
 import {
     filterBenchmarkArtifacts,
+    loadAnalysisIndex,
     loadBenchmarkArtifacts,
     loadRunArtifacts,
 } from "../../lib/data";
+import {
+    buildBenchmarkIndexLookup,
+    formatTopModeLabel,
+} from "../../lib/benchmarkIndexLookup";
 import {
     resolveBenchmarkSortOrder,
     sortBenchmarkArtifacts,
@@ -42,10 +47,12 @@ export default async function BenchmarksPage({
 }: {
     searchParams: Promise<BenchmarkSearchParams>;
 }) {
-    const [benchmarks, runs] = await Promise.all([
+    const [benchmarks, runs, index] = await Promise.all([
         loadBenchmarkArtifacts(),
         loadRunArtifacts(),
+        loadAnalysisIndex(),
     ]);
+    const benchmarkIndex = index ? buildBenchmarkIndexLookup(index) : null;
     const { models, presets } = collectArtifactFacets(runs, benchmarks);
     const params = await searchParams;
     const filtered = filterBenchmarkArtifacts(benchmarks, {
@@ -303,6 +310,39 @@ export default async function BenchmarksPage({
                             ),
                         },
                         {
+                            key: "stability",
+                            label: "Stability",
+                            helpKey: "stabilityPairwiseMean",
+                            hideOnMobile: true,
+                            render: (row) => {
+                                const value = (row as { stability?: number })
+                                    .stability;
+                                return typeof value === "number"
+                                    ? value.toFixed(3)
+                                    : "—";
+                            },
+                        },
+                        {
+                            key: "topMode",
+                            label: "Top mode",
+                            cellClass: "cell-question",
+                            hideOnMobile: true,
+                            render: (row) => {
+                                const label = (
+                                    row as { topMode?: string | null }
+                                ).topMode;
+                                return label ? (
+                                    <TruncateText
+                                        text={label}
+                                        maxLength={56}
+                                        className="muted"
+                                    />
+                                ) : (
+                                    <span className="muted">—</span>
+                                );
+                            },
+                        },
+                        {
                             key: "compare",
                             label: "Compare",
                             cellClass: "cell-actions",
@@ -323,14 +363,24 @@ export default async function BenchmarksPage({
                             ),
                         },
                     ]}
-                    data={paging.paged.map((benchmark) => ({
-                        id: benchmark.id,
-                        createdAt: benchmark.metadata.createdAt,
-                        question: benchmark.question,
-                        runs: benchmark.payload.runs,
-                        modeCount: benchmark.payload.modeCount,
-                        entropy: benchmark.payload.divergenceEntropy,
-                    }))}
+                    data={paging.paged.map((benchmark) => {
+                        const indexed = benchmarkIndex?.get(benchmark.id);
+                        return {
+                            id: benchmark.id,
+                            createdAt: benchmark.metadata.createdAt,
+                            question: benchmark.question,
+                            runs: benchmark.payload.runs,
+                            modeCount: benchmark.payload.modeCount,
+                            entropy: benchmark.payload.divergenceEntropy,
+                            stability:
+                                indexed?.stabilityPairwiseMean ??
+                                benchmark.payload.summary?.stability
+                                    ?.pairwiseMean,
+                            topMode: indexed
+                                ? formatTopModeLabel(indexed.modeLabels)
+                                : null,
+                        };
+                    })}
                     getRowId={(row) => (row as { id: string }).id}
                     renderCardActions={(row) => (
                         <>

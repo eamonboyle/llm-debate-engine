@@ -4,7 +4,11 @@ import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
 import { loadAnalysisIndex } from "../../lib/data";
 import { IssueSeverityChart } from "../../components/charts/IssueSeverityChart";
-import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
+import {
+    applyIndexFilters,
+    collectIndexFacets,
+    hasActiveIndexFilters,
+} from "../../lib/indexFilters";
 import {
     buildIssueTypeSummaries,
     listRunsForIssueType,
@@ -49,7 +53,11 @@ export default async function IssuesExplorerPage({
 
     const { models, presets } = collectIndexFacets(index);
     const filteredIndex = applyIndexFilters(index, params);
-    const summaries = buildIssueTypeSummaries(filteredIndex);
+    const summaries = buildIssueTypeSummaries(filteredIndex, {
+        useIndexedSeverity:
+            !hasActiveIndexFilters(params) &&
+            Boolean(index.aggregates.issueSeverityByType?.length),
+    });
     const selectedType = (params.type ?? "").trim();
     const selectedRuns = selectedType
         ? listRunsForIssueType(filteredIndex, selectedType)

@@ -1364,6 +1364,13 @@ pre {
     font-weight: 500;
 }
 
+.trace-step-attempts {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-data-amber);
+    font-weight: 500;
+}
+
 .trace-step-error {
     color: var(--color-error);
 }

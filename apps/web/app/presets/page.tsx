@@ -77,6 +77,9 @@ export default async function PresetLeaderboardPage({
                     <Link href="/catalog" className="button secondary">
                         Experiment catalog
                     </Link>
+                    <Link href="/presets/compare" className="button secondary">
+                        Compare presets
+                    </Link>
                 </div>
             </div>
 
@@ -117,6 +120,12 @@ export default async function PresetLeaderboardPage({
                                 helpKey: "solverToRevisionDelta",
                             },
                             {
+                                key: "avgEvidenceRisk",
+                                label: "Avg evidence risk",
+                                helpKey: "evidenceRiskLevel",
+                                hideOnMobile: true,
+                            },
+                            {
                                 key: "avgCoherence",
                                 label: "Avg coherence",
                                 helpKey: "coherence",
@@ -144,7 +153,9 @@ export default async function PresetLeaderboardPage({
                             avgMaxSeverity: formatMetric(row.avgMaxSeverity),
                             avgSolverToRevisionDelta: formatMetric(
                                 row.avgSolverToRevisionDelta,
+                                3,
                             ),
+                            avgEvidenceRisk: formatMetric(row.avgEvidenceRisk),
                             avgCoherence: formatMetric(row.avgCoherence),
                             runsHref: row.runsHref,
                         }))}

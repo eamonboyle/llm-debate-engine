@@ -471,6 +471,8 @@ export function TraceStep({
     const kind = getStepKind(step.output);
     const kindColor = kind ? getKindColor(kind) : "var(--color-text-muted)";
     const duration = formatStepDuration(step.createdAt, step.completedAt);
+    const rawAttempts = Array.isArray(step.rawAttempts) ? step.rawAttempts : [];
+    const showAttempts = rawAttempts.length > 0;
 
     return (
         <div
@@ -542,6 +544,12 @@ export function TraceStep({
                                 {duration}
                             </span>
                         ) : null}
+                        {showAttempts ? (
+                            <span className="trace-step-attempts">
+                                {rawAttempts.length} attempt
+                                {rawAttempts.length === 1 ? "" : "s"}
+                            </span>
+                        ) : null}
                         {step.error && (
                             <span className="trace-step-error">
                                 {step.error}
@@ -562,16 +570,16 @@ export function TraceStep({
                         </CollapsibleTracePanel>
                     ) : null}
 
-                    {step.rawAttempts && step.rawAttempts.length > 0 ? (
+                    {showAttempts ? (
                         <CollapsibleTracePanel
-                            label={`Parse retries (${step.rawAttempts.length})`}
+                            label={`Parse retries (${rawAttempts.length})`}
                         >
                             <p className="trace-summary-meta">
                                 Structured output attempts before the final
                                 parsed response.
                             </p>
                             <pre className="trace-json-pre">
-                                {JSON.stringify(step.rawAttempts, null, 2)}
+                                {JSON.stringify(rawAttempts, null, 2)}
                             </pre>
                         </CollapsibleTracePanel>
                     ) : null}

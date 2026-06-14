@@ -114,6 +114,11 @@ const NAV_ENTRIES: NavEntry[] = [
                 hint: "Per-pipeline preset metrics",
             },
             {
+                href: "/presets/compare",
+                label: "Compare presets",
+                hint: "Side-by-side preset averages",
+            },
+            {
                 href: "/quality",
                 label: "Quality insights",
                 hint: "Judge rubric scores",
@@ -166,6 +171,15 @@ function isLeafActive(pathname: string, href: string): boolean {
         return false;
     }
     if (href === "/benchmarks" && pathname.startsWith("/benchmarks/compare")) {
+        return false;
+    }
+    if (href === "/presets" && pathname.startsWith("/presets/compare")) {
+        return false;
+    }
+    if (
+        href === "/leaderboard" &&
+        pathname.startsWith("/leaderboard/compare")
+    ) {
         return false;
     }
     return true;
