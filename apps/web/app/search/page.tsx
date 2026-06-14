@@ -27,11 +27,11 @@ type SearchParams = {
 function hasActiveSearch(params: SearchParams): boolean {
     return Boolean(
         (params.q ?? "").trim() ||
-            params.model ||
-            params.preset ||
-            params.fast ||
-            params.from ||
-            params.to,
+        params.model ||
+        params.preset ||
+        params.fast ||
+        params.from ||
+        params.to,
     );
 }
 

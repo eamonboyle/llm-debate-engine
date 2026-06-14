@@ -27,7 +27,9 @@ function makeBenchmark(
 
 describe("extractBenchmarkSummaryDisplay", () => {
     it("returns null metrics when summary is missing", () => {
-        const display = extractBenchmarkSummaryDisplay(makeBenchmark(undefined));
+        const display = extractBenchmarkSummaryDisplay(
+            makeBenchmark(undefined),
+        );
         expect(display.hasAny).toBe(false);
         expect(display.consensusMean).toBeNull();
         expect(display.stabilityMean).toBeNull();

@@ -7,7 +7,10 @@ import {
 import { ExportFilteredLink } from "../../components/ExportFilteredLink";
 import { PresetFilterSelect } from "../../components/PresetFilterSelect";
 import { ModelFilterSelect } from "../../components/ModelFilterSelect";
-import { buildActivityFeed, resolveActivitySortOrder } from "../../lib/activityFeed";
+import {
+    buildActivityFeed,
+    resolveActivitySortOrder,
+} from "../../lib/activityFeed";
 import { collectArtifactFacets } from "../../lib/artifactFacets";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
 import { buildQueryString, paginateItems } from "../../lib/listPagination";
@@ -85,7 +88,10 @@ export default async function ActivityPage({
                 <h1 className="title">Activity feed</h1>
                 <p className="subtitle">
                     Chronological timeline of run traces and benchmarks —{" "}
-                    {sort === "oldest" ? "oldest experiments first" : "newest experiments first"}.
+                    {sort === "oldest"
+                        ? "oldest experiments first"
+                        : "newest experiments first"}
+                    .
                 </p>
             </div>
 
@@ -143,11 +149,7 @@ export default async function ActivityPage({
                         <option value="25">25 per page</option>
                         <option value="50">50 per page</option>
                     </select>
-                    <select
-                        name="sort"
-                        defaultValue={sort}
-                        className="input"
-                    >
+                    <select name="sort" defaultValue={sort} className="input">
                         <option value="newest">Sort: newest first</option>
                         <option value="oldest">Sort: oldest first</option>
                     </select>

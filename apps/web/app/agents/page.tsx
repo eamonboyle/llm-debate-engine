@@ -58,7 +58,9 @@ export default async function AgentStatsPage({
                 <p className="subtitle">
                     How often each debate agent appears across {runs.length} run
                     trace{runs.length === 1 ? "" : "s"}
-                    {filtersActive ? ` (filtered from ${allRuns.length} total)` : ""}{" "}
+                    {filtersActive
+                        ? ` (filtered from ${allRuns.length} total)`
+                        : ""}{" "}
                     — step counts, participating runs, errors, and average step
                     duration when timestamps are available.
                 </p>
@@ -117,8 +119,8 @@ export default async function AgentStatsPage({
             <div className="card">
                 {runs.length === 0 ? (
                     <p className="muted">
-                        No runs match your filters. Try broadening model, preset,
-                        or date range.
+                        No runs match your filters. Try broadening model,
+                        preset, or date range.
                     </p>
                 ) : rows.length === 0 ? (
                     <p className="muted">

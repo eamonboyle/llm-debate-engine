@@ -16,9 +16,10 @@ function toNumberOrNull(value: unknown): number | null {
     return typeof value === "number" && Number.isFinite(value) ? value : null;
 }
 
-function readMeanStddev(
-    value: unknown,
-): { mean: number | null; stddev: number | null } {
+function readMeanStddev(value: unknown): {
+    mean: number | null;
+    stddev: number | null;
+} {
     if (!value || typeof value !== "object") {
         return { mean: null, stddev: null };
     }
@@ -60,9 +61,6 @@ export function extractBenchmarkSummaryDisplay(
     };
 }
 
-export function formatSummaryMetric(
-    value: number | null,
-    digits = 3,
-): string {
+export function formatSummaryMetric(value: number | null, digits = 3): string {
     return value == null ? "—" : value.toFixed(digits);
 }
