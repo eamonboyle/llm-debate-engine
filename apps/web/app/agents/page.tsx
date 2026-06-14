@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ModelFilterSelect } from "../../components/ModelFilterSelect";
-import { PresetFilterSelect } from "../../components/PresetFilterSelect";
+import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
 import { buildAgentStats, formatAgentDuration } from "../../lib/agentStats";
 import { collectArtifactFacets } from "../../lib/artifactFacets";
@@ -9,6 +8,7 @@ import {
     filterRunArtifacts,
     loadBenchmarkArtifacts,
     loadRunArtifacts,
+    type ArtifactFilterParams,
 } from "../../lib/data";
 import { buildQueryString } from "../../lib/listPagination";
 
@@ -16,18 +16,12 @@ export const metadata: Metadata = {
     title: "Agent pipeline stats",
 };
 
-type AgentSearchParams = {
-    model?: string;
-    preset?: string;
-    fast?: string;
-    from?: string;
-    to?: string;
-};
+type AgentStatsSearchParams = ArtifactFilterParams;
 
 export default async function AgentStatsPage({
     searchParams,
 }: {
-    searchParams: Promise<AgentSearchParams>;
+    searchParams: Promise<AgentStatsSearchParams>;
 }) {
     const params = await searchParams;
     const [allRuns, benchmarks] = await Promise.all([
@@ -35,20 +29,7 @@ export default async function AgentStatsPage({
         loadBenchmarkArtifacts(),
     ]);
     const { models, presets } = collectArtifactFacets(allRuns, benchmarks);
-    const runs = filterRunArtifacts(allRuns, {
-        model: params.model,
-        preset: params.preset,
-        fast: params.fast,
-        from: params.from,
-        to: params.to,
-    });
-    const hasFilters = Boolean(
-        params.model ||
-            params.preset ||
-            params.fast ||
-            params.from ||
-            params.to,
-    );
+    const runs = filterRunArtifacts(allRuns, params);
 
     if (allRuns.length === 0) {
         return (
@@ -68,15 +49,16 @@ export default async function AgentStatsPage({
     const rows = buildAgentStats(runs);
     const totalSteps = rows.reduce((sum, row) => sum + row.stepCount, 0);
     const totalErrors = rows.reduce((sum, row) => sum + row.errorCount, 0);
+    const filtersActive = runs.length !== allRuns.length;
 
     return (
         <section className="stack">
             <div>
                 <h1 className="title">Agent pipeline stats</h1>
                 <p className="subtitle">
-                    How often each debate agent appears across {runs.length}{" "}
-                    run trace{runs.length === 1 ? "" : "s"}
-                    {hasFilters ? ` (filtered from ${allRuns.length} total)` : ""}
+                    How often each debate agent appears across {runs.length} run
+                    trace{runs.length === 1 ? "" : "s"}
+                    {filtersActive ? ` (filtered from ${allRuns.length} total)` : ""}{" "}
                     — step counts, participating runs, errors, and average step
                     duration when timestamps are available.
                 </p>
@@ -87,59 +69,23 @@ export default async function AgentStatsPage({
                     <Link href="/pipeline" className="button secondary">
                         Pipeline reference
                     </Link>
+                    <Link href="/timing" className="button secondary">
+                        Pipeline timing
+                    </Link>
                     <Link href="/runs" className="button secondary">
                         Browse runs
                     </Link>
                 </div>
             </div>
 
-            <form className="card" method="get">
-                <div className="filter-grid">
-                    <ModelFilterSelect
-                        models={models}
-                        defaultValue={params.model ?? ""}
-                        listId="agents-model-filter-options"
-                    />
-                    <PresetFilterSelect
-                        presets={presets}
-                        defaultValue={params.preset ?? ""}
-                    />
-                    <select
-                        name="fast"
-                        defaultValue={params.fast ?? ""}
-                        className="input"
-                    >
-                        <option value="">Fast mode: any</option>
-                        <option value="true">Fast only</option>
-                        <option value="false">Non-fast only</option>
-                    </select>
-                    <input
-                        type="datetime-local"
-                        name="from"
-                        defaultValue={params.from ?? ""}
-                        className="input"
-                        title="Created at or after"
-                    />
-                    <input
-                        type="datetime-local"
-                        name="to"
-                        defaultValue={params.to ?? ""}
-                        className="input"
-                        title="Created at or before"
-                    />
-                </div>
-                <div className="filter-actions">
-                    <button type="submit" className="button">
-                        Apply filters
-                    </button>
-                    <Link href="/agents" className="button secondary">
-                        Clear
-                    </Link>
-                    <span className="small muted">
-                        {runs.length} run{runs.length === 1 ? "" : "s"} in scope
-                    </span>
-                </div>
-            </form>
+            <InsightFilterCard
+                action="/agents"
+                models={models}
+                presets={presets}
+                params={params}
+                totalRuns={allRuns.length}
+                filteredRuns={runs.length}
+            />
 
             <div className="grid-4">
                 <div className="card">
@@ -216,7 +162,7 @@ export default async function AgentStatsPage({
                 )}
             </div>
 
-            {hasFilters ? (
+            {filtersActive ? (
                 <p className="small muted">
                     Filtered view.{" "}
                     <Link href={`/runs${buildQueryString(params, {})}`}>
