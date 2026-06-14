@@ -134,6 +134,13 @@ export type RunArtifact = {
                 kind: string;
                 data: unknown;
             };
+            request?: {
+                model?: string;
+                temperature?: number;
+                schemaName?: string;
+                messages?: Array<{ role?: string; content?: string }>;
+            };
+            rawAttempts?: unknown[];
             error?: string;
             createdAt?: string;
             completedAt?: string;

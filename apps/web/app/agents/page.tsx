@@ -1,17 +1,36 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
 import { buildAgentStats, formatAgentDuration } from "../../lib/agentStats";
-import { loadRunArtifacts } from "../../lib/data";
+import { collectArtifactFacets } from "../../lib/artifactFacets";
+import {
+    filterRunArtifacts,
+    loadBenchmarkArtifacts,
+    loadRunArtifacts,
+    type ArtifactFilterParams,
+} from "../../lib/data";
 
 export const metadata: Metadata = {
     title: "Agent pipeline stats",
 };
 
-export default async function AgentStatsPage() {
-    const runs = await loadRunArtifacts();
+type AgentStatsSearchParams = ArtifactFilterParams;
 
-    if (runs.length === 0) {
+export default async function AgentStatsPage({
+    searchParams,
+}: {
+    searchParams: Promise<AgentStatsSearchParams>;
+}) {
+    const params = await searchParams;
+    const [allRuns, benchmarks] = await Promise.all([
+        loadRunArtifacts(),
+        loadBenchmarkArtifacts(),
+    ]);
+    const { models, presets } = collectArtifactFacets(allRuns, benchmarks);
+    const runs = filterRunArtifacts(allRuns, params);
+
+    if (allRuns.length === 0) {
         return (
             <section className="stack">
                 <h1 className="title">Agent pipeline stats</h1>
@@ -29,6 +48,7 @@ export default async function AgentStatsPage() {
     const rows = buildAgentStats(runs);
     const totalSteps = rows.reduce((sum, row) => sum + row.stepCount, 0);
     const totalErrors = rows.reduce((sum, row) => sum + row.errorCount, 0);
+    const filtersActive = runs.length !== allRuns.length;
 
     return (
         <section className="stack">
@@ -36,8 +56,10 @@ export default async function AgentStatsPage() {
                 <h1 className="title">Agent pipeline stats</h1>
                 <p className="subtitle">
                     How often each debate agent appears across {runs.length} run
-                    traces — step counts, participating runs, errors, and
-                    average step duration when timestamps are available.
+                    trace{runs.length === 1 ? "" : "s"}
+                    {filtersActive ? ` (${allRuns.length} total)` : ""} — step
+                    counts, participating runs, errors, and average step
+                    duration when timestamps are available.
                 </p>
                 <div
                     className="page-actions"
@@ -46,11 +68,23 @@ export default async function AgentStatsPage() {
                     <Link href="/pipeline" className="button secondary">
                         Pipeline reference
                     </Link>
+                    <Link href="/timing" className="button secondary">
+                        Pipeline timing
+                    </Link>
                     <Link href="/runs" className="button secondary">
                         Browse runs
                     </Link>
                 </div>
             </div>
+
+            <InsightFilterCard
+                action="/agents"
+                models={models}
+                presets={presets}
+                params={params}
+                totalRuns={allRuns.length}
+                filteredRuns={runs.length}
+            />
 
             <div className="grid-4">
                 <div className="card">
@@ -82,7 +116,9 @@ export default async function AgentStatsPage() {
             <div className="card">
                 {rows.length === 0 ? (
                     <p className="muted">
-                        No agent steps found in run artifacts.
+                        {runs.length === 0
+                            ? "No runs match the current filters."
+                            : "No agent steps found in run artifacts."}
                     </p>
                 ) : (
                     <ResponsiveTable
