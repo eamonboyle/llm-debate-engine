@@ -10,6 +10,7 @@ import {
     loadRunArtifacts,
     type ArtifactFilterParams,
 } from "../../lib/data";
+import { buildQueryString } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
     title: "Agent pipeline stats",
@@ -57,8 +58,10 @@ export default async function AgentStatsPage({
                 <p className="subtitle">
                     How often each debate agent appears across {runs.length} run
                     trace{runs.length === 1 ? "" : "s"}
-                    {filtersActive ? ` (${allRuns.length} total)` : ""} — step
-                    counts, participating runs, errors, and average step
+                    {filtersActive
+                        ? ` (filtered from ${allRuns.length} total)`
+                        : ""}{" "}
+                    — step counts, participating runs, errors, and average step
                     duration when timestamps are available.
                 </p>
                 <div
@@ -114,11 +117,14 @@ export default async function AgentStatsPage({
             </div>
 
             <div className="card">
-                {rows.length === 0 ? (
+                {runs.length === 0 ? (
                     <p className="muted">
-                        {runs.length === 0
-                            ? "No runs match the current filters."
-                            : "No agent steps found in run artifacts."}
+                        No runs match your filters. Try broadening model,
+                        preset, or date range.
+                    </p>
+                ) : rows.length === 0 ? (
+                    <p className="muted">
+                        No agent steps found in the filtered run artifacts.
                     </p>
                 ) : (
                     <ResponsiveTable
@@ -157,6 +163,15 @@ export default async function AgentStatsPage({
                     />
                 )}
             </div>
+
+            {filtersActive ? (
+                <p className="small muted">
+                    Filtered view.{" "}
+                    <Link href={`/runs${buildQueryString(params, {})}`}>
+                        Browse matching runs
+                    </Link>
+                </p>
+            ) : null}
         </section>
     );
 }
