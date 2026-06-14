@@ -59,14 +59,21 @@ function makeIndex(): AnalysisIndex {
 
 describe("issueExplorer", () => {
     it("summarizes issue types with run coverage", () => {
-        const summaries = buildIssueTypeSummaries(makeIndex());
+        const summaries = buildIssueTypeSummaries(makeIndex(), {
+            useIndexedSeverity: true,
+        });
         expect(summaries[0]).toEqual({
             type: "factual",
             totalCount: 3,
             runCount: 2,
-            avgSeverity: 4.5,
+            avgSeverity: 3.5,
             maxSeverity: 5,
         });
+    });
+
+    it("falls back to run max severity when indexed severity is disabled", () => {
+        const summaries = buildIssueTypeSummaries(makeIndex());
+        expect(summaries[0]?.avgSeverity).toBe(4.5);
     });
 
     it("lists runs for a selected issue type", () => {

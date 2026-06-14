@@ -8,6 +8,7 @@ type Step = {
     agentName: string;
     role: string;
     output?: unknown;
+    rawAttempts?: unknown[];
     error?: string;
     createdAt?: string;
     completedAt?: string;
@@ -389,9 +390,14 @@ export function TraceStep({
     isLast: boolean;
 }) {
     const [jsonOpen, setJsonOpen] = useState(false);
+    const [attemptsOpen, setAttemptsOpen] = useState(false);
     const kind = getStepKind(step.output);
     const kindColor = kind ? getKindColor(kind) : "var(--color-text-muted)";
     const duration = formatStepDuration(step.createdAt, step.completedAt);
+    const rawAttempts = Array.isArray(step.rawAttempts)
+        ? step.rawAttempts
+        : [];
+    const showAttempts = rawAttempts.length > 0;
 
     return (
         <div
@@ -463,6 +469,12 @@ export function TraceStep({
                                 {duration}
                             </span>
                         ) : null}
+                        {showAttempts ? (
+                            <span className="trace-step-attempts">
+                                {rawAttempts.length} attempt
+                                {rawAttempts.length === 1 ? "" : "s"}
+                            </span>
+                        ) : null}
                         {step.error && (
                             <span className="trace-step-error">
                                 {step.error}
@@ -473,6 +485,27 @@ export function TraceStep({
 
                 <div className="trace-step-content">
                     <StructuredSummary output={step.output} />
+
+                    {showAttempts ? (
+                        <div className="trace-json-wrap">
+                            <button
+                                type="button"
+                                className="trace-json-toggle"
+                                onClick={() => setAttemptsOpen((o) => !o)}
+                                aria-expanded={attemptsOpen}
+                            >
+                                <span className="trace-json-toggle-icon">
+                                    {attemptsOpen ? "▼" : "▶"}
+                                </span>
+                                Raw LLM attempts ({rawAttempts.length})
+                            </button>
+                            {attemptsOpen && (
+                                <pre className="trace-json-pre">
+                                    {JSON.stringify(rawAttempts, null, 2)}
+                                </pre>
+                            )}
+                        </div>
+                    ) : null}
 
                     <div className="trace-json-wrap">
                         <button

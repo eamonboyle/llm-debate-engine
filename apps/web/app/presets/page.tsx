@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
 import { loadAnalysisIndex } from "../../lib/data";
+import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
 import { buildPresetLeaderboard } from "../../lib/presetLeaderboard";
 
 export const metadata: Metadata = {
@@ -9,14 +11,13 @@ export const metadata: Metadata = {
 };
 
 type PresetLeaderboardSearchParams = {
+    q?: string;
+    model?: string;
+    preset?: string;
     fast?: string;
+    from?: string;
+    to?: string;
 };
-
-function resolveFastMode(value: string | undefined): boolean | undefined {
-    if (value === "true") return true;
-    if (value === "false") return false;
-    return undefined;
-}
 
 function formatMetric(value: number | null, digits = 2) {
     return typeof value === "number" ? value.toFixed(digits) : "—";
@@ -28,10 +29,9 @@ export default async function PresetLeaderboardPage({
     searchParams: Promise<PresetLeaderboardSearchParams>;
 }) {
     const params = await searchParams;
-    const fastMode = resolveFastMode(params.fast);
-    const index = await loadAnalysisIndex();
+    const rawIndex = await loadAnalysisIndex();
 
-    if (!index) {
+    if (!rawIndex) {
         return (
             <section className="stack">
                 <h1 className="title">Preset leaderboard</h1>
@@ -46,11 +46,10 @@ export default async function PresetLeaderboardPage({
         );
     }
 
-    const filteredRunCount =
-        fastMode === undefined
-            ? index.runs.length
-            : index.runs.filter((run) => run.fastMode === fastMode).length;
-    const rows = buildPresetLeaderboard(index, { fastMode });
+    const { models, presets } = collectIndexFacets(rawIndex);
+    const index = applyIndexFilters(rawIndex, params);
+    const filteredRunCount = index.totals.runs;
+    const rows = buildPresetLeaderboard(index, { linkFilters: params });
 
     return (
         <section className="stack">
@@ -60,11 +59,9 @@ export default async function PresetLeaderboardPage({
                     Average critique pressure, confidence drift, and judge
                     rubric scores per pipeline preset across {filteredRunCount}{" "}
                     indexed run{filteredRunCount === 1 ? "" : "s"}
-                    {fastMode === undefined
-                        ? ""
-                        : fastMode
-                          ? " (fast mode only)"
-                          : " (non-fast only)"}
+                    {filteredRunCount !== rawIndex.totals.runs
+                        ? ` (${rawIndex.totals.runs} total)`
+                        : ""}
                     .
                 </p>
                 <div
@@ -80,34 +77,24 @@ export default async function PresetLeaderboardPage({
                     <Link href="/catalog" className="button secondary">
                         Experiment catalog
                     </Link>
+                    <Link href="/presets/compare" className="button secondary">
+                        Compare presets
+                    </Link>
                 </div>
             </div>
 
-            <form className="card" method="get">
-                <div className="filter-grid">
-                    <select
-                        name="fast"
-                        defaultValue={params.fast ?? ""}
-                        className="input"
-                    >
-                        <option value="">Fast mode: any</option>
-                        <option value="true">Fast only</option>
-                        <option value="false">Non-fast only</option>
-                    </select>
-                </div>
-                <div className="filter-actions">
-                    <button type="submit" className="button">
-                        Apply
-                    </button>
-                    <Link href="/presets" className="button secondary">
-                        Clear
-                    </Link>
-                </div>
-            </form>
+            <InsightFilterCard
+                action="/presets"
+                models={models}
+                presets={presets}
+                params={params}
+                totalRuns={rawIndex.totals.runs}
+                filteredRuns={filteredRunCount}
+            />
 
             <div className="card">
                 {rows.length === 0 ? (
-                    <p className="muted">No runs in the analysis index.</p>
+                    <p className="muted">No runs match the current filters.</p>
                 ) : (
                     <ResponsiveTable
                         columns={[
@@ -131,6 +118,12 @@ export default async function PresetLeaderboardPage({
                                 key: "avgSolverToRevisionDelta",
                                 label: "Avg solver→revision Δ",
                                 helpKey: "solverToRevisionDelta",
+                            },
+                            {
+                                key: "avgEvidenceRisk",
+                                label: "Avg evidence risk",
+                                helpKey: "evidenceRiskLevel",
+                                hideOnMobile: true,
                             },
                             {
                                 key: "avgCoherence",
@@ -160,7 +153,9 @@ export default async function PresetLeaderboardPage({
                             avgMaxSeverity: formatMetric(row.avgMaxSeverity),
                             avgSolverToRevisionDelta: formatMetric(
                                 row.avgSolverToRevisionDelta,
+                                3,
                             ),
+                            avgEvidenceRisk: formatMetric(row.avgEvidenceRisk),
                             avgCoherence: formatMetric(row.avgCoherence),
                             runsHref: row.runsHref,
                         }))}

@@ -24,8 +24,13 @@ function mean(values: number[]): number | undefined {
     return values.reduce((sum, value) => sum + value, 0) / values.length;
 }
 
+export type IssueSummaryOptions = {
+    useIndexedSeverity?: boolean;
+};
+
 export function buildIssueTypeSummaries(
     index: AnalysisIndex,
+    opts: IssueSummaryOptions = {},
 ): IssueTypeSummary[] {
     const totalCounts = new Map<string, number>();
     const runCounts = new Map<string, number>();
@@ -45,16 +50,33 @@ export function buildIssueTypeSummaries(
         }
     }
 
+    const indexedSeverity = new Map<
+        string,
+        { avgSeverity: number; maxSeverity: number }
+    >();
+    if (opts.useIndexedSeverity && index.aggregates.issueSeverityByType) {
+        for (const row of index.aggregates.issueSeverityByType) {
+            indexedSeverity.set(row.type.toLowerCase(), {
+                avgSeverity: row.avgSeverity,
+                maxSeverity: row.maxSeverity,
+            });
+        }
+    }
+
     return [...totalCounts.entries()]
         .map(([type, totalCount]) => {
+            const indexed = indexedSeverity.get(type.toLowerCase());
             const severities = severitiesByType.get(type) ?? [];
             return {
                 type,
                 totalCount,
                 runCount: runCounts.get(type) ?? 0,
-                avgSeverity: mean(severities),
+                avgSeverity: indexed?.avgSeverity ?? mean(severities),
                 maxSeverity:
-                    severities.length > 0 ? Math.max(...severities) : undefined,
+                    indexed?.maxSeverity ??
+                    (severities.length > 0
+                        ? Math.max(...severities)
+                        : undefined),
             };
         })
         .sort((a, b) => b.totalCount - a.totalCount);

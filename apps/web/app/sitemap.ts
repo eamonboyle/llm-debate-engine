@@ -80,6 +80,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             priority: 0.77,
         },
         {
+            url: `${SITE_URL}/presets/compare`,
+            changeFrequency: "weekly",
+            priority: 0.72,
+        },
+        {
             url: `${SITE_URL}/quality`,
             changeFrequency: "weekly",
             priority: 0.77,
