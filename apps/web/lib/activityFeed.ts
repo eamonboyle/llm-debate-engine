@@ -2,6 +2,8 @@ import type { BenchmarkArtifact, RunArtifact } from "./data";
 
 export type ActivityKind = "run" | "benchmark";
 
+export type ActivitySortOrder = "newest" | "oldest";
+
 export type ActivityEntry = {
     id: string;
     kind: ActivityKind;
@@ -22,6 +24,7 @@ export type ActivityFeedFilters = {
     fast?: string;
     from?: string;
     to?: string;
+    sort?: ActivitySortOrder;
 };
 
 function normalize(value: string | undefined): string {
@@ -42,6 +45,12 @@ function parseFastFilter(v: string | undefined): boolean | undefined {
     return undefined;
 }
 
+export function resolveActivitySortOrder(
+    value: string | undefined,
+): ActivitySortOrder {
+    return value === "oldest" ? "oldest" : "newest";
+}
+
 export function buildActivityFeed(
     runs: RunArtifact[],
     benchmarks: BenchmarkArtifact[],
@@ -54,6 +63,7 @@ export function buildActivityFeed(
     const fast = parseFastFilter(filters.fast);
     const fromDate = parseDateInput(filters.from);
     const toDate = parseDateInput(filters.to);
+    const sort = filters.sort ?? "newest";
 
     const runEntries: ActivityEntry[] = runs.map((run) => {
         const issueCount = run.run.metrics.critique?.issueCount;
@@ -124,5 +134,9 @@ export function buildActivityFeed(
         return true;
     });
 
-    return entries.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    return entries.sort((a, b) =>
+        sort === "newest"
+            ? b.createdAt.localeCompare(a.createdAt)
+            : a.createdAt.localeCompare(b.createdAt),
+    );
 }

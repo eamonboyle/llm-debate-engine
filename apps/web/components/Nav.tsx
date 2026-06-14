@@ -176,7 +176,10 @@ function isLeafActive(pathname: string, href: string): boolean {
     if (href === "/presets" && pathname.startsWith("/presets/compare")) {
         return false;
     }
-    if (href === "/leaderboard" && pathname.startsWith("/leaderboard/compare")) {
+    if (
+        href === "/leaderboard" &&
+        pathname.startsWith("/leaderboard/compare")
+    ) {
         return false;
     }
     return true;

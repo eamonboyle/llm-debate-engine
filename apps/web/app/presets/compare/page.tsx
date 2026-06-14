@@ -85,7 +85,10 @@ export default async function PresetComparePage({
                     <Link href="/pipeline" className="button secondary">
                         Pipeline reference
                     </Link>
-                    <Link href="/leaderboard/compare" className="button secondary">
+                    <Link
+                        href="/leaderboard/compare"
+                        className="button secondary"
+                    >
                         Compare models
                     </Link>
                 </div>
@@ -290,7 +293,9 @@ export default async function PresetComparePage({
                                 <tr>
                                     <td>Avg coherence</td>
                                     <td>
-                                        {formatMetric(compare.left.avgCoherence)}
+                                        {formatMetric(
+                                            compare.left.avgCoherence,
+                                        )}
                                     </td>
                                     <td>
                                         {formatMetric(
@@ -298,7 +303,9 @@ export default async function PresetComparePage({
                                         )}
                                     </td>
                                     <td>
-                                        {formatDelta(compare.delta.avgCoherence)}
+                                        {formatDelta(
+                                            compare.delta.avgCoherence,
+                                        )}
                                     </td>
                                 </tr>
                             </tbody>

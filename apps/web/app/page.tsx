@@ -316,11 +316,40 @@ export default async function OverviewPage({
                     helpKey="skippedFiles"
                 />
                 <MetricCard
+                    label="Unique counterfactual modes"
+                    value={Object.keys(counterfactualFailureModeCounts).length}
+                    helpKey="uniqueCounterfactualModes"
+                />
+            </div>
+
+            <div className="grid-4">
+                <MetricCard
                     label="Avg solver->revision Δ"
                     value={
                         index.aggregates.confidenceDrift.solverToRevisionMean
                     }
                     helpKey="solverToRevisionDelta"
+                />
+                <MetricCard
+                    label="Avg revision->synth Δ"
+                    value={
+                        index.aggregates.confidenceDrift
+                            .revisionToSynthesizerMean
+                    }
+                    helpKey="revisionToSynthesizerDelta"
+                />
+                <MetricCard
+                    label="Avg calibrated−synth Δ"
+                    value={
+                        index.aggregates.confidenceDrift
+                            .calibratedMinusSynthMean
+                    }
+                    helpKey="calibratedMinusSynthDelta"
+                />
+                <MetricCard
+                    label="Avg evidence-plan risk"
+                    value={evidencePlanning.riskLevelMean}
+                    helpKey="evidenceRiskLevel"
                 />
             </div>
 
@@ -402,16 +431,6 @@ export default async function OverviewPage({
                         confidenceCorrelation.severityVsRevisionToSynthesizerDelta
                     }
                     helpKey="severityVsRevisionToSynthesizerDelta"
-                />
-                <MetricCard
-                    label="Avg evidence-plan risk"
-                    value={evidencePlanning.riskLevelMean}
-                    helpKey="evidenceRiskLevel"
-                />
-                <MetricCard
-                    label="Unique counterfactual modes"
-                    value={Object.keys(counterfactualFailureModeCounts).length}
-                    helpKey="uniqueCounterfactualModes"
                 />
             </div>
 

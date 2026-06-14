@@ -4,7 +4,11 @@ import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
 import { loadAnalysisIndex } from "../../lib/data";
 import { IssueSeverityChart } from "../../components/charts/IssueSeverityChart";
-import { applyIndexFilters, collectIndexFacets, hasActiveIndexFilters } from "../../lib/indexFilters";
+import {
+    applyIndexFilters,
+    collectIndexFacets,
+    hasActiveIndexFilters,
+} from "../../lib/indexFilters";
 import {
     buildIssueTypeSummaries,
     listRunsForIssueType,

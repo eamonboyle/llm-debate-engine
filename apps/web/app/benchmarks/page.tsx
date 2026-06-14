@@ -328,8 +328,9 @@ export default async function BenchmarksPage({
                             cellClass: "cell-question",
                             hideOnMobile: true,
                             render: (row) => {
-                                const label = (row as { topMode?: string | null })
-                                    .topMode;
+                                const label = (
+                                    row as { topMode?: string | null }
+                                ).topMode;
                                 return label ? (
                                     <TruncateText
                                         text={label}
