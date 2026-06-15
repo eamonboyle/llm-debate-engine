@@ -2,8 +2,6 @@ import type { BenchmarkArtifact, RunArtifact } from "./data";
 import type { QuestionGroup } from "./questionGroups";
 import type { ModelLeaderboardRow } from "./modelLeaderboard";
 import type { GlobalSearchResult } from "./globalSearch";
-import type { ModelLeaderboardRow } from "./modelLeaderboard";
-import type { GlobalSearchResult } from "./globalSearch";
 
 function escapeCsv(value: string): string {
     if (/[",\n\r]/.test(value)) {

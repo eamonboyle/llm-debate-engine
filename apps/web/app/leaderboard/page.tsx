@@ -105,7 +105,7 @@ export default async function ModelLeaderboardPage({
                     style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
                 >
                     <a
-                        href={`/api/leaderboard${buildQueryString(params)}`}
+                        href={`/api/leaderboard${buildQueryString(params, {})}`}
                         className="button secondary"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -114,7 +114,7 @@ export default async function ModelLeaderboardPage({
                         Export JSON
                     </a>
                     <a
-                        href={`/api/leaderboard${buildQueryString(params)}&format=csv`}
+                        href={`/api/leaderboard${buildQueryString(params, {})}&format=csv`}
                         className="button secondary"
                         download="model-leaderboard.csv"
                     >

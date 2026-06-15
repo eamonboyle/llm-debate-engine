@@ -198,8 +198,7 @@ export default async function SearchPage({
                             <a
                                 href={`/api/search${buildQueryString(params, {
                                     q: query || undefined,
-                                    limit: "500",
-                                })}`}
+                                })}&limit=500`}
                                 className="button secondary"
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -210,8 +209,7 @@ export default async function SearchPage({
                             <a
                                 href={`/api/search${buildQueryString(params, {
                                     q: query || undefined,
-                                    limit: "500",
-                                })}&format=csv`}
+                                })}&limit=500&format=csv`}
                                 className="button secondary"
                                 download="search-results.csv"
                             >
