@@ -19,6 +19,10 @@ import {
     extractBenchmarkSummaryDisplay,
     formatSummaryMetric,
 } from "../../../lib/benchmarkSummaryMetrics";
+import {
+    extractClaimCentroidDisplay,
+    formatClaimCentroidComparison,
+} from "../../../lib/claimCentroidMetrics";
 import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
 import { CopyPageLink } from "../../../components/CopyPageLink";
 
@@ -85,6 +89,7 @@ export default async function BenchmarkDetailPage({
     ];
     const modes = benchmark.payload.modes ?? [];
     const summaryDisplay = extractBenchmarkSummaryDisplay(benchmark);
+    const claimCentroidDisplay = extractClaimCentroidDisplay(benchmark);
 
     return (
         <section className="stack">
@@ -235,9 +240,102 @@ export default async function BenchmarkDetailPage({
                 </h2>
                 <p className="small muted" style={{ marginBottom: "1rem" }}>
                     Distribution of runs across discovered answer modes
+                    (answer-embedding clustering)
                 </p>
                 <ModeSizeBar modeSizes={benchmark.payload.modeSizes} />
             </div>
+
+            {claimCentroidDisplay.hasClaimCentroid ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>
+                        Claim-centroid clustering
+                        <InfoTooltip helpKey="claimCentroidComparison" />
+                    </h2>
+                    <p className="small muted" style={{ marginBottom: "1rem" }}>
+                        Compares answer-embedding modes (above) with
+                        claim-centroid clustering — groups runs by underlying
+                        claim structure rather than final-answer wording.
+                    </p>
+                    <div className="grid-4">
+                        <MetricCard
+                            label="Mode count"
+                            value={formatClaimCentroidComparison(
+                                claimCentroidDisplay.answerModeCount,
+                                claimCentroidDisplay.modeCount,
+                                0,
+                            )}
+                            helpKey="modeCountClaimCentroid"
+                        />
+                        <MetricCard
+                            label="Divergence entropy"
+                            value={formatClaimCentroidComparison(
+                                claimCentroidDisplay.answerDivergenceEntropy,
+                                claimCentroidDisplay.divergenceEntropy,
+                            )}
+                            helpKey="divergenceEntropyClaimCentroid"
+                        />
+                        <MetricCard
+                            label="Stability mean"
+                            value={formatSummaryMetric(
+                                claimCentroidDisplay.stabilityPairwiseMean,
+                            )}
+                            helper={
+                                claimCentroidDisplay.stabilityMin != null &&
+                                claimCentroidDisplay.stabilityMax != null
+                                    ? `${formatSummaryMetric(claimCentroidDisplay.stabilityMin)} – ${formatSummaryMetric(claimCentroidDisplay.stabilityMax)}`
+                                    : undefined
+                            }
+                            helpKey="stabilityClaimCentroid"
+                        />
+                        <MetricCard
+                            label="Mode count delta"
+                            value={
+                                claimCentroidDisplay.modeCountDelta == null
+                                    ? "—"
+                                    : claimCentroidDisplay.modeCountDelta > 0
+                                      ? `+${claimCentroidDisplay.modeCountDelta}`
+                                      : String(
+                                            claimCentroidDisplay.modeCountDelta,
+                                        )
+                            }
+                            helper="answer modes minus claim modes"
+                            helpKey="claimCentroidComparison"
+                        />
+                    </div>
+                    {claimCentroidDisplay.modeSizes ? (
+                        <div style={{ marginTop: "1.25rem" }}>
+                            <div
+                                className="small muted"
+                                style={{ marginBottom: 8 }}
+                            >
+                                Claim-centroid mode sizes
+                            </div>
+                            <ModeSizeBar
+                                modeSizes={claimCentroidDisplay.modeSizes}
+                            />
+                        </div>
+                    ) : null}
+                    <div style={{ marginTop: "1.25rem" }}>
+                        <div
+                            className="small muted"
+                            style={{ marginBottom: 8 }}
+                        >
+                            Threshold sensitivity (claim-centroid)
+                            <InfoTooltip helpKey="thresholdSensitivity" />
+                        </div>
+                        <div className="grid-4">
+                            {claimCentroidDisplay.thresholdCounts.map((row) => (
+                                <MetricCard
+                                    key={row.threshold}
+                                    label={`Modes @ ${row.threshold}`}
+                                    value={row.modeCount}
+                                    helpKey="thresholdSensitivity"
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            ) : null}
 
             <BenchmarkDetailCharts
                 benchmarkId={benchmark.id}

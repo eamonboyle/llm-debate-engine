@@ -1,5 +1,9 @@
 import type { BenchmarkArtifact, RunArtifact } from "./data";
 import type { QuestionGroup } from "./questionGroups";
+import type { ModelLeaderboardRow } from "./modelLeaderboard";
+import type { GlobalSearchResult } from "./globalSearch";
+import type { ModelLeaderboardRow } from "./modelLeaderboard";
+import type { GlobalSearchResult } from "./globalSearch";
 
 function escapeCsv(value: string): string {
     if (/[",\n\r]/.test(value)) {
@@ -92,4 +96,85 @@ export function questionGroupsToCsv(groups: QuestionGroup[]): string {
         ]),
     );
     return [header.join(","), ...rows].join("\n");
+}
+
+export function modelLeaderboardToCsv(rows: ModelLeaderboardRow[]): string {
+    const header = [
+        "model",
+        "runCount",
+        "avgIssueCount",
+        "avgMaxSeverity",
+        "avgSolverToRevisionDelta",
+        "avgEvidenceRisk",
+        "avgSolverConfidence",
+    ];
+    const csvRows = rows.map((entry) =>
+        row([
+            entry.model,
+            entry.runCount,
+            entry.avgIssueCount,
+            entry.avgMaxSeverity ?? "",
+            entry.avgSolverToRevisionDelta ?? "",
+            entry.avgEvidenceRisk ?? "",
+            entry.avgSolverConfidence ?? "",
+        ]),
+    );
+    return [header.join(","), ...csvRows].join("\n");
+}
+
+export function searchResultsToCsv(result: GlobalSearchResult): string {
+    const sections: string[] = [];
+
+    sections.push("section,question,runCount,benchmarkCount,latestCreatedAt");
+    for (const group of result.questions) {
+        sections.push(
+            row([
+                "question",
+                group.question,
+                group.runCount,
+                group.benchmarkCount,
+                group.latestCreatedAt,
+            ]),
+        );
+    }
+
+    sections.push("");
+    sections.push(
+        "section,id,question,model,preset,createdAt,runs,modeCount,entropy,preview",
+    );
+    for (const run of result.runs) {
+        sections.push(
+            row([
+                "run",
+                run.id,
+                run.question,
+                run.model,
+                run.preset,
+                run.createdAt,
+                "",
+                "",
+                "",
+                run.preview,
+            ]),
+        );
+    }
+
+    for (const benchmark of result.benchmarks) {
+        sections.push(
+            row([
+                "benchmark",
+                benchmark.id,
+                benchmark.question,
+                benchmark.model,
+                benchmark.preset,
+                benchmark.createdAt,
+                benchmark.runs,
+                benchmark.modeCount,
+                benchmark.entropy,
+                "",
+            ]),
+        );
+    }
+
+    return sections.join("\n");
 }

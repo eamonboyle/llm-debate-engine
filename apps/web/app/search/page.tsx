@@ -193,6 +193,32 @@ export default async function SearchPage({
                     <Link href="/search" className="button secondary">
                         Clear
                     </Link>
+                    {hasResults ? (
+                        <>
+                            <a
+                                href={`/api/search${buildQueryString(params, {
+                                    q: query || undefined,
+                                    limit: "500",
+                                })}`}
+                                className="button secondary"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                download
+                            >
+                                Export JSON
+                            </a>
+                            <a
+                                href={`/api/search${buildQueryString(params, {
+                                    q: query || undefined,
+                                    limit: "500",
+                                })}&format=csv`}
+                                className="button secondary"
+                                download="search-results.csv"
+                            >
+                                Export CSV
+                            </a>
+                        </>
+                    ) : null}
                 </div>
             </form>
 
