@@ -17,6 +17,7 @@ import { GET as getRuns } from "./runs/route";
 import { GET as getBenchmarkById } from "./benchmarks/[id]/route";
 import { GET as getBenchmarkPairsById } from "./benchmarks/[id]/pairs/route";
 import { GET as getSearch } from "./search/route";
+import { GET as getLeaderboard } from "./leaderboard/route";
 import { GET as getQuestions } from "./questions/route";
 
 const tempDirs: string[] = [];
@@ -237,6 +238,160 @@ describe("web api routes", () => {
         expect(json.totals.runs).toBe(1);
         expect(json.runs[0].id).toBe("run_1");
         expect(json.storeTotals.runs).toBe(1);
+    });
+
+    it("filters global search results by model and preset", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_match.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_match",
+                question: "Climate policy tradeoffs",
+                metadata: {
+                    createdAt: new Date().toISOString(),
+                    model: "gpt-alpha",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run_match",
+                    finalAnswer: "Balanced growth",
+                    steps: [],
+                    metrics: {},
+                },
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "run_other.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_other",
+                question: "Climate policy tradeoffs",
+                metadata: {
+                    createdAt: new Date().toISOString(),
+                    model: "gpt-beta",
+                    pipelinePreset: "research_deep",
+                    fastMode: true,
+                },
+                run: {
+                    id: "run_other",
+                    finalAnswer: "Other answer",
+                    steps: [],
+                    metrics: {},
+                },
+            }),
+            "utf-8",
+        );
+
+        const response = await getSearch(
+            new Request(
+                "http://localhost/api/search?q=climate&model=gpt-alpha&preset=standard&fast=false",
+            ),
+        );
+        expect(response.status).toBe(200);
+        const json = (await response.json()) as {
+            totals: { runs: number };
+            runs: Array<{ id: string }>;
+            filters: { model?: string; preset?: string; fast?: string };
+        };
+        expect(json.totals.runs).toBe(1);
+        expect(json.runs[0].id).toBe("run_match");
+        expect(json.filters.model).toBe("gpt-alpha");
+        expect(json.filters.preset).toBe("standard");
+        expect(json.filters.fast).toBe("false");
+    });
+
+    it("returns search results as CSV", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_1.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_1",
+                question: "Climate policy",
+                metadata: {
+                    createdAt: new Date().toISOString(),
+                    model: "gpt",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run_1",
+                    finalAnswer: "Answer",
+                    steps: [],
+                    metrics: {},
+                },
+            }),
+            "utf-8",
+        );
+
+        const response = await getSearch(
+            new Request("http://localhost/api/search?q=climate&format=csv"),
+        );
+        expect(response.status).toBe(200);
+        expect(response.headers.get("Content-Type")).toContain("text/csv");
+        expect(await response.text()).toContain("run_1");
+    });
+
+    it("returns model leaderboard JSON and CSV from analysis index", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 1, benchmarks: 0, skippedFiles: 0 },
+                runs: [
+                    {
+                        id: "run_1",
+                        question: "Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "standard",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                        confidence: {
+                            solver: 0.8,
+                            solverToRevisionDelta: -0.1,
+                        },
+                        critique: { issueCount: 2, maxSeverity: 4 },
+                    },
+                ],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getLeaderboard(
+            new Request("http://localhost/api/leaderboard"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            rows: Array<{ model: string }>;
+        };
+        expect(json.rows[0].model).toBe("gpt-alpha");
+
+        const csvResponse = await getLeaderboard(
+            new Request("http://localhost/api/leaderboard?format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(csvResponse.headers.get("Content-Type")).toContain("text/csv");
+        expect(await csvResponse.text()).toContain("gpt-alpha");
     });
 
     it("returns analysis CSV exports", async () => {

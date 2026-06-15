@@ -175,6 +175,18 @@ export type BenchmarkArtifact = {
         modeCountAt0_8?: number;
         modeCountAt0_9?: number;
         modeCountAt0_95?: number;
+        modeCountClaimCentroid?: number;
+        modeSizesClaimCentroid?: number[];
+        divergenceEntropyClaimCentroid?: number;
+        modeCountClaimCentroidAt0_8?: number;
+        modeCountClaimCentroidAt0_9?: number;
+        modeCountClaimCentroidAt0_95?: number;
+        stabilityClaimCentroid?: {
+            pairwiseMean?: number;
+            pairwiseStddev?: number;
+            minPairwiseSimilarity?: number;
+            maxPairwiseSimilarity?: number;
+        };
         modes?: Array<{
             size: number;
             members: number[];

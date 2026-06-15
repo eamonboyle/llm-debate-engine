@@ -31,6 +31,14 @@ export const GLOSSARY: Record<string, string> = {
     // Benchmark metrics
     modeCount:
         "Number of distinct answer clusters discovered from benchmark final-answer embeddings.",
+    modeCountClaimCentroid:
+        "Number of clusters from claim-centroid embeddings — groups runs by semantic claim structure rather than final-answer wording.",
+    divergenceEntropyClaimCentroid:
+        "Entropy of run distribution across claim-centroid modes; compare with answer-embedding entropy to see whether divergence is lexical or substantive.",
+    stabilityClaimCentroid:
+        "Average pairwise similarity of claim-centroid vectors across benchmark runs.",
+    claimCentroidComparison:
+        "Side-by-side answer-embedding vs claim-centroid clustering. Fewer claim-centroid modes often means answers diverge in wording but share underlying claims.",
     divergenceEntropy:
         "Entropy of run distribution across modes; higher means broader divergence.",
     entropy:

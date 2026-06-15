@@ -5,6 +5,7 @@ import { ResponsiveTable } from "../../components/ResponsiveTable";
 import { loadAnalysisIndex } from "../../lib/data";
 import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
 import { buildModelLeaderboard } from "../../lib/modelLeaderboard";
+import { buildQueryString } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
     title: "Model leaderboard",
@@ -97,6 +98,30 @@ export default async function ModelLeaderboardPage({
                 totalRuns={rawIndex.totals.runs}
                 filteredRuns={filteredRunCount}
             />
+
+            {rows.length > 0 ? (
+                <div
+                    className="page-actions"
+                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                >
+                    <a
+                        href={`/api/leaderboard${buildQueryString(params, {})}`}
+                        className="button secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                    >
+                        Export JSON
+                    </a>
+                    <a
+                        href={`/api/leaderboard${buildQueryString(params, {})}&format=csv`}
+                        className="button secondary"
+                        download="model-leaderboard.csv"
+                    >
+                        Export CSV
+                    </a>
+                </div>
+            ) : null}
 
             <div className="card">
                 {rows.length === 0 ? (
