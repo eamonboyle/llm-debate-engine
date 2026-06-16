@@ -18,6 +18,10 @@ import { GET as getBenchmarkById } from "./benchmarks/[id]/route";
 import { GET as getBenchmarkPairsById } from "./benchmarks/[id]/pairs/route";
 import { GET as getSearch } from "./search/route";
 import { GET as getLeaderboard } from "./leaderboard/route";
+import { GET as getLeaderboardCompare } from "./leaderboard/compare/route";
+import { GET as getPresets } from "./presets/route";
+import { GET as getPresetsCompare } from "./presets/compare/route";
+import { GET as getQuality } from "./quality/route";
 import { GET as getQuestions } from "./questions/route";
 
 const tempDirs: string[] = [];
@@ -392,6 +396,331 @@ describe("web api routes", () => {
         expect(csvResponse.status).toBe(200);
         expect(csvResponse.headers.get("Content-Type")).toContain("text/csv");
         expect(await csvResponse.text()).toContain("gpt-alpha");
+    });
+
+    it("returns preset leaderboard JSON and CSV from analysis index", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 1, benchmarks: 0, skippedFiles: 0 },
+                runs: [
+                    {
+                        id: "run_1",
+                        question: "Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "research_deep",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                        confidence: {
+                            solver: 0.8,
+                            solverToRevisionDelta: -0.1,
+                        },
+                        critique: { issueCount: 2, maxSeverity: 4 },
+                        quality: {
+                            coherence: 4.5,
+                            completeness: 4.0,
+                            factualRisk: 2.0,
+                            uncertaintyHandling: 3.5,
+                        },
+                    },
+                ],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getPresets(
+            new Request("http://localhost/api/presets"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            rows: Array<{ preset: string }>;
+        };
+        expect(json.rows[0].preset).toBe("research_deep");
+
+        const csvResponse = await getPresets(
+            new Request("http://localhost/api/presets?format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(csvResponse.headers.get("Content-Type")).toContain("text/csv");
+        expect(await csvResponse.text()).toContain("research_deep");
+    });
+
+    it("returns quality insights JSON and CSV from analysis index", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 1, benchmarks: 0, skippedFiles: 0 },
+                runs: [
+                    {
+                        id: "run_1",
+                        question: "Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "research_deep",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                        confidence: {
+                            solver: 0.8,
+                            solverToRevisionDelta: -0.1,
+                        },
+                        critique: { issueCount: 2, maxSeverity: 4 },
+                        quality: {
+                            coherence: 4.5,
+                            completeness: 4.0,
+                            factualRisk: 2.0,
+                            uncertaintyHandling: 3.5,
+                        },
+                    },
+                ],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getQuality(
+            new Request("http://localhost/api/quality"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            rows: Array<{ id: string; coherence: number | null }>;
+            summary: { withQualityScores: number };
+        };
+        expect(json.rows[0].id).toBe("run_1");
+        expect(json.rows[0].coherence).toBe(4.5);
+        expect(json.summary.withQualityScores).toBe(1);
+
+        const csvResponse = await getQuality(
+            new Request("http://localhost/api/quality?format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(csvResponse.headers.get("Content-Type")).toContain("text/csv");
+        expect(await csvResponse.text()).toContain("run_1");
+    });
+
+    it("returns model compare deltas from analysis index", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 2, benchmarks: 0, skippedFiles: 0 },
+                runs: [
+                    {
+                        id: "run_1",
+                        question: "Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "standard",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                        confidence: {
+                            solver: 0.8,
+                            solverToRevisionDelta: -0.1,
+                        },
+                        critique: { issueCount: 2, maxSeverity: 4 },
+                    },
+                    {
+                        id: "run_2",
+                        question: "Q",
+                        createdAt: "2026-01-02T00:00:00.000Z",
+                        model: "gpt-beta",
+                        pipelinePreset: "standard",
+                        fastMode: false,
+                        finalAnswerPreview: "B",
+                        confidence: {
+                            solver: 0.6,
+                            solverToRevisionDelta: 0.05,
+                        },
+                        critique: { issueCount: 4, maxSeverity: 5 },
+                    },
+                ],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+
+        const response = await getLeaderboardCompare(
+            new Request(
+                "http://localhost/api/leaderboard/compare?left=gpt-alpha&right=gpt-beta",
+            ),
+        );
+        expect(response.status).toBe(200);
+        const json = (await response.json()) as {
+            left: { model: string };
+            right: { model: string };
+            delta: { runCount: number; avgIssueCount: number | null };
+        };
+        expect(json.left.model).toBe("gpt-alpha");
+        expect(json.right.model).toBe("gpt-beta");
+        expect(json.delta.runCount).toBe(0);
+        expect(json.delta.avgIssueCount).toBe(2);
+    });
+
+    it("returns preset compare deltas from analysis index", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 2, benchmarks: 0, skippedFiles: 0 },
+                runs: [
+                    {
+                        id: "run_1",
+                        question: "Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "standard",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                        confidence: {
+                            solver: 0.8,
+                            solverToRevisionDelta: -0.1,
+                        },
+                        critique: { issueCount: 2, maxSeverity: 4 },
+                        quality: { coherence: 3.5 },
+                    },
+                    {
+                        id: "run_2",
+                        question: "Q",
+                        createdAt: "2026-01-02T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "research_deep",
+                        fastMode: false,
+                        finalAnswerPreview: "B",
+                        confidence: {
+                            solver: 0.6,
+                            solverToRevisionDelta: 0.05,
+                        },
+                        critique: { issueCount: 4, maxSeverity: 5 },
+                        quality: { coherence: 4.5 },
+                    },
+                ],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+
+        const response = await getPresetsCompare(
+            new Request(
+                "http://localhost/api/presets/compare?left=standard&right=research_deep",
+            ),
+        );
+        expect(response.status).toBe(200);
+        const json = (await response.json()) as {
+            left: { preset: string };
+            right: { preset: string };
+            delta: {
+                avgIssueCount: number | null;
+                avgCoherence: number | null;
+            };
+        };
+        expect(json.left.preset).toBe("standard");
+        expect(json.right.preset).toBe("research_deep");
+        expect(json.delta.avgIssueCount).toBe(2);
+        expect(json.delta.avgCoherence).toBe(1);
+    });
+
+    it("returns 400/404 for invalid model and preset compare requests", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+
+        const missingModelParams = await getLeaderboardCompare(
+            new Request("http://localhost/api/leaderboard/compare"),
+        );
+        expect(missingModelParams.status).toBe(400);
+
+        const missingPresetParams = await getPresetsCompare(
+            new Request("http://localhost/api/presets/compare"),
+        );
+        expect(missingPresetParams.status).toBe(400);
+
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 0, benchmarks: 0, skippedFiles: 0 },
+                runs: [],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+
+        const notFoundModel = await getLeaderboardCompare(
+            new Request(
+                "http://localhost/api/leaderboard/compare?left=a&right=b",
+            ),
+        );
+        expect(notFoundModel.status).toBe(404);
+
+        const notFoundPreset = await getPresetsCompare(
+            new Request("http://localhost/api/presets/compare?left=a&right=b"),
+        );
+        expect(notFoundPreset.status).toBe(404);
     });
 
     it("returns analysis CSV exports", async () => {
