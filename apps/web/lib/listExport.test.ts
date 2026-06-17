@@ -3,6 +3,8 @@ import type { BenchmarkArtifact, RunArtifact } from "./data";
 import {
     benchmarkArtifactsToCsv,
     modelLeaderboardToCsv,
+    presetLeaderboardToCsv,
+    qualityRunsToCsv,
     questionGroupsToCsv,
     runArtifactsToCsv,
     searchResultsToCsv,
@@ -86,6 +88,43 @@ describe("listExport", () => {
         ]);
         expect(csv).toContain("gpt-test");
         expect(csv).toContain("-0.05");
+    });
+
+    it("exports preset leaderboard rows", () => {
+        const csv = presetLeaderboardToCsv([
+            {
+                preset: "research_deep",
+                runCount: 2,
+                avgIssueCount: 3.5,
+                avgMaxSeverity: 4.0,
+                avgSolverToRevisionDelta: -0.02,
+                avgEvidenceRisk: 2.5,
+                avgCoherence: 4.2,
+                runsHref: "/runs?preset=research_deep",
+            },
+        ]);
+        expect(csv).toContain("research_deep");
+        expect(csv).toContain("4.2");
+    });
+
+    it("exports quality run rows", () => {
+        const csv = qualityRunsToCsv([
+            {
+                id: "run_1",
+                question: "Topic",
+                model: "gpt-test",
+                preset: "research_deep",
+                createdAt: "2026-01-01T00:00:00.000Z",
+                coherence: 4.5,
+                completeness: 4.0,
+                factualRisk: 2.0,
+                uncertaintyHandling: 3.5,
+                issueCount: 2,
+                traceHref: "/runs/run_1",
+            },
+        ]);
+        expect(csv).toContain("run_1");
+        expect(csv).toContain("4.5");
     });
 
     it("exports search results with section markers", () => {

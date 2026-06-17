@@ -12,6 +12,7 @@ import {
     buildQualityRunRows,
     summarizeQuality,
 } from "../../lib/qualityInsights";
+import { buildQueryString } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
     title: "Quality insights",
@@ -91,6 +92,30 @@ export default async function QualityInsightsPage({
                 totalRuns={rawIndex.runs.length}
                 filteredRuns={index.runs.length}
             />
+
+            {summary.withQualityScores > 0 ? (
+                <div
+                    className="page-actions"
+                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                >
+                    <a
+                        href={`/api/quality${buildQueryString(params, {})}`}
+                        className="button secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                    >
+                        Export JSON
+                    </a>
+                    <a
+                        href={`/api/quality${buildQueryString(params, {})}&format=csv`}
+                        className="button secondary"
+                        download="quality-insights.csv"
+                    >
+                        Export CSV
+                    </a>
+                </div>
+            ) : null}
 
             <div className="grid-4">
                 <MetricCard

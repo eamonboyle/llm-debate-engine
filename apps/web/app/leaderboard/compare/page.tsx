@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CompareDeltaChart } from "../../../components/charts/CompareDeltaChart";
+import { CompareExportLink } from "../../../components/CompareExportLink";
 import { CompareSwapLink } from "../../../components/CompareSwapLink";
 import { MetricCard } from "../../../components/MetricCard";
 import { ModelFilterSelect } from "../../../components/ModelFilterSelect";
@@ -100,6 +102,13 @@ export default async function ModelComparePage({
                     {leftModel && rightModel ? (
                         <CompareSwapLink
                             basePath="/leaderboard/compare"
+                            left={leftModel}
+                            right={rightModel}
+                        />
+                    ) : null}
+                    {compare ? (
+                        <CompareExportLink
+                            apiPath="/api/leaderboard/compare"
                             left={leftModel}
                             right={rightModel}
                         />
@@ -309,6 +318,38 @@ export default async function ModelComparePage({
                             helpKey="evidenceRiskLevel"
                         />
                     </div>
+
+                    <CompareDeltaChart
+                        leftLabel={compare.left.model}
+                        rightLabel={compare.right.model}
+                        rows={[
+                            {
+                                metric: "avgIssues",
+                                left: compare.left.avgIssueCount,
+                                right: compare.right.avgIssueCount,
+                            },
+                            {
+                                metric: "maxSeverity",
+                                left: compare.left.avgMaxSeverity,
+                                right: compare.right.avgMaxSeverity,
+                            },
+                            {
+                                metric: "solverRevΔ",
+                                left: compare.left.avgSolverToRevisionDelta,
+                                right: compare.right.avgSolverToRevisionDelta,
+                            },
+                            {
+                                metric: "evidenceRisk",
+                                left: compare.left.avgEvidenceRisk,
+                                right: compare.right.avgEvidenceRisk,
+                            },
+                            {
+                                metric: "solverConf",
+                                left: compare.left.avgSolverConfidence,
+                                right: compare.right.avgSolverConfidence,
+                            },
+                        ]}
+                    />
                 </>
             )}
         </section>

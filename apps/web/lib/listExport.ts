@@ -1,6 +1,8 @@
 import type { BenchmarkArtifact, RunArtifact } from "./data";
 import type { QuestionGroup } from "./questionGroups";
 import type { ModelLeaderboardRow } from "./modelLeaderboard";
+import type { PresetLeaderboardRow } from "./presetLeaderboard";
+import type { QualityRunRow } from "./qualityInsights";
 import type { GlobalSearchResult } from "./globalSearch";
 
 function escapeCsv(value: string): string {
@@ -115,6 +117,60 @@ export function modelLeaderboardToCsv(rows: ModelLeaderboardRow[]): string {
             entry.avgSolverToRevisionDelta ?? "",
             entry.avgEvidenceRisk ?? "",
             entry.avgSolverConfidence ?? "",
+        ]),
+    );
+    return [header.join(","), ...csvRows].join("\n");
+}
+
+export function presetLeaderboardToCsv(rows: PresetLeaderboardRow[]): string {
+    const header = [
+        "preset",
+        "runCount",
+        "avgIssueCount",
+        "avgMaxSeverity",
+        "avgSolverToRevisionDelta",
+        "avgEvidenceRisk",
+        "avgCoherence",
+    ];
+    const csvRows = rows.map((entry) =>
+        row([
+            entry.preset,
+            entry.runCount,
+            entry.avgIssueCount,
+            entry.avgMaxSeverity ?? "",
+            entry.avgSolverToRevisionDelta ?? "",
+            entry.avgEvidenceRisk ?? "",
+            entry.avgCoherence ?? "",
+        ]),
+    );
+    return [header.join(","), ...csvRows].join("\n");
+}
+
+export function qualityRunsToCsv(rows: QualityRunRow[]): string {
+    const header = [
+        "id",
+        "question",
+        "model",
+        "preset",
+        "createdAt",
+        "coherence",
+        "completeness",
+        "factualRisk",
+        "uncertaintyHandling",
+        "issueCount",
+    ];
+    const csvRows = rows.map((entry) =>
+        row([
+            entry.id,
+            entry.question,
+            entry.model,
+            entry.preset,
+            entry.createdAt,
+            entry.coherence ?? "",
+            entry.completeness ?? "",
+            entry.factualRisk ?? "",
+            entry.uncertaintyHandling ?? "",
+            entry.issueCount,
         ]),
     );
     return [header.join(","), ...csvRows].join("\n");

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CompareDeltaChart } from "../../../components/charts/CompareDeltaChart";
+import { CompareExportLink } from "../../../components/CompareExportLink";
 import { CompareSwapLink } from "../../../components/CompareSwapLink";
 import { MetricCard } from "../../../components/MetricCard";
 import { PresetFilterSelect } from "../../../components/PresetFilterSelect";
@@ -123,6 +125,18 @@ export default async function PresetComparePage({
                     {leftPreset && rightPreset ? (
                         <CompareSwapLink
                             basePath="/presets/compare"
+                            left={leftPreset}
+                            right={rightPreset}
+                            extraParams={
+                                fastMode !== undefined
+                                    ? { fast: String(fastMode) }
+                                    : undefined
+                            }
+                        />
+                    ) : null}
+                    {compare ? (
+                        <CompareExportLink
+                            apiPath="/api/presets/compare"
                             left={leftPreset}
                             right={rightPreset}
                             extraParams={
@@ -334,6 +348,38 @@ export default async function PresetComparePage({
                             helpKey="coherence"
                         />
                     </div>
+
+                    <CompareDeltaChart
+                        leftLabel={compare.left.preset}
+                        rightLabel={compare.right.preset}
+                        rows={[
+                            {
+                                metric: "avgIssues",
+                                left: compare.left.avgIssueCount,
+                                right: compare.right.avgIssueCount,
+                            },
+                            {
+                                metric: "maxSeverity",
+                                left: compare.left.avgMaxSeverity,
+                                right: compare.right.avgMaxSeverity,
+                            },
+                            {
+                                metric: "solverRevΔ",
+                                left: compare.left.avgSolverToRevisionDelta,
+                                right: compare.right.avgSolverToRevisionDelta,
+                            },
+                            {
+                                metric: "evidenceRisk",
+                                left: compare.left.avgEvidenceRisk,
+                                right: compare.right.avgEvidenceRisk,
+                            },
+                            {
+                                metric: "coherence",
+                                left: compare.left.avgCoherence,
+                                right: compare.right.avgCoherence,
+                            },
+                        ]}
+                    />
                 </>
             )}
         </section>

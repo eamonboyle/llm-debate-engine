@@ -5,6 +5,7 @@ import { ResponsiveTable } from "../../components/ResponsiveTable";
 import { loadAnalysisIndex } from "../../lib/data";
 import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
 import { buildPresetLeaderboard } from "../../lib/presetLeaderboard";
+import { buildQueryString } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
     title: "Preset leaderboard",
@@ -91,6 +92,30 @@ export default async function PresetLeaderboardPage({
                 totalRuns={rawIndex.totals.runs}
                 filteredRuns={filteredRunCount}
             />
+
+            {rows.length > 0 ? (
+                <div
+                    className="page-actions"
+                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                >
+                    <a
+                        href={`/api/presets${buildQueryString(params, {})}`}
+                        className="button secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                    >
+                        Export JSON
+                    </a>
+                    <a
+                        href={`/api/presets${buildQueryString(params, {})}&format=csv`}
+                        className="button secondary"
+                        download="preset-leaderboard.csv"
+                    >
+                        Export CSV
+                    </a>
+                </div>
+            ) : null}
 
             <div className="card">
                 {rows.length === 0 ? (

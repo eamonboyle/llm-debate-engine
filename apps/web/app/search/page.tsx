@@ -8,8 +8,10 @@ import {
 } from "../../components/ResponsiveTable";
 import { collectArtifactFacets } from "../../lib/artifactFacets";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
-import { buildQueryString } from "../../lib/listPagination";
+import { buildQueryString, parsePositiveInt } from "../../lib/listPagination";
 import { searchArtifacts, questionHubHref } from "../../lib/globalSearch";
+
+const SEARCH_LIMIT_OPTIONS = [12, 24, 50] as const;
 
 export const metadata: Metadata = {
     title: "Search",
@@ -22,6 +24,7 @@ type SearchParams = {
     fast?: string;
     from?: string;
     to?: string;
+    limit?: string;
 };
 
 function hasActiveSearch(params: SearchParams): boolean {
@@ -108,7 +111,9 @@ export default async function SearchPage({
         );
     }
 
+    const limit = parsePositiveInt(params.limit, { fallback: 12, max: 50 });
     const results = searchArtifacts(runs, benchmarks, query, {
+        limitPerSection: limit,
         filters: {
             model: params.model,
             preset: params.preset,
@@ -117,6 +122,12 @@ export default async function SearchPage({
             to: params.to,
         },
     });
+    const hasMoreRuns = results.totals.runs > results.runs.length;
+    const hasMoreBenchmarks =
+        results.totals.benchmarks > results.benchmarks.length;
+    const hasMoreQuestions =
+        results.totals.questions > results.questions.length;
+    const nextLimit = SEARCH_LIMIT_OPTIONS.find((option) => option > limit);
     const encodedQ = encodeURIComponent(query);
     const hasResults =
         results.totals.runs > 0 ||
@@ -185,6 +196,18 @@ export default async function SearchPage({
                         className="input"
                         title="Created at or before"
                     />
+                    <select
+                        name="limit"
+                        defaultValue={String(limit)}
+                        className="input"
+                        title="Results per section"
+                    >
+                        {SEARCH_LIMIT_OPTIONS.map((option) => (
+                            <option key={option} value={option}>
+                                Show {option} per section
+                            </option>
+                        ))}
+                    </select>
                 </div>
                 <div className="filter-actions">
                     <button type="submit" className="button">
@@ -269,8 +292,21 @@ export default async function SearchPage({
                 <div className="card">
                     <div className="small muted">Showing per section</div>
                     <div style={{ marginTop: 6, fontSize: "1.25rem" }}>
-                        up to 12
+                        {limit}
                     </div>
+                    {nextLimit &&
+                    (hasMoreRuns || hasMoreBenchmarks || hasMoreQuestions) ? (
+                        <Link
+                            href={`/search${buildQueryString(params, {
+                                q: query || undefined,
+                                limit: String(nextLimit),
+                            })}`}
+                            className="small"
+                            style={{ display: "inline-block", marginTop: 8 }}
+                        >
+                            Show {nextLimit} per section →
+                        </Link>
+                    ) : null}
                 </div>
             </div>
 
@@ -286,7 +322,23 @@ export default async function SearchPage({
 
             {results.questions.length > 0 ? (
                 <div className="card">
-                    <h2 style={{ marginTop: 0 }}>Questions</h2>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "baseline",
+                            gap: 12,
+                            flexWrap: "wrap",
+                        }}
+                    >
+                        <h2 style={{ marginTop: 0 }}>Questions</h2>
+                        {hasMoreQuestions ? (
+                            <span className="small muted">
+                                Showing {results.questions.length} of{" "}
+                                {results.totals.questions}
+                            </span>
+                        ) : null}
+                    </div>
                     <ResponsiveTable
                         columns={[
                             {
@@ -323,7 +375,23 @@ export default async function SearchPage({
 
             {results.runs.length > 0 ? (
                 <div className="card">
-                    <h2 style={{ marginTop: 0 }}>Runs</h2>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "baseline",
+                            gap: 12,
+                            flexWrap: "wrap",
+                        }}
+                    >
+                        <h2 style={{ marginTop: 0 }}>Runs</h2>
+                        {hasMoreRuns ? (
+                            <span className="small muted">
+                                Showing {results.runs.length} of{" "}
+                                {results.totals.runs}
+                            </span>
+                        ) : null}
+                    </div>
                     <ResponsiveTable
                         columns={[
                             { key: "id", label: "ID" },
@@ -363,7 +431,23 @@ export default async function SearchPage({
 
             {results.benchmarks.length > 0 ? (
                 <div className="card">
-                    <h2 style={{ marginTop: 0 }}>Benchmarks</h2>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "baseline",
+                            gap: 12,
+                            flexWrap: "wrap",
+                        }}
+                    >
+                        <h2 style={{ marginTop: 0 }}>Benchmarks</h2>
+                        {hasMoreBenchmarks ? (
+                            <span className="small muted">
+                                Showing {results.benchmarks.length} of{" "}
+                                {results.totals.benchmarks}
+                            </span>
+                        ) : null}
+                    </div>
                     <ResponsiveTable
                         columns={[
                             { key: "id", label: "ID" },
