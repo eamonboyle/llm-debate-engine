@@ -12,6 +12,7 @@ import {
     summarizeConfidenceDrift,
 } from "../../lib/confidenceDrift";
 import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
+import { buildQueryString } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
     title: "Confidence drift",
@@ -90,6 +91,30 @@ export default async function ConfidenceDriftPage({
                 totalRuns={rawIndex.runs.length}
                 filteredRuns={index.runs.length}
             />
+
+            {rows.length > 0 ? (
+                <div
+                    className="page-actions"
+                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                >
+                    <a
+                        href={`/api/drift${buildQueryString(params, {})}`}
+                        className="button secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                    >
+                        Export JSON
+                    </a>
+                    <a
+                        href={`/api/drift${buildQueryString(params, {})}&format=csv`}
+                        className="button secondary"
+                        download="confidence-drift.csv"
+                    >
+                        Export CSV
+                    </a>
+                </div>
+            ) : null}
 
             <div className="grid-4">
                 <MetricCard label="Indexed runs" value={summary.runCount} />

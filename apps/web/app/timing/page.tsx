@@ -15,6 +15,7 @@ import {
     formatDurationMs,
     summarizeStepTiming,
 } from "../../lib/stepTiming";
+import { buildQueryString } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
     title: "Pipeline timing",
@@ -87,6 +88,30 @@ export default async function PipelineTimingPage({
                 totalRuns={allRuns.length}
                 filteredRuns={runs.length}
             />
+
+            {rows.length > 0 ? (
+                <div
+                    className="page-actions"
+                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                >
+                    <a
+                        href={`/api/timing${buildQueryString(params, {})}`}
+                        className="button secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                    >
+                        Export JSON
+                    </a>
+                    <a
+                        href={`/api/timing${buildQueryString(params, {})}&format=csv`}
+                        className="button secondary"
+                        download="pipeline-timing.csv"
+                    >
+                        Export CSV
+                    </a>
+                </div>
+            ) : null}
 
             <div className="grid-4">
                 <MetricCard label="Run artifacts" value={runs.length} />

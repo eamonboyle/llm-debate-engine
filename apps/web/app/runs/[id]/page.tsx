@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
     loadBenchmarksByQuestion,
+    loadRunArtifacts,
     loadRunById,
     loadRunsByQuestion,
 } from "../../../lib/data";
@@ -19,6 +20,7 @@ import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
 import { CopyPageLink } from "../../../components/CopyPageLink";
 import { CopyTextButton } from "../../../components/CopyTextButton";
 import { summarizeRun } from "../../../lib/runCompare";
+import { buildCompareSuggestions } from "../../../lib/compareSuggestions";
 import { questionHubHref } from "../../../lib/questionGroups";
 
 export async function generateMetadata({
@@ -44,10 +46,14 @@ export default async function RunTracePage({
     if (!run) notFound();
 
     const steps = run.run.steps;
-    const [previousRuns, relatedBenchmarks] = await Promise.all([
+    const [allRuns, previousRuns, relatedBenchmarks] = await Promise.all([
+        loadRunArtifacts(),
         loadRunsByQuestion(run.question, run.id),
         loadBenchmarksByQuestion(run.question),
     ]);
+    const compareSuggestions = buildCompareSuggestions(allRuns, {
+        left: run.id,
+    });
     const metricsSummary = summarizeRun(run);
     const consensusSummary = extractConsensusSummary(run);
     const critiqueByType = extractCritiqueByType(run);
@@ -143,6 +149,35 @@ export default async function RunTracePage({
                 </p>
                 <RunMetricsSummary summary={metricsSummary} />
             </div>
+
+            {compareSuggestions.length > 0 ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>Suggested comparisons</h2>
+                    <p className="small muted" style={{ marginBottom: "1rem" }}>
+                        Pair this run with other traces on the same question or
+                        model — one click to open the compare view.
+                    </p>
+                    <ul className="compare-suggestions-list">
+                        {compareSuggestions.map((suggestion) => (
+                            <li key={suggestion.id}>
+                                <Link
+                                    href={suggestion.href}
+                                    className="button secondary"
+                                >
+                                    Compare with {suggestion.id.slice(-16)}
+                                </Link>
+                                <span className="small muted">
+                                    {suggestion.reason} · {suggestion.model} ·{" "}
+                                    {suggestion.pipelinePreset} ·{" "}
+                                    {new Date(
+                                        suggestion.createdAt,
+                                    ).toLocaleString()}
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ) : null}
 
             {consensusSummary ? (
                 <div className="card">

@@ -22,6 +22,10 @@ import { GET as getLeaderboardCompare } from "./leaderboard/compare/route";
 import { GET as getPresets } from "./presets/route";
 import { GET as getPresetsCompare } from "./presets/compare/route";
 import { GET as getQuality } from "./quality/route";
+import { GET as getAgents } from "./agents/route";
+import { GET as getTiming } from "./timing/route";
+import { GET as getDrift } from "./drift/route";
+import { GET as getIssues } from "./issues/route";
 import { GET as getQuestions } from "./questions/route";
 
 const tempDirs: string[] = [];
@@ -525,6 +529,186 @@ describe("web api routes", () => {
         expect(csvResponse.status).toBe(200);
         expect(csvResponse.headers.get("Content-Type")).toContain("text/csv");
         expect(await csvResponse.text()).toContain("run_1");
+    });
+
+    it("returns agent stats JSON and CSV from run artifacts", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_1.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_1",
+                question: "Q",
+                metadata: {
+                    createdAt: "2026-01-01T00:00:00.000Z",
+                    model: "gpt-alpha",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run_1",
+                    finalAnswer: "A",
+                    steps: [
+                        {
+                            agentName: "SolverAgent",
+                            role: "solver",
+                            createdAt: "2026-01-01T00:00:00.000Z",
+                            completedAt: "2026-01-01T00:00:01.000Z",
+                        },
+                    ],
+                    metrics: {},
+                },
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getAgents(
+            new Request("http://localhost/api/agents"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            rows: Array<{ agentName: string; stepCount: number }>;
+        };
+        expect(json.rows[0].agentName).toBe("SolverAgent");
+        expect(json.rows[0].stepCount).toBe(1);
+
+        const csvResponse = await getAgents(
+            new Request("http://localhost/api/agents?format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(csvResponse.headers.get("Content-Type")).toContain("text/csv");
+        expect(await csvResponse.text()).toContain("SolverAgent");
+
+        const timingResponse = await getTiming(
+            new Request("http://localhost/api/timing"),
+        );
+        expect(timingResponse.status).toBe(200);
+        const timingJson = (await timingResponse.json()) as {
+            rows: Array<{ agentName: string; sampleCount: number }>;
+        };
+        expect(timingJson.rows[0].agentName).toBe("SolverAgent");
+        expect(timingJson.rows[0].sampleCount).toBe(1);
+    });
+
+    it("returns confidence drift JSON and CSV from analysis index", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 1, benchmarks: 0, skippedFiles: 0 },
+                runs: [
+                    {
+                        id: "run_1",
+                        question: "Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "research_deep",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                        confidence: {
+                            solver: 0.8,
+                            solverToRevisionDelta: -0.15,
+                            revisionToSynthesizerDelta: 0.05,
+                        },
+                        critique: { issueCount: 2, maxSeverity: 4 },
+                    },
+                ],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    confidenceDrift: {
+                        solverToRevisionMean: -0.15,
+                        revisionToSynthesizerMean: 0.05,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getDrift(
+            new Request("http://localhost/api/drift"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            rows: Array<{ runId: string; driftMagnitude: number | null }>;
+        };
+        expect(json.rows[0].runId).toBe("run_1");
+        expect(json.rows[0].driftMagnitude).toBeCloseTo(0.2, 3);
+
+        const csvResponse = await getDrift(
+            new Request("http://localhost/api/drift?format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(await csvResponse.text()).toContain("run_1");
+    });
+
+    it("returns critique issues JSON and CSV from analysis index", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 1, benchmarks: 0, skippedFiles: 0 },
+                runs: [
+                    {
+                        id: "run_1",
+                        question: "Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "research_deep",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                        confidence: { solver: 0.8 },
+                        critique: {
+                            issueCount: 2,
+                            maxSeverity: 4,
+                            byType: { unsupported_claim: 2 },
+                        },
+                    },
+                ],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: { unsupported_claim: 2 },
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getIssues(
+            new Request("http://localhost/api/issues?type=unsupported_claim"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            summaries: Array<{ type: string; totalCount: number }>;
+            selectedRuns: Array<{ runId: string; countForType: number }>;
+        };
+        expect(json.summaries[0].type).toBe("unsupported_claim");
+        expect(json.selectedRuns[0].runId).toBe("run_1");
+        expect(json.selectedRuns[0].countForType).toBe(2);
+
+        const csvResponse = await getIssues(
+            new Request(
+                "http://localhost/api/issues?type=unsupported_claim&format=csv",
+            ),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(await csvResponse.text()).toContain("unsupported_claim");
     });
 
     it("returns model compare deltas from analysis index", async () => {
