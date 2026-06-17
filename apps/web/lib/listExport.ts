@@ -1,10 +1,7 @@
 import type { AgentStatRow } from "./agentStats";
 import type { ConfidenceDriftRow } from "./confidenceDrift";
 import type { BenchmarkArtifact, RunArtifact } from "./data";
-import type {
-    IssueTypeSummary,
-    RunIssueRow,
-} from "./issueExplorer";
+import type { IssueTypeSummary, RunIssueRow } from "./issueExplorer";
 import type { QuestionGroup } from "./questionGroups";
 import type { ModelLeaderboardRow } from "./modelLeaderboard";
 import type { PresetLeaderboardRow } from "./presetLeaderboard";
