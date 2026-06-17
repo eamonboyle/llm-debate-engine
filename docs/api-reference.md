@@ -199,6 +199,59 @@ Query parameters:
 
 Response includes `totals`, `runs`, `benchmarks`, `questions`, and `storeTotals` (full artifact counts).
 
+## `GET /api/agents`
+
+Returns per-agent pipeline stats from run artifacts (same filters as `/agents`).
+
+Query params: `q`, `model`, `preset`, `fast`, `from`, `to`, and optional `format=csv`.
+
+Example:
+
+```bash
+curl "http://localhost:3000/api/agents"
+curl -O "http://localhost:3000/api/agents?format=csv"
+```
+
+## `GET /api/timing`
+
+Returns per-agent step timing stats from run trace timestamps (same filters as `/timing`).
+
+Query params: `q`, `model`, `preset`, `fast`, `from`, `to`, and optional `format=csv`.
+
+Example:
+
+```bash
+curl "http://localhost:3000/api/timing"
+curl -O "http://localhost:3000/api/timing?format=csv"
+```
+
+## `GET /api/drift`
+
+Returns confidence drift rows and summary from the analysis index (same filters as `/drift`).
+
+- Returns `404` when no analysis index exists.
+- Pass `format=csv` for tabular export.
+
+Example:
+
+```bash
+curl "http://localhost:3000/api/drift"
+curl -O "http://localhost:3000/api/drift?format=csv"
+```
+
+## `GET /api/issues`
+
+Returns critique issue type summaries from the analysis index (same filters as `/issues`).
+
+Query params include index filters plus optional `type` to include runs for a selected issue type in JSON/CSV exports.
+
+Example:
+
+```bash
+curl "http://localhost:3000/api/issues"
+curl "http://localhost:3000/api/issues?type=unsupported_claim&format=csv"
+```
+
 ## `GET /api/benchmarks/:id/pairs`
 
 Returns benchmark pairwise similarity payload:

@@ -13,6 +13,7 @@ import {
     buildIssueTypeSummaries,
     listRunsForIssueType,
 } from "../../lib/issueExplorer";
+import { buildQueryString } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
     title: "Critique issues",
@@ -98,6 +99,30 @@ export default async function IssuesExplorerPage({
                 filteredRuns={filteredIndex.totals.runs}
                 preserveKeys={["type"]}
             />
+
+            {summaries.length > 0 ? (
+                <div
+                    className="page-actions"
+                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                >
+                    <a
+                        href={`/api/issues${buildQueryString(params, {})}`}
+                        className="button secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                    >
+                        Export JSON
+                    </a>
+                    <a
+                        href={`/api/issues${buildQueryString(params, {})}&format=csv`}
+                        className="button secondary"
+                        download="critique-issues.csv"
+                    >
+                        Export CSV
+                    </a>
+                </div>
+            ) : null}
 
             <div className="card">
                 <IssueSeverityChart rows={summaries} />

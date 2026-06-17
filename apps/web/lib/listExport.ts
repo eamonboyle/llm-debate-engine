@@ -1,9 +1,16 @@
+import type { AgentStatRow } from "./agentStats";
+import type { ConfidenceDriftRow } from "./confidenceDrift";
 import type { BenchmarkArtifact, RunArtifact } from "./data";
+import type {
+    IssueTypeSummary,
+    RunIssueRow,
+} from "./issueExplorer";
 import type { QuestionGroup } from "./questionGroups";
 import type { ModelLeaderboardRow } from "./modelLeaderboard";
 import type { PresetLeaderboardRow } from "./presetLeaderboard";
 import type { QualityRunRow } from "./qualityInsights";
 import type { GlobalSearchResult } from "./globalSearch";
+import type { AgentTimingRow } from "./stepTiming";
 
 function escapeCsv(value: string): string {
     if (/[",\n\r]/.test(value)) {
@@ -228,6 +235,119 @@ export function searchResultsToCsv(result: GlobalSearchResult): string {
                 "",
             ]),
         );
+    }
+
+    return sections.join("\n");
+}
+
+export function agentStatsToCsv(rows: AgentStatRow[]): string {
+    const header = [
+        "agentName",
+        "stepCount",
+        "runCount",
+        "errorCount",
+        "avgDurationMs",
+    ];
+    const csvRows = rows.map((entry) =>
+        row([
+            entry.agentName,
+            entry.stepCount,
+            entry.runCount,
+            entry.errorCount,
+            entry.avgDurationMs ?? "",
+        ]),
+    );
+    return [header.join(","), ...csvRows].join("\n");
+}
+
+export function agentTimingToCsv(rows: AgentTimingRow[]): string {
+    const header = [
+        "agentName",
+        "role",
+        "sampleCount",
+        "avgDurationMs",
+        "medianDurationMs",
+        "totalDurationMs",
+    ];
+    const csvRows = rows.map((entry) =>
+        row([
+            entry.agentName,
+            entry.role,
+            entry.sampleCount,
+            entry.avgDurationMs,
+            entry.medianDurationMs,
+            entry.totalDurationMs,
+        ]),
+    );
+    return [header.join(","), ...csvRows].join("\n");
+}
+
+export function confidenceDriftToCsv(rows: ConfidenceDriftRow[]): string {
+    const header = [
+        "runId",
+        "question",
+        "model",
+        "pipelinePreset",
+        "maxSeverity",
+        "solverToRevisionDelta",
+        "revisionToSynthesizerDelta",
+        "calibratedMinusSynthDelta",
+        "driftMagnitude",
+    ];
+    const csvRows = rows.map((entry) =>
+        row([
+            entry.runId,
+            entry.question,
+            entry.model,
+            entry.pipelinePreset,
+            entry.maxSeverity ?? "",
+            entry.solverToRevisionDelta ?? "",
+            entry.revisionToSynthesizerDelta ?? "",
+            entry.calibratedMinusSynthDelta ?? "",
+            entry.driftMagnitude ?? "",
+        ]),
+    );
+    return [header.join(","), ...csvRows].join("\n");
+}
+
+export function issueExplorerToCsv(
+    summaries: IssueTypeSummary[],
+    selectedType?: string,
+    selectedRuns: RunIssueRow[] = [],
+): string {
+    const sections: string[] = [];
+    sections.push("type,totalCount,runCount,avgSeverity,maxSeverity");
+    for (const summary of summaries) {
+        sections.push(
+            row([
+                summary.type,
+                summary.totalCount,
+                summary.runCount,
+                summary.avgSeverity ?? "",
+                summary.maxSeverity ?? "",
+            ]),
+        );
+    }
+
+    if (selectedType && selectedRuns.length > 0) {
+        sections.push("");
+        sections.push(
+            `selectedType,${escapeCsv(selectedType)}`,
+            "runId,question,model,pipelinePreset,countForType,issueCount,maxSeverity",
+        );
+        for (const runRow of selectedRuns) {
+            sections.push(
+                row([
+                    runRow.runId,
+                    runRow.question,
+                    runRow.model,
+                    runRow.pipelinePreset,
+                    runRow.countForType,
+                    runRow.issueCount,
+                    runRow.maxSeverity ?? "",
+                ]),
+            );
+        }
     }
 
     return sections.join("\n");

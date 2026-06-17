@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { BenchmarkArtifact, RunArtifact } from "./data";
 import {
+    agentStatsToCsv,
+    agentTimingToCsv,
     benchmarkArtifactsToCsv,
+    confidenceDriftToCsv,
+    issueExplorerToCsv,
     modelLeaderboardToCsv,
     presetLeaderboardToCsv,
     qualityRunsToCsv,
@@ -147,5 +151,83 @@ describe("listExport", () => {
         expect(csv).toContain("section,question");
         expect(csv).toContain("run_1");
         expect(csv).toContain("Topic A");
+    });
+
+    it("exports agent stats rows", () => {
+        const csv = agentStatsToCsv([
+            {
+                agentName: "SolverAgent",
+                stepCount: 12,
+                runCount: 4,
+                errorCount: 0,
+                avgDurationMs: 1500,
+            },
+        ]);
+        expect(csv).toContain("SolverAgent");
+        expect(csv).toContain("1500");
+    });
+
+    it("exports agent timing rows", () => {
+        const csv = agentTimingToCsv([
+            {
+                agentName: "SolverAgent",
+                role: "solver",
+                sampleCount: 5,
+                avgDurationMs: 1200,
+                medianDurationMs: 1100,
+                totalDurationMs: 6000,
+            },
+        ]);
+        expect(csv).toContain("solver");
+        expect(csv).toContain("6000");
+    });
+
+    it("exports confidence drift rows", () => {
+        const csv = confidenceDriftToCsv([
+            {
+                runId: "run_1",
+                question: "Topic",
+                model: "gpt-test",
+                pipelinePreset: "standard",
+                maxSeverity: 4,
+                solverToRevisionDelta: -0.1,
+                revisionToSynthesizerDelta: 0.05,
+                calibratedMinusSynthDelta: -0.02,
+                driftMagnitude: 0.15,
+                traceHref: "/runs/run_1",
+                compareHref: "/runs/compare?left=run_1",
+            },
+        ]);
+        expect(csv).toContain("run_1");
+        expect(csv).toContain("-0.1");
+    });
+
+    it("exports issue explorer summaries and selected runs", () => {
+        const csv = issueExplorerToCsv(
+            [
+                {
+                    type: "unsupported_claim",
+                    totalCount: 3,
+                    runCount: 2,
+                    avgSeverity: 3.5,
+                    maxSeverity: 4,
+                },
+            ],
+            "unsupported_claim",
+            [
+                {
+                    runId: "run_1",
+                    question: "Topic",
+                    model: "gpt-test",
+                    pipelinePreset: "standard",
+                    issueCount: 2,
+                    countForType: 1,
+                    maxSeverity: 4,
+                    href: "/runs/run_1",
+                },
+            ],
+        );
+        expect(csv).toContain("unsupported_claim");
+        expect(csv).toContain("run_1");
     });
 });

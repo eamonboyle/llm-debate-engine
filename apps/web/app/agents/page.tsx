@@ -89,6 +89,30 @@ export default async function AgentStatsPage({
                 filteredRuns={runs.length}
             />
 
+            {rows.length > 0 ? (
+                <div
+                    className="page-actions"
+                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                >
+                    <a
+                        href={`/api/agents${buildQueryString(params, {})}`}
+                        className="button secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                    >
+                        Export JSON
+                    </a>
+                    <a
+                        href={`/api/agents${buildQueryString(params, {})}&format=csv`}
+                        className="button secondary"
+                        download="agent-pipeline-stats.csv"
+                    >
+                        Export CSV
+                    </a>
+                </div>
+            ) : null}
+
             <div className="grid-4">
                 <div className="card">
                     <div className="small muted">Unique agents</div>
