@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { openGlobalSearch } from "../lib/openSearch";
 
 type NavLeaf = {
     href: string;
@@ -492,9 +493,40 @@ export function Nav() {
                     aria-label="Primary"
                 >
                     <div className="nav-desktop-row">
+                        <button
+                            type="button"
+                            className="nav-search-trigger"
+                            aria-label="Search artifacts (keyboard shortcut /)"
+                            onClick={openGlobalSearch}
+                        >
+                            <span className="nav-search-trigger-icon" aria-hidden>
+                                ⌕
+                            </span>
+                            <span className="nav-search-trigger-label">
+                                Search
+                            </span>
+                            <kbd className="nav-search-kbd">/</kbd>
+                        </button>
                         {renderDesktopNav(pathname)}
                     </div>
                     <div className="nav-mobile-stack">
+                        <button
+                            type="button"
+                            className="nav-search-trigger nav-search-trigger-mobile"
+                            aria-label="Search artifacts"
+                            onClick={() => {
+                                setMobileNavOpen(false);
+                                openGlobalSearch();
+                            }}
+                        >
+                            <span className="nav-search-trigger-icon" aria-hidden>
+                                ⌕
+                            </span>
+                            <span className="nav-search-trigger-label">
+                                Search artifacts
+                            </span>
+                            <kbd className="nav-search-kbd">/</kbd>
+                        </button>
                         {renderMobileNav(pathname, () =>
                             setMobileNavOpen(false),
                         )}

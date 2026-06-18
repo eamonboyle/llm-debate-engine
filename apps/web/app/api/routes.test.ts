@@ -26,6 +26,9 @@ import { GET as getAgents } from "./agents/route";
 import { GET as getTiming } from "./timing/route";
 import { GET as getDrift } from "./drift/route";
 import { GET as getIssues } from "./issues/route";
+import { GET as getOutliers } from "./outliers/route";
+import { GET as getEvidence } from "./evidence/route";
+import { GET as getCounterfactual } from "./counterfactual/route";
 import { GET as getQuestions } from "./questions/route";
 
 const tempDirs: string[] = [];
@@ -709,6 +712,188 @@ describe("web api routes", () => {
         );
         expect(csvResponse.status).toBe(200);
         expect(await csvResponse.text()).toContain("unsupported_claim");
+    });
+
+    it("returns outlier runs JSON and CSV from analysis index", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 1, benchmarks: 1, skippedFiles: 0 },
+                runs: [
+                    {
+                        id: "run_1",
+                        question: "Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "standard",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                    },
+                ],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                    outlierRuns: [
+                        {
+                            benchmarkId: "bench_1",
+                            runId: "run_1",
+                            avgSimilarity: 0.35,
+                            zScore: -2.1,
+                        },
+                    ],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getOutliers(
+            new Request("http://localhost/api/outliers"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            rows: Array<{ runId: string; avgSimilarity: number }>;
+        };
+        expect(json.rows[0].runId).toBe("run_1");
+        expect(json.rows[0].avgSimilarity).toBe(0.35);
+
+        const csvResponse = await getOutliers(
+            new Request("http://localhost/api/outliers?format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(await csvResponse.text()).toContain("run_1");
+    });
+
+    it("returns evidence planning JSON and CSV from analysis index", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 1, benchmarks: 0, skippedFiles: 0 },
+                runs: [
+                    {
+                        id: "run_1",
+                        question: "Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "research_deep",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                        research: { evidenceRiskLevel: 4 },
+                    },
+                ],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    evidencePlanning: {
+                        riskLevelMean: 4,
+                        riskLevelDistribution: { "4": 1 },
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getEvidence(
+            new Request("http://localhost/api/evidence?level=4"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            selectedLevel: number;
+            selectedRuns: Array<{ runId: string }>;
+        };
+        expect(json.selectedLevel).toBe(4);
+        expect(json.selectedRuns[0].runId).toBe("run_1");
+
+        const csvResponse = await getEvidence(
+            new Request("http://localhost/api/evidence?level=4&format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(await csvResponse.text()).toContain("run_1");
+    });
+
+    it("returns counterfactual modes JSON and CSV from analysis index", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 1, benchmarks: 0, skippedFiles: 0 },
+                runs: [
+                    {
+                        id: "run_1",
+                        question: "Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "research_deep",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                        research: {
+                            topCounterfactualFailureMode: "missing evidence",
+                            counterfactualFailureModeCount: 2,
+                        },
+                    },
+                ],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    counterfactualFailureModeCounts: {
+                        "missing evidence": 1,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getCounterfactual(
+            new Request(
+                "http://localhost/api/counterfactual?mode=missing%20evidence",
+            ),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            selectedMode: string;
+            selectedRuns: Array<{ runId: string }>;
+        };
+        expect(json.selectedMode).toBe("missing evidence");
+        expect(json.selectedRuns[0].runId).toBe("run_1");
+
+        const csvResponse = await getCounterfactual(
+            new Request(
+                "http://localhost/api/counterfactual?mode=missing%20evidence&format=csv",
+            ),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(await csvResponse.text()).toContain("missing evidence");
     });
 
     it("returns model compare deltas from analysis index", async () => {

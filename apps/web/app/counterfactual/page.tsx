@@ -94,6 +94,30 @@ export default async function CounterfactualExplorerPage({
                 preserveKeys={["mode"]}
             />
 
+            {summaries.length > 0 ? (
+                <div
+                    className="page-actions"
+                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                >
+                    <a
+                        href={`/api/counterfactual${buildQueryString(params, {})}`}
+                        className="button secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                    >
+                        Export JSON
+                    </a>
+                    <a
+                        href={`/api/counterfactual${buildQueryString(params, {})}&format=csv`}
+                        className="button secondary"
+                        download="counterfactual-modes.csv"
+                    >
+                        Export CSV
+                    </a>
+                </div>
+            ) : null}
+
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>Failure modes</h2>
                 {summaries.length === 0 ? (

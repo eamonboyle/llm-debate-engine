@@ -5,8 +5,11 @@ import {
     agentTimingToCsv,
     benchmarkArtifactsToCsv,
     confidenceDriftToCsv,
+    counterfactualExplorerToCsv,
+    evidenceExplorerToCsv,
     issueExplorerToCsv,
     modelLeaderboardToCsv,
+    outliersToCsv,
     presetLeaderboardToCsv,
     qualityRunsToCsv,
     questionGroupsToCsv,
@@ -228,6 +231,59 @@ describe("listExport", () => {
             ],
         );
         expect(csv).toContain("unsupported_claim");
+        expect(csv).toContain("run_1");
+    });
+
+    it("exports outlier rows", () => {
+        const csv = outliersToCsv([
+            {
+                benchmarkId: "bench_1",
+                runId: "run_1",
+                avgSimilarity: 0.42,
+                zScore: -1.2,
+                peerRunId: "run_2",
+                peerCompareHref: "/runs/compare?left=run_1&right=run_2",
+            },
+        ]);
+        expect(csv).toContain("run_1");
+        expect(csv).toContain("run_2");
+    });
+
+    it("exports evidence explorer summaries and selected runs", () => {
+        const csv = evidenceExplorerToCsv(
+            [{ riskLevel: 4, runCount: 2 }],
+            4,
+            [
+                {
+                    runId: "run_1",
+                    question: "Topic",
+                    model: "gpt-test",
+                    pipelinePreset: "research_deep",
+                    evidenceRiskLevel: 4,
+                    href: "/runs/run_1",
+                },
+            ],
+        );
+        expect(csv).toContain("riskLevel,runCount");
+        expect(csv).toContain("run_1");
+    });
+
+    it("exports counterfactual explorer summaries and selected runs", () => {
+        const csv = counterfactualExplorerToCsv(
+            [{ mode: "missing evidence", runCount: 3 }],
+            "missing evidence",
+            [
+                {
+                    runId: "run_1",
+                    question: "Topic",
+                    model: "gpt-test",
+                    pipelinePreset: "research_deep",
+                    failureModeCount: 2,
+                    href: "/runs/run_1",
+                },
+            ],
+        );
+        expect(csv).toContain("missing evidence");
         expect(csv).toContain("run_1");
     });
 });
