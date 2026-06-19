@@ -1,4 +1,5 @@
 import type { AgentStatRow } from "./agentStats";
+import type { CatalogStats } from "./catalogStats";
 import type { ConfidenceDriftRow } from "./confidenceDrift";
 import type {
     FailureModeSummary,
@@ -356,6 +357,37 @@ export function issueExplorerToCsv(
     return sections.join("\n");
 }
 
+export function counterfactualExplorerToCsv(
+    summaries: FailureModeSummary[],
+    selectedMode?: string,
+    selectedRuns: RunFailureModeRow[] = [],
+): string {
+    const sections: string[] = [];
+    sections.push("mode,runCount");
+    for (const summary of summaries) {
+        sections.push(row([summary.mode, summary.runCount]));
+    }
+
+    if (selectedMode && selectedRuns.length > 0) {
+        sections.push("");
+        sections.push(`selectedMode,${escapeCsv(selectedMode)}`);
+        sections.push("runId,question,model,pipelinePreset,failureModeCount");
+        for (const runRow of selectedRuns) {
+            sections.push(
+                row([
+                    runRow.runId,
+                    runRow.question,
+                    runRow.model,
+                    runRow.pipelinePreset,
+                    runRow.failureModeCount,
+                ]),
+            );
+        }
+    }
+
+    return sections.join("\n");
+}
+
 export function outliersToCsv(rows: OutlierExplorerRow[]): string {
     const header = [
         "benchmarkId",
@@ -407,32 +439,45 @@ export function evidenceExplorerToCsv(
     return sections.join("\n");
 }
 
-export function counterfactualExplorerToCsv(
-    summaries: FailureModeSummary[],
-    selectedMode?: string,
-    selectedRuns: RunFailureModeRow[] = [],
-): string {
+export function catalogStatsToCsv(stats: CatalogStats): string {
     const sections: string[] = [];
-    sections.push("mode,runCount");
-    for (const summary of summaries) {
-        sections.push(row([summary.mode, summary.runCount]));
-    }
 
-    if (selectedMode && selectedRuns.length > 0) {
-        sections.push("");
-        sections.push(`selectedMode,${escapeCsv(selectedMode)}`);
-        sections.push("runId,question,model,pipelinePreset,failureModeCount");
-        for (const runRow of selectedRuns) {
-            sections.push(
-                row([
-                    runRow.runId,
-                    runRow.question,
-                    runRow.model,
-                    runRow.pipelinePreset,
-                    runRow.failureModeCount,
-                ]),
-            );
-        }
+    sections.push("section,model,preset,runCount,benchmarkCount,total");
+    for (const entry of stats.models) {
+        sections.push(
+            row([
+                "model",
+                entry.model,
+                "",
+                entry.runCount,
+                entry.benchmarkCount,
+                entry.total,
+            ]),
+        );
+    }
+    for (const entry of stats.presets) {
+        sections.push(
+            row([
+                "preset",
+                "",
+                entry.preset,
+                entry.runCount,
+                entry.benchmarkCount,
+                entry.total,
+            ]),
+        );
+    }
+    for (const entry of stats.combos) {
+        sections.push(
+            row([
+                "combo",
+                entry.model,
+                entry.preset,
+                entry.runCount,
+                entry.benchmarkCount,
+                entry.total,
+            ]),
+        );
     }
 
     return sections.join("\n");

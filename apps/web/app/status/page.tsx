@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ApiStatusPanel } from "../../components/ApiStatusPanel";
 import { MetricCard } from "../../components/MetricCard";
+import { RebuildAnalysisPanel } from "../../components/RebuildAnalysisPanel";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
 import { loadAnalysisIndex, loadDataStatus } from "../../lib/data";
+import { isAnalysisRebuildEnabled } from "../../lib/rebuildAnalysis";
 
 export const metadata: Metadata = {
     title: "Data status",
@@ -136,6 +138,12 @@ export default async function DataStatusPage() {
                     getRowId={(row) => (row as { item: string }).item}
                 />
             </div>
+
+            <RebuildAnalysisPanel
+                enabled={isAnalysisRebuildEnabled()}
+                artifactRuns={status.artifactCounts.runs}
+                artifactBenchmarks={status.artifactCounts.benchmarks}
+            />
 
             <ApiStatusPanel />
 

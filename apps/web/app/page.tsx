@@ -12,6 +12,7 @@ import { buildCatalogStats } from "../lib/catalogStats";
 import {
     loadAnalysisIndex,
     loadBenchmarkArtifacts,
+    loadDataStatus,
     loadRunArtifacts,
 } from "../lib/data";
 import {
@@ -22,6 +23,7 @@ import {
     filterIndexRuns,
     hasActiveIndexFilters,
 } from "../lib/indexFilters";
+import { computeIndexFreshness } from "../lib/indexFreshness";
 
 export const metadata: Metadata = {
     title: "Overview",
@@ -39,11 +41,13 @@ export default async function OverviewPage({
     searchParams: Promise<OverviewSearchParams>;
 }) {
     const params = await searchParams;
-    const [index, runs, benchmarks] = await Promise.all([
+    const [index, runs, benchmarks, status] = await Promise.all([
         loadAnalysisIndex(),
         loadRunArtifacts(),
         loadBenchmarkArtifacts(),
+        loadDataStatus(),
     ]);
+    const indexFreshness = computeIndexFreshness(status, index);
     const recentActivity = buildActivityFeed(runs, benchmarks).slice(0, 6);
 
     if (!index) {
@@ -178,9 +182,10 @@ export default async function OverviewPage({
                     <div className="card">
                         <p className="muted" style={{ margin: 0 }}>
                             Run <code>pnpm analyze</code> to unlock overview
-                            charts, leaderboards, and insight pages. See the{" "}
-                            <Link href="/status">data status</Link> page for the
-                            full readiness checklist.
+                            charts, leaderboards, and insight pages — or use{" "}
+                            <Link href="/status">Rebuild analysis index</Link>{" "}
+                            on the data status page when running locally. See
+                            the checklist there for the full readiness list.
                         </p>
                     </div>
                 ) : null}
@@ -224,6 +229,26 @@ export default async function OverviewPage({
 
     return (
         <section className="stack">
+            {indexFreshness.stale ? (
+                <div
+                    className="card"
+                    style={{ borderColor: "var(--color-warning)" }}
+                >
+                    <h2 style={{ marginTop: 0 }}>
+                        Analysis index may be stale
+                    </h2>
+                    <p className="muted" style={{ marginBottom: 12 }}>
+                        {indexFreshness.missingIndex
+                            ? "Artifacts are loaded but the analysis index is missing."
+                            : `The index covers ${indexFreshness.indexedRuns} runs and ${indexFreshness.indexedBenchmarks} benchmarks, but ${indexFreshness.artifactRuns} runs and ${indexFreshness.artifactBenchmarks} benchmarks exist on disk.`}{" "}
+                        Charts and insight pages may omit recent experiments
+                        until you rebuild.
+                    </p>
+                    <Link href="/status" className="button secondary">
+                        Rebuild from data status
+                    </Link>
+                </div>
+            ) : null}
             <div>
                 <h1 className="title">LLM Research Dashboard</h1>
                 <p className="subtitle">
