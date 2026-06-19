@@ -5,6 +5,7 @@ import { MetricCard } from "../../components/MetricCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
 import { buildCatalogStats, filterCatalogStats } from "../../lib/catalogStats";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
+import { buildQueryString } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
     title: "Experiment catalog",
@@ -103,6 +104,28 @@ export default async function CatalogPage({
                     </div>
                 </form>
             </CollapsibleFilterCard>
+
+            <div
+                className="page-actions"
+                style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+            >
+                <a
+                    href={`/api/catalog${buildQueryString({ q: params.q }, {})}`}
+                    className="button secondary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download
+                >
+                    Export JSON
+                </a>
+                <a
+                    href={`/api/catalog${buildQueryString({ q: params.q }, {})}&format=csv`}
+                    className="button secondary"
+                    download="experiment-catalog.csv"
+                >
+                    Export CSV
+                </a>
+            </div>
 
             <div className="grid-4">
                 <MetricCard

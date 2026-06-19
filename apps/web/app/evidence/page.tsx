@@ -122,6 +122,30 @@ export default async function EvidenceExplorerPage({
                 />
             </div>
 
+            {riskSummaries.length > 0 ? (
+                <div
+                    className="page-actions"
+                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                >
+                    <a
+                        href={`/api/evidence${buildQueryString(params, {})}`}
+                        className="button secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                    >
+                        Export JSON
+                    </a>
+                    <a
+                        href={`/api/evidence${buildQueryString(params, {})}&format=csv`}
+                        className="button secondary"
+                        download="evidence-planning.csv"
+                    >
+                        Export CSV
+                    </a>
+                </div>
+            ) : null}
+
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>Risk level distribution</h2>
                 {riskSummaries.length === 0 ? (

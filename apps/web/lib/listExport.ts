@@ -1,9 +1,19 @@
 import type { AgentStatRow } from "./agentStats";
+import type { CatalogStats } from "./catalogStats";
 import type { ConfidenceDriftRow } from "./confidenceDrift";
+import type {
+    FailureModeSummary,
+    RunFailureModeRow,
+} from "./counterfactualExplorer";
 import type { BenchmarkArtifact, RunArtifact } from "./data";
+import type {
+    EvidenceRiskSummary,
+    RunEvidenceRow,
+} from "./evidenceExplorer";
 import type { IssueTypeSummary, RunIssueRow } from "./issueExplorer";
 import type { QuestionGroup } from "./questionGroups";
 import type { ModelLeaderboardRow } from "./modelLeaderboard";
+import type { OutlierRow } from "./outlierRows";
 import type { PresetLeaderboardRow } from "./presetLeaderboard";
 import type { QualityRunRow } from "./qualityInsights";
 import type { GlobalSearchResult } from "./globalSearch";
@@ -345,6 +355,136 @@ export function issueExplorerToCsv(
                 ]),
             );
         }
+    }
+
+    return sections.join("\n");
+}
+
+export function counterfactualExplorerToCsv(
+    summaries: FailureModeSummary[],
+    selectedMode?: string,
+    selectedRuns: RunFailureModeRow[] = [],
+): string {
+    const sections: string[] = [];
+    sections.push("mode,runCount");
+    for (const summary of summaries) {
+        sections.push(row([summary.mode, summary.runCount]));
+    }
+
+    if (selectedMode && selectedRuns.length > 0) {
+        sections.push("");
+        sections.push(`selectedMode,${escapeCsv(selectedMode)}`);
+        sections.push(
+            "runId,question,model,pipelinePreset,failureModeCount",
+        );
+        for (const runRow of selectedRuns) {
+            sections.push(
+                row([
+                    runRow.runId,
+                    runRow.question,
+                    runRow.model,
+                    runRow.pipelinePreset,
+                    runRow.failureModeCount,
+                ]),
+            );
+        }
+    }
+
+    return sections.join("\n");
+}
+
+export function evidenceExplorerToCsv(
+    summaries: EvidenceRiskSummary[],
+    selectedLevel?: number,
+    selectedRuns: RunEvidenceRow[] = [],
+): string {
+    const sections: string[] = [];
+    sections.push("riskLevel,runCount");
+    for (const summary of summaries) {
+        sections.push(row([summary.riskLevel, summary.runCount]));
+    }
+
+    if (selectedLevel != null && selectedRuns.length > 0) {
+        sections.push("");
+        sections.push(`selectedLevel,${selectedLevel}`);
+        sections.push(
+            "runId,question,model,pipelinePreset,evidenceRiskLevel",
+        );
+        for (const runRow of selectedRuns) {
+            sections.push(
+                row([
+                    runRow.runId,
+                    runRow.question,
+                    runRow.model,
+                    runRow.pipelinePreset,
+                    runRow.evidenceRiskLevel,
+                ]),
+            );
+        }
+    }
+
+    return sections.join("\n");
+}
+
+export function outlierRunsToCsv(rows: OutlierRow[]): string {
+    const header = [
+        "benchmarkId",
+        "runId",
+        "avgSimilarity",
+        "zScore",
+        "peerRunId",
+    ];
+    const csvRows = rows.map((entry) =>
+        row([
+            entry.benchmarkId,
+            entry.runId,
+            entry.avgSimilarity,
+            entry.zScore,
+            entry.peerRunId ?? "",
+        ]),
+    );
+    return [header.join(","), ...csvRows].join("\n");
+}
+
+export function catalogStatsToCsv(stats: CatalogStats): string {
+    const sections: string[] = [];
+
+    sections.push("section,model,preset,runCount,benchmarkCount,total");
+    for (const entry of stats.models) {
+        sections.push(
+            row([
+                "model",
+                entry.model,
+                "",
+                entry.runCount,
+                entry.benchmarkCount,
+                entry.total,
+            ]),
+        );
+    }
+    for (const entry of stats.presets) {
+        sections.push(
+            row([
+                "preset",
+                "",
+                entry.preset,
+                entry.runCount,
+                entry.benchmarkCount,
+                entry.total,
+            ]),
+        );
+    }
+    for (const entry of stats.combos) {
+        sections.push(
+            row([
+                "combo",
+                entry.model,
+                entry.preset,
+                entry.runCount,
+                entry.benchmarkCount,
+                entry.total,
+            ]),
+        );
     }
 
     return sections.join("\n");

@@ -26,10 +26,16 @@ import { GET as getAgents } from "./agents/route";
 import { GET as getTiming } from "./timing/route";
 import { GET as getDrift } from "./drift/route";
 import { GET as getIssues } from "./issues/route";
+import { GET as getCounterfactual } from "./counterfactual/route";
+import { GET as getEvidence } from "./evidence/route";
+import { GET as getOutliers } from "./outliers/route";
+import { GET as getCatalog } from "./catalog/route";
+import { POST as postAnalysisRebuild } from "./analysis/rebuild/route";
 import { GET as getQuestions } from "./questions/route";
 
 const tempDirs: string[] = [];
 const originalRunsDir = process.env.RUNS_DIR;
+const originalRebuildEnabled = process.env.ANALYSIS_REBUILD_ENABLED;
 
 async function makeTempDir() {
     const dir = await mkdtemp(join(tmpdir(), "api-route-test-"));
@@ -39,6 +45,7 @@ async function makeTempDir() {
 
 afterEach(async () => {
     process.env.RUNS_DIR = originalRunsDir;
+    process.env.ANALYSIS_REBUILD_ENABLED = originalRebuildEnabled;
     await Promise.all(
         tempDirs
             .splice(0)
@@ -1886,5 +1893,253 @@ describe("web api routes", () => {
         expect(csvResponse.headers.get("Content-Type")).toContain("text/csv");
         const csv = await csvResponse.text();
         expect(csv).toContain("run_a");
+    });
+
+    it("returns counterfactual explorer JSON and CSV", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 1, benchmarks: 0, skippedFiles: 0 },
+                runs: [
+                    {
+                        id: "run_cf",
+                        question: "Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "research_deep",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                        research: {
+                            topCounterfactualFailureMode: "missing_evidence",
+                            counterfactualFailureModeCount: 2,
+                        },
+                        critique: { issueCount: 0 },
+                    },
+                ],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    counterfactualFailureModeCounts: {
+                        missing_evidence: 1,
+                    },
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getCounterfactual(
+            new Request(
+                "http://localhost/api/counterfactual?mode=missing_evidence",
+            ),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            summaries: Array<{ mode: string }>;
+            selectedRuns: Array<{ runId: string }>;
+        };
+        expect(json.summaries[0].mode).toBe("missing_evidence");
+        expect(json.selectedRuns[0].runId).toBe("run_cf");
+
+        const csvResponse = await getCounterfactual(
+            new Request(
+                "http://localhost/api/counterfactual?mode=missing_evidence&format=csv",
+            ),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(await csvResponse.text()).toContain("missing_evidence");
+    });
+
+    it("returns evidence explorer JSON and CSV", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 1, benchmarks: 0, skippedFiles: 0 },
+                runs: [
+                    {
+                        id: "run_ev",
+                        question: "Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "research_deep",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                        research: { evidenceRiskLevel: 4 },
+                        critique: { issueCount: 0 },
+                    },
+                ],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    evidencePlanning: {
+                        riskLevelMean: 4,
+                        riskLevelDistribution: { "4": 1 },
+                    },
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getEvidence(
+            new Request("http://localhost/api/evidence?level=4"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            riskSummaries: Array<{ riskLevel: number }>;
+            selectedRuns: Array<{ runId: string }>;
+        };
+        expect(json.riskSummaries[0].riskLevel).toBe(4);
+        expect(json.selectedRuns[0].runId).toBe("run_ev");
+
+        const csvResponse = await getEvidence(
+            new Request("http://localhost/api/evidence?level=4&format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(await csvResponse.text()).toContain("run_ev");
+    });
+
+    it("returns outlier runs JSON and CSV", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 1, benchmarks: 1, skippedFiles: 0 },
+                runs: [],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    outlierRuns: [
+                        {
+                            benchmarkId: "bench_1",
+                            runId: "run_out",
+                            avgSimilarity: 0.42,
+                            zScore: -1.8,
+                        },
+                    ],
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getOutliers(
+            new Request("http://localhost/api/outliers"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            rows: Array<{ runId: string }>;
+        };
+        expect(json.rows[0].runId).toBe("run_out");
+
+        const csvResponse = await getOutliers(
+            new Request("http://localhost/api/outliers?format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(await csvResponse.text()).toContain("run_out");
+    });
+
+    it("returns catalog JSON and CSV from artifacts", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_cat.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_cat",
+                question: "Catalog Q",
+                metadata: {
+                    createdAt: "2026-01-01T00:00:00.000Z",
+                    model: "gpt-catalog",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run_cat",
+                    finalAnswer: "A",
+                    steps: [],
+                    metrics: {},
+                },
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getCatalog();
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            models: Array<{ model: string }>;
+        };
+        expect(json.models[0].model).toBe("gpt-catalog");
+
+        const csvResponse = await getCatalog(
+            new Request("http://localhost/api/catalog?format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(await csvResponse.text()).toContain("gpt-catalog");
+    });
+
+    it("rebuilds analysis index from artifacts when enabled", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        process.env.ANALYSIS_REBUILD_ENABLED = "true";
+        await writeFile(
+            join(dir, "run_rebuild.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_rebuild",
+                question: "Rebuild Q",
+                metadata: {
+                    createdAt: "2026-01-01T00:00:00.000Z",
+                    model: "gpt-rebuild",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run_rebuild",
+                    finalAnswer: "Answer",
+                    steps: [],
+                    metrics: {},
+                },
+            }),
+            "utf-8",
+        );
+
+        const response = await postAnalysisRebuild();
+        expect(response.status).toBe(200);
+        const json = (await response.json()) as {
+            ok: boolean;
+            totals: { runs: number };
+        };
+        expect(json.ok).toBe(true);
+        expect(json.totals.runs).toBeGreaterThanOrEqual(1);
     });
 });
