@@ -97,6 +97,30 @@ export default async function EvidenceExplorerPage({
                 preserveKeys={["level"]}
             />
 
+            {riskSummaries.length > 0 ? (
+                <div
+                    className="page-actions"
+                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                >
+                    <a
+                        href={`/api/evidence${buildQueryString(params, {})}`}
+                        className="button secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                    >
+                        Export JSON
+                    </a>
+                    <a
+                        href={`/api/evidence${buildQueryString(params, {})}&format=csv`}
+                        className="button secondary"
+                        download="evidence-planning.csv"
+                    >
+                        Export CSV
+                    </a>
+                </div>
+            ) : null}
+
             <div className="grid-4">
                 <MetricCard
                     label="Runs with risk score"

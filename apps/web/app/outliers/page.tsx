@@ -3,10 +3,10 @@ import Link from "next/link";
 import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { MetricCard } from "../../components/MetricCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
-import { buildOutlierRows } from "../../lib/outlierRows";
 import { loadAnalysisIndex } from "../../lib/data";
 import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
 import { buildQueryString } from "../../lib/listPagination";
+import { buildOutlierExplorerRows } from "../../lib/outlierExplorer";
 
 export const metadata: Metadata = {
     title: "Outlier runs",
@@ -47,7 +47,7 @@ export default async function OutliersPage({
 
     const { models, presets } = collectIndexFacets(rawIndex);
     const index = applyIndexFilters(rawIndex, params);
-    const rows = await buildOutlierRows(index);
+    const rows = await buildOutlierExplorerRows(index);
 
     return (
         <section className="stack">

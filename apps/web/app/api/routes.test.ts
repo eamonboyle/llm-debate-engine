@@ -718,6 +718,188 @@ describe("web api routes", () => {
         expect(await csvResponse.text()).toContain("unsupported_claim");
     });
 
+    it("returns outlier runs JSON and CSV from analysis index", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 1, benchmarks: 1, skippedFiles: 0 },
+                runs: [
+                    {
+                        id: "run_1",
+                        question: "Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "standard",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                    },
+                ],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                    outlierRuns: [
+                        {
+                            benchmarkId: "bench_1",
+                            runId: "run_1",
+                            avgSimilarity: 0.35,
+                            zScore: -2.1,
+                        },
+                    ],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getOutliers(
+            new Request("http://localhost/api/outliers"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            rows: Array<{ runId: string; avgSimilarity: number }>;
+        };
+        expect(json.rows[0].runId).toBe("run_1");
+        expect(json.rows[0].avgSimilarity).toBe(0.35);
+
+        const csvResponse = await getOutliers(
+            new Request("http://localhost/api/outliers?format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(await csvResponse.text()).toContain("run_1");
+    });
+
+    it("returns evidence planning JSON and CSV from analysis index", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 1, benchmarks: 0, skippedFiles: 0 },
+                runs: [
+                    {
+                        id: "run_1",
+                        question: "Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "research_deep",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                        research: { evidenceRiskLevel: 4 },
+                    },
+                ],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    evidencePlanning: {
+                        riskLevelMean: 4,
+                        riskLevelDistribution: { "4": 1 },
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getEvidence(
+            new Request("http://localhost/api/evidence?level=4"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            selectedLevel: number;
+            selectedRuns: Array<{ runId: string }>;
+        };
+        expect(json.selectedLevel).toBe(4);
+        expect(json.selectedRuns[0].runId).toBe("run_1");
+
+        const csvResponse = await getEvidence(
+            new Request("http://localhost/api/evidence?level=4&format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(await csvResponse.text()).toContain("run_1");
+    });
+
+    it("returns counterfactual modes JSON and CSV from analysis index", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 1, benchmarks: 0, skippedFiles: 0 },
+                runs: [
+                    {
+                        id: "run_1",
+                        question: "Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "research_deep",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                        research: {
+                            topCounterfactualFailureMode: "missing evidence",
+                            counterfactualFailureModeCount: 2,
+                        },
+                    },
+                ],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    counterfactualFailureModeCounts: {
+                        "missing evidence": 1,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getCounterfactual(
+            new Request(
+                "http://localhost/api/counterfactual?mode=missing%20evidence",
+            ),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            selectedMode: string;
+            selectedRuns: Array<{ runId: string }>;
+        };
+        expect(json.selectedMode).toBe("missing evidence");
+        expect(json.selectedRuns[0].runId).toBe("run_1");
+
+        const csvResponse = await getCounterfactual(
+            new Request(
+                "http://localhost/api/counterfactual?mode=missing%20evidence&format=csv",
+            ),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(await csvResponse.text()).toContain("missing evidence");
+    });
+
     it("returns model compare deltas from analysis index", async () => {
         const dir = await makeTempDir();
         process.env.RUNS_DIR = dir;
@@ -1893,190 +2075,6 @@ describe("web api routes", () => {
         expect(csvResponse.headers.get("Content-Type")).toContain("text/csv");
         const csv = await csvResponse.text();
         expect(csv).toContain("run_a");
-    });
-
-    it("returns counterfactual explorer JSON and CSV", async () => {
-        const dir = await makeTempDir();
-        process.env.RUNS_DIR = dir;
-        await writeFile(
-            join(dir, "analysis-index.json"),
-            JSON.stringify({
-                generatedAt: new Date().toISOString(),
-                totals: { runs: 1, benchmarks: 0, skippedFiles: 0 },
-                runs: [
-                    {
-                        id: "run_cf",
-                        question: "Q",
-                        createdAt: "2026-01-01T00:00:00.000Z",
-                        model: "gpt-alpha",
-                        pipelinePreset: "research_deep",
-                        fastMode: false,
-                        finalAnswerPreview: "A",
-                        research: {
-                            topCounterfactualFailureMode: "missing_evidence",
-                            counterfactualFailureModeCount: 2,
-                        },
-                        critique: { issueCount: 0 },
-                    },
-                ],
-                benchmarks: [],
-                aggregates: {
-                    issueTypeCounts: {},
-                    counterfactualFailureModeCounts: {
-                        missing_evidence: 1,
-                    },
-                    confidenceDrift: {
-                        solverToRevisionMean: 0,
-                        revisionToSynthesizerMean: 0,
-                        calibratedMinusSynthMean: 0,
-                    },
-                    presets: {},
-                    critiqueVsConfidence: [],
-                },
-                skipped: [],
-            }),
-            "utf-8",
-        );
-
-        const jsonResponse = await getCounterfactual(
-            new Request(
-                "http://localhost/api/counterfactual?mode=missing_evidence",
-            ),
-        );
-        expect(jsonResponse.status).toBe(200);
-        const json = (await jsonResponse.json()) as {
-            summaries: Array<{ mode: string }>;
-            selectedRuns: Array<{ runId: string }>;
-        };
-        expect(json.summaries[0].mode).toBe("missing_evidence");
-        expect(json.selectedRuns[0].runId).toBe("run_cf");
-
-        const csvResponse = await getCounterfactual(
-            new Request(
-                "http://localhost/api/counterfactual?mode=missing_evidence&format=csv",
-            ),
-        );
-        expect(csvResponse.status).toBe(200);
-        expect(await csvResponse.text()).toContain("missing_evidence");
-    });
-
-    it("returns evidence explorer JSON and CSV", async () => {
-        const dir = await makeTempDir();
-        process.env.RUNS_DIR = dir;
-        await writeFile(
-            join(dir, "analysis-index.json"),
-            JSON.stringify({
-                generatedAt: new Date().toISOString(),
-                totals: { runs: 1, benchmarks: 0, skippedFiles: 0 },
-                runs: [
-                    {
-                        id: "run_ev",
-                        question: "Q",
-                        createdAt: "2026-01-01T00:00:00.000Z",
-                        model: "gpt-alpha",
-                        pipelinePreset: "research_deep",
-                        fastMode: false,
-                        finalAnswerPreview: "A",
-                        research: { evidenceRiskLevel: 4 },
-                        critique: { issueCount: 0 },
-                    },
-                ],
-                benchmarks: [],
-                aggregates: {
-                    issueTypeCounts: {},
-                    evidencePlanning: {
-                        riskLevelMean: 4,
-                        riskLevelDistribution: { "4": 1 },
-                    },
-                    confidenceDrift: {
-                        solverToRevisionMean: 0,
-                        revisionToSynthesizerMean: 0,
-                        calibratedMinusSynthMean: 0,
-                    },
-                    presets: {},
-                    critiqueVsConfidence: [],
-                },
-                skipped: [],
-            }),
-            "utf-8",
-        );
-
-        const jsonResponse = await getEvidence(
-            new Request("http://localhost/api/evidence?level=4"),
-        );
-        expect(jsonResponse.status).toBe(200);
-        const json = (await jsonResponse.json()) as {
-            riskSummaries: Array<{ riskLevel: number }>;
-            selectedRuns: Array<{ runId: string }>;
-        };
-        expect(json.riskSummaries[0].riskLevel).toBe(4);
-        expect(json.selectedRuns[0].runId).toBe("run_ev");
-
-        const csvResponse = await getEvidence(
-            new Request("http://localhost/api/evidence?level=4&format=csv"),
-        );
-        expect(csvResponse.status).toBe(200);
-        expect(await csvResponse.text()).toContain("run_ev");
-    });
-
-    it("returns outlier runs JSON and CSV", async () => {
-        const dir = await makeTempDir();
-        process.env.RUNS_DIR = dir;
-        await writeFile(
-            join(dir, "analysis-index.json"),
-            JSON.stringify({
-                generatedAt: new Date().toISOString(),
-                totals: { runs: 1, benchmarks: 1, skippedFiles: 0 },
-                runs: [
-                    {
-                        id: "run_out",
-                        question: "Q",
-                        createdAt: "2026-01-01T00:00:00.000Z",
-                        model: "gpt-alpha",
-                        pipelinePreset: "standard",
-                        fastMode: false,
-                        finalAnswerPreview: "A",
-                        critique: { issueCount: 0 },
-                    },
-                ],
-                benchmarks: [],
-                aggregates: {
-                    issueTypeCounts: {},
-                    outlierRuns: [
-                        {
-                            benchmarkId: "bench_1",
-                            runId: "run_out",
-                            avgSimilarity: 0.42,
-                            zScore: -1.8,
-                        },
-                    ],
-                    confidenceDrift: {
-                        solverToRevisionMean: 0,
-                        revisionToSynthesizerMean: 0,
-                        calibratedMinusSynthMean: 0,
-                    },
-                    presets: {},
-                    critiqueVsConfidence: [],
-                },
-                skipped: [],
-            }),
-            "utf-8",
-        );
-
-        const jsonResponse = await getOutliers(
-            new Request("http://localhost/api/outliers"),
-        );
-        expect(jsonResponse.status).toBe(200);
-        const json = (await jsonResponse.json()) as {
-            rows: Array<{ runId: string }>;
-        };
-        expect(json.rows[0].runId).toBe("run_out");
-
-        const csvResponse = await getOutliers(
-            new Request("http://localhost/api/outliers?format=csv"),
-        );
-        expect(csvResponse.status).toBe(200);
-        expect(await csvResponse.text()).toContain("run_out");
     });
 
     it("returns catalog JSON and CSV from artifacts", async () => {

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { OPEN_SEARCH_EVENT } from "../lib/openSearch";
 
 type SearchApiResult = {
     query: string;
@@ -73,6 +74,13 @@ export function SearchTypeahead() {
         } finally {
             setLoading(false);
         }
+    }, []);
+
+    useEffect(() => {
+        const onOpenSearch = () => setOpen(true);
+        window.addEventListener(OPEN_SEARCH_EVENT, onOpenSearch);
+        return () =>
+            window.removeEventListener(OPEN_SEARCH_EVENT, onOpenSearch);
     }, []);
 
     useEffect(() => {

@@ -1,7 +1,7 @@
 import { loadAnalysisIndex } from "../../../lib/data";
 import { applyIndexFilters } from "../../../lib/indexFilters";
-import { outlierRunsToCsv } from "../../../lib/listExport";
-import { buildOutlierRows } from "../../../lib/outlierRows";
+import { buildOutlierExplorerRows } from "../../../lib/outlierExplorer";
+import { outliersToCsv } from "../../../lib/listExport";
 
 function readFilterParams(url: URL) {
     return {
@@ -28,10 +28,10 @@ export async function GET(request: Request) {
     }
 
     const filteredIndex = applyIndexFilters(index, filters);
-    const rows = await buildOutlierRows(filteredIndex);
+    const rows = await buildOutlierExplorerRows(filteredIndex);
 
     if (format === "csv") {
-        const csv = outlierRunsToCsv(rows);
+        const csv = outliersToCsv(rows);
         return new Response(csv, {
             headers: {
                 "Content-Type": "text/csv; charset=utf-8",

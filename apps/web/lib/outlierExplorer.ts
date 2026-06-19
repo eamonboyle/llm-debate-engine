@@ -2,7 +2,7 @@ import { findMostSimilarPeerRunId } from "./benchmarkPeers";
 import type { AnalysisIndex } from "./data";
 import { loadBenchmarkPairsById } from "./data";
 
-export type OutlierRow = {
+export type OutlierExplorerRow = {
     benchmarkId: string;
     runId: string;
     avgSimilarity: number;
@@ -11,9 +11,9 @@ export type OutlierRow = {
     peerCompareHref: string | null;
 };
 
-export async function buildOutlierRows(
+export async function buildOutlierExplorerRows(
     index: AnalysisIndex,
-): Promise<OutlierRow[]> {
+): Promise<OutlierExplorerRow[]> {
     const outliers = index.aggregates.outlierRuns ?? [];
     const sorted = [...outliers].sort(
         (a, b) => a.avgSimilarity - b.avgSimilarity,

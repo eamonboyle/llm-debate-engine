@@ -8,9 +8,9 @@ import type {
 import type { BenchmarkArtifact, RunArtifact } from "./data";
 import type { EvidenceRiskSummary, RunEvidenceRow } from "./evidenceExplorer";
 import type { IssueTypeSummary, RunIssueRow } from "./issueExplorer";
+import type { OutlierExplorerRow } from "./outlierExplorer";
 import type { QuestionGroup } from "./questionGroups";
 import type { ModelLeaderboardRow } from "./modelLeaderboard";
-import type { OutlierRow } from "./outlierRows";
 import type { PresetLeaderboardRow } from "./presetLeaderboard";
 import type { QualityRunRow } from "./qualityInsights";
 import type { GlobalSearchResult } from "./globalSearch";
@@ -388,6 +388,26 @@ export function counterfactualExplorerToCsv(
     return sections.join("\n");
 }
 
+export function outliersToCsv(rows: OutlierExplorerRow[]): string {
+    const header = [
+        "benchmarkId",
+        "runId",
+        "avgSimilarity",
+        "zScore",
+        "peerRunId",
+    ];
+    const csvRows = rows.map((entry) =>
+        row([
+            entry.benchmarkId,
+            entry.runId,
+            entry.avgSimilarity,
+            entry.zScore,
+            entry.peerRunId ?? "",
+        ]),
+    );
+    return [header.join(","), ...csvRows].join("\n");
+}
+
 export function evidenceExplorerToCsv(
     summaries: EvidenceRiskSummary[],
     selectedLevel?: number,
@@ -417,26 +437,6 @@ export function evidenceExplorerToCsv(
     }
 
     return sections.join("\n");
-}
-
-export function outlierRunsToCsv(rows: OutlierRow[]): string {
-    const header = [
-        "benchmarkId",
-        "runId",
-        "avgSimilarity",
-        "zScore",
-        "peerRunId",
-    ];
-    const csvRows = rows.map((entry) =>
-        row([
-            entry.benchmarkId,
-            entry.runId,
-            entry.avgSimilarity,
-            entry.zScore,
-            entry.peerRunId ?? "",
-        ]),
-    );
-    return [header.join(","), ...csvRows].join("\n");
 }
 
 export function catalogStatsToCsv(stats: CatalogStats): string {
