@@ -3,9 +3,10 @@ import Link from "next/link";
 import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { MetricCard } from "../../components/MetricCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
-import { findMostSimilarPeerRunId } from "../../lib/benchmarkPeers";
-import { loadAnalysisIndex, loadBenchmarkPairsById } from "../../lib/data";
+import { loadAnalysisIndex } from "../../lib/data";
 import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
+import { buildQueryString } from "../../lib/listPagination";
+import { buildOutlierExplorerRows } from "../../lib/outlierExplorer";
 
 export const metadata: Metadata = {
     title: "Outlier runs",
@@ -46,28 +47,7 @@ export default async function OutliersPage({
 
     const { models, presets } = collectIndexFacets(rawIndex);
     const index = applyIndexFilters(rawIndex, params);
-    const outliers = index.aggregates.outlierRuns ?? [];
-    const sorted = [...outliers].sort(
-        (a, b) => a.avgSimilarity - b.avgSimilarity,
-    );
-
-    const rows = await Promise.all(
-        sorted.map(async (row) => {
-            const pairsData = await loadBenchmarkPairsById(row.benchmarkId);
-            const peerRunId = findMostSimilarPeerRunId(
-                row.runId,
-                pairsData.runIds,
-                pairsData.pairs,
-            );
-            return {
-                ...row,
-                peerRunId,
-                peerCompareHref: peerRunId
-                    ? `/runs/compare?left=${row.runId}&right=${peerRunId}`
-                    : null,
-            };
-        }),
-    );
+    const rows = await buildOutlierExplorerRows(index);
 
     return (
         <section className="stack">
@@ -100,10 +80,34 @@ export default async function OutliersPage({
                 filteredRuns={index.runs.length}
             />
 
+            {rows.length > 0 ? (
+                <div
+                    className="page-actions"
+                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                >
+                    <a
+                        href={`/api/outliers${buildQueryString(params, {})}`}
+                        className="button secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                    >
+                        Export JSON
+                    </a>
+                    <a
+                        href={`/api/outliers${buildQueryString(params, {})}&format=csv`}
+                        className="button secondary"
+                        download="outlier-runs.csv"
+                    >
+                        Export CSV
+                    </a>
+                </div>
+            ) : null}
+
             <div className="grid-4">
                 <MetricCard
                     label="Outliers indexed"
-                    value={sorted.length}
+                    value={rows.length}
                     helpKey="outlierRuns"
                 />
                 <MetricCard
@@ -113,15 +117,15 @@ export default async function OutliersPage({
                 />
                 <MetricCard
                     label="Lowest avg similarity"
-                    value={sorted[0] ? sorted[0].avgSimilarity.toFixed(3) : "—"}
+                    value={rows[0] ? rows[0].avgSimilarity.toFixed(3) : "—"}
                     helpKey="avgSimilarity"
                 />
                 <MetricCard
                     label="Most negative z-score"
                     value={
-                        sorted.length > 0
+                        rows.length > 0
                             ? Math.min(
-                                  ...sorted.map((row) => row.zScore),
+                                  ...rows.map((row) => row.zScore),
                               ).toFixed(2)
                             : "—"
                     }
