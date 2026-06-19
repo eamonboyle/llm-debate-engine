@@ -69,8 +69,8 @@ export function RebuildAnalysisPanel({
             <p className="small muted">
                 Regenerate <code>analysis-index.json</code> plus CSV, markdown
                 report, bundle, and benchmark pair exports from artifacts in{" "}
-                <code>runs/</code>. Equivalent to{" "}
-                <code>pnpm analyze:full</code> for self-hosted deployments.
+                <code>runs/</code>. Equivalent to <code>pnpm analyze:full</code>{" "}
+                for self-hosted deployments.
             </p>
             {!enabled ? (
                 <p className="muted" style={{ marginBottom: 0 }}>

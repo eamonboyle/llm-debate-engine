@@ -184,8 +184,8 @@ export default async function OverviewPage({
                             Run <code>pnpm analyze</code> to unlock overview
                             charts, leaderboards, and insight pages — or use{" "}
                             <Link href="/status">Rebuild analysis index</Link>{" "}
-                            on the data status page when running locally. See the
-                            checklist there for the full readiness list.
+                            on the data status page when running locally. See
+                            the checklist there for the full readiness list.
                         </p>
                     </div>
                 ) : null}
@@ -234,14 +234,15 @@ export default async function OverviewPage({
                     className="card"
                     style={{ borderColor: "var(--color-warning)" }}
                 >
-                    <h2 style={{ marginTop: 0 }}>Analysis index may be stale</h2>
+                    <h2 style={{ marginTop: 0 }}>
+                        Analysis index may be stale
+                    </h2>
                     <p className="muted" style={{ marginBottom: 12 }}>
                         {indexFreshness.missingIndex
                             ? "Artifacts are loaded but the analysis index is missing."
-                            : `The index covers ${indexFreshness.indexedRuns} runs and ${indexFreshness.indexedBenchmarks} benchmarks, but ${indexFreshness.artifactRuns} runs and ${indexFreshness.artifactBenchmarks} benchmarks exist on disk.`}
-                        {" "}
-                        Charts and insight pages may omit recent experiments until
-                        you rebuild.
+                            : `The index covers ${indexFreshness.indexedRuns} runs and ${indexFreshness.indexedBenchmarks} benchmarks, but ${indexFreshness.artifactRuns} runs and ${indexFreshness.artifactBenchmarks} benchmarks exist on disk.`}{" "}
+                        Charts and insight pages may omit recent experiments
+                        until you rebuild.
                     </p>
                     <Link href="/status" className="button secondary">
                         Rebuild from data status

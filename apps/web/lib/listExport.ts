@@ -6,10 +6,7 @@ import type {
     RunFailureModeRow,
 } from "./counterfactualExplorer";
 import type { BenchmarkArtifact, RunArtifact } from "./data";
-import type {
-    EvidenceRiskSummary,
-    RunEvidenceRow,
-} from "./evidenceExplorer";
+import type { EvidenceRiskSummary, RunEvidenceRow } from "./evidenceExplorer";
 import type { IssueTypeSummary, RunIssueRow } from "./issueExplorer";
 import type { QuestionGroup } from "./questionGroups";
 import type { ModelLeaderboardRow } from "./modelLeaderboard";
@@ -374,9 +371,7 @@ export function counterfactualExplorerToCsv(
     if (selectedMode && selectedRuns.length > 0) {
         sections.push("");
         sections.push(`selectedMode,${escapeCsv(selectedMode)}`);
-        sections.push(
-            "runId,question,model,pipelinePreset,failureModeCount",
-        );
+        sections.push("runId,question,model,pipelinePreset,failureModeCount");
         for (const runRow of selectedRuns) {
             sections.push(
                 row([
@@ -407,9 +402,7 @@ export function evidenceExplorerToCsv(
     if (selectedLevel != null && selectedRuns.length > 0) {
         sections.push("");
         sections.push(`selectedLevel,${selectedLevel}`);
-        sections.push(
-            "runId,question,model,pipelinePreset,evidenceRiskLevel",
-        );
+        sections.push("runId,question,model,pipelinePreset,evidenceRiskLevel");
         for (const runRow of selectedRuns) {
             sections.push(
                 row([

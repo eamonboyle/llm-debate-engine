@@ -1,7 +1,7 @@
 import {
     isAnalysisRebuildEnabled,
     rebuildAnalysisArtifacts,
-} from "../../../lib/rebuildAnalysis";
+} from "../../../../lib/rebuildAnalysis";
 
 export async function POST() {
     if (!isAnalysisRebuildEnabled()) {

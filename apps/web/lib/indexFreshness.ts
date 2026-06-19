@@ -20,10 +20,12 @@ export function computeIndexFreshness(
     const indexedRuns = index?.totals.runs ?? 0;
     const indexedBenchmarks = index?.totals.benchmarks ?? 0;
     const runsBehind = Math.max(0, artifactRuns - indexedRuns);
-    const benchmarksBehind = Math.max(0, artifactBenchmarks - indexedBenchmarks);
+    const benchmarksBehind = Math.max(
+        0,
+        artifactBenchmarks - indexedBenchmarks,
+    );
     const missingIndex = !index && (artifactRuns > 0 || artifactBenchmarks > 0);
-    const stale =
-        missingIndex || runsBehind > 0 || benchmarksBehind > 0;
+    const stale = missingIndex || runsBehind > 0 || benchmarksBehind > 0;
 
     return {
         stale,

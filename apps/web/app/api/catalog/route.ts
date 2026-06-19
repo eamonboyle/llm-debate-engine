@@ -1,4 +1,7 @@
-import { buildCatalogStats, filterCatalogStats } from "../../../lib/catalogStats";
+import {
+    buildCatalogStats,
+    filterCatalogStats,
+} from "../../../lib/catalogStats";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../../lib/data";
 import { catalogStatsToCsv } from "../../../lib/listExport";
 

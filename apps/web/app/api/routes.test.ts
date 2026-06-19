@@ -2027,7 +2027,18 @@ describe("web api routes", () => {
             JSON.stringify({
                 generatedAt: new Date().toISOString(),
                 totals: { runs: 1, benchmarks: 1, skippedFiles: 0 },
-                runs: [],
+                runs: [
+                    {
+                        id: "run_out",
+                        question: "Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "standard",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                        critique: { issueCount: 0 },
+                    },
+                ],
                 benchmarks: [],
                 aggregates: {
                     issueTypeCounts: {},
@@ -2093,7 +2104,9 @@ describe("web api routes", () => {
             "utf-8",
         );
 
-        const jsonResponse = await getCatalog();
+        const jsonResponse = await getCatalog(
+            new Request("http://localhost/api/catalog"),
+        );
         expect(jsonResponse.status).toBe(200);
         const json = (await jsonResponse.json()) as {
             models: Array<{ model: string }>;
@@ -2118,10 +2131,13 @@ describe("web api routes", () => {
                 id: "run_rebuild",
                 question: "Rebuild Q",
                 metadata: {
+                    schemaVersion: 1,
                     createdAt: "2026-01-01T00:00:00.000Z",
                     model: "gpt-rebuild",
                     pipelinePreset: "standard",
                     fastMode: false,
+                    pipelineVersion: "1.0.0",
+                    source: "cli",
                 },
                 run: {
                     id: "run_rebuild",

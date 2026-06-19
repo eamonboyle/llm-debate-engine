@@ -1,5 +1,5 @@
 import { resolve } from "path";
-import { buildAndWriteAnalysisIndex } from "../../../../../src/artifacts/indexer";
+import { buildAndWriteAnalysisIndex } from "../../../src/artifacts/indexer";
 
 function getRunsDir(): string {
     if (process.env.RUNS_DIR) {
