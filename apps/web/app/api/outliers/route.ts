@@ -35,7 +35,8 @@ export async function GET(request: Request) {
         return new Response(csv, {
             headers: {
                 "Content-Type": "text/csv; charset=utf-8",
-                "Content-Disposition": 'attachment; filename="outlier-runs.csv"',
+                "Content-Disposition":
+                    'attachment; filename="outlier-runs.csv"',
                 "Cache-Control": "public, max-age=60",
             },
         });

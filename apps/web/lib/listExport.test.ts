@@ -250,20 +250,16 @@ describe("listExport", () => {
     });
 
     it("exports evidence explorer summaries and selected runs", () => {
-        const csv = evidenceExplorerToCsv(
-            [{ riskLevel: 4, runCount: 2 }],
-            4,
-            [
-                {
-                    runId: "run_1",
-                    question: "Topic",
-                    model: "gpt-test",
-                    pipelinePreset: "research_deep",
-                    evidenceRiskLevel: 4,
-                    href: "/runs/run_1",
-                },
-            ],
-        );
+        const csv = evidenceExplorerToCsv([{ riskLevel: 4, runCount: 2 }], 4, [
+            {
+                runId: "run_1",
+                question: "Topic",
+                model: "gpt-test",
+                pipelinePreset: "research_deep",
+                evidenceRiskLevel: 4,
+                href: "/runs/run_1",
+            },
+        ]);
         expect(csv).toContain("riskLevel,runCount");
         expect(csv).toContain("run_1");
     });

@@ -499,7 +499,10 @@ export function Nav() {
                             aria-label="Search artifacts (keyboard shortcut /)"
                             onClick={openGlobalSearch}
                         >
-                            <span className="nav-search-trigger-icon" aria-hidden>
+                            <span
+                                className="nav-search-trigger-icon"
+                                aria-hidden
+                            >
                                 ⌕
                             </span>
                             <span className="nav-search-trigger-label">
@@ -519,7 +522,10 @@ export function Nav() {
                                 openGlobalSearch();
                             }}
                         >
-                            <span className="nav-search-trigger-icon" aria-hidden>
+                            <span
+                                className="nav-search-trigger-icon"
+                                aria-hidden
+                            >
                                 ⌕
                             </span>
                             <span className="nav-search-trigger-label">

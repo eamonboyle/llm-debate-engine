@@ -79,7 +79,8 @@ export function SearchTypeahead() {
     useEffect(() => {
         const onOpenSearch = () => setOpen(true);
         window.addEventListener(OPEN_SEARCH_EVENT, onOpenSearch);
-        return () => window.removeEventListener(OPEN_SEARCH_EVENT, onOpenSearch);
+        return () =>
+            window.removeEventListener(OPEN_SEARCH_EVENT, onOpenSearch);
     }, []);
 
     useEffect(() => {
