@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
     loadBenchmarksByQuestion,
+    loadBenchmarksContainingRun,
     loadRunArtifacts,
     loadRunById,
     loadRunsByQuestion,
@@ -22,6 +23,13 @@ import { CopyTextButton } from "../../../components/CopyTextButton";
 import { summarizeRun } from "../../../lib/runCompare";
 import { buildCompareSuggestions } from "../../../lib/compareSuggestions";
 import { questionHubHref } from "../../../lib/questionGroups";
+import {
+    buildRunStepTiming,
+    formatDurationMs,
+    summarizeRunStepTiming,
+} from "../../../lib/stepTiming";
+import { RecentViewsTracker } from "../../../components/RecentViewsTracker";
+import { ResponsiveTable } from "../../../components/ResponsiveTable";
 
 export async function generateMetadata({
     params,
@@ -46,11 +54,17 @@ export default async function RunTracePage({
     if (!run) notFound();
 
     const steps = run.run.steps;
-    const [allRuns, previousRuns, relatedBenchmarks] = await Promise.all([
-        loadRunArtifacts(),
-        loadRunsByQuestion(run.question, run.id),
-        loadBenchmarksByQuestion(run.question),
-    ]);
+    const [allRuns, previousRuns, relatedBenchmarks, memberBenchmarks] =
+        await Promise.all([
+            loadRunArtifacts(),
+            loadRunsByQuestion(run.question, run.id),
+            loadBenchmarksByQuestion(run.question),
+            loadBenchmarksContainingRun(run.id),
+        ]);
+    const memberBenchmarkIds = new Set(memberBenchmarks.map((b) => b.id));
+    const stepTimingRows = buildRunStepTiming(run);
+    const stepTimingSummary = summarizeRunStepTiming(stepTimingRows);
+    const runTitle = `${run.question.slice(0, 80)}${run.question.length > 80 ? "…" : ""}`;
     const compareSuggestions = buildCompareSuggestions(allRuns, {
         left: run.id,
     });
@@ -62,6 +76,12 @@ export default async function RunTracePage({
 
     return (
         <section className="stack">
+            <RecentViewsTracker
+                id={run.id}
+                kind="run"
+                href={`/runs/${run.id}`}
+                title={runTitle}
+            />
             <div>
                 <h1 className="title">Run trace</h1>
                 <p className="subtitle">
@@ -149,6 +169,105 @@ export default async function RunTracePage({
                 </p>
                 <RunMetricsSummary summary={metricsSummary} />
             </div>
+
+            {stepTimingSummary.timedStepCount > 0 ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>Step timing</h2>
+                    <p className="small muted" style={{ marginBottom: "1rem" }}>
+                        Per-agent step duration from trace timestamps.
+                        {stepTimingSummary.totalDurationMs != null
+                            ? ` Total pipeline time ${formatDurationMs(stepTimingSummary.totalDurationMs)} across ${stepTimingSummary.timedStepCount} timed step${stepTimingSummary.timedStepCount === 1 ? "" : "s"}.`
+                            : null}
+                    </p>
+                    <ResponsiveTable
+                        columns={[
+                            { key: "stepId", label: "Step" },
+                            { key: "agentName", label: "Agent" },
+                            { key: "role", label: "Role" },
+                            {
+                                key: "durationMs",
+                                label: "Duration",
+                                render: (row) => {
+                                    const duration = (
+                                        row as { durationMs: number | null }
+                                    ).durationMs;
+                                    return duration == null
+                                        ? "—"
+                                        : formatDurationMs(duration);
+                                },
+                            },
+                        ]}
+                        data={stepTimingRows}
+                        getRowId={(row) => (row as { stepId: string }).stepId}
+                    />
+                </div>
+            ) : null}
+
+            {memberBenchmarks.length > 0 ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>Included in benchmarks</h2>
+                    <p className="small muted" style={{ marginBottom: "1rem" }}>
+                        This run is part of {memberBenchmarks.length} multi-run
+                        stability benchmark
+                        {memberBenchmarks.length === 1 ? "" : "s"}.
+                    </p>
+                    <div className="previous-answers-list">
+                        {memberBenchmarks.map((benchmark, idx) => (
+                            <div
+                                key={benchmark.id}
+                                className="previous-answer-item"
+                                style={{
+                                    padding: "0.75rem 0",
+                                    borderBottom:
+                                        idx < memberBenchmarks.length - 1
+                                            ? "1px solid var(--color-border, #e0e0e0)"
+                                            : undefined,
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        flexWrap: "wrap",
+                                        gap: "0.5rem 1rem",
+                                        alignItems: "baseline",
+                                        marginBottom: 4,
+                                    }}
+                                >
+                                    <Link href={`/benchmarks/${benchmark.id}`}>
+                                        <code className="small">
+                                            {benchmark.id.slice(-20)}
+                                        </code>
+                                    </Link>
+                                    <span className="artifact-membership-badge">
+                                        member
+                                    </span>
+                                    <span className="small muted">
+                                        {new Date(
+                                            benchmark.metadata.createdAt,
+                                        ).toLocaleString()}
+                                    </span>
+                                    <span className="small muted">
+                                        {benchmark.metadata.model} ·{" "}
+                                        {benchmark.metadata.pipelinePreset} ·{" "}
+                                        {benchmark.payload.runs} runs ·{" "}
+                                        {benchmark.payload.modeCount} modes
+                                    </span>
+                                    <Link
+                                        href={`/benchmarks/${benchmark.id}`}
+                                        className="button"
+                                        style={{
+                                            padding: "0.2rem 0.5rem",
+                                            fontSize: "0.75rem",
+                                        }}
+                                    >
+                                        View roster
+                                    </Link>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            ) : null}
 
             {compareSuggestions.length > 0 ? (
                 <div className="card">
@@ -267,6 +386,11 @@ export default async function RunTracePage({
                                             {benchmark.id.slice(-20)}
                                         </code>
                                     </Link>
+                                    {memberBenchmarkIds.has(benchmark.id) ? (
+                                        <span className="artifact-membership-badge">
+                                            includes this run
+                                        </span>
+                                    ) : null}
                                     <span className="small muted">
                                         {new Date(
                                             benchmark.metadata.createdAt,

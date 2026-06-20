@@ -8,6 +8,7 @@ import {
     loadBenchmarkById,
     loadBenchmarkPairsById,
     loadBenchmarksByIds,
+    loadBenchmarksContainingRun,
     loadRunArtifacts,
     loadRunById,
 } from "./data";
@@ -41,7 +42,11 @@ function makeRunArtifact(id: string, createdAt: string) {
     };
 }
 
-function makeBenchmarkArtifact(id: string, createdAt: string) {
+function makeBenchmarkArtifact(
+    id: string,
+    createdAt: string,
+    runIds: string[] = [],
+) {
     return {
         kind: "benchmark",
         id,
@@ -53,7 +58,8 @@ function makeBenchmarkArtifact(id: string, createdAt: string) {
             fastMode: false,
         },
         payload: {
-            runs: 2,
+            runs: runIds.length || 2,
+            runIds,
             modeCount: 1,
             modeSizes: [2],
             divergenceEntropy: 0,
@@ -269,6 +275,37 @@ describe("web data loader", () => {
 
         const selected = await loadBenchmarksByIds(["bench_a", "bench_b"]);
         expect(selected).toHaveLength(2);
+    });
+
+    it("loads benchmarks that include a specific run id", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "bench_member.json"),
+            JSON.stringify(
+                makeBenchmarkArtifact(
+                    "bench_member",
+                    "2025-01-02T00:00:00.000Z",
+                    ["run_target", "run_other"],
+                ),
+            ),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "bench_other.json"),
+            JSON.stringify(
+                makeBenchmarkArtifact(
+                    "bench_other",
+                    "2025-01-01T00:00:00.000Z",
+                    ["run_other"],
+                ),
+            ),
+            "utf-8",
+        );
+
+        const matches = await loadBenchmarksContainingRun("run_target");
+        expect(matches).toHaveLength(1);
+        expect(matches[0].id).toBe("bench_member");
     });
 
     it("loads benchmark pairwise data from chunk then fallback", async () => {

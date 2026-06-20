@@ -1,8 +1,13 @@
-import { loadBenchmarksByIds } from "../../../../lib/data";
 import { buildBenchmarkComparePayload } from "../../../../lib/benchmarkCompare";
+import {
+    benchmarkCompareToCsv,
+    csvCompareResponse,
+} from "../../../../lib/compareExport";
+import { loadBenchmarksByIds } from "../../../../lib/data";
 
 export async function GET(request: Request) {
     const url = new URL(request.url);
+    const format = url.searchParams.get("format") ?? "json";
     const left = url.searchParams.get("left");
     const right = url.searchParams.get("right");
     if (!left || !right) {
@@ -24,7 +29,14 @@ export async function GET(request: Request) {
         );
     }
 
-    return Response.json(
-        buildBenchmarkComparePayload(leftBenchmark, rightBenchmark),
-    );
+    const payload = buildBenchmarkComparePayload(leftBenchmark, rightBenchmark);
+
+    if (format === "csv") {
+        return csvCompareResponse(
+            benchmarkCompareToCsv(payload),
+            `benchmark-compare-${left}-vs-${right}.csv`,
+        );
+    }
+
+    return Response.json(payload);
 }

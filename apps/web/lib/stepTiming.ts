@@ -9,6 +9,15 @@ export type AgentTimingRow = {
     totalDurationMs: number;
 };
 
+export type RunStepTimingRow = {
+    stepId: string;
+    agentName: string;
+    role: string;
+    durationMs: number | null;
+    createdAt: string | null;
+    completedAt: string | null;
+};
+
 function stepDurationMs(
     createdAt: string | undefined,
     completedAt: string | undefined,
@@ -30,6 +39,32 @@ function median(values: number[]): number {
         return (sorted[mid - 1] + sorted[mid]) / 2;
     }
     return sorted[mid];
+}
+
+export function buildRunStepTiming(run: RunArtifact): RunStepTimingRow[] {
+    return run.run.steps.map((step) => ({
+        stepId: step.id,
+        agentName: step.agentName,
+        role: step.role,
+        durationMs: stepDurationMs(step.createdAt, step.completedAt),
+        createdAt: step.createdAt ?? null,
+        completedAt: step.completedAt ?? null,
+    }));
+}
+
+export function summarizeRunStepTiming(rows: RunStepTimingRow[]) {
+    const durations = rows
+        .map((row) => row.durationMs)
+        .filter((value): value is number => value != null);
+    const totalDurationMs = durations.reduce((sum, value) => sum + value, 0);
+
+    return {
+        stepCount: rows.length,
+        timedStepCount: durations.length,
+        totalDurationMs: durations.length > 0 ? totalDurationMs : null,
+        avgStepDurationMs:
+            durations.length > 0 ? totalDurationMs / durations.length : null,
+    };
 }
 
 export function buildAgentTimingStats(runs: RunArtifact[]): AgentTimingRow[] {

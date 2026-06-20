@@ -5,7 +5,9 @@ type CompareExportLinkProps = {
     left?: string;
     right?: string;
     extraParams?: Record<string, string | undefined>;
-    label?: string;
+    jsonLabel?: string;
+    csvLabel?: string;
+    csvFilename?: string;
 };
 
 export function CompareExportLink({
@@ -13,24 +15,36 @@ export function CompareExportLink({
     left,
     right,
     extraParams = {},
-    label = "Export compare JSON",
+    jsonLabel = "Export compare JSON",
+    csvLabel = "Export compare CSV",
+    csvFilename,
 }: CompareExportLinkProps) {
     if (!left || !right) return null;
 
-    const href = `${apiPath}${buildQueryString(
-        { left, right, ...extraParams },
+    const baseQuery = buildQueryString({ left, right, ...extraParams }, {});
+    const csvQuery = buildQueryString(
+        { left, right, format: "csv", ...extraParams },
         {},
-    )}`;
+    );
 
     return (
-        <a
-            href={href}
-            className="button secondary"
-            target="_blank"
-            rel="noopener noreferrer"
-            download
-        >
-            {label}
-        </a>
+        <>
+            <a
+                href={`${apiPath}${baseQuery}`}
+                className="button secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+                download
+            >
+                {jsonLabel}
+            </a>
+            <a
+                href={`${apiPath}${csvQuery}`}
+                className="button secondary"
+                download={csvFilename ?? "compare.csv"}
+            >
+                {csvLabel}
+            </a>
+        </>
     );
 }

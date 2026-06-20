@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { openGlobalSearch } from "../lib/openSearch";
+import { RecentViewsMenu } from "./RecentViewsMenu";
 
 type NavLeaf = {
     href: string;
@@ -510,6 +511,7 @@ export function Nav() {
                             </span>
                             <kbd className="nav-search-kbd">/</kbd>
                         </button>
+                        <RecentViewsMenu />
                         {renderDesktopNav(pathname)}
                     </div>
                     <div className="nav-mobile-stack">
@@ -533,6 +535,9 @@ export function Nav() {
                             </span>
                             <kbd className="nav-search-kbd">/</kbd>
                         </button>
+                        <div className="nav-recent-mobile">
+                            <RecentViewsMenu />
+                        </div>
                         {renderMobileNav(pathname, () =>
                             setMobileNavOpen(false),
                         )}

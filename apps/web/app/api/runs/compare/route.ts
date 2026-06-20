@@ -1,8 +1,13 @@
+import {
+    csvCompareResponse,
+    runCompareToCsv,
+} from "../../../../lib/compareExport";
 import { loadRunArtifacts } from "../../../../lib/data";
 import { buildRunComparePayload } from "../../../../lib/runCompare";
 
 export async function GET(request: Request) {
     const url = new URL(request.url);
+    const format = url.searchParams.get("format") ?? "json";
     const left = url.searchParams.get("left");
     const right = url.searchParams.get("right");
 
@@ -24,5 +29,14 @@ export async function GET(request: Request) {
         );
     }
 
-    return Response.json(buildRunComparePayload(leftRun, rightRun));
+    const payload = buildRunComparePayload(leftRun, rightRun);
+
+    if (format === "csv") {
+        return csvCompareResponse(
+            runCompareToCsv(payload),
+            `run-compare-${left}-vs-${right}.csv`,
+        );
+    }
+
+    return Response.json(payload);
 }

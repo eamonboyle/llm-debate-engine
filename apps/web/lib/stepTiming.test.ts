@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { RunArtifact } from "./data";
-import { buildAgentTimingStats, formatDurationMs } from "./stepTiming";
+import {
+    buildAgentTimingStats,
+    buildRunStepTiming,
+    formatDurationMs,
+    summarizeRunStepTiming,
+} from "./stepTiming";
 
 function sampleRun(): RunArtifact {
     return {
@@ -51,5 +56,17 @@ describe("stepTiming", () => {
         expect(formatDurationMs(450)).toBe("450ms");
         expect(formatDurationMs(2500)).toBe("2.5s");
         expect(formatDurationMs(125_000)).toBe("2m 5s");
+    });
+
+    it("builds per-run step timing rows", () => {
+        const rows = buildRunStepTiming(sampleRun());
+        expect(rows).toHaveLength(2);
+        expect(rows[0].durationMs).toBe(2000);
+        expect(rows[1].durationMs).toBe(3000);
+
+        const summary = summarizeRunStepTiming(rows);
+        expect(summary.timedStepCount).toBe(2);
+        expect(summary.totalDurationMs).toBe(5000);
+        expect(summary.avgStepDurationMs).toBe(2500);
     });
 });
