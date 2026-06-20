@@ -1871,6 +1871,74 @@ describe("web api routes", () => {
         expect(json.delta.research.counterfactualFailureModeCount).toBe(2);
     });
 
+    it("exports run compare deltas as CSV", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_left.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_left",
+                question: "Q left",
+                metadata: {
+                    createdAt: "2025-01-01T00:00:00.000Z",
+                    model: "gpt",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run_left",
+                    finalAnswer: "A",
+                    steps: [{ id: "s1", agentName: "Solver", role: "solver" }],
+                    metrics: {
+                        confidence: { solver: 0.3 },
+                        critique: { byType: { factual_error: 1 } },
+                    },
+                },
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "run_right.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_right",
+                question: "Q right",
+                metadata: {
+                    createdAt: "2025-01-01T00:00:00.000Z",
+                    model: "gpt",
+                    pipelinePreset: "research_deep",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run_right",
+                    finalAnswer: "B",
+                    steps: [
+                        { id: "s1", agentName: "Solver", role: "solver" },
+                        { id: "s2", agentName: "Skeptic", role: "skeptic" },
+                    ],
+                    metrics: {
+                        confidence: { solver: 0.6 },
+                        critique: { byType: { factual_error: 2 } },
+                    },
+                },
+            }),
+            "utf-8",
+        );
+
+        const response = await getRunsCompare(
+            new Request(
+                "http://localhost/api/runs/compare?left=run_left&right=run_right&format=csv",
+            ),
+        );
+        expect(response.status).toBe(200);
+        expect(response.headers.get("Content-Type")).toContain("text/csv");
+        const csv = await response.text();
+        expect(csv).toContain("metric,left,right,delta");
+        expect(csv).toContain("metrics.confidence.solver,0.3,0.6,0.3");
+        expect(csv).toContain("stepCount,1,2,1");
+    });
+
     it("returns 400/404 for invalid run compare requests", async () => {
         const dir = await makeTempDir();
         process.env.RUNS_DIR = dir;

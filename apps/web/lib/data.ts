@@ -478,6 +478,17 @@ export async function loadBenchmarksByQuestion(
         );
 }
 
+export async function loadBenchmarksContainingRun(
+    runId: string,
+): Promise<BenchmarkArtifact[]> {
+    const benchmarks = await loadBenchmarkArtifacts();
+    return benchmarks
+        .filter((benchmark) => (benchmark.payload.runIds ?? []).includes(runId))
+        .sort((a, b) =>
+            b.metadata.createdAt.localeCompare(a.metadata.createdAt),
+        );
+}
+
 export type AnalysisCsvKind = "runs" | "benchmarks";
 
 export type DataStatus = {

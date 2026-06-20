@@ -25,6 +25,7 @@ import {
 } from "../../../lib/claimCentroidMetrics";
 import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
 import { CopyPageLink } from "../../../components/CopyPageLink";
+import { RecentViewsTracker } from "../../../components/RecentViewsTracker";
 
 export async function generateMetadata({
     params,
@@ -90,9 +91,16 @@ export default async function BenchmarkDetailPage({
     const modes = benchmark.payload.modes ?? [];
     const summaryDisplay = extractBenchmarkSummaryDisplay(benchmark);
     const claimCentroidDisplay = extractClaimCentroidDisplay(benchmark);
+    const benchmarkTitle = `${benchmark.question.slice(0, 80)}${benchmark.question.length > 80 ? "…" : ""}`;
 
     return (
         <section className="stack">
+            <RecentViewsTracker
+                id={benchmark.id}
+                kind="benchmark"
+                href={`/benchmarks/${benchmark.id}`}
+                title={benchmarkTitle}
+            />
             <div>
                 <h1 className="title">Benchmark detail</h1>
                 <p className="subtitle">

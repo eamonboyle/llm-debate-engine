@@ -1,8 +1,13 @@
+import {
+    csvCompareResponse,
+    modelCompareToCsv,
+} from "../../../../lib/compareExport";
 import { loadAnalysisIndex } from "../../../../lib/data";
 import { buildModelComparePayload } from "../../../../lib/modelCompare";
 
 export async function GET(request: Request) {
     const url = new URL(request.url);
+    const format = url.searchParams.get("format") ?? "json";
     const left = url.searchParams.get("left");
     const right = url.searchParams.get("right");
 
@@ -26,6 +31,13 @@ export async function GET(request: Request) {
         return Response.json(
             { error: "one or both models not found in analysis index" },
             { status: 404 },
+        );
+    }
+
+    if (format === "csv") {
+        return csvCompareResponse(
+            modelCompareToCsv(compare),
+            `model-compare-${left}-vs-${right}.csv`,
         );
     }
 
