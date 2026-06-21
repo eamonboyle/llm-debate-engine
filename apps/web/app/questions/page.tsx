@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CollapsibleFilterCard } from "../../components/CollapsibleFilterCard";
 import {
     ResponsiveTable,
     TruncateText,
 } from "../../components/ResponsiveTable";
+import { ModelFilterSelect } from "../../components/ModelFilterSelect";
+import { PresetFilterSelect } from "../../components/PresetFilterSelect";
+import { collectArtifactFacets } from "../../lib/artifactFacets";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
 import {
+    filterArtifactsForQuestionGroups,
     groupArtifactsByQuestion,
     questionHubHref,
 } from "../../lib/questionGroups";
@@ -22,6 +27,11 @@ export const metadata: Metadata = {
 
 type QuestionsSearchParams = {
     q?: string;
+    model?: string;
+    preset?: string;
+    fast?: string;
+    from?: string;
+    to?: string;
     sort?: string;
     page?: string;
     pageSize?: string;
@@ -33,8 +43,16 @@ export default async function QuestionsPage({
     searchParams: Promise<QuestionsSearchParams>;
 }) {
     const params = await searchParams;
-    const runs = await loadRunArtifacts();
-    const benchmarks = await loadBenchmarkArtifacts();
+    const [allRuns, allBenchmarks] = await Promise.all([
+        loadRunArtifacts(),
+        loadBenchmarkArtifacts(),
+    ]);
+    const { models, presets } = collectArtifactFacets(allRuns, allBenchmarks);
+    const { runs, benchmarks } = filterArtifactsForQuestionGroups(
+        allRuns,
+        allBenchmarks,
+        params,
+    );
     const groups = groupArtifactsByQuestion(runs, benchmarks);
 
     const q = (params.q ?? "").trim().toLowerCase();
@@ -50,6 +68,14 @@ export default async function QuestionsPage({
         maxPageSize: 100,
     });
 
+    const hasArtifactFilters = Boolean(
+        params.model ||
+            params.preset ||
+            params.fast ||
+            params.from ||
+            params.to,
+    );
+
     return (
         <section className="stack">
             <div>
@@ -60,65 +86,120 @@ export default async function QuestionsPage({
                 </p>
             </div>
 
-            <form className="card" method="get">
-                <div className="filter-grid">
-                    <input
-                        name="q"
-                        placeholder="Filter questions..."
-                        defaultValue={params.q ?? ""}
-                        className="input"
-                    />
-                    <select name="sort" defaultValue={sort} className="input">
-                        <option value="newest">Sort: recently updated</option>
-                        <option value="oldest">Sort: oldest first</option>
-                        <option value="most-runs">Sort: most runs</option>
-                        <option value="most-experiments">
-                            Sort: most experiments
-                        </option>
-                    </select>
-                    <select
-                        name="pageSize"
-                        defaultValue={String(paging.pageSize)}
-                        className="input"
-                    >
-                        <option value="10">10 per page</option>
-                        <option value="20">20 per page</option>
-                        <option value="50">50 per page</option>
-                    </select>
-                </div>
-                <div className="filter-actions">
-                    <button type="submit" className="button">
-                        Apply
-                    </button>
-                    <a href="/questions" className="button secondary">
-                        Clear
-                    </a>
-                    <ExportFilteredLink
-                        apiPath="/api/questions"
-                        params={{
-                            q: params.q,
-                            sort,
-                        }}
-                    />
-                    <a
-                        href={`/api/questions${buildQueryString(params, {
-                            q: params.q,
-                            sort,
-                            pageSize: "500",
-                            page: "1",
-                        })}&format=csv`}
-                        className="button secondary"
-                        download="questions.csv"
-                    >
-                        Export CSV
-                    </a>
-                    <span className="small muted">
-                        {filtered.length} question
-                        {filtered.length === 1 ? "" : "s"} · {runs.length} runs
-                        · {benchmarks.length} benchmarks
-                    </span>
-                </div>
-            </form>
+            <CollapsibleFilterCard
+                resultsSummary={
+                    <>
+                        {paging.startDisplay}-{paging.endDisplay} of{" "}
+                        {filtered.length} questions
+                    </>
+                }
+            >
+                <form method="get">
+                    <div className="filter-grid">
+                        <input
+                            name="q"
+                            placeholder="Filter questions..."
+                            defaultValue={params.q ?? ""}
+                            className="input"
+                        />
+                        <ModelFilterSelect
+                            models={models}
+                            defaultValue={params.model ?? ""}
+                            listId="question-model-filter-options"
+                        />
+                        <PresetFilterSelect
+                            presets={presets}
+                            defaultValue={params.preset ?? ""}
+                        />
+                        <select
+                            name="fast"
+                            defaultValue={params.fast ?? ""}
+                            className="input"
+                        >
+                            <option value="">Fast mode: any</option>
+                            <option value="true">Fast only</option>
+                            <option value="false">Non-fast only</option>
+                        </select>
+                        <input
+                            type="datetime-local"
+                            name="from"
+                            defaultValue={params.from ?? ""}
+                            className="input"
+                            title="Last activity on or after"
+                        />
+                        <input
+                            type="datetime-local"
+                            name="to"
+                            defaultValue={params.to ?? ""}
+                            className="input"
+                            title="Last activity on or before"
+                        />
+                    </div>
+                    <div className="filter-sort-row">
+                        <select name="sort" defaultValue={sort} className="input">
+                            <option value="newest">Sort: recently updated</option>
+                            <option value="oldest">Sort: oldest first</option>
+                            <option value="most-runs">Sort: most runs</option>
+                            <option value="most-experiments">
+                                Sort: most experiments
+                            </option>
+                        </select>
+                        <select
+                            name="pageSize"
+                            defaultValue={String(paging.pageSize)}
+                            className="input"
+                        >
+                            <option value="10">10 per page</option>
+                            <option value="20">20 per page</option>
+                            <option value="50">50 per page</option>
+                        </select>
+                    </div>
+                    <div className="filter-actions">
+                        <button type="submit" className="button">
+                            Apply filters
+                        </button>
+                        <Link href="/questions" className="button secondary">
+                            Clear
+                        </Link>
+                        <ExportFilteredLink
+                            apiPath="/api/questions"
+                            params={{
+                                q: params.q,
+                                model: params.model,
+                                preset: params.preset,
+                                fast: params.fast,
+                                from: params.from,
+                                to: params.to,
+                                sort,
+                            }}
+                        />
+                        <a
+                            href={`/api/questions${buildQueryString(params, {
+                                q: params.q,
+                                model: params.model,
+                                preset: params.preset,
+                                fast: params.fast,
+                                from: params.from,
+                                to: params.to,
+                                sort,
+                                pageSize: "500",
+                                page: "1",
+                            })}&format=csv`}
+                            className="button secondary"
+                            download="questions.csv"
+                        >
+                            Export CSV
+                        </a>
+                        <span className="small muted">
+                            {filtered.length} question
+                            {filtered.length === 1 ? "" : "s"}
+                            {hasArtifactFilters
+                                ? ` (from ${runs.length} runs · ${benchmarks.length} benchmarks)`
+                                : ` · ${allRuns.length} runs · ${allBenchmarks.length} benchmarks`}
+                        </span>
+                    </div>
+                </form>
+            </CollapsibleFilterCard>
 
             <div className="card">
                 {paging.paged.length === 0 ? (

@@ -1,4 +1,12 @@
-import type { BenchmarkArtifact, RunArtifact } from "./data";
+import type {
+    ArtifactFilterParams,
+    BenchmarkArtifact,
+    RunArtifact,
+} from "./data";
+import {
+    filterBenchmarkArtifacts,
+    filterRunArtifacts,
+} from "./data";
 
 export type QuestionGroup = {
     question: string;
@@ -17,6 +25,17 @@ function uniqueSorted(values: string[]): string[] {
 
 export function questionHubHref(question: string): string {
     return `/questions/view?${new URLSearchParams({ question }).toString()}`;
+}
+
+export function filterArtifactsForQuestionGroups(
+    runs: RunArtifact[],
+    benchmarks: BenchmarkArtifact[],
+    filters: ArtifactFilterParams,
+): { runs: RunArtifact[]; benchmarks: BenchmarkArtifact[] } {
+    return {
+        runs: filterRunArtifacts(runs, filters),
+        benchmarks: filterBenchmarkArtifacts(benchmarks, filters),
+    };
 }
 
 export function groupArtifactsByQuestion(
