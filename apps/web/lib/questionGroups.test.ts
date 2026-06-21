@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 import type { BenchmarkArtifact, RunArtifact } from "./data";
-import { groupArtifactsByQuestion, questionHubHref } from "./questionGroups";
+import {
+    filterArtifactsForQuestionGroups,
+    groupArtifactsByQuestion,
+    questionHubHref,
+} from "./questionGroups";
 
 function makeRun(id: string, question: string, createdAt: string): RunArtifact {
     return {
@@ -71,5 +75,28 @@ describe("groupArtifactsByQuestion", () => {
         expect(groups[0].benchmarkCount).toBe(1);
         expect(groups[0].latestCreatedAt).toBe("2026-01-04T00:00:00.000Z");
         expect(groups[0].presets).toEqual(["research_deep", "standard"]);
+    });
+
+    it("filters artifacts before grouping", () => {
+        const runs = [
+            makeRun("r1", "Q1?", "2026-01-02T00:00:00.000Z"),
+            {
+                ...makeRun("r2", "Q2?", "2026-01-01T00:00:00.000Z"),
+                metadata: {
+                    ...makeRun("r2", "Q2?", "2026-01-01T00:00:00.000Z")
+                        .metadata,
+                    model: "other-model",
+                },
+            },
+        ];
+        const { runs: filteredRuns, benchmarks: filteredBenchmarks } =
+            filterArtifactsForQuestionGroups(runs, [], { model: "gpt-test" });
+        const groups = groupArtifactsByQuestion(
+            filteredRuns,
+            filteredBenchmarks,
+        );
+
+        expect(groups).toHaveLength(1);
+        expect(groups[0]?.question).toBe("Q1?");
     });
 });

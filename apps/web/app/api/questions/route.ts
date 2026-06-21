@@ -1,6 +1,9 @@
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../../lib/data";
 import { questionGroupsToCsv } from "../../../lib/listExport";
-import { groupArtifactsByQuestion } from "../../../lib/questionGroups";
+import {
+    filterArtifactsForQuestionGroups,
+    groupArtifactsByQuestion,
+} from "../../../lib/questionGroups";
 import {
     resolveQuestionSortOrder,
     sortQuestionGroups,
@@ -10,13 +13,28 @@ import { parseListPagination } from "../_shared/pagination";
 export async function GET(request: Request) {
     const url = new URL(request.url);
     const format = url.searchParams.get("format") ?? "json";
-    const [runs, benchmarks] = await Promise.all([
+    const [allRuns, allBenchmarks] = await Promise.all([
         loadRunArtifacts(),
         loadBenchmarkArtifacts(),
     ]);
 
-    const q = (url.searchParams.get("q") ?? "").trim().toLowerCase();
+    const filters = {
+        q: url.searchParams.get("q") ?? undefined,
+        model: url.searchParams.get("model") ?? undefined,
+        preset: url.searchParams.get("preset") ?? undefined,
+        fast: url.searchParams.get("fast") ?? undefined,
+        from: url.searchParams.get("from") ?? undefined,
+        to: url.searchParams.get("to") ?? undefined,
+    };
+
+    const { runs, benchmarks } = filterArtifactsForQuestionGroups(
+        allRuns,
+        allBenchmarks,
+        filters,
+    );
     const groups = groupArtifactsByQuestion(runs, benchmarks);
+
+    const q = (filters.q ?? "").trim().toLowerCase();
     const filtered = q
         ? groups.filter((group) => group.question.toLowerCase().includes(q))
         : groups;

@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { InsightFilterCard } from "../../components/InsightFilterCard";
-import { ResponsiveTable } from "../../components/ResponsiveTable";
-import { loadAnalysisIndex } from "../../lib/data";
+import {
+    ResponsiveTable,
+    TruncateText,
+} from "../../components/ResponsiveTable";
+import { loadAnalysisIndex, loadRunArtifacts } from "../../lib/data";
 import { IssueSeverityChart } from "../../components/charts/IssueSeverityChart";
 import {
     applyIndexFilters,
@@ -13,6 +16,7 @@ import {
     buildIssueTypeSummaries,
     listRunsForIssueType,
 } from "../../lib/issueExplorer";
+import { extractCritiqueNotesForRuns } from "../../lib/critiqueNotes";
 import { buildQueryString } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
@@ -62,6 +66,13 @@ export default async function IssuesExplorerPage({
     const selectedType = (params.type ?? "").trim();
     const selectedRuns = selectedType
         ? listRunsForIssueType(filteredIndex, selectedType)
+        : [];
+    const critiqueNotes = selectedType
+        ? extractCritiqueNotesForRuns(
+              await loadRunArtifacts(),
+              selectedType,
+              new Set(selectedRuns.map((row) => row.runId)),
+          )
         : [];
 
     return (
@@ -293,7 +304,80 @@ export default async function IssuesExplorerPage({
                         </Link>
                     </div>
                 </div>
-            ) : (
+            ) : null}
+
+            {selectedType && critiqueNotes.length > 0 ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>
+                        Critique notes for &ldquo;{selectedType}&rdquo;
+                    </h2>
+                    <p className="small muted" style={{ marginTop: 0 }}>
+                        Verbatim skeptic notes from run traces —{" "}
+                        {critiqueNotes.length} note
+                        {critiqueNotes.length === 1 ? "" : "s"} across{" "}
+                        {selectedRuns.length} run
+                        {selectedRuns.length === 1 ? "" : "s"}.
+                    </p>
+                    <ResponsiveTable
+                        columns={[
+                            {
+                                key: "severity",
+                                label: "Severity",
+                                render: (row) =>
+                                    (row as { severity: number }).severity,
+                            },
+                            {
+                                key: "note",
+                                label: "Note",
+                                cellClass: "cell-question",
+                                render: (row) => (
+                                    <TruncateText
+                                        text={(row as { note: string }).note}
+                                        maxLength={160}
+                                    />
+                                ),
+                            },
+                            {
+                                key: "agentName",
+                                label: "Agent",
+                                hideOnMobile: true,
+                            },
+                            {
+                                key: "runId",
+                                label: "Run",
+                                hideOnMobile: true,
+                            },
+                            {
+                                key: "open",
+                                label: "Open",
+                                render: (row) => (
+                                    <Link href={(row as { href: string }).href}>
+                                        Trace
+                                    </Link>
+                                ),
+                            },
+                        ]}
+                        data={critiqueNotes}
+                        getRowId={(row) => {
+                            const r = row as {
+                                runId: string;
+                                agentName: string;
+                                severity: number;
+                                note: string;
+                            };
+                            return `${r.runId}-${r.agentName}-${r.severity}-${r.note.slice(0, 40)}`;
+                        }}
+                        renderCardActions={(row) => (
+                            <Link
+                                href={(row as { href: string }).href}
+                                className="button"
+                            >
+                                View trace
+                            </Link>
+                        )}
+                    />
+                </div>
+            ) : selectedType ? null : (
                 <div className="card">
                     <p className="muted" style={{ margin: 0 }}>
                         Pick an issue type above to list contributing run

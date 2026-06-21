@@ -7,6 +7,7 @@ import { PresetFilterSelect } from "../../components/PresetFilterSelect";
 import {
     ResponsiveTable,
     TruncateText,
+    type Column,
 } from "../../components/ResponsiveTable";
 import { MetricCard } from "../../components/MetricCard";
 import { collectArtifactFacets } from "../../lib/artifactFacets";
@@ -25,6 +26,7 @@ import {
     sortBenchmarkArtifacts,
 } from "../../lib/artifactSort";
 import { buildQueryString, paginateItems } from "../../lib/listPagination";
+import { extractClaimCentroidDisplay } from "../../lib/claimCentroidMetrics";
 
 export const metadata: Metadata = {
     title: "Benchmarks",
@@ -40,6 +42,19 @@ type BenchmarkSearchParams = {
     sort?: string;
     page?: string;
     pageSize?: string;
+};
+
+type BenchmarkTableRow = {
+    id: string;
+    createdAt: string;
+    question: string;
+    runs: number;
+    modeCount: number;
+    claimModeCount: number | null;
+    modeCountDelta: number | null;
+    entropy: number;
+    stability?: number;
+    topMode?: string | null;
 };
 
 export default async function BenchmarksPage({
@@ -68,6 +83,53 @@ export default async function BenchmarksPage({
     const paging = paginateItems(sorted, params, {
         defaultPageSize: 25,
         maxPageSize: 200,
+    });
+    const showClaimCentroid = sorted.some(
+        (benchmark) => extractClaimCentroidDisplay(benchmark).hasClaimCentroid,
+    );
+    const claimCentroidColumns: Column<BenchmarkTableRow>[] = showClaimCentroid
+        ? [
+              {
+                  key: "claimModeCount",
+                  label: "Claim modes",
+                  helpKey: "modeCountClaimCentroid",
+                  hideOnMobile: true,
+                  render: (row) =>
+                      typeof row.claimModeCount === "number"
+                          ? row.claimModeCount
+                          : "—",
+              },
+              {
+                  key: "modeCountDelta",
+                  label: "Δ modes",
+                  helpKey: "modeCount",
+                  hideOnMobile: true,
+                  render: (row) => {
+                      const delta = row.modeCountDelta;
+                      if (delta == null) return "—";
+                      const sign = delta > 0 ? "+" : "";
+                      return `${sign}${delta}`;
+                  },
+              },
+          ]
+        : [];
+    const tableRows: BenchmarkTableRow[] = paging.paged.map((benchmark) => {
+        const indexed = benchmarkIndex?.get(benchmark.id);
+        const claim = extractClaimCentroidDisplay(benchmark);
+        return {
+            id: benchmark.id,
+            createdAt: benchmark.metadata.createdAt,
+            question: benchmark.question,
+            runs: benchmark.payload.runs,
+            modeCount: benchmark.payload.modeCount,
+            claimModeCount: claim.modeCount,
+            modeCountDelta: claim.modeCountDelta,
+            entropy: benchmark.payload.divergenceEntropy,
+            stability:
+                indexed?.stabilityPairwiseMean ??
+                benchmark.payload.summary?.stability?.pairwiseMean,
+            topMode: indexed ? formatTopModeLabel(indexed.modeLabels) : null,
+        };
     });
 
     return (
@@ -244,7 +306,7 @@ export default async function BenchmarksPage({
             </CollapsibleFilterCard>
 
             <div className="card">
-                <ResponsiveTable
+                <ResponsiveTable<BenchmarkTableRow>
                     columns={[
                         {
                             key: "details",
@@ -253,7 +315,7 @@ export default async function BenchmarksPage({
                             hideOnMobile: true,
                             render: (row) => (
                                 <Link
-                                    href={`/benchmarks/${(row as { id: string }).id}`}
+                                    href={`/benchmarks/${row.id}`}
                                     className="button"
                                     style={{
                                         padding: "0.35rem 0.6rem",
@@ -269,9 +331,7 @@ export default async function BenchmarksPage({
                             key: "createdAt",
                             label: "Created",
                             render: (row) =>
-                                new Date(
-                                    (row as { createdAt: string }).createdAt,
-                                ).toLocaleString(),
+                                new Date(row.createdAt).toLocaleString(),
                         },
                         {
                             key: "question",
@@ -279,9 +339,7 @@ export default async function BenchmarksPage({
                             cellClass: "cell-question",
                             render: (row) => (
                                 <TruncateText
-                                    text={
-                                        (row as { question: string }).question
-                                    }
+                                    text={row.question}
                                     maxLength={80}
                                     className="muted"
                                 />
@@ -297,15 +355,14 @@ export default async function BenchmarksPage({
                             label: "Modes",
                             helpKey: "modeCount",
                         },
+                        ...claimCentroidColumns,
                         {
                             key: "entropy",
                             label: "Entropy",
                             helpKey: "entropy",
                             render: (row) => (
                                 <span className="benchmark-entropy">
-                                    {(
-                                        row as { entropy: number }
-                                    ).entropy.toFixed(3)}
+                                    {row.entropy.toFixed(3)}
                                 </span>
                             ),
                         },
@@ -314,33 +371,26 @@ export default async function BenchmarksPage({
                             label: "Stability",
                             helpKey: "stabilityPairwiseMean",
                             hideOnMobile: true,
-                            render: (row) => {
-                                const value = (row as { stability?: number })
-                                    .stability;
-                                return typeof value === "number"
-                                    ? value.toFixed(3)
-                                    : "—";
-                            },
+                            render: (row) =>
+                                typeof row.stability === "number"
+                                    ? row.stability.toFixed(3)
+                                    : "—",
                         },
                         {
                             key: "topMode",
                             label: "Top mode",
                             cellClass: "cell-question",
                             hideOnMobile: true,
-                            render: (row) => {
-                                const label = (
-                                    row as { topMode?: string | null }
-                                ).topMode;
-                                return label ? (
+                            render: (row) =>
+                                row.topMode ? (
                                     <TruncateText
-                                        text={label}
+                                        text={row.topMode}
                                         maxLength={56}
                                         className="muted"
                                     />
                                 ) : (
                                     <span className="muted">—</span>
-                                );
-                            },
+                                ),
                         },
                         {
                             key: "compare",
@@ -350,12 +400,12 @@ export default async function BenchmarksPage({
                             render: (row) => (
                                 <span className="cell-compare-links">
                                     <Link
-                                        href={`/benchmarks/compare?left=${(row as { id: string }).id}`}
+                                        href={`/benchmarks/compare?left=${row.id}`}
                                     >
                                         L
                                     </Link>
                                     <Link
-                                        href={`/benchmarks/compare?right=${(row as { id: string }).id}`}
+                                        href={`/benchmarks/compare?right=${row.id}`}
                                     >
                                         R
                                     </Link>
@@ -363,41 +413,24 @@ export default async function BenchmarksPage({
                             ),
                         },
                     ]}
-                    data={paging.paged.map((benchmark) => {
-                        const indexed = benchmarkIndex?.get(benchmark.id);
-                        return {
-                            id: benchmark.id,
-                            createdAt: benchmark.metadata.createdAt,
-                            question: benchmark.question,
-                            runs: benchmark.payload.runs,
-                            modeCount: benchmark.payload.modeCount,
-                            entropy: benchmark.payload.divergenceEntropy,
-                            stability:
-                                indexed?.stabilityPairwiseMean ??
-                                benchmark.payload.summary?.stability
-                                    ?.pairwiseMean,
-                            topMode: indexed
-                                ? formatTopModeLabel(indexed.modeLabels)
-                                : null,
-                        };
-                    })}
-                    getRowId={(row) => (row as { id: string }).id}
+                    data={tableRows}
+                    getRowId={(row) => row.id}
                     renderCardActions={(row) => (
                         <>
                             <Link
-                                href={`/benchmarks/${(row as { id: string }).id}`}
+                                href={`/benchmarks/${row.id}`}
                                 className="button"
                             >
                                 Details
                             </Link>
                             <Link
-                                href={`/benchmarks/compare?left=${(row as { id: string }).id}`}
+                                href={`/benchmarks/compare?left=${row.id}`}
                                 className="button secondary"
                             >
                                 Set left
                             </Link>
                             <Link
-                                href={`/benchmarks/compare?right=${(row as { id: string }).id}`}
+                                href={`/benchmarks/compare?right=${row.id}`}
                                 className="button secondary"
                             >
                                 Set right

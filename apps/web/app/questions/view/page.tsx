@@ -78,6 +78,8 @@ export default async function QuestionHubPage({
 
     const compareLeft = runs[0]?.id;
     const compareRight = runs[1]?.id;
+    const benchmarkCompareLeft = benchmarks[0]?.id;
+    const benchmarkCompareRight = benchmarks[1]?.id;
 
     return (
         <section className="stack">
@@ -121,6 +123,22 @@ export default async function QuestionHubPage({
                             className="button secondary"
                         >
                             Compare runs (picker)
+                        </Link>
+                    ) : null}
+                    {benchmarkCompareLeft && benchmarkCompareRight ? (
+                        <Link
+                            href={`/benchmarks/compare?left=${benchmarkCompareLeft}&right=${benchmarkCompareRight}&question=${encodeURIComponent(question)}`}
+                            className="button secondary"
+                        >
+                            Compare latest two benchmarks
+                        </Link>
+                    ) : null}
+                    {benchmarks.length >= 2 ? (
+                        <Link
+                            href={`/benchmarks/compare?question=${encodeURIComponent(question)}`}
+                            className="button secondary"
+                        >
+                            Compare benchmarks (picker)
                         </Link>
                     ) : null}
                 </div>

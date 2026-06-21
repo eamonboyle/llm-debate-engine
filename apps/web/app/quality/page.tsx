@@ -6,12 +6,13 @@ import {
     ResponsiveTable,
     TruncateText,
 } from "../../components/ResponsiveTable";
-import { loadAnalysisIndex } from "../../lib/data";
+import { loadAnalysisIndex, loadRunArtifacts } from "../../lib/data";
 import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
 import {
     buildQualityRunRows,
     summarizeQuality,
 } from "../../lib/qualityInsights";
+import { aggregateJudgeNarratives } from "../../lib/judgeNarrativeInsights";
 import { buildQueryString } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
@@ -59,6 +60,21 @@ export default async function QualityInsightsPage({
     const index = applyIndexFilters(rawIndex, params);
     const summary = summarizeQuality(index);
     const rows = buildQualityRunRows(index);
+    const qualityRunIds = new Set(
+        rows
+            .filter(
+                (row) =>
+                    row.coherence != null ||
+                    row.completeness != null ||
+                    row.factualRisk != null ||
+                    row.uncertaintyHandling != null,
+            )
+            .map((row) => row.id),
+    );
+    const narratives =
+        qualityRunIds.size > 0
+            ? aggregateJudgeNarratives(await loadRunArtifacts(), qualityRunIds)
+            : { strengths: [], weaknesses: [] };
 
     return (
         <section className="stack">
@@ -152,93 +168,172 @@ export default async function QualityInsightsPage({
                     </p>
                 </div>
             ) : (
-                <div className="card">
-                    <h2 style={{ marginTop: 0 }}>Runs by quality</h2>
-                    <ResponsiveTable
-                        columns={[
-                            { key: "id", label: "Run ID" },
-                            {
-                                key: "question",
-                                label: "Question",
-                                cellClass: "cell-question",
-                                render: (row) => (
-                                    <TruncateText
-                                        text={
-                                            (row as { question: string })
-                                                .question
-                                        }
-                                        maxLength={72}
-                                        className="muted"
-                                    />
+                <>
+                    {narratives.strengths.length > 0 ||
+                    narratives.weaknesses.length > 0 ? (
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns:
+                                    "repeat(auto-fit, minmax(280px, 1fr))",
+                                gap: "1rem",
+                            }}
+                        >
+                            {narratives.strengths.length > 0 ? (
+                                <div className="card">
+                                    <h2 style={{ marginTop: 0 }}>
+                                        Recurring strengths
+                                    </h2>
+                                    <p className="small muted">
+                                        Themes from judge narratives across
+                                        filtered runs with rubric scores.
+                                    </p>
+                                    <ul className="trace-summary-list">
+                                        {narratives.strengths.map((theme) => (
+                                            <li key={theme.text}>
+                                                <Link
+                                                    href={`/runs/${theme.sampleRunId}`}
+                                                >
+                                                    {theme.text}
+                                                </Link>
+                                                <span className="small muted">
+                                                    {" "}
+                                                    · {theme.runCount} run
+                                                    {theme.runCount === 1
+                                                        ? ""
+                                                        : "s"}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ) : null}
+                            {narratives.weaknesses.length > 0 ? (
+                                <div className="card">
+                                    <h2 style={{ marginTop: 0 }}>
+                                        Recurring weaknesses
+                                    </h2>
+                                    <p className="small muted">
+                                        Common critique themes from judge steps
+                                        — click to open a sample trace.
+                                    </p>
+                                    <ul className="trace-summary-list">
+                                        {narratives.weaknesses.map((theme) => (
+                                            <li key={theme.text}>
+                                                <Link
+                                                    href={`/runs/${theme.sampleRunId}`}
+                                                >
+                                                    {theme.text}
+                                                </Link>
+                                                <span className="small muted">
+                                                    {" "}
+                                                    · {theme.runCount} run
+                                                    {theme.runCount === 1
+                                                        ? ""
+                                                        : "s"}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ) : null}
+                        </div>
+                    ) : null}
+
+                    <div className="card">
+                        <h2 style={{ marginTop: 0 }}>Runs by quality</h2>
+                        <ResponsiveTable
+                            columns={[
+                                { key: "id", label: "Run ID" },
+                                {
+                                    key: "question",
+                                    label: "Question",
+                                    cellClass: "cell-question",
+                                    render: (row) => (
+                                        <TruncateText
+                                            text={
+                                                (row as { question: string })
+                                                    .question
+                                            }
+                                            maxLength={72}
+                                            className="muted"
+                                        />
+                                    ),
+                                },
+                                {
+                                    key: "model",
+                                    label: "Model",
+                                    helpKey: "model",
+                                },
+                                {
+                                    key: "preset",
+                                    label: "Preset",
+                                    helpKey: "preset",
+                                },
+                                {
+                                    key: "coherence",
+                                    label: "Coherence",
+                                    helpKey: "coherence",
+                                },
+                                {
+                                    key: "completeness",
+                                    label: "Completeness",
+                                    helpKey: "completeness",
+                                },
+                                {
+                                    key: "factualRisk",
+                                    label: "Factual risk",
+                                    helpKey: "factualRisk",
+                                },
+                                {
+                                    key: "uncertaintyHandling",
+                                    label: "Uncertainty",
+                                    helpKey: "uncertaintyHandling",
+                                    hideOnMobile: true,
+                                },
+                                {
+                                    key: "trace",
+                                    label: "Open",
+                                    cellClass: "cell-actions",
+                                    render: (row) => (
+                                        <Link
+                                            href={
+                                                (row as { traceHref: string })
+                                                    .traceHref
+                                            }
+                                        >
+                                            Trace
+                                        </Link>
+                                    ),
+                                },
+                            ]}
+                            data={rows.map((row) => ({
+                                id: row.id,
+                                question: row.question,
+                                model: row.model,
+                                preset: row.preset,
+                                coherence: formatScore(row.coherence),
+                                completeness: formatScore(row.completeness),
+                                factualRisk: formatScore(row.factualRisk),
+                                uncertaintyHandling: formatScore(
+                                    row.uncertaintyHandling,
                                 ),
-                            },
-                            { key: "model", label: "Model", helpKey: "model" },
-                            {
-                                key: "preset",
-                                label: "Preset",
-                                helpKey: "preset",
-                            },
-                            {
-                                key: "coherence",
-                                label: "Coherence",
-                                helpKey: "coherence",
-                            },
-                            {
-                                key: "completeness",
-                                label: "Completeness",
-                                helpKey: "completeness",
-                            },
-                            {
-                                key: "factualRisk",
-                                label: "Factual risk",
-                                helpKey: "factualRisk",
-                            },
-                            {
-                                key: "uncertaintyHandling",
-                                label: "Uncertainty",
-                                helpKey: "uncertaintyHandling",
-                                hideOnMobile: true,
-                            },
-                            {
-                                key: "trace",
-                                label: "Open",
-                                cellClass: "cell-actions",
-                                render: (row) => (
-                                    <Link
-                                        href={
-                                            (row as { traceHref: string })
-                                                .traceHref
-                                        }
-                                    >
-                                        Trace
-                                    </Link>
-                                ),
-                            },
-                        ]}
-                        data={rows.map((row) => ({
-                            id: row.id,
-                            question: row.question,
-                            model: row.model,
-                            preset: row.preset,
-                            coherence: formatScore(row.coherence),
-                            completeness: formatScore(row.completeness),
-                            factualRisk: formatScore(row.factualRisk),
-                            uncertaintyHandling: formatScore(
-                                row.uncertaintyHandling,
-                            ),
-                            traceHref: row.traceHref,
-                        }))}
-                        getRowId={(row) => (row as { id: string }).id}
-                        renderCardActions={(row) => (
-                            <Link
-                                href={(row as { traceHref: string }).traceHref}
-                                className="button"
-                            >
-                                View trace
-                            </Link>
-                        )}
-                    />
-                </div>
+                                traceHref: row.traceHref,
+                            }))}
+                            getRowId={(row) => (row as { id: string }).id}
+                            renderCardActions={(row) => (
+                                <Link
+                                    href={
+                                        (row as { traceHref: string }).traceHref
+                                    }
+                                    className="button"
+                                >
+                                    View trace
+                                </Link>
+                            )}
+                        />
+                    </div>
+                </>
             )}
         </section>
     );
