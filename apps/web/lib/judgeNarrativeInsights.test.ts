@@ -52,7 +52,11 @@ function makeRunWithJudgement(
 describe("aggregateJudgeNarratives", () => {
     it("aggregates recurring strengths and weaknesses", () => {
         const runs = [
-            makeRunWithJudgement("run_a", ["Clear structure"], ["Thin evidence"]),
+            makeRunWithJudgement(
+                "run_a",
+                ["Clear structure"],
+                ["Thin evidence"],
+            ),
             makeRunWithJudgement(
                 "run_b",
                 ["Clear structure"],

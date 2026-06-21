@@ -70,10 +70,10 @@ export default async function QuestionsPage({
 
     const hasArtifactFilters = Boolean(
         params.model ||
-            params.preset ||
-            params.fast ||
-            params.from ||
-            params.to,
+        params.preset ||
+        params.fast ||
+        params.from ||
+        params.to,
     );
 
     return (
@@ -136,8 +136,14 @@ export default async function QuestionsPage({
                         />
                     </div>
                     <div className="filter-sort-row">
-                        <select name="sort" defaultValue={sort} className="input">
-                            <option value="newest">Sort: recently updated</option>
+                        <select
+                            name="sort"
+                            defaultValue={sort}
+                            className="input"
+                        >
+                            <option value="newest">
+                                Sort: recently updated
+                            </option>
                             <option value="oldest">Sort: oldest first</option>
                             <option value="most-runs">Sort: most runs</option>
                             <option value="most-experiments">

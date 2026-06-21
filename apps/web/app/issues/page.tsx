@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { InsightFilterCard } from "../../components/InsightFilterCard";
-import { ResponsiveTable, TruncateText } from "../../components/ResponsiveTable";
+import {
+    ResponsiveTable,
+    TruncateText,
+} from "../../components/ResponsiveTable";
 import { loadAnalysisIndex, loadRunArtifacts } from "../../lib/data";
 import { IssueSeverityChart } from "../../components/charts/IssueSeverityChart";
 import {
@@ -309,8 +312,9 @@ export default async function IssuesExplorerPage({
                         Critique notes for &ldquo;{selectedType}&rdquo;
                     </h2>
                     <p className="small muted" style={{ marginTop: 0 }}>
-                        Verbatim skeptic notes from run traces — {critiqueNotes.length}{" "}
-                        note{critiqueNotes.length === 1 ? "" : "s"} across{" "}
+                        Verbatim skeptic notes from run traces —{" "}
+                        {critiqueNotes.length} note
+                        {critiqueNotes.length === 1 ? "" : "s"} across{" "}
                         {selectedRuns.length} run
                         {selectedRuns.length === 1 ? "" : "s"}.
                     </p>
@@ -347,9 +351,7 @@ export default async function IssuesExplorerPage({
                                 key: "open",
                                 label: "Open",
                                 render: (row) => (
-                                    <Link
-                                        href={(row as { href: string }).href}
-                                    >
+                                    <Link href={(row as { href: string }).href}>
                                         Trace
                                     </Link>
                                 ),

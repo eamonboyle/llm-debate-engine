@@ -128,9 +128,7 @@ export default async function BenchmarksPage({
             stability:
                 indexed?.stabilityPairwiseMean ??
                 benchmark.payload.summary?.stability?.pairwiseMean,
-            topMode: indexed
-                ? formatTopModeLabel(indexed.modeLabels)
-                : null,
+            topMode: indexed ? formatTopModeLabel(indexed.modeLabels) : null,
         };
     });
 

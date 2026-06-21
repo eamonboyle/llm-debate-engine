@@ -56,10 +56,7 @@ export function extractCritiqueNotesFromRun(
         if (step.output?.kind !== "critique") continue;
         const issues = extractIssues(step.output);
         for (const issue of issues) {
-            if (
-                normalizedType &&
-                issue.type.toLowerCase() !== normalizedType
-            ) {
+            if (normalizedType && issue.type.toLowerCase() !== normalizedType) {
                 continue;
             }
             rows.push({

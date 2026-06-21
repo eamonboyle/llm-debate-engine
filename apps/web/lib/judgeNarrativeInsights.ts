@@ -89,7 +89,9 @@ export function aggregateJudgeNarratives(
         if (runIds && !runIds.has(run.id)) continue;
         for (const step of run.run.steps) {
             if (step.output?.kind !== "judgement") continue;
-            const { strengths, weaknesses } = extractJudgementLists(step.output);
+            const { strengths, weaknesses } = extractJudgementLists(
+                step.output,
+            );
             for (const text of strengths) {
                 strengthEntries.push({ text, runId: run.id });
             }

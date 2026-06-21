@@ -3,10 +3,7 @@ import type {
     BenchmarkArtifact,
     RunArtifact,
 } from "./data";
-import {
-    filterBenchmarkArtifacts,
-    filterRunArtifacts,
-} from "./data";
+import { filterBenchmarkArtifacts, filterRunArtifacts } from "./data";
 
 export type QuestionGroup = {
     question: string;
