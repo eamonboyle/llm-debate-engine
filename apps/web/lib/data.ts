@@ -451,6 +451,13 @@ export async function loadRunById(id: string) {
     return runs.find((run) => run.id === id) ?? null;
 }
 
+export async function loadRunsByIds(ids: string[]): Promise<RunArtifact[]> {
+    if (ids.length === 0) return [];
+    const idSet = new Set(ids);
+    const runs = await loadRunArtifacts();
+    return runs.filter((run) => idSet.has(run.id));
+}
+
 export async function loadRunsByQuestion(
     question: string,
     excludeRunId?: string,

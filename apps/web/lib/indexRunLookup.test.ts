@@ -16,13 +16,17 @@ function sampleIndex(): AnalysisIndex {
                 fastMode: false,
                 finalAnswerPreview: "A",
                 stepCount: 10,
-                confidence: { solver: 0.8 },
+                confidence: { solver: 0.8, calibratedAdjusted: 0.75 },
                 critique: {
                     issueCount: 5,
                     maxSeverity: 4,
                     byType: { factual: 2 },
                 },
-                research: { evidenceRiskLevel: 3 },
+                research: {
+                    evidenceRiskLevel: 3,
+                    topCounterfactualFailureMode: "omission",
+                },
+                quality: { coherence: 0.9, factualRisk: 0.2 },
             },
         ],
         benchmarks: [],
@@ -48,7 +52,11 @@ describe("buildIndexRunLookup", () => {
             stepCount: 10,
             maxSeverity: 4,
             solverConfidence: 0.8,
+            calibratedConfidence: 0.75,
             evidenceRiskLevel: 3,
+            qualityCoherence: 0.9,
+            factualRisk: 0.2,
+            topCounterfactualMode: "omission",
         });
         expect(lookup.get("missing")).toBeUndefined();
     });

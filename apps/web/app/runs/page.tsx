@@ -20,6 +20,10 @@ import {
     sortRunArtifacts,
 } from "../../lib/artifactSort";
 import { buildQueryString, paginateItems } from "../../lib/listPagination";
+import {
+    filterRunsByStepCriteria,
+    hasActiveRunStepFilters,
+} from "../../lib/runStepFilters";
 
 export const metadata: Metadata = {
     title: "Runs",
@@ -35,6 +39,8 @@ type RunsSearchParams = {
     sort?: string;
     page?: string;
     pageSize?: string;
+    agent?: string;
+    errors?: string;
 };
 
 export default async function RunsPage({
@@ -58,8 +64,16 @@ export default async function RunsPage({
         from: params.from,
         to: params.to,
     });
+    const stepFiltered = filterRunsByStepCriteria(filtered, {
+        agent: params.agent,
+        errors: params.errors,
+    });
+    const stepFiltersActive = hasActiveRunStepFilters({
+        agent: params.agent,
+        errors: params.errors,
+    });
     const sort = resolveRunSortOrder(params.sort);
-    const sorted = sortRunArtifacts(filtered, sort);
+    const sorted = sortRunArtifacts(stepFiltered, sort);
     const paging = paginateItems(sorted, params, {
         defaultPageSize: 25,
         maxPageSize: 200,
@@ -74,14 +88,42 @@ export default async function RunsPage({
                 </p>
             </div>
 
+            {stepFiltersActive ? (
+                <div className="card" style={{ borderColor: "var(--color-warning)" }}>
+                    <p style={{ margin: 0 }}>
+                        Showing runs
+                        {params.agent ? (
+                            <>
+                                {" "}
+                                with{" "}
+                                {params.errors === "true" ? "errors from " : "steps from "}
+                                <code>{params.agent}</code>
+                            </>
+                        ) : (
+                            <> with step errors</>
+                        )}
+                        .{" "}
+                        <a href="/runs" className="button secondary">
+                            Clear step filters
+                        </a>
+                    </p>
+                </div>
+            ) : null}
+
             <CollapsibleFilterCard
                 resultsSummary={
                     <>
-                        {paging.startDisplay}-{paging.endDisplay} of {filtered.length} runs
+                        {paging.startDisplay}-{paging.endDisplay} of {stepFiltered.length} runs
                     </>
                 }
             >
             <form method="get">
+                {params.agent ? (
+                    <input type="hidden" name="agent" value={params.agent} />
+                ) : null}
+                {params.errors === "true" ? (
+                    <input type="hidden" name="errors" value="true" />
+                ) : null}
                 <div className="filter-grid">
                     <input
                         name="q"
@@ -186,7 +228,7 @@ export default async function RunsPage({
                     </a>
                     <span className="small muted">
                         Showing {paging.startDisplay}-{paging.endDisplay} of{" "}
-                        {filtered.length} filtered
+                        {stepFiltered.length} filtered
                         runs ({runs.length} total)
                     </span>
                 </div>
@@ -287,6 +329,47 @@ export default async function RunsPage({
                                               : value.toFixed(2);
                                       },
                                   },
+                                  {
+                                      key: "calibratedConf",
+                                      label: "Calibrated",
+                                      helpKey: "calibratedConfidence",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const value = (
+                                              row as { calibratedConf?: number }
+                                          ).calibratedConf;
+                                          return value == null
+                                              ? "—"
+                                              : value.toFixed(2);
+                                      },
+                                  },
+                                  {
+                                      key: "evidenceRisk",
+                                      label: "Evidence risk",
+                                      helpKey: "evidenceRiskLevel",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const value = (
+                                              row as { evidenceRisk?: number }
+                                          ).evidenceRisk;
+                                          return value == null
+                                              ? "—"
+                                              : value.toFixed(1);
+                                      },
+                                  },
+                                  {
+                                      key: "qualityCoherence",
+                                      label: "Coherence",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const value = (
+                                              row as { qualityCoherence?: number }
+                                          ).qualityCoherence;
+                                          return value == null
+                                              ? "—"
+                                              : value.toFixed(2);
+                                      },
+                                  },
                               ]
                             : []),
                         {
@@ -345,6 +428,9 @@ export default async function RunsPage({
                             steps: indexed?.stepCount,
                             issues: indexed?.issueCount,
                             solverConf: indexed?.solverConfidence,
+                            calibratedConf: indexed?.calibratedConfidence,
+                            evidenceRisk: indexed?.evidenceRiskLevel,
+                            qualityCoherence: indexed?.qualityCoherence,
                         };
                     })}
                     getRowId={(row) => (row as { id: string }).id}

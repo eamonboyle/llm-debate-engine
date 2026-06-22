@@ -1,10 +1,19 @@
 import type { SimilarityPair } from "./benchmarkPeers";
+import type { RunArtifact } from "./data";
+import type { IndexRunSnapshot } from "./indexRunLookup";
 
 export type BenchmarkRunRosterRow = {
     runId: string;
     runIndex: number;
     avgSimilarity: number | null;
     modeIndex: number | null;
+};
+
+export type EnrichedBenchmarkRunRosterRow = BenchmarkRunRosterRow & {
+    model?: string;
+    preset?: string;
+    solverConfidence?: number;
+    issueCount?: number;
 };
 
 function averageSimilarityByRunIndex(
@@ -82,5 +91,44 @@ export function sortBenchmarkRunRoster(
             return a.avgSimilarity - b.avgSimilarity;
         }
         return a.runIndex - b.runIndex;
+    });
+}
+
+function sumCritiqueIssues(run: RunArtifact): number {
+    const byType = run.run.metrics.critique?.byType;
+    if (!byType || typeof byType !== "object") return 0;
+    let sum = 0;
+    for (const value of Object.values(byType as Record<string, unknown>)) {
+        if (typeof value === "number" && Number.isFinite(value)) {
+            sum += value;
+        }
+    }
+    return sum;
+}
+
+export function enrichBenchmarkRunRoster(
+    roster: BenchmarkRunRosterRow[],
+    runsById: Map<string, RunArtifact>,
+    indexLookup?: Map<string, IndexRunSnapshot> | null,
+): EnrichedBenchmarkRunRosterRow[] {
+    return roster.map((row) => {
+        const run = runsById.get(row.runId);
+        const indexed = indexLookup?.get(row.runId);
+        const solverFromArtifact = run?.run.metrics.confidence?.solver;
+        const solverConfidence =
+            indexed?.solverConfidence ??
+            (typeof solverFromArtifact === "number"
+                ? solverFromArtifact
+                : undefined);
+        const issueCount =
+            indexed?.issueCount ?? (run ? sumCritiqueIssues(run) : undefined);
+
+        return {
+            ...row,
+            model: run?.metadata.model,
+            preset: run?.metadata.pipelinePreset,
+            solverConfidence,
+            issueCount,
+        };
     });
 }

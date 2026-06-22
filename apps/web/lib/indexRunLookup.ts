@@ -5,7 +5,11 @@ export type IndexRunSnapshot = {
     stepCount?: number;
     maxSeverity?: number;
     solverConfidence?: number;
+    calibratedConfidence?: number;
     evidenceRiskLevel?: number;
+    qualityCoherence?: number;
+    factualRisk?: number;
+    topCounterfactualMode?: string;
 };
 
 export function buildIndexRunLookup(
@@ -19,7 +23,11 @@ export function buildIndexRunLookup(
             stepCount: run.stepCount,
             maxSeverity: run.critique.maxSeverity,
             solverConfidence: run.confidence.solver,
+            calibratedConfidence: run.confidence.calibratedAdjusted,
             evidenceRiskLevel: run.research?.evidenceRiskLevel,
+            qualityCoherence: run.quality?.coherence,
+            factualRisk: run.quality?.factualRisk,
+            topCounterfactualMode: run.research?.topCounterfactualFailureMode,
         });
     }
 

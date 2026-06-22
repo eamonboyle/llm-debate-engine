@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { loadBenchmarkById, loadBenchmarkPairsById } from "../../../lib/data";
+import {
+    loadBenchmarkById,
+    loadBenchmarkPairsById,
+    loadAnalysisIndex,
+    loadRunsByIds,
+} from "../../../lib/data";
 import {
     buildBenchmarkRunRoster,
+    enrichBenchmarkRunRoster,
     sortBenchmarkRunRoster,
 } from "../../../lib/benchmarkRunRoster";
+import { buildIndexRunLookup } from "../../../lib/indexRunLookup";
 import { MetricCard } from "../../../components/MetricCard";
 import { InfoTooltip } from "../../../components/InfoTooltip";
 import { ModeSizeBar } from "../../../components/benchmark/ModeSizeBar";
@@ -60,12 +67,22 @@ export default async function BenchmarkDetailPage({
             : (benchmark.payload.summary?.stability?.pairs ?? []);
     const rosterRunIds =
         pairsData.runIds.length > 0 ? pairsData.runIds : runIds;
-    const runRoster = sortBenchmarkRunRoster(
-        buildBenchmarkRunRoster({
-            runIds: rosterRunIds,
-            pairs,
-            modes: benchmark.payload.modes,
-        }),
+    const [memberRuns, index] = await Promise.all([
+        loadRunsByIds(rosterRunIds),
+        loadAnalysisIndex(),
+    ]);
+    const runsById = new Map(memberRuns.map((run) => [run.id, run]));
+    const indexLookup = index ? buildIndexRunLookup(index) : null;
+    const runRoster = enrichBenchmarkRunRoster(
+        sortBenchmarkRunRoster(
+            buildBenchmarkRunRoster({
+                runIds: rosterRunIds,
+                pairs,
+                modes: benchmark.payload.modes,
+            }),
+        ),
+        runsById,
+        indexLookup,
     ).map((row) => {
         const peerRunId = findMostSimilarPeerRunId(
             row.runId,
@@ -381,6 +398,48 @@ export default async function BenchmarkDetailPage({
                                         </code>
                                     </Link>
                                 ),
+                            },
+                            {
+                                key: "model",
+                                label: "Model",
+                                helpKey: "model",
+                                hideOnMobile: true,
+                                render: (row) =>
+                                    (row as { model?: string }).model ?? "—",
+                            },
+                            {
+                                key: "preset",
+                                label: "Preset",
+                                helpKey: "preset",
+                                hideOnMobile: true,
+                                render: (row) =>
+                                    (row as { preset?: string }).preset ?? "—",
+                            },
+                            {
+                                key: "solverConfidence",
+                                label: "Solver conf.",
+                                helpKey: "solverConfidence",
+                                hideOnMobile: true,
+                                render: (row) => {
+                                    const value = (
+                                        row as { solverConfidence?: number }
+                                    ).solverConfidence;
+                                    return value == null
+                                        ? "—"
+                                        : value.toFixed(2);
+                                },
+                            },
+                            {
+                                key: "issueCount",
+                                label: "Issues",
+                                helpKey: "issueCount",
+                                hideOnMobile: true,
+                                render: (row) => {
+                                    const value = (
+                                        row as { issueCount?: number }
+                                    ).issueCount;
+                                    return value == null ? "—" : value;
+                                },
                             },
                             {
                                 key: "modeIndex",

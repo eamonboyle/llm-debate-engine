@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CollapsibleFilterCard } from "../components/CollapsibleFilterCard";
 import { MetricCard } from "../components/MetricCard";
+import { ModelFilterSelect } from "../components/ModelFilterSelect";
 import { PresetFilterSelect } from "../components/PresetFilterSelect";
 import { ResponsiveTable } from "../components/ResponsiveTable";
 import { OverviewCharts } from "../components/charts/OverviewCharts";
@@ -30,7 +31,10 @@ export const metadata: Metadata = {
 };
 
 type OverviewSearchParams = {
+    q?: string;
+    model?: string;
     preset?: string;
+    fast?: string;
     from?: string;
     to?: string;
 };
@@ -214,9 +218,12 @@ export default async function OverviewPage({
     const filterEntries = Object.entries(index.filterContext ?? {}).filter(
         ([, value]) => value !== undefined && value !== null && value !== "",
     );
-    const { presets } = collectIndexFacets(index);
+    const { presets, models } = collectIndexFacets(index);
     const trendFilters = {
+        q: params.q,
+        model: params.model,
         preset: params.preset,
+        fast: params.fast,
         from: params.from,
         to: params.to,
     };
@@ -593,10 +600,29 @@ export default async function OverviewPage({
             >
                 <form method="get">
                     <div className="filter-grid">
+                        <input
+                            name="q"
+                            placeholder="Search question / answer"
+                            defaultValue={params.q ?? ""}
+                            className="input"
+                        />
+                        <ModelFilterSelect
+                            models={models}
+                            defaultValue={params.model ?? ""}
+                        />
                         <PresetFilterSelect
                             presets={presets}
                             defaultValue={params.preset ?? ""}
                         />
+                        <select
+                            name="fast"
+                            defaultValue={params.fast ?? ""}
+                            className="input"
+                        >
+                            <option value="">Fast mode: any</option>
+                            <option value="true">Fast only</option>
+                            <option value="false">Non-fast only</option>
+                        </select>
                         <input
                             type="datetime-local"
                             name="from"

@@ -11,6 +11,7 @@ import {
     type ArtifactFilterParams,
 } from "../../lib/data";
 import { buildQueryString } from "../../lib/listPagination";
+import { buildAgentErrorRunsHref } from "../../lib/runStepFilters";
 
 export const metadata: Metadata = {
     title: "Agent pipeline stats",
@@ -129,7 +130,16 @@ export default async function AgentStatsPage({
                 <div className="card">
                     <div className="small muted">Step errors</div>
                     <div style={{ marginTop: 6, fontSize: "1.25rem" }}>
-                        {totalErrors}
+                        {totalErrors > 0 ? (
+                            <Link
+                                href="/runs?errors=true"
+                                title="View runs with step errors"
+                            >
+                                {totalErrors}
+                            </Link>
+                        ) : (
+                            totalErrors
+                        )}
                     </div>
                 </div>
                 <div className="card">
@@ -156,7 +166,30 @@ export default async function AgentStatsPage({
                             { key: "agentName", label: "Agent" },
                             { key: "stepCount", label: "Steps" },
                             { key: "runCount", label: "Runs" },
-                            { key: "errorCount", label: "Errors" },
+                            {
+                                key: "errorCount",
+                                label: "Errors",
+                                render: (row) => {
+                                    const errorCount = (
+                                        row as { errorCount: number }
+                                    ).errorCount;
+                                    if (errorCount === 0) return "0";
+                                    const agentName = (
+                                        row as { agentName: string }
+                                    ).agentName;
+                                    return (
+                                        <Link
+                                            href={buildAgentErrorRunsHref(
+                                                agentName,
+                                                params,
+                                            )}
+                                            title={`View runs with ${agentName} step errors`}
+                                        >
+                                            {errorCount}
+                                        </Link>
+                                    );
+                                },
+                            },
                             {
                                 key: "avgDuration",
                                 label: "Avg duration",
