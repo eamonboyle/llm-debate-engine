@@ -6,6 +6,8 @@ export type IndexRunSnapshot = {
     maxSeverity?: number;
     solverConfidence?: number;
     evidenceRiskLevel?: number;
+    coherence?: number;
+    factualRisk?: number;
 };
 
 export function buildIndexRunLookup(
@@ -20,6 +22,8 @@ export function buildIndexRunLookup(
             maxSeverity: run.critique.maxSeverity,
             solverConfidence: run.confidence.solver,
             evidenceRiskLevel: run.research?.evidenceRiskLevel,
+            coherence: run.quality?.coherence,
+            factualRisk: run.quality?.factualRisk,
         });
     }
 

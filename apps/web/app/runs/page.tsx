@@ -136,6 +136,12 @@ export default async function RunsPage({
                         <option value="drift_desc">
                             Sort: largest confidence drift
                         </option>
+                        <option value="coherence_desc">
+                            Sort: highest judge coherence
+                        </option>
+                        <option value="factual_risk_desc">
+                            Sort: highest factual risk
+                        </option>
                     </select>
                     <select
                         name="pageSize"
@@ -287,6 +293,34 @@ export default async function RunsPage({
                                               : value.toFixed(2);
                                       },
                                   },
+                                  {
+                                      key: "coherence",
+                                      label: "Coherence",
+                                      helpKey: "coherence",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const value = (
+                                              row as { coherence?: number }
+                                          ).coherence;
+                                          return value == null
+                                              ? "—"
+                                              : value.toFixed(1);
+                                      },
+                                  },
+                                  {
+                                      key: "factualRisk",
+                                      label: "Factual risk",
+                                      helpKey: "factualRisk",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const value = (
+                                              row as { factualRisk?: number }
+                                          ).factualRisk;
+                                          return value == null
+                                              ? "—"
+                                              : value.toFixed(1);
+                                      },
+                                  },
                               ]
                             : []),
                         {
@@ -345,6 +379,8 @@ export default async function RunsPage({
                             steps: indexed?.stepCount,
                             issues: indexed?.issueCount,
                             solverConf: indexed?.solverConfidence,
+                            coherence: indexed?.coherence,
+                            factualRisk: indexed?.factualRisk,
                         };
                     })}
                     getRowId={(row) => (row as { id: string }).id}

@@ -180,40 +180,97 @@ export default async function QuestionHubPage({
             </div>
 
             {indexMetrics ? (
-                <div className="grid-4">
-                    <MetricCard
-                        label="Indexed runs"
-                        value={indexMetrics.indexedRunCount}
-                        helpKey="runArtifacts"
-                    />
-                    <MetricCard
-                        label="Avg critique issues"
-                        value={
-                            indexMetrics.avgIssueCount == null
-                                ? "—"
-                                : indexMetrics.avgIssueCount.toFixed(1)
-                        }
-                        helpKey="issueCount"
-                    />
-                    <MetricCard
-                        label="Avg solver confidence"
-                        value={
-                            indexMetrics.avgSolverConfidence == null
-                                ? "—"
-                                : indexMetrics.avgSolverConfidence.toFixed(2)
-                        }
-                        helpKey="solverConfidence"
-                    />
-                    <MetricCard
-                        label="Avg evidence risk"
-                        value={
-                            indexMetrics.avgEvidenceRisk == null
-                                ? "—"
-                                : indexMetrics.avgEvidenceRisk.toFixed(1)
-                        }
-                        helpKey="evidenceRiskLevel"
-                    />
-                </div>
+                <>
+                    <div className="grid-4">
+                        <MetricCard
+                            label="Indexed runs"
+                            value={indexMetrics.indexedRunCount}
+                            helpKey="runArtifacts"
+                        />
+                        <MetricCard
+                            label="Avg critique issues"
+                            value={
+                                indexMetrics.avgIssueCount == null
+                                    ? "—"
+                                    : indexMetrics.avgIssueCount.toFixed(1)
+                            }
+                            helpKey="issueCount"
+                        />
+                        <MetricCard
+                            label="Avg solver confidence"
+                            value={
+                                indexMetrics.avgSolverConfidence == null
+                                    ? "—"
+                                    : indexMetrics.avgSolverConfidence.toFixed(
+                                          2,
+                                      )
+                            }
+                            helpKey="solverConfidence"
+                        />
+                        <MetricCard
+                            label="Avg evidence risk"
+                            value={
+                                indexMetrics.avgEvidenceRisk == null
+                                    ? "—"
+                                    : indexMetrics.avgEvidenceRisk.toFixed(1)
+                            }
+                            helpKey="evidenceRiskLevel"
+                        />
+                    </div>
+                    <div className="grid-4">
+                        <MetricCard
+                            label="Avg confidence drift"
+                            value={
+                                indexMetrics.avgSolverToRevisionDelta == null
+                                    ? "—"
+                                    : indexMetrics.avgSolverToRevisionDelta.toFixed(
+                                          3,
+                                      )
+                            }
+                            helpKey="solverToRevisionDelta"
+                        />
+                        <MetricCard
+                            label="Avg judge coherence"
+                            value={
+                                indexMetrics.avgCoherence == null
+                                    ? "—"
+                                    : indexMetrics.avgCoherence.toFixed(2)
+                            }
+                            helpKey="coherence"
+                        />
+                        <MetricCard
+                            label="Avg factual risk"
+                            value={
+                                indexMetrics.avgFactualRisk == null
+                                    ? "—"
+                                    : indexMetrics.avgFactualRisk.toFixed(2)
+                            }
+                            helpKey="factualRisk"
+                        />
+                        <MetricCard
+                            label="Runs with quality scores"
+                            value={indexMetrics.runsWithQualityScores}
+                            helpKey="judgement"
+                        />
+                    </div>
+                    <div
+                        className="page-actions"
+                        style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                    >
+                        <Link
+                            href={`/drift?q=${encodeURIComponent(question)}`}
+                            className="button secondary"
+                        >
+                            Drift for this question
+                        </Link>
+                        <Link
+                            href={`/quality?q=${encodeURIComponent(question)}`}
+                            className="button secondary"
+                        >
+                            Quality for this question
+                        </Link>
+                    </div>
+                </>
             ) : null}
 
             <div className="card">

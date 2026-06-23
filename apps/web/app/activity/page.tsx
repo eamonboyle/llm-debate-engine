@@ -13,6 +13,7 @@ import {
 } from "../../lib/activityFeed";
 import { collectArtifactFacets } from "../../lib/artifactFacets";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
+import { questionHubHref } from "../../lib/questionGroups";
 import { buildQueryString, paginateItems } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
@@ -231,15 +232,19 @@ export default async function ActivityPage({
                                 key: "question",
                                 label: "Question",
                                 cellClass: "cell-question",
-                                render: (row) => (
-                                    <TruncateText
-                                        text={
-                                            (row as { question: string })
-                                                .question
-                                        }
-                                        maxLength={90}
-                                    />
-                                ),
+                                render: (row) => {
+                                    const question = (
+                                        row as { question: string }
+                                    ).question;
+                                    return (
+                                        <Link href={questionHubHref(question)}>
+                                            <TruncateText
+                                                text={question}
+                                                maxLength={90}
+                                            />
+                                        </Link>
+                                    );
+                                },
                             },
                             {
                                 key: "model",
@@ -280,15 +285,25 @@ export default async function ActivityPage({
                             `${(row as { kind: string }).kind}-${(row as { id: string }).id}`
                         }
                         renderCardActions={(row) => (
-                            <Link
-                                href={(row as { href: string }).href}
-                                className="button"
-                            >
-                                Open{" "}
-                                {(row as { kind: string }).kind === "run"
-                                    ? "trace"
-                                    : "benchmark"}
-                            </Link>
+                            <>
+                                <Link
+                                    href={(row as { href: string }).href}
+                                    className="button"
+                                >
+                                    Open{" "}
+                                    {(row as { kind: string }).kind === "run"
+                                        ? "trace"
+                                        : "benchmark"}
+                                </Link>
+                                <Link
+                                    href={questionHubHref(
+                                        (row as { question: string }).question,
+                                    )}
+                                    className="button secondary"
+                                >
+                                    Question hub
+                                </Link>
+                            </>
                         )}
                     />
                 )}

@@ -21,6 +21,7 @@ function sampleIndex(): AnalysisIndex {
                 },
                 critique: { issueCount: 2 },
                 research: { evidenceRiskLevel: 2 },
+                quality: { coherence: 3, factualRisk: 2 },
             },
             {
                 id: "run_b",
@@ -36,6 +37,7 @@ function sampleIndex(): AnalysisIndex {
                 },
                 critique: { issueCount: 4 },
                 research: { evidenceRiskLevel: 4 },
+                quality: { coherence: 5, factualRisk: 3 },
             },
         ],
         benchmarks: [],
@@ -62,6 +64,9 @@ describe("summarizeQuestionHubMetrics", () => {
         expect(summary?.avgSolverConfidence).toBeCloseTo(0.5, 3);
         expect(summary?.avgEvidenceRisk).toBe(3);
         expect(summary?.avgSolverToRevisionDelta).toBeCloseTo(0.2, 3);
+        expect(summary?.avgCoherence).toBe(4);
+        expect(summary?.avgFactualRisk).toBe(2.5);
+        expect(summary?.runsWithQualityScores).toBe(2);
     });
 
     it("returns null when no indexed runs match", () => {

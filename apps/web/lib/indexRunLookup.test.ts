@@ -23,6 +23,7 @@ function sampleIndex(): AnalysisIndex {
                     byType: { factual: 2 },
                 },
                 research: { evidenceRiskLevel: 3 },
+                quality: { coherence: 4, factualRisk: 2 },
             },
         ],
         benchmarks: [],
@@ -49,6 +50,8 @@ describe("buildIndexRunLookup", () => {
             maxSeverity: 4,
             solverConfidence: 0.8,
             evidenceRiskLevel: 3,
+            coherence: 4,
+            factualRisk: 2,
         });
         expect(lookup.get("missing")).toBeUndefined();
     });
