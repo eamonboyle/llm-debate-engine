@@ -1,9 +1,10 @@
 import {
     isAnalysisRebuildEnabled,
+    parseAnalysisRebuildFilters,
     rebuildAnalysisArtifacts,
 } from "../../../../lib/rebuildAnalysis";
 
-export async function POST() {
+export async function POST(request?: Request) {
     if (!isAnalysisRebuildEnabled()) {
         return Response.json(
             {
@@ -13,8 +14,26 @@ export async function POST() {
         );
     }
 
+    let filters = {};
+    if (request) {
+        try {
+            const contentType = request.headers.get("content-type") ?? "";
+            if (contentType.includes("application/json")) {
+                const body = (await request.json()) as unknown;
+                if (body != null && typeof body === "object") {
+                    filters = parseAnalysisRebuildFilters(body);
+                }
+            }
+        } catch {
+            return Response.json(
+                { error: "Invalid rebuild request body" },
+                { status: 400 },
+            );
+        }
+    }
+
     try {
-        const result = await rebuildAnalysisArtifacts();
+        const result = await rebuildAnalysisArtifacts(filters);
         return Response.json({
             ok: true,
             ...result,

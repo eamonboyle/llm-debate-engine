@@ -1,6 +1,8 @@
+import { Suspense, type ReactNode } from "react";
 import { CollapsibleFilterCard } from "./CollapsibleFilterCard";
 import { ModelFilterSelect } from "./ModelFilterSelect";
 import { PresetFilterSelect } from "./PresetFilterSelect";
+import { SaveFilterButton } from "./SaveFilterButton";
 import type { ArtifactFilterParams } from "../lib/data";
 
 type InsightFilterCardProps = {
@@ -11,6 +13,7 @@ type InsightFilterCardProps = {
     totalRuns: number;
     filteredRuns: number;
     preserveKeys?: string[];
+    extraFields?: ReactNode;
 };
 
 export function InsightFilterCard({
@@ -21,6 +24,7 @@ export function InsightFilterCard({
     totalRuns,
     filteredRuns,
     preserveKeys = [],
+    extraFields,
 }: InsightFilterCardProps) {
     const clearHref = (() => {
         const query = new URLSearchParams();
@@ -93,6 +97,7 @@ export function InsightFilterCard({
                         className="input"
                         title="Created at or before"
                     />
+                    {extraFields}
                 </div>
                 <div className="filter-actions">
                     <button type="submit" className="button">
@@ -101,6 +106,9 @@ export function InsightFilterCard({
                     <a href={clearHref} className="button secondary">
                         Clear
                     </a>
+                    <Suspense fallback={null}>
+                        <SaveFilterButton />
+                    </Suspense>
                 </div>
             </form>
         </CollapsibleFilterCard>

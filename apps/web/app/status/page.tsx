@@ -4,7 +4,13 @@ import { ApiStatusPanel } from "../../components/ApiStatusPanel";
 import { MetricCard } from "../../components/MetricCard";
 import { RebuildAnalysisPanel } from "../../components/RebuildAnalysisPanel";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
-import { loadAnalysisIndex, loadDataStatus } from "../../lib/data";
+import { collectArtifactFacets } from "../../lib/artifactFacets";
+import {
+    loadAnalysisIndex,
+    loadBenchmarkArtifacts,
+    loadDataStatus,
+    loadRunArtifacts,
+} from "../../lib/data";
 import { isAnalysisRebuildEnabled } from "../../lib/rebuildAnalysis";
 
 export const metadata: Metadata = {
@@ -12,10 +18,13 @@ export const metadata: Metadata = {
 };
 
 export default async function DataStatusPage() {
-    const [status, index] = await Promise.all([
+    const [status, index, runs, benchmarks] = await Promise.all([
         loadDataStatus(),
         loadAnalysisIndex(),
+        loadRunArtifacts(),
+        loadBenchmarkArtifacts(),
     ]);
+    const { presets } = collectArtifactFacets(runs, benchmarks);
 
     const indexReady = status.hasAnalysisIndex || status.hasAnalysisBundle;
     const artifactsReady =
@@ -143,6 +152,7 @@ export default async function DataStatusPage() {
                 enabled={isAnalysisRebuildEnabled()}
                 artifactRuns={status.artifactCounts.runs}
                 artifactBenchmarks={status.artifactCounts.benchmarks}
+                presetOptions={presets}
             />
 
             <ApiStatusPanel />
@@ -240,6 +250,14 @@ export default async function DataStatusPage() {
                             >
                                 API: benchmark pairs
                             </a>
+                        ) : null}
+                        {status.hasBenchmarkPairs ? (
+                            <Link
+                                href="/similarity"
+                                className="button secondary"
+                            >
+                                Similarity explorer
+                            </Link>
                         ) : null}
                     </div>
                 </div>

@@ -2224,4 +2224,78 @@ describe("web api routes", () => {
         expect(json.ok).toBe(true);
         expect(json.totals.runs).toBeGreaterThanOrEqual(1);
     });
+
+    it("rebuilds filtered analysis index when filters are provided", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        process.env.ANALYSIS_REBUILD_ENABLED = "true";
+        await writeFile(
+            join(dir, "run_match.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_match",
+                question: "Climate policy question",
+                metadata: {
+                    schemaVersion: 1,
+                    createdAt: "2026-01-01T00:00:00.000Z",
+                    model: "gpt-filter",
+                    pipelinePreset: "research_deep",
+                    fastMode: false,
+                    pipelineVersion: "1.0.0",
+                    source: "cli",
+                },
+                run: {
+                    id: "run_match",
+                    finalAnswer: "Answer",
+                    steps: [],
+                    metrics: {},
+                },
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "run_skip.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_skip",
+                question: "Unrelated topic",
+                metadata: {
+                    schemaVersion: 1,
+                    createdAt: "2026-01-02T00:00:00.000Z",
+                    model: "gpt-filter",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                    pipelineVersion: "1.0.0",
+                    source: "cli",
+                },
+                run: {
+                    id: "run_skip",
+                    finalAnswer: "Other",
+                    steps: [],
+                    metrics: {},
+                },
+            }),
+            "utf-8",
+        );
+
+        const response = await postAnalysisRebuild(
+            new Request("http://localhost/api/analysis/rebuild", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    questionContains: "climate",
+                    presetEquals: "research_deep",
+                }),
+            }),
+        );
+        expect(response.status).toBe(200);
+        const json = (await response.json()) as {
+            ok: boolean;
+            totals: { runs: number };
+            filters?: { questionContains?: string };
+        };
+        expect(json.ok).toBe(true);
+        expect(json.totals.runs).toBe(1);
+        expect(json.filters?.questionContains).toBe("climate");
+    });
 });

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { CollapsibleFilterCard } from "../../components/CollapsibleFilterCard";
 import { ExportFilteredLink } from "../../components/ExportFilteredLink";
 import { ModelFilterSelect } from "../../components/ModelFilterSelect";
 import { PresetFilterSelect } from "../../components/PresetFilterSelect";
+import { SaveFilterButton } from "../../components/SaveFilterButton";
 import {
     ResponsiveTable,
     TruncateText,
@@ -155,6 +157,9 @@ export default async function RunsPage({
                     <a href="/runs" className="button secondary">
                         Clear
                     </a>
+                    <Suspense fallback={null}>
+                        <SaveFilterButton />
+                    </Suspense>
                     <ExportFilteredLink
                         apiPath="/api/runs"
                         params={{
