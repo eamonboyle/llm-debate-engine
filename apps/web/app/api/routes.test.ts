@@ -30,6 +30,8 @@ import { GET as getCounterfactual } from "./counterfactual/route";
 import { GET as getEvidence } from "./evidence/route";
 import { GET as getOutliers } from "./outliers/route";
 import { GET as getCatalog } from "./catalog/route";
+import { GET as getCatalogGaps } from "./catalog/gaps/route";
+import { GET as getReview } from "./review/route";
 import { POST as postAnalysisRebuild } from "./analysis/rebuild/route";
 import { GET as getQuestions } from "./questions/route";
 
@@ -2184,6 +2186,122 @@ describe("web api routes", () => {
         );
         expect(csvResponse.status).toBe(200);
         expect(await csvResponse.text()).toContain("gpt-catalog");
+    });
+
+    it("returns catalog coverage gaps", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_gap_a.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_gap_a",
+                question: "Q",
+                metadata: {
+                    createdAt: new Date().toISOString(),
+                    model: "gpt-a",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run_gap_a",
+                    finalAnswer: "A",
+                    steps: [],
+                    metrics: {},
+                },
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "run_gap_b.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_gap_b",
+                question: "Q2",
+                metadata: {
+                    createdAt: new Date().toISOString(),
+                    model: "gpt-b",
+                    pipelinePreset: "research_deep",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run_gap_b",
+                    finalAnswer: "B",
+                    steps: [],
+                    metrics: {},
+                },
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getCatalogGaps(
+            new Request("http://localhost/api/catalog/gaps"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            gaps: Array<{ model: string; preset: string }>;
+        };
+        expect(json.gaps.length).toBeGreaterThan(0);
+
+        const csvResponse = await getCatalogGaps(
+            new Request("http://localhost/api/catalog/gaps?format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(await csvResponse.text()).toContain("model,preset");
+    });
+
+    it("returns review queue payload", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 1, benchmarks: 0, skippedFiles: 0 },
+                runs: [
+                    {
+                        id: "run_review",
+                        question: "Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt",
+                        pipelinePreset: "standard",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                        confidence: {},
+                        critique: { issueCount: 9 },
+                        quality: { factualRisk: 4.5, coherence: 1.5 },
+                    },
+                ],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    critiqueVsConfidence: [],
+                },
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getReview(
+            new Request("http://localhost/api/review"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            flaggedCount: number;
+            items: Array<{ runId: string }>;
+        };
+        expect(json.flaggedCount).toBeGreaterThan(0);
+        expect(json.items[0].runId).toBe("run_review");
+
+        const csvResponse = await getReview(
+            new Request("http://localhost/api/review?format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(await csvResponse.text()).toContain("run_review");
     });
 
     it("rebuilds analysis index from artifacts when enabled", async () => {

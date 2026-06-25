@@ -1,4 +1,5 @@
 import type { AgentStatRow } from "./agentStats";
+import type { CatalogGapRow } from "./catalogGaps";
 import type { CatalogStats } from "./catalogStats";
 import type { ConfidenceDriftRow } from "./confidenceDrift";
 import type {
@@ -13,6 +14,7 @@ import type { QuestionGroup } from "./questionGroups";
 import type { ModelLeaderboardRow } from "./modelLeaderboard";
 import type { PresetLeaderboardRow } from "./presetLeaderboard";
 import type { QualityRunRow } from "./qualityInsights";
+import type { ReviewQueueItem } from "./reviewQueue";
 import type { GlobalSearchResult } from "./globalSearch";
 import type { AgentTimingRow } from "./stepTiming";
 
@@ -481,4 +483,38 @@ export function catalogStatsToCsv(stats: CatalogStats): string {
     }
 
     return sections.join("\n");
+}
+
+export function catalogGapsToCsv(gaps: CatalogGapRow[]): string {
+    const header = ["model", "preset"];
+    const rows = gaps.map((gap) => row([gap.model, gap.preset]));
+    return [header.join(","), ...rows].join("\n");
+}
+
+export function reviewQueueToCsv(items: ReviewQueueItem[]): string {
+    const header = [
+        "runId",
+        "question",
+        "model",
+        "preset",
+        "createdAt",
+        "priority",
+        "reasons",
+        "traceHref",
+        "peerCompareHref",
+    ];
+    const rows = items.map((item) =>
+        row([
+            item.runId,
+            item.question,
+            item.model,
+            item.preset,
+            item.createdAt,
+            item.priority,
+            item.reasons.join("; "),
+            item.traceHref,
+            item.peerCompareHref ?? "",
+        ]),
+    );
+    return [header.join(","), ...rows].join("\n");
 }

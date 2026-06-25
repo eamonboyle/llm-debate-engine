@@ -26,6 +26,7 @@ import {
 import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
 import { CopyPageLink } from "../../../components/CopyPageLink";
 import { RecentViewsTracker } from "../../../components/RecentViewsTracker";
+import { PinArtifactButton } from "../../../components/PinArtifactButton";
 
 export async function generateMetadata({
     params,
@@ -116,6 +117,12 @@ export default async function BenchmarkDetailPage({
                         filename={`${benchmark.id}.json`}
                     />
                     <CopyPageLink />
+                    <PinArtifactButton
+                        id={benchmark.id}
+                        kind="benchmark"
+                        href={`/benchmarks/${benchmark.id}`}
+                        title={benchmarkTitle}
+                    />
                     <Link
                         href={questionHubHref(benchmark.question)}
                         className="button secondary"

@@ -315,6 +315,9 @@ export default async function OverviewPage({
                     <a href="/outliers" className="button secondary">
                         Outlier runs
                     </a>
+                    <a href="/review" className="button secondary">
+                        Review queue
+                    </a>
                     <a href="/report" className="button secondary">
                         Analysis report
                     </a>

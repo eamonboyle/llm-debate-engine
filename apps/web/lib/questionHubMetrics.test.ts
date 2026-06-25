@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { AnalysisIndex } from "./data";
-import { summarizeQuestionHubMetrics } from "./questionHubMetrics";
+import {
+    buildQuestionModelRows,
+    summarizeQuestionHubMetrics,
+} from "./questionHubMetrics";
 
 function sampleIndex(): AnalysisIndex {
     return {
@@ -68,5 +71,32 @@ describe("summarizeQuestionHubMetrics", () => {
         expect(
             summarizeQuestionHubMetrics(sampleIndex(), "Other topic"),
         ).toBeNull();
+    });
+});
+
+describe("buildQuestionModelRows", () => {
+    it("groups indexed runs by model with compare link", () => {
+        const index = sampleIndex();
+        index.runs.push({
+            id: "run_c",
+            question: "Topic A",
+            createdAt: "2026-01-03T00:00:00.000Z",
+            model: "claude",
+            pipelinePreset: "standard",
+            fastMode: false,
+            finalAnswerPreview: "c",
+            confidence: { solver: 0.8 },
+            critique: { issueCount: 1 },
+            research: { evidenceRiskLevel: 1 },
+        });
+
+        const rows = buildQuestionModelRows(index, "Topic A");
+        expect(rows).toHaveLength(2);
+        expect(rows[0].model).toBe("gpt");
+        expect(rows[0].runCount).toBe(2);
+        expect(rows[0].avgIssueCount).toBe(3);
+        expect(rows[1].model).toBe("claude");
+        expect(rows[0].compareHref).toContain("run_b");
+        expect(rows[0].compareHref).toContain("run_c");
     });
 });

@@ -109,6 +109,9 @@ export default async function CatalogPage({
                 className="page-actions"
                 style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
             >
+                <Link href="/catalog/gaps" className="button secondary">
+                    Coverage gaps
+                </Link>
                 <a
                     href={`/api/catalog${buildQueryString({ q: params.q }, {})}`}
                     className="button secondary"

@@ -13,7 +13,10 @@ import {
     loadRunsByQuestion,
 } from "../../../lib/data";
 import { questionHubHref } from "../../../lib/questionGroups";
-import { summarizeQuestionHubMetrics } from "../../../lib/questionHubMetrics";
+import {
+    summarizeQuestionHubMetrics,
+    buildQuestionModelRows,
+} from "../../../lib/questionHubMetrics";
 
 export const metadata: Metadata = {
     title: "Question hub",
@@ -51,6 +54,7 @@ export default async function QuestionHubPage({
     const indexMetrics = index
         ? summarizeQuestionHubMetrics(index, question)
         : null;
+    const modelRows = index ? buildQuestionModelRows(index, question) : [];
 
     if (runs.length === 0 && benchmarks.length === 0) {
         notFound();
@@ -212,6 +216,110 @@ export default async function QuestionHubPage({
                                 : indexMetrics.avgEvidenceRisk.toFixed(1)
                         }
                         helpKey="evidenceRiskLevel"
+                    />
+                </div>
+            ) : null}
+
+            {modelRows.length > 1 ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>By model</h2>
+                    <p className="small muted" style={{ marginBottom: "1rem" }}>
+                        Indexed run metrics grouped by model for this question.
+                    </p>
+                    <ResponsiveTable
+                        columns={[
+                            { key: "model", label: "Model", helpKey: "model" },
+                            { key: "runCount", label: "Runs" },
+                            {
+                                key: "avgIssueCount",
+                                label: "Avg issues",
+                                helpKey: "issueCount",
+                            },
+                            {
+                                key: "avgSolverConfidence",
+                                label: "Avg solver conf.",
+                                helpKey: "solverConfidence",
+                            },
+                            {
+                                key: "avgEvidenceRisk",
+                                label: "Avg evidence risk",
+                                helpKey: "evidenceRiskLevel",
+                                hideOnMobile: true,
+                            },
+                            {
+                                key: "latest",
+                                label: "Latest run",
+                                hideOnMobile: true,
+                                render: (row) => (
+                                    <Link
+                                        href={`/runs/${(row as { latestRunId: string }).latestRunId}`}
+                                    >
+                                        Open
+                                    </Link>
+                                ),
+                            },
+                            {
+                                key: "compare",
+                                label: "Compare",
+                                render: (row) => {
+                                    const href = (
+                                        row as { compareHref: string | null }
+                                    ).compareHref;
+                                    return href ? (
+                                        <Link href={href}>Top two</Link>
+                                    ) : (
+                                        <span className="muted">—</span>
+                                    );
+                                },
+                            },
+                        ]}
+                        data={modelRows.map((row) => ({
+                            model: row.model,
+                            runCount: row.runCount,
+                            avgIssueCount:
+                                row.avgIssueCount == null
+                                    ? "—"
+                                    : row.avgIssueCount.toFixed(1),
+                            avgSolverConfidence:
+                                row.avgSolverConfidence == null
+                                    ? "—"
+                                    : row.avgSolverConfidence.toFixed(2),
+                            avgEvidenceRisk:
+                                row.avgEvidenceRisk == null
+                                    ? "—"
+                                    : row.avgEvidenceRisk.toFixed(1),
+                            latestRunId: row.latestRunId,
+                            compareHref: row.compareHref,
+                        }))}
+                        getRowId={(row) => (row as { model: string }).model}
+                        renderCardActions={(row) => (
+                            <>
+                                {(row as { latestRunId: string | null })
+                                    .latestRunId ? (
+                                    <Link
+                                        href={`/runs/${(row as { latestRunId: string }).latestRunId}`}
+                                        className="button"
+                                    >
+                                        Latest trace
+                                    </Link>
+                                ) : null}
+                                {(row as { compareHref: string | null })
+                                    .compareHref ? (
+                                    <Link
+                                        href={
+                                            (
+                                                row as {
+                                                    compareHref: string;
+                                                }
+                                            ).compareHref
+                                        }
+                                        className="button secondary"
+                                    >
+                                        Compare models
+                                    </Link>
+                                ) : null}
+                            </>
+                        )}
                     />
                 </div>
             ) : null}

@@ -29,6 +29,7 @@ import {
     summarizeRunStepTiming,
 } from "../../../lib/stepTiming";
 import { RecentViewsTracker } from "../../../components/RecentViewsTracker";
+import { PinArtifactButton } from "../../../components/PinArtifactButton";
 import { ResponsiveTable } from "../../../components/ResponsiveTable";
 
 export async function generateMetadata({
@@ -97,6 +98,12 @@ export default async function RunTracePage({
                         filename={`${run.id}.json`}
                     />
                     <CopyPageLink />
+                    <PinArtifactButton
+                        id={run.id}
+                        kind="run"
+                        href={`/runs/${run.id}`}
+                        title={runTitle}
+                    />
                     <Link
                         href={questionHubHref(run.question)}
                         className="button secondary"

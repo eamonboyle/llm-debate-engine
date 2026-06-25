@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { openGlobalSearch } from "../lib/openSearch";
 import { RecentViewsMenu } from "./RecentViewsMenu";
+import { PinnedArtifactsMenu } from "./PinnedArtifactsMenu";
 
 type NavLeaf = {
     href: string;
@@ -36,6 +37,11 @@ const NAV_ENTRIES: NavEntry[] = [
                 href: "/catalog",
                 label: "Catalog",
                 hint: "Models and presets",
+            },
+            {
+                href: "/catalog/gaps",
+                label: "Coverage gaps",
+                hint: "Untested model × preset pairs",
             },
             {
                 href: "/pipeline",
@@ -144,6 +150,11 @@ const NAV_ENTRIES: NavEntry[] = [
                 href: "/outliers",
                 label: "Outliers",
                 hint: "Low-similarity benchmark runs",
+            },
+            {
+                href: "/review",
+                label: "Review queue",
+                hint: "Runs needing attention",
             },
             {
                 href: "/report",
@@ -512,6 +523,7 @@ export function Nav() {
                             <kbd className="nav-search-kbd">/</kbd>
                         </button>
                         <RecentViewsMenu />
+                        <PinnedArtifactsMenu />
                         {renderDesktopNav(pathname)}
                     </div>
                     <div className="nav-mobile-stack">
@@ -537,6 +549,7 @@ export function Nav() {
                         </button>
                         <div className="nav-recent-mobile">
                             <RecentViewsMenu />
+                            <PinnedArtifactsMenu />
                         </div>
                         {renderMobileNav(pathname, () =>
                             setMobileNavOpen(false),
