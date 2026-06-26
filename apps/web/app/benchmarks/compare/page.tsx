@@ -9,6 +9,7 @@ import { CompareDeltaChart } from "../../../components/charts/CompareDeltaChart"
 import { ModeSizeBar } from "../../../components/benchmark/ModeSizeBar";
 import { buildBenchmarkComparePayload } from "../../../lib/benchmarkCompare";
 import { buildBenchmarkCompareSuggestions } from "../../../lib/benchmarkCompareSuggestions";
+import { extractClaimCentroidDisplay } from "../../../lib/claimCentroidMetrics";
 import { TruncateText } from "../../../components/ResponsiveTable";
 import { CompareExportLink } from "../../../components/CompareExportLink";
 import { CompareSwapLink } from "../../../components/CompareSwapLink";
@@ -47,6 +48,12 @@ export default async function BenchmarkComparePage({
     const right = selected.find((b) => b.id === params.right) ?? null;
     const compare =
         left && right ? buildBenchmarkComparePayload(left, right) : null;
+    const leftClaim =
+        left != null ? extractClaimCentroidDisplay(left) : null;
+    const rightClaim =
+        right != null ? extractClaimCentroidDisplay(right) : null;
+    const showClaimCentroid =
+        leftClaim?.hasClaimCentroid || rightClaim?.hasClaimCentroid;
     const suggestions = buildBenchmarkCompareSuggestions(allArtifacts, {
         left: params.left,
         right: params.right,
@@ -439,6 +446,96 @@ export default async function BenchmarkComparePage({
                                             )}
                                         </td>
                                     </tr>
+                                    {showClaimCentroid ? (
+                                        <>
+                                            <tr>
+                                                <td colSpan={4}>
+                                                    <span className="small muted">
+                                                        Claim-centroid clustering
+                                                        (answer embedding vs
+                                                        claim centroid)
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Claim mode count</td>
+                                                <td>
+                                                    {compare.left.claimCentroid
+                                                        .modeCount ?? "—"}
+                                                </td>
+                                                <td>
+                                                    {compare.right.claimCentroid
+                                                        .modeCount ?? "—"}
+                                                </td>
+                                                <td
+                                                    className={`compare-delta-cell ${typeof compare.delta.claimCentroidModeCount === "number" ? (compare.delta.claimCentroidModeCount > 0 ? "compare-delta-pos" : compare.delta.claimCentroidModeCount < 0 ? "compare-delta-neg" : "") : ""}`}
+                                                >
+                                                    {formatDelta(
+                                                        compare.delta
+                                                            .claimCentroidModeCount,
+                                                    )}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Claim entropy</td>
+                                                <td>
+                                                    {compare.left.claimCentroid
+                                                        .divergenceEntropy !=
+                                                    null
+                                                        ? compare.left.claimCentroid.divergenceEntropy.toFixed(
+                                                              3,
+                                                          )
+                                                        : "—"}
+                                                </td>
+                                                <td>
+                                                    {compare.right.claimCentroid
+                                                        .divergenceEntropy !=
+                                                    null
+                                                        ? compare.right.claimCentroid.divergenceEntropy.toFixed(
+                                                              3,
+                                                          )
+                                                        : "—"}
+                                                </td>
+                                                <td
+                                                    className={`compare-delta-cell ${typeof compare.delta.claimCentroidDivergenceEntropy === "number" ? (compare.delta.claimCentroidDivergenceEntropy > 0 ? "compare-delta-pos" : compare.delta.claimCentroidDivergenceEntropy < 0 ? "compare-delta-neg" : "") : ""}`}
+                                                >
+                                                    {formatDelta(
+                                                        compare.delta
+                                                            .claimCentroidDivergenceEntropy,
+                                                    )}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Claim stability mean</td>
+                                                <td>
+                                                    {compare.left.claimCentroid
+                                                        .stabilityPairwiseMean !=
+                                                    null
+                                                        ? compare.left.claimCentroid.stabilityPairwiseMean.toFixed(
+                                                              3,
+                                                          )
+                                                        : "—"}
+                                                </td>
+                                                <td>
+                                                    {compare.right.claimCentroid
+                                                        .stabilityPairwiseMean !=
+                                                    null
+                                                        ? compare.right.claimCentroid.stabilityPairwiseMean.toFixed(
+                                                              3,
+                                                          )
+                                                        : "—"}
+                                                </td>
+                                                <td
+                                                    className={`compare-delta-cell ${typeof compare.delta.claimCentroidStabilityPairwiseMean === "number" ? (compare.delta.claimCentroidStabilityPairwiseMean > 0 ? "compare-delta-pos" : compare.delta.claimCentroidStabilityPairwiseMean < 0 ? "compare-delta-neg" : "") : ""}`}
+                                                >
+                                                    {formatDelta(
+                                                        compare.delta
+                                                            .claimCentroidStabilityPairwiseMean,
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        </>
+                                    ) : null}
                                 </tbody>
                             </table>
                         </div>
@@ -462,6 +559,31 @@ export default async function BenchmarkComparePage({
                                 left: compare.left.stabilityPairwiseMean,
                                 right: compare.right.stabilityPairwiseMean,
                             },
+                            ...(showClaimCentroid
+                                ? [
+                                      {
+                                          metric: "claimModes",
+                                          left: compare.left.claimCentroid
+                                              .modeCount,
+                                          right: compare.right.claimCentroid
+                                              .modeCount,
+                                      },
+                                      {
+                                          metric: "claimEntropy",
+                                          left: compare.left.claimCentroid
+                                              .divergenceEntropy,
+                                          right: compare.right.claimCentroid
+                                              .divergenceEntropy,
+                                      },
+                                      {
+                                          metric: "claimStability",
+                                          left: compare.left.claimCentroid
+                                              .stabilityPairwiseMean,
+                                          right: compare.right.claimCentroid
+                                              .stabilityPairwiseMean,
+                                      },
+                                  ]
+                                : []),
                         ]}
                     />
                 </div>

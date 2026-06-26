@@ -1,5 +1,6 @@
-import { loadAnalysisIndex } from "../../../lib/data";
+import { loadAnalysisIndex, loadRunArtifacts } from "../../../lib/data";
 import { applyIndexFilters } from "../../../lib/indexFilters";
+import { aggregateJudgeNarratives } from "../../../lib/judgeNarrativeInsights";
 import { qualityRunsToCsv } from "../../../lib/listExport";
 import {
     buildQualityRunRows,
@@ -33,6 +34,9 @@ export async function GET(request: Request) {
     const filteredIndex = applyIndexFilters(index, filters);
     const rows = buildQualityRunRows(filteredIndex);
     const summary = summarizeQuality(filteredIndex);
+    const includeNarratives =
+        url.searchParams.get("include")?.split(",").includes("narratives") ??
+        true;
 
     if (format === "csv") {
         const csv = qualityRunsToCsv(rows);
@@ -46,11 +50,32 @@ export async function GET(request: Request) {
         });
     }
 
+    const qualityRunIds = new Set(
+        rows
+            .filter(
+                (row) =>
+                    row.coherence != null ||
+                    row.completeness != null ||
+                    row.factualRisk != null ||
+                    row.uncertaintyHandling != null,
+            )
+            .map((row) => row.id),
+    );
+
+    const narratives =
+        includeNarratives && qualityRunIds.size > 0
+            ? aggregateJudgeNarratives(
+                  await loadRunArtifacts(),
+                  qualityRunIds,
+              )
+            : undefined;
+
     return Response.json({
         totalRuns: filteredIndex.totals.runs,
         totalRunsUnfiltered: index.totals.runs,
         filters,
         summary,
         rows,
+        ...(narratives ? { narratives } : {}),
     });
 }

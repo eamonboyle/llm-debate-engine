@@ -3,6 +3,7 @@ import { CollapsibleFilterCard } from "../../components/CollapsibleFilterCard";
 import { ExportFilteredLink } from "../../components/ExportFilteredLink";
 import { ModelFilterSelect } from "../../components/ModelFilterSelect";
 import { PresetFilterSelect } from "../../components/PresetFilterSelect";
+import { SavedFilterViewsMenu } from "../../components/SavedFilterViewsMenu";
 import {
     ResponsiveTable,
     TruncateText,
@@ -155,6 +156,20 @@ export default async function RunsPage({
                     <a href="/runs" className="button secondary">
                         Clear
                     </a>
+                    <SavedFilterViewsMenu
+                        scope="runs"
+                        basePath="/runs"
+                        currentParams={{
+                            q: params.q,
+                            model: params.model,
+                            preset: params.preset,
+                            fast: params.fast,
+                            from: params.from,
+                            to: params.to,
+                            sort: params.sort,
+                            pageSize: params.pageSize,
+                        }}
+                    />
                     <ExportFilteredLink
                         apiPath="/api/runs"
                         params={{

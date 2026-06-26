@@ -76,5 +76,42 @@ describe("benchmark compare helpers", () => {
         expect(compared.delta.modeCount).toBe(2);
         expect(compared.delta.divergenceEntropy).toBeCloseTo(0.7, 3);
         expect(compared.delta.stabilityPairwiseMean).toBeNull();
+        expect(compared.left.claimCentroid.hasClaimCentroid).toBe(false);
+    });
+
+    it("includes claim-centroid deltas when present", () => {
+        const left = makeBenchmarkArtifact({
+            id: "bench_left",
+            runs: 4,
+            modeCount: 5,
+            divergenceEntropy: 2.1,
+            stabilityPairwiseMean: 0.7,
+        });
+        left.payload.modeCountClaimCentroid = 4;
+        left.payload.divergenceEntropyClaimCentroid = 1.9;
+        left.payload.stabilityClaimCentroid = { pairwiseMean: 0.75 };
+
+        const right = makeBenchmarkArtifact({
+            id: "bench_right",
+            runs: 4,
+            modeCount: 5,
+            divergenceEntropy: 2.1,
+            stabilityPairwiseMean: 0.7,
+        });
+        right.payload.modeCountClaimCentroid = 3;
+        right.payload.divergenceEntropyClaimCentroid = 1.5;
+        right.payload.stabilityClaimCentroid = { pairwiseMean: 0.82 };
+
+        const compared = buildBenchmarkComparePayload(left, right);
+        expect(compared.left.claimCentroid.hasClaimCentroid).toBe(true);
+        expect(compared.delta.claimCentroidModeCount).toBe(-1);
+        expect(compared.delta.claimCentroidDivergenceEntropy).toBeCloseTo(
+            -0.4,
+            3,
+        );
+        expect(compared.delta.claimCentroidStabilityPairwiseMean).toBeCloseTo(
+            0.07,
+            3,
+        );
     });
 });

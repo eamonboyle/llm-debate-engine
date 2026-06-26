@@ -517,6 +517,40 @@ describe("web api routes", () => {
             }),
             "utf-8",
         );
+        await writeFile(
+            join(dir, "run_1.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_1",
+                question: "Q",
+                metadata: {
+                    createdAt: "2026-01-01T00:00:00.000Z",
+                    model: "gpt-alpha",
+                    pipelinePreset: "research_deep",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run_1",
+                    finalAnswer: "A",
+                    steps: [
+                        {
+                            agentName: "JudgeAgent",
+                            role: "judge",
+                            createdAt: "2026-01-01T00:00:00.000Z",
+                            completedAt: "2026-01-01T00:00:01.000Z",
+                            output: {
+                                kind: "judgement",
+                                data: {
+                                    strengths: ["Clear structure"],
+                                    weaknesses: ["Limited evidence"],
+                                },
+                            },
+                        },
+                    ],
+                },
+            }),
+            "utf-8",
+        );
 
         const jsonResponse = await getQuality(
             new Request("http://localhost/api/quality"),
@@ -525,10 +559,16 @@ describe("web api routes", () => {
         const json = (await jsonResponse.json()) as {
             rows: Array<{ id: string; coherence: number | null }>;
             summary: { withQualityScores: number };
+            narratives: {
+                strengths: Array<{ text: string; runCount: number }>;
+                weaknesses: Array<{ text: string; runCount: number }>;
+            };
         };
         expect(json.rows[0].id).toBe("run_1");
         expect(json.rows[0].coherence).toBe(4.5);
         expect(json.summary.withQualityScores).toBe(1);
+        expect(json.narratives.strengths[0].text).toBe("Clear structure");
+        expect(json.narratives.weaknesses[0].text).toBe("Limited evidence");
 
         const csvResponse = await getQuality(
             new Request("http://localhost/api/quality?format=csv"),
@@ -1667,6 +1707,9 @@ describe("web api routes", () => {
                     modeCount: 1,
                     modeSizes: [2],
                     divergenceEntropy: 0.1,
+                    modeCountClaimCentroid: 2,
+                    divergenceEntropyClaimCentroid: 0.05,
+                    stabilityClaimCentroid: { pairwiseMean: 0.95 },
                     summary: { stability: { pairwiseMean: 0.9, pairs: [] } },
                 },
             }),
@@ -1689,6 +1732,9 @@ describe("web api routes", () => {
                     modeCount: 3,
                     modeSizes: [2, 1, 1],
                     divergenceEntropy: 0.8,
+                    modeCountClaimCentroid: 4,
+                    divergenceEntropyClaimCentroid: 0.7,
+                    stabilityClaimCentroid: { pairwiseMean: 0.55 },
                     summary: { stability: { pairwiseMean: 0.6, pairs: [] } },
                 },
             }),
@@ -1707,12 +1753,18 @@ describe("web api routes", () => {
                 modeCount: number;
                 divergenceEntropy: number;
                 stabilityPairwiseMean: number | null;
+                claimCentroidModeCount: number | null;
+            };
+            left: {
+                claimCentroid: { hasClaimCentroid: boolean };
             };
         };
         expect(json.delta.runs).toBe(2);
         expect(json.delta.modeCount).toBe(2);
         expect(json.delta.divergenceEntropy).toBeCloseTo(0.7, 3);
         expect(json.delta.stabilityPairwiseMean).toBeCloseTo(-0.3, 3);
+        expect(json.left.claimCentroid.hasClaimCentroid).toBe(true);
+        expect(json.delta.claimCentroidModeCount).toBe(2);
     });
 
     it("returns 400/404 for invalid benchmark compare requests", async () => {

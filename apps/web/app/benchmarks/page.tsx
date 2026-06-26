@@ -4,6 +4,7 @@ import { CollapsibleFilterCard } from "../../components/CollapsibleFilterCard";
 import { ExportFilteredLink } from "../../components/ExportFilteredLink";
 import { ModelFilterSelect } from "../../components/ModelFilterSelect";
 import { PresetFilterSelect } from "../../components/PresetFilterSelect";
+import { SavedFilterViewsMenu } from "../../components/SavedFilterViewsMenu";
 import {
     ResponsiveTable,
     TruncateText,
@@ -267,6 +268,20 @@ export default async function BenchmarksPage({
                         <Link href="/benchmarks" className="button secondary">
                             Clear
                         </Link>
+                        <SavedFilterViewsMenu
+                            scope="benchmarks"
+                            basePath="/benchmarks"
+                            currentParams={{
+                                q: params.q,
+                                model: params.model,
+                                preset: params.preset,
+                                fast: params.fast,
+                                from: params.from,
+                                to: params.to,
+                                sort: params.sort,
+                                pageSize: params.pageSize,
+                            }}
+                        />
                         <ExportFilteredLink
                             apiPath="/api/benchmarks"
                             params={{

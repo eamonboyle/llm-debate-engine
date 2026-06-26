@@ -1,5 +1,9 @@
 import type { MetadataRoute } from "next";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../lib/data";
+import {
+    groupArtifactsByQuestion,
+    questionHubHref,
+} from "../lib/questionGroups";
 
 const SITE_URL =
     process.env.NEXT_PUBLIC_SITE_URL ??
@@ -139,5 +143,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }),
     );
 
-    return [...staticRoutes, ...runRoutes, ...benchmarkRoutes];
+    const questionGroups = groupArtifactsByQuestion(runs, benchmarks);
+    const questionRoutes: MetadataRoute.Sitemap = questionGroups.map(
+        (group) => ({
+            url: `${SITE_URL}${questionHubHref(group.question)}`,
+            lastModified: group.latestCreatedAt,
+            changeFrequency: "weekly",
+            priority: 0.75,
+        }),
+    );
+
+    return [
+        ...staticRoutes,
+        ...runRoutes,
+        ...benchmarkRoutes,
+        ...questionRoutes,
+    ];
 }

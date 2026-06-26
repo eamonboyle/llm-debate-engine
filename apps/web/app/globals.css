@@ -2286,3 +2286,92 @@ pre {
     white-space: pre-wrap;
     word-break: break-word;
 }
+
+.saved-filter-views {
+    position: relative;
+    display: inline-flex;
+}
+
+.saved-filter-views-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    margin-left: 0.35rem;
+    padding: 0 0.3rem;
+    border-radius: 999px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    background: var(--color-accent-subtle);
+    color: var(--color-text-primary);
+}
+
+.saved-filter-views-panel {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    z-index: 30;
+    width: min(24rem, 90vw);
+    padding: 0.85rem;
+    display: grid;
+    gap: 0.65rem;
+}
+
+.saved-filter-views-save {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+}
+
+.saved-filter-views-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.45rem;
+}
+
+.saved-filter-views-list li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.35rem;
+    align-items: start;
+}
+
+.saved-filter-views-item {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.45rem 0.55rem;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid var(--color-border-subtle);
+    background: var(--color-bg-elevated);
+}
+
+.saved-filter-views-item:hover,
+.saved-filter-views-item:focus-visible {
+    border-color: var(--color-border-default);
+    background: var(--color-accent-subtle);
+}
+
+.saved-filter-views-name {
+    font-weight: 600;
+}
+
+.saved-filter-views-delete {
+    border: 1px solid var(--color-border-subtle);
+    background: transparent;
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-sm);
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+}
+
+.saved-filter-views-delete:hover,
+.saved-filter-views-delete:focus-visible {
+    color: var(--color-danger);
+    border-color: color-mix(in srgb, var(--color-danger) 35%, transparent);
+}

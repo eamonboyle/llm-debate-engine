@@ -1,4 +1,5 @@
 import type { BenchmarkArtifact } from "./data";
+import { extractClaimCentroidDisplay } from "./claimCentroidMetrics";
 
 export type BenchmarkCompareSummary = {
     id: string;
@@ -11,6 +12,13 @@ export type BenchmarkCompareSummary = {
     modeCount: number;
     divergenceEntropy: number;
     stabilityPairwiseMean: number | null;
+    claimCentroid: {
+        hasClaimCentroid: boolean;
+        modeCount: number | null;
+        divergenceEntropy: number | null;
+        stabilityPairwiseMean: number | null;
+        modeCountDelta: number | null;
+    };
 };
 
 export type BenchmarkComparePayload = {
@@ -21,6 +29,9 @@ export type BenchmarkComparePayload = {
         modeCount: number;
         divergenceEntropy: number;
         stabilityPairwiseMean: number | null;
+        claimCentroidModeCount: number | null;
+        claimCentroidDivergenceEntropy: number | null;
+        claimCentroidStabilityPairwiseMean: number | null;
     };
 };
 
@@ -39,6 +50,7 @@ function subtractOrNull(
 export function summarizeBenchmark(
     benchmark: BenchmarkArtifact,
 ): BenchmarkCompareSummary {
+    const claimCentroid = extractClaimCentroidDisplay(benchmark);
     return {
         id: benchmark.id,
         question: benchmark.question,
@@ -52,6 +64,13 @@ export function summarizeBenchmark(
         stabilityPairwiseMean: toNumberOrNull(
             benchmark.payload.summary?.stability?.pairwiseMean,
         ),
+        claimCentroid: {
+            hasClaimCentroid: claimCentroid.hasClaimCentroid,
+            modeCount: claimCentroid.modeCount,
+            divergenceEntropy: claimCentroid.divergenceEntropy,
+            stabilityPairwiseMean: claimCentroid.stabilityPairwiseMean,
+            modeCountDelta: claimCentroid.modeCountDelta,
+        },
     };
 }
 
@@ -72,6 +91,18 @@ export function buildBenchmarkComparePayload(
             stabilityPairwiseMean: subtractOrNull(
                 right.stabilityPairwiseMean,
                 left.stabilityPairwiseMean,
+            ),
+            claimCentroidModeCount: subtractOrNull(
+                right.claimCentroid.modeCount,
+                left.claimCentroid.modeCount,
+            ),
+            claimCentroidDivergenceEntropy: subtractOrNull(
+                right.claimCentroid.divergenceEntropy,
+                left.claimCentroid.divergenceEntropy,
+            ),
+            claimCentroidStabilityPairwiseMean: subtractOrNull(
+                right.claimCentroid.stabilityPairwiseMean,
+                left.claimCentroid.stabilityPairwiseMean,
             ),
         },
     };
