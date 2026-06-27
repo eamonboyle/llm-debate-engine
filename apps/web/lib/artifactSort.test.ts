@@ -114,6 +114,32 @@ describe("artifact sort helpers", () => {
         expect(sorted.map((r) => r.id)).toEqual(["large", "mid", "small"]);
     });
 
+    it("sorts runs by avg severity descending", () => {
+        const runs = [
+            makeRun("low", "2025-01-01T00:00:00.000Z", {
+                critique: { avgSeverity: 1.5 },
+            }),
+            makeRun("high", "2025-01-01T00:00:00.000Z", {
+                critique: { avgSeverity: 4.2 },
+            }),
+        ];
+        const sorted = sortRunArtifacts(runs, "severity_desc");
+        expect(sorted.map((r) => r.id)).toEqual(["high", "low"]);
+    });
+
+    it("sorts runs by coherence descending", () => {
+        const runs = [
+            makeRun("low", "2025-01-01T00:00:00.000Z", {
+                quality: { coherence: 2 },
+            }),
+            makeRun("high", "2025-01-01T00:00:00.000Z", {
+                quality: { coherence: 5 },
+            }),
+        ];
+        const sorted = sortRunArtifacts(runs, "coherence_desc");
+        expect(sorted.map((r) => r.id)).toEqual(["high", "low"]);
+    });
+
     it("sorts benchmarks by entropy descending", () => {
         const benchmarks = [
             makeBenchmark("low", "2025-01-01T00:00:00.000Z", {

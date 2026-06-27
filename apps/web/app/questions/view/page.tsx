@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CollapsibleFilterCard } from "../../../components/CollapsibleFilterCard";
+import { ModelFilterSelect } from "../../../components/ModelFilterSelect";
+import { PresetFilterSelect } from "../../../components/PresetFilterSelect";
 import {
     ResponsiveTable,
     TruncateText,
@@ -8,12 +11,18 @@ import {
 import { CopyPageLink } from "../../../components/CopyPageLink";
 import { MetricCard } from "../../../components/MetricCard";
 import {
+    filterBenchmarkArtifacts,
+    filterRunArtifacts,
     loadAnalysisIndex,
     loadBenchmarksByQuestion,
     loadRunsByQuestion,
 } from "../../../lib/data";
+import { buildQueryString } from "../../../lib/listPagination";
 import { questionHubHref } from "../../../lib/questionGroups";
-import { summarizeQuestionHubMetrics } from "../../../lib/questionHubMetrics";
+import {
+    buildQuestionHubRunRows,
+    summarizeQuestionHubMetrics,
+} from "../../../lib/questionHubMetrics";
 
 export const metadata: Metadata = {
     title: "Question hub",
@@ -21,7 +30,17 @@ export const metadata: Metadata = {
 
 type QuestionViewSearchParams = {
     question?: string;
+    model?: string;
+    preset?: string;
+    fast?: string;
 };
+
+function insightHref(
+    path: "/drift" | "/quality" | "/issues" | "/outliers",
+    question: string,
+): string {
+    return `${path}?q=${encodeURIComponent(question)}`;
+}
 
 export default async function QuestionHubPage({
     searchParams,
@@ -43,29 +62,44 @@ export default async function QuestionHubPage({
         );
     }
 
-    const [runs, benchmarks, index] = await Promise.all([
+    const [allRuns, allBenchmarks, index] = await Promise.all([
         loadRunsByQuestion(question),
         loadBenchmarksByQuestion(question),
         loadAnalysisIndex(),
     ]);
-    const indexMetrics = index
-        ? summarizeQuestionHubMetrics(index, question)
-        : null;
 
-    if (runs.length === 0 && benchmarks.length === 0) {
+    if (allRuns.length === 0 && allBenchmarks.length === 0) {
         notFound();
     }
 
+    const filterParams = {
+        model: params.model,
+        preset: params.preset,
+        fast: params.fast,
+    };
+    const runs = filterRunArtifacts(allRuns, filterParams);
+    const benchmarks = filterBenchmarkArtifacts(allBenchmarks, filterParams);
+    const indexMetrics = index
+        ? summarizeQuestionHubMetrics(index, question)
+        : null;
+    const indexedRunRows = index
+        ? buildQuestionHubRunRows(
+              index,
+              question,
+              runs.map((run) => run.id),
+          )
+        : null;
+
     const models = [
         ...new Set([
-            ...runs.map((r) => r.metadata.model),
-            ...benchmarks.map((b) => b.metadata.model),
+            ...allRuns.map((r) => r.metadata.model),
+            ...allBenchmarks.map((b) => b.metadata.model),
         ]),
     ].sort();
     const presets = [
         ...new Set([
-            ...runs.map((r) => r.metadata.pipelinePreset),
-            ...benchmarks.map((b) => b.metadata.pipelinePreset),
+            ...allRuns.map((r) => r.metadata.pipelinePreset),
+            ...allBenchmarks.map((b) => b.metadata.pipelinePreset),
         ]),
     ].sort();
     const latestActivity = [
@@ -80,15 +114,17 @@ export default async function QuestionHubPage({
     const compareRight = runs[1]?.id;
     const benchmarkCompareLeft = benchmarks[0]?.id;
     const benchmarkCompareRight = benchmarks[1]?.id;
+    const questionQuery = { question };
 
     return (
         <section className="stack">
             <div>
                 <h1 className="title">Question hub</h1>
                 <p className="subtitle">
-                    All experiments for one research question — {runs.length}{" "}
-                    run{runs.length === 1 ? "" : "s"}, {benchmarks.length}{" "}
-                    benchmark{benchmarks.length === 1 ? "" : "s"}.
+                    All experiments for one research question — {runs.length} of{" "}
+                    {allRuns.length} run{allRuns.length === 1 ? "" : "s"},{" "}
+                    {benchmarks.length} of {allBenchmarks.length} benchmark
+                    {allBenchmarks.length === 1 ? "" : "s"}.
                 </p>
                 <div
                     className="page-actions"
@@ -109,6 +145,34 @@ export default async function QuestionHubPage({
                     >
                         Filter benchmarks list
                     </Link>
+                    {index ? (
+                        <>
+                            <Link
+                                href={insightHref("/drift", question)}
+                                className="button secondary"
+                            >
+                                Confidence drift
+                            </Link>
+                            <Link
+                                href={insightHref("/quality", question)}
+                                className="button secondary"
+                            >
+                                Quality rubric
+                            </Link>
+                            <Link
+                                href={insightHref("/issues", question)}
+                                className="button secondary"
+                            >
+                                Critique issues
+                            </Link>
+                            <Link
+                                href={insightHref("/outliers", question)}
+                                className="button secondary"
+                            >
+                                Outlier runs
+                            </Link>
+                        </>
+                    ) : null}
                     {compareLeft && compareRight ? (
                         <Link
                             href={`/runs/compare?left=${compareLeft}&right=${compareRight}&question=${encodeURIComponent(question)}`}
@@ -144,6 +208,51 @@ export default async function QuestionHubPage({
                 </div>
             </div>
 
+            <CollapsibleFilterCard
+                resultsSummary={
+                    <>
+                        {runs.length} runs · {benchmarks.length} benchmarks for
+                        this question
+                    </>
+                }
+            >
+                <form method="get">
+                    <input type="hidden" name="question" value={question} />
+                    <div className="filter-grid">
+                        <ModelFilterSelect
+                            models={models}
+                            defaultValue={params.model ?? ""}
+                            listId="question-hub-model-filter"
+                        />
+                        <PresetFilterSelect
+                            presets={presets}
+                            defaultValue={params.preset ?? ""}
+                            listId="question-hub-preset-filter"
+                        />
+                        <select
+                            name="fast"
+                            defaultValue={params.fast ?? ""}
+                            className="input"
+                        >
+                            <option value="">Fast mode: any</option>
+                            <option value="true">Fast only</option>
+                            <option value="false">Non-fast only</option>
+                        </select>
+                    </div>
+                    <div className="filter-actions">
+                        <button type="submit" className="button">
+                            Apply filters
+                        </button>
+                        <a
+                            href={questionHubHref(question)}
+                            className="button secondary"
+                        >
+                            Clear
+                        </a>
+                    </div>
+                </form>
+            </CollapsibleFilterCard>
+
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>{question}</h2>
                 <div className="grid-4" style={{ marginTop: "1rem" }}>
@@ -171,7 +280,11 @@ export default async function QuestionHubPage({
                         <div className="small muted">Share</div>
                         <div style={{ marginTop: 6 }}>
                             <CopyPageLink
-                                path={questionHubHref(question)}
+                                path={`/questions/view${buildQueryString(questionQuery, {
+                                    model: params.model,
+                                    preset: params.preset,
+                                    fast: params.fast,
+                                })}`}
                                 label="Copy URL"
                             />
                         </div>
@@ -196,6 +309,15 @@ export default async function QuestionHubPage({
                         helpKey="issueCount"
                     />
                     <MetricCard
+                        label="Avg severity"
+                        value={
+                            indexMetrics.avgSeverity == null
+                                ? "—"
+                                : indexMetrics.avgSeverity.toFixed(2)
+                        }
+                        helpKey="avgSeverity"
+                    />
+                    <MetricCard
                         label="Avg solver confidence"
                         value={
                             indexMetrics.avgSolverConfidence == null
@@ -213,13 +335,51 @@ export default async function QuestionHubPage({
                         }
                         helpKey="evidenceRiskLevel"
                     />
+                    <MetricCard
+                        label="Avg coherence"
+                        value={
+                            indexMetrics.avgCoherence == null
+                                ? "—"
+                                : indexMetrics.avgCoherence.toFixed(2)
+                        }
+                        helpKey="coherence"
+                    />
+                    <MetricCard
+                        label="Avg factual risk"
+                        value={
+                            indexMetrics.avgFactualRisk == null
+                                ? "—"
+                                : indexMetrics.avgFactualRisk.toFixed(2)
+                        }
+                        helpKey="factualRisk"
+                    />
+                    <MetricCard
+                        label="Avg confidence drift"
+                        value={
+                            indexMetrics.avgSolverToRevisionDelta == null
+                                ? "—"
+                                : indexMetrics.avgSolverToRevisionDelta.toFixed(
+                                      2,
+                                  )
+                        }
+                        helpKey="solverToRevisionDelta"
+                    />
                 </div>
-            ) : null}
+            ) : (
+                <div className="card">
+                    <p className="muted">
+                        Run <code>pnpm analyze</code> to see indexed quality
+                        and critique rollups for this question.
+                    </p>
+                </div>
+            )}
 
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>Runs</h2>
                 {runs.length === 0 ? (
-                    <p className="muted">No runs for this question yet.</p>
+                    <p className="muted">
+                        No runs match the current filters for this question.
+                    </p>
                 ) : (
                     <ResponsiveTable
                         columns={[
@@ -235,6 +395,60 @@ export default async function QuestionHubPage({
                             },
                             { key: "model", label: "Model" },
                             { key: "preset", label: "Preset" },
+                            ...(indexedRunRows
+                                ? [
+                                      {
+                                          key: "issues",
+                                          label: "Issues",
+                                          helpKey: "issueCount",
+                                          hideOnMobile: true,
+                                          render: (
+                                              row: Record<string, unknown>,
+                                          ) => {
+                                              const value = (
+                                                  row as { issues?: number }
+                                              ).issues;
+                                              return value == null
+                                                  ? "—"
+                                                  : value;
+                                          },
+                                      },
+                                      {
+                                          key: "avgSeverity",
+                                          label: "Avg severity",
+                                          helpKey: "avgSeverity",
+                                          hideOnMobile: true,
+                                          render: (
+                                              row: Record<string, unknown>,
+                                          ) => {
+                                              const value = (
+                                                  row as {
+                                                      avgSeverity?: number;
+                                                  }
+                                              ).avgSeverity;
+                                              return value == null
+                                                  ? "—"
+                                                  : value.toFixed(2);
+                                          },
+                                      },
+                                      {
+                                          key: "coherence",
+                                          label: "Coherence",
+                                          helpKey: "coherence",
+                                          hideOnMobile: true,
+                                          render: (
+                                              row: Record<string, unknown>,
+                                          ) => {
+                                              const value = (
+                                                  row as { coherence?: number }
+                                              ).coherence;
+                                              return value == null
+                                                  ? "—"
+                                                  : value.toFixed(2);
+                                          },
+                                      },
+                                  ]
+                                : []),
                             {
                                 key: "preview",
                                 label: "Final answer",
@@ -261,13 +475,19 @@ export default async function QuestionHubPage({
                                 ),
                             },
                         ]}
-                        data={runs.map((run) => ({
-                            id: run.id,
-                            createdAt: run.metadata.createdAt,
-                            model: run.metadata.model,
-                            preset: run.metadata.pipelinePreset,
-                            preview: run.run.finalAnswer,
-                        }))}
+                        data={runs.map((run) => {
+                            const indexed = indexedRunRows?.get(run.id);
+                            return {
+                                id: run.id,
+                                createdAt: run.metadata.createdAt,
+                                model: run.metadata.model,
+                                preset: run.metadata.pipelinePreset,
+                                preview: run.run.finalAnswer,
+                                issues: indexed?.issueCount,
+                                avgSeverity: indexed?.avgSeverity,
+                                coherence: indexed?.coherence,
+                            };
+                        })}
                         getRowId={(row) => (row as { id: string }).id}
                         renderCardActions={(row) => (
                             <Link
@@ -285,7 +505,8 @@ export default async function QuestionHubPage({
                 <h2 style={{ marginTop: 0 }}>Benchmarks</h2>
                 {benchmarks.length === 0 ? (
                     <p className="muted">
-                        No benchmarks for this question yet.
+                        No benchmarks match the current filters for this
+                        question.
                     </p>
                 ) : (
                     <ResponsiveTable

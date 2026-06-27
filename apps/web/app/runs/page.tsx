@@ -127,6 +127,12 @@ export default async function RunsPage({
                         <option value="issues_asc">
                             Sort: fewest critique issues
                         </option>
+                        <option value="severity_desc">
+                            Sort: highest avg severity
+                        </option>
+                        <option value="severity_asc">
+                            Sort: lowest avg severity
+                        </option>
                         <option value="evidence_risk_desc">
                             Sort: highest evidence risk
                         </option>
@@ -135,6 +141,12 @@ export default async function RunsPage({
                         </option>
                         <option value="drift_desc">
                             Sort: largest confidence drift
+                        </option>
+                        <option value="coherence_desc">
+                            Sort: highest coherence
+                        </option>
+                        <option value="factual_risk_desc">
+                            Sort: highest factual risk
                         </option>
                     </select>
                     <select
@@ -274,6 +286,20 @@ export default async function RunsPage({
                                       },
                                   },
                                   {
+                                      key: "avgSeverity",
+                                      label: "Avg severity",
+                                      helpKey: "avgSeverity",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const value = (
+                                              row as { avgSeverity?: number }
+                                          ).avgSeverity;
+                                          return value == null
+                                              ? "—"
+                                              : value.toFixed(2);
+                                      },
+                                  },
+                                  {
                                       key: "solverConf",
                                       label: "Solver conf.",
                                       helpKey: "solverConfidence",
@@ -282,6 +308,34 @@ export default async function RunsPage({
                                           const value = (
                                               row as { solverConf?: number }
                                           ).solverConf;
+                                          return value == null
+                                              ? "—"
+                                              : value.toFixed(2);
+                                      },
+                                  },
+                                  {
+                                      key: "coherence",
+                                      label: "Coherence",
+                                      helpKey: "coherence",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const value = (
+                                              row as { coherence?: number }
+                                          ).coherence;
+                                          return value == null
+                                              ? "—"
+                                              : value.toFixed(2);
+                                      },
+                                  },
+                                  {
+                                      key: "factualRisk",
+                                      label: "Factual risk",
+                                      helpKey: "factualRisk",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const value = (
+                                              row as { factualRisk?: number }
+                                          ).factualRisk;
                                           return value == null
                                               ? "—"
                                               : value.toFixed(2);
@@ -344,7 +398,10 @@ export default async function RunsPage({
                             finalAnswer: run.run.finalAnswer,
                             steps: indexed?.stepCount,
                             issues: indexed?.issueCount,
+                            avgSeverity: indexed?.avgSeverity,
                             solverConf: indexed?.solverConfidence,
+                            coherence: indexed?.coherence,
+                            factualRisk: indexed?.factualRisk,
                         };
                     })}
                     getRowId={(row) => (row as { id: string }).id}
