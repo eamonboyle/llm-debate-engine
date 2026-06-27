@@ -114,7 +114,7 @@ export default async function QuestionHubPage({
     const compareRight = runs[1]?.id;
     const benchmarkCompareLeft = benchmarks[0]?.id;
     const benchmarkCompareRight = benchmarks[1]?.id;
-    const questionQuery = { question };
+    const questionQuery: QuestionViewSearchParams = { question };
 
     return (
         <section className="stack">
@@ -227,7 +227,6 @@ export default async function QuestionHubPage({
                         <PresetFilterSelect
                             presets={presets}
                             defaultValue={params.preset ?? ""}
-                            listId="question-hub-preset-filter"
                         />
                         <select
                             name="fast"

@@ -74,11 +74,11 @@ export function searchArtifacts(
         : groupArtifactsByQuestion(matchedRuns, matchedBenchmarks);
 
     const sortedRuns =
-        sort === "relevance"
+        sort === "relevance" || sort === "entropy_desc"
             ? matchedRuns
             : sortRunArtifacts(matchedRuns, sort);
     const sortedBenchmarks =
-        sort === "relevance"
+        sort === "relevance" || sort === "issues_desc"
             ? matchedBenchmarks
             : sort === "entropy_desc"
               ? sortBenchmarkArtifacts(matchedBenchmarks, "entropy_desc")
