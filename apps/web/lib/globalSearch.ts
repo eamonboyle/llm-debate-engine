@@ -93,7 +93,9 @@ export function searchArtifacts(
                   const totalA = a.runCount + a.benchmarkCount;
                   const totalB = b.runCount + b.benchmarkCount;
                   if (totalA !== totalB) {
-                      return sort === "oldest" ? totalA - totalB : totalB - totalA;
+                      return sort === "oldest"
+                          ? totalA - totalB
+                          : totalB - totalA;
                   }
                   return a.question.localeCompare(b.question);
               });

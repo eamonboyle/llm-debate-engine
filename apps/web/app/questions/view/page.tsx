@@ -279,11 +279,14 @@ export default async function QuestionHubPage({
                         <div className="small muted">Share</div>
                         <div style={{ marginTop: 6 }}>
                             <CopyPageLink
-                                path={`/questions/view${buildQueryString(questionQuery, {
-                                    model: params.model,
-                                    preset: params.preset,
-                                    fast: params.fast,
-                                })}`}
+                                path={`/questions/view${buildQueryString(
+                                    questionQuery,
+                                    {
+                                        model: params.model,
+                                        preset: params.preset,
+                                        fast: params.fast,
+                                    },
+                                )}`}
                                 label="Copy URL"
                             />
                         </div>
@@ -367,8 +370,8 @@ export default async function QuestionHubPage({
             ) : (
                 <div className="card">
                     <p className="muted">
-                        Run <code>pnpm analyze</code> to see indexed quality
-                        and critique rollups for this question.
+                        Run <code>pnpm analyze</code> to see indexed quality and
+                        critique rollups for this question.
                     </p>
                 </div>
             )}

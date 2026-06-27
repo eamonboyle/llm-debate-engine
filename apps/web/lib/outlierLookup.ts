@@ -13,7 +13,12 @@ export type RunOutlierContext = {
 export function findRunOutlierEntry(
     index: AnalysisIndex | null,
     runId: string,
-): { benchmarkId: string; runId: string; avgSimilarity: number; zScore: number } | null {
+): {
+    benchmarkId: string;
+    runId: string;
+    avgSimilarity: number;
+    zScore: number;
+} | null {
     if (!index) return null;
     return (
         index.aggregates.outlierRuns?.find((row) => row.runId === runId) ?? null

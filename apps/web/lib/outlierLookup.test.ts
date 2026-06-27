@@ -1,9 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import type { AnalysisIndex } from "./data";
-import {
-    buildRunOutlierContext,
-    findRunOutlierEntry,
-} from "./outlierLookup";
+import { buildRunOutlierContext, findRunOutlierEntry } from "./outlierLookup";
 
 vi.mock("./data", async (importOriginal) => {
     const actual = await importOriginal<typeof import("./data")>();
