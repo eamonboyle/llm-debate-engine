@@ -47,8 +47,11 @@ describe("buildIndexRunLookup", () => {
             issueCount: 5,
             stepCount: 10,
             maxSeverity: 4,
+            avgSeverity: undefined,
             solverConfidence: 0.8,
             evidenceRiskLevel: 3,
+            qualityCoherence: undefined,
+            factualRisk: undefined,
         });
         expect(lookup.get("missing")).toBeUndefined();
     });

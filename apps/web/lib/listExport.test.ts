@@ -137,6 +137,7 @@ describe("listExport", () => {
     it("exports search results with section markers", () => {
         const csv = searchResultsToCsv({
             query: "climate",
+            sort: "relevance",
             totals: { runs: 1, benchmarks: 0, questions: 1 },
             runs: [
                 {
@@ -146,6 +147,7 @@ describe("listExport", () => {
                     preset: "standard",
                     createdAt: "2026-01-01T00:00:00.000Z",
                     preview: "Answer preview",
+                    issueCount: 2,
                 },
             ],
             benchmarks: [],

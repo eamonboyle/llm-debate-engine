@@ -8,7 +8,10 @@ export type RunSortOrder =
     | "issues_asc"
     | "evidence_risk_desc"
     | "solver_conf_desc"
-    | "drift_desc";
+    | "drift_desc"
+    | "severity_desc"
+    | "coherence_desc"
+    | "factual_risk_desc";
 
 export type BenchmarkSortOrder =
     | ArtifactSortOrder
@@ -25,6 +28,9 @@ const RUN_SORT_ORDERS = new Set<RunSortOrder>([
     "evidence_risk_desc",
     "solver_conf_desc",
     "drift_desc",
+    "severity_desc",
+    "coherence_desc",
+    "factual_risk_desc",
 ]);
 
 const BENCHMARK_SORT_ORDERS = new Set<BenchmarkSortOrder>([
@@ -89,6 +95,18 @@ function runConfidenceDriftMagnitude(run: RunArtifact): number | null {
         run.run.metrics.confidence?.solverToRevisionDelta,
     );
     return delta == null ? null : Math.abs(delta);
+}
+
+function runMaxSeverity(run: RunArtifact): number | null {
+    return toNumberOrNull(run.run.metrics.critique?.maxSeverity);
+}
+
+function runCoherence(run: RunArtifact): number | null {
+    return toNumberOrNull(run.run.metrics.quality?.coherence);
+}
+
+function runFactualRisk(run: RunArtifact): number | null {
+    return toNumberOrNull(run.run.metrics.quality?.factualRisk);
 }
 
 function benchmarkStability(benchmark: BenchmarkArtifact): number | null {
@@ -181,6 +199,24 @@ export function sortRunArtifacts(
             cmp = compareNullableNumbers(
                 runConfidenceDriftMagnitude(a),
                 runConfidenceDriftMagnitude(b),
+                "desc",
+            );
+        } else if (order === "severity_desc") {
+            cmp = compareNullableNumbers(
+                runMaxSeverity(a),
+                runMaxSeverity(b),
+                "desc",
+            );
+        } else if (order === "coherence_desc") {
+            cmp = compareNullableNumbers(
+                runCoherence(a),
+                runCoherence(b),
+                "desc",
+            );
+        } else if (order === "factual_risk_desc") {
+            cmp = compareNullableNumbers(
+                runFactualRisk(a),
+                runFactualRisk(b),
                 "desc",
             );
         }

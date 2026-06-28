@@ -101,4 +101,35 @@ describe("globalSearch", () => {
         expect(result.totals.benchmarks).toBe(1);
         expect(result.benchmarks[0].id).toBe("bench_b");
     });
+
+    it("sorts runs by issue count when requested", () => {
+        const runs = [
+            {
+                ...makeRun("run_low", "Alpha", "A"),
+                run: {
+                    ...makeRun("run_low", "Alpha", "A").run,
+                    metrics: { critique: { byType: { omission: 1 } } },
+                },
+            },
+            {
+                ...makeRun("run_high", "Alpha", "B"),
+                run: {
+                    ...makeRun("run_high", "Alpha", "B").run,
+                    metrics: {
+                        critique: { byType: { factual_error: 3 } },
+                    },
+                },
+            },
+        ];
+
+        const result = searchArtifacts(runs, [], "alpha", {
+            sort: "issues_desc",
+        });
+
+        expect(result.sort).toBe("issues_desc");
+        expect(result.runs.map((row) => row.id)).toEqual([
+            "run_high",
+            "run_low",
+        ]);
+    });
 });

@@ -9,7 +9,11 @@ import {
 import { collectArtifactFacets } from "../../lib/artifactFacets";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
 import { buildQueryString, parsePositiveInt } from "../../lib/listPagination";
-import { searchArtifacts, questionHubHref } from "../../lib/globalSearch";
+import {
+    resolveSearchSortOrder,
+    searchArtifacts,
+    questionHubHref,
+} from "../../lib/globalSearch";
 
 const SEARCH_LIMIT_OPTIONS = [12, 24, 50] as const;
 
@@ -25,6 +29,7 @@ type SearchParams = {
     from?: string;
     to?: string;
     limit?: string;
+    sort?: string;
 };
 
 function hasActiveSearch(params: SearchParams): boolean {
@@ -112,8 +117,10 @@ export default async function SearchPage({
     }
 
     const limit = parsePositiveInt(params.limit, { fallback: 12, max: 50 });
+    const sort = resolveSearchSortOrder(params.sort);
     const results = searchArtifacts(runs, benchmarks, query, {
         limitPerSection: limit,
+        sort,
         filters: {
             model: params.model,
             preset: params.preset,
@@ -196,6 +203,22 @@ export default async function SearchPage({
                         className="input"
                         title="Created at or before"
                     />
+                    <select
+                        name="sort"
+                        defaultValue={sort}
+                        className="input"
+                        title="Sort matched artifacts"
+                    >
+                        <option value="relevance">Sort: relevance</option>
+                        <option value="newest">Sort: newest first</option>
+                        <option value="oldest">Sort: oldest first</option>
+                        <option value="issues_desc">
+                            Sort: most critique issues (runs)
+                        </option>
+                        <option value="entropy_desc">
+                            Sort: highest entropy (benchmarks)
+                        </option>
+                    </select>
                     <select
                         name="limit"
                         defaultValue={String(limit)}
@@ -411,6 +434,13 @@ export default async function SearchPage({
                                 ),
                             },
                             { key: "model", label: "Model" },
+                            {
+                                key: "issues",
+                                label: "Issues",
+                                hideOnMobile: true,
+                                render: (row) =>
+                                    (row as { issueCount: number }).issueCount,
+                            },
                             {
                                 key: "open",
                                 label: "Open",

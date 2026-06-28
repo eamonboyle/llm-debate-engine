@@ -3,9 +3,12 @@ import type { AnalysisIndex } from "./data";
 export type QuestionHubMetrics = {
     indexedRunCount: number;
     avgIssueCount: number | null;
+    avgMaxSeverity: number | null;
     avgSolverConfidence: number | null;
     avgEvidenceRisk: number | null;
     avgSolverToRevisionDelta: number | null;
+    avgCoherence: number | null;
+    avgFactualRisk: number | null;
 };
 
 function average(values: number[]): number | null {
@@ -21,6 +24,9 @@ export function summarizeQuestionHubMetrics(
     if (runs.length === 0) return null;
 
     const issueCounts = runs.map((run) => run.critique.issueCount);
+    const maxSeverities = runs
+        .map((run) => run.critique.maxSeverity)
+        .filter((value): value is number => typeof value === "number");
     const solverConfidences = runs
         .map((run) => run.confidence.solver)
         .filter((value): value is number => typeof value === "number");
@@ -30,12 +36,21 @@ export function summarizeQuestionHubMetrics(
     const driftDeltas = runs
         .map((run) => run.confidence.solverToRevisionDelta)
         .filter((value): value is number => typeof value === "number");
+    const coherences = runs
+        .map((run) => run.quality?.coherence)
+        .filter((value): value is number => typeof value === "number");
+    const factualRisks = runs
+        .map((run) => run.quality?.factualRisk)
+        .filter((value): value is number => typeof value === "number");
 
     return {
         indexedRunCount: runs.length,
         avgIssueCount: average(issueCounts),
+        avgMaxSeverity: average(maxSeverities),
         avgSolverConfidence: average(solverConfidences),
         avgEvidenceRisk: average(evidenceRisks),
         avgSolverToRevisionDelta: average(driftDeltas),
+        avgCoherence: average(coherences),
+        avgFactualRisk: average(factualRisks),
     };
 }

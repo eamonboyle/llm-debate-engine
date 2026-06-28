@@ -83,6 +83,7 @@ describe("artifact sort helpers", () => {
     it("resolves unknown run sort to newest", () => {
         expect(resolveRunSortOrder("invalid")).toBe("newest");
         expect(resolveRunSortOrder("issues_desc")).toBe("issues_desc");
+        expect(resolveRunSortOrder("coherence_desc")).toBe("coherence_desc");
     });
 
     it("sorts runs by critique issue count descending", () => {
@@ -96,6 +97,28 @@ describe("artifact sort helpers", () => {
         ];
         const sorted = sortRunArtifacts(runs, "issues_desc");
         expect(sorted.map((r) => r.id)).toEqual(["high", "low"]);
+    });
+
+    it("sorts runs by quality and severity metrics", () => {
+        const runs = [
+            makeRun("low", "2025-01-01T00:00:00.000Z", {
+                critique: { maxSeverity: 2 },
+                quality: { coherence: 3, factualRisk: 2 },
+            }),
+            makeRun("high", "2025-01-01T00:00:00.000Z", {
+                critique: { maxSeverity: 5 },
+                quality: { coherence: 4.5, factualRisk: 4 },
+            }),
+        ];
+        expect(
+            sortRunArtifacts(runs, "severity_desc").map((run) => run.id),
+        ).toEqual(["high", "low"]);
+        expect(
+            sortRunArtifacts(runs, "coherence_desc").map((run) => run.id),
+        ).toEqual(["high", "low"]);
+        expect(
+            sortRunArtifacts(runs, "factual_risk_desc").map((run) => run.id),
+        ).toEqual(["high", "low"]);
     });
 
     it("sorts runs by absolute confidence drift descending", () => {

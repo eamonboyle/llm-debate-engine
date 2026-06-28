@@ -62,6 +62,9 @@ describe("summarizeQuestionHubMetrics", () => {
         expect(summary?.avgSolverConfidence).toBeCloseTo(0.5, 3);
         expect(summary?.avgEvidenceRisk).toBe(3);
         expect(summary?.avgSolverToRevisionDelta).toBeCloseTo(0.2, 3);
+        expect(summary?.avgMaxSeverity).toBeNull();
+        expect(summary?.avgCoherence).toBeNull();
+        expect(summary?.avgFactualRisk).toBeNull();
     });
 
     it("returns null when no indexed runs match", () => {

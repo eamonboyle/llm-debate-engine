@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
+    loadAnalysisIndex,
     loadBenchmarksByQuestion,
     loadBenchmarksContainingRun,
     loadRunArtifacts,
@@ -30,6 +31,7 @@ import {
 } from "../../../lib/stepTiming";
 import { RecentViewsTracker } from "../../../components/RecentViewsTracker";
 import { ResponsiveTable } from "../../../components/ResponsiveTable";
+import { buildRunOutlierContext } from "../../../lib/outlierLookup";
 
 export async function generateMetadata({
     params,
@@ -54,13 +56,15 @@ export default async function RunTracePage({
     if (!run) notFound();
 
     const steps = run.run.steps;
-    const [allRuns, previousRuns, relatedBenchmarks, memberBenchmarks] =
+    const [allRuns, previousRuns, relatedBenchmarks, memberBenchmarks, index] =
         await Promise.all([
             loadRunArtifacts(),
             loadRunsByQuestion(run.question, run.id),
             loadBenchmarksByQuestion(run.question),
             loadBenchmarksContainingRun(run.id),
+            loadAnalysisIndex(),
         ]);
+    const outlierContext = await buildRunOutlierContext(index, run.id);
     const memberBenchmarkIds = new Set(memberBenchmarks.map((b) => b.id));
     const stepTimingRows = buildRunStepTiming(run);
     const stepTimingSummary = summarizeRunStepTiming(stepTimingRows);
@@ -123,6 +127,54 @@ export default async function RunTracePage({
                     </a>
                 </div>
             </div>
+
+            {outlierContext ? (
+                <div
+                    className="card"
+                    style={{ borderColor: "var(--color-warning)" }}
+                >
+                    <h2 style={{ marginTop: 0 }}>Benchmark outlier</h2>
+                    <p className="small muted" style={{ marginBottom: 12 }}>
+                        This run was flagged as a low-similarity outlier within
+                        one or more benchmarks — its answer diverged from peer
+                        runs on the same question.
+                    </p>
+                    <ul className="trace-summary-list">
+                        {outlierContext.entries.map((entry) => (
+                            <li key={entry.benchmarkId}>
+                                <span>
+                                    Benchmark{" "}
+                                    <code>{entry.benchmarkId}</code> · avg
+                                    similarity{" "}
+                                    {entry.avgSimilarity.toFixed(3)} · z-score{" "}
+                                    {entry.zScore.toFixed(2)}
+                                </span>
+                                <span className="small muted">
+                                    {" "}
+                                    ·{" "}
+                                    <Link href={entry.benchmarkHref}>
+                                        View benchmark
+                                    </Link>
+                                    {entry.peerCompareHref ? (
+                                        <>
+                                            {" "}
+                                            ·{" "}
+                                            <Link href={entry.peerCompareHref}>
+                                                Compare to closest peer
+                                            </Link>
+                                        </>
+                                    ) : null}
+                                    {" "}
+                                    ·{" "}
+                                    <Link href="/outliers">
+                                        All outliers
+                                    </Link>
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ) : null}
 
             <div className="grid-4">
                 <div className="card">

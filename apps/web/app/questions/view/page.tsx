@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CollapsibleFilterCard } from "../../../components/CollapsibleFilterCard";
+import { ModelFilterSelect } from "../../../components/ModelFilterSelect";
+import { PresetFilterSelect } from "../../../components/PresetFilterSelect";
 import {
     ResponsiveTable,
     TruncateText,
@@ -8,10 +11,14 @@ import {
 import { CopyPageLink } from "../../../components/CopyPageLink";
 import { MetricCard } from "../../../components/MetricCard";
 import {
+    filterBenchmarkArtifacts,
+    filterRunArtifacts,
     loadAnalysisIndex,
     loadBenchmarksByQuestion,
     loadRunsByQuestion,
 } from "../../../lib/data";
+import { buildIndexRunLookup } from "../../../lib/indexRunLookup";
+import { buildQueryString } from "../../../lib/listPagination";
 import { questionHubHref } from "../../../lib/questionGroups";
 import { summarizeQuestionHubMetrics } from "../../../lib/questionHubMetrics";
 
@@ -21,7 +28,14 @@ export const metadata: Metadata = {
 
 type QuestionViewSearchParams = {
     question?: string;
+    model?: string;
+    preset?: string;
+    fast?: string;
 };
+
+function formatMetric(value: number | null | undefined, digits = 1) {
+    return typeof value === "number" ? value.toFixed(digits) : "—";
+}
 
 export default async function QuestionHubPage({
     searchParams,
@@ -43,29 +57,41 @@ export default async function QuestionHubPage({
         );
     }
 
-    const [runs, benchmarks, index] = await Promise.all([
+    const [allRuns, allBenchmarks, index] = await Promise.all([
         loadRunsByQuestion(question),
         loadBenchmarksByQuestion(question),
         loadAnalysisIndex(),
     ]);
-    const indexMetrics = index
-        ? summarizeQuestionHubMetrics(index, question)
-        : null;
 
-    if (runs.length === 0 && benchmarks.length === 0) {
+    if (allRuns.length === 0 && allBenchmarks.length === 0) {
         notFound();
     }
 
+    const artifactFilters = {
+        model: params.model,
+        preset: params.preset,
+        fast: params.fast,
+    };
+    const runs = filterRunArtifacts(allRuns, artifactFilters);
+    const benchmarks = filterBenchmarkArtifacts(allBenchmarks, artifactFilters);
+    const indexLookup = index ? buildIndexRunLookup(index) : null;
+    const indexMetrics = index
+        ? summarizeQuestionHubMetrics(index, question)
+        : null;
+    const filtersActive = Boolean(params.model || params.preset || params.fast);
+    const insightHref = (path: string) =>
+        `${path}${buildQueryString({ q: question, ...artifactFilters }, {})}`;
+
     const models = [
         ...new Set([
-            ...runs.map((r) => r.metadata.model),
-            ...benchmarks.map((b) => b.metadata.model),
+            ...allRuns.map((r) => r.metadata.model),
+            ...allBenchmarks.map((b) => b.metadata.model),
         ]),
     ].sort();
     const presets = [
         ...new Set([
-            ...runs.map((r) => r.metadata.pipelinePreset),
-            ...benchmarks.map((b) => b.metadata.pipelinePreset),
+            ...allRuns.map((r) => r.metadata.pipelinePreset),
+            ...allBenchmarks.map((b) => b.metadata.pipelinePreset),
         ]),
     ].sort();
     const latestActivity = [
@@ -80,6 +106,10 @@ export default async function QuestionHubPage({
     const compareRight = runs[1]?.id;
     const benchmarkCompareLeft = benchmarks[0]?.id;
     const benchmarkCompareRight = benchmarks[1]?.id;
+    const sharePath = `/questions/view${buildQueryString(
+        { question, ...artifactFilters },
+        {},
+    )}`;
 
     return (
         <section className="stack">
@@ -88,7 +118,11 @@ export default async function QuestionHubPage({
                 <p className="subtitle">
                     All experiments for one research question — {runs.length}{" "}
                     run{runs.length === 1 ? "" : "s"}, {benchmarks.length}{" "}
-                    benchmark{benchmarks.length === 1 ? "" : "s"}.
+                    benchmark{benchmarks.length === 1 ? "" : "s"}
+                    {filtersActive
+                        ? ` (filtered from ${allRuns.length} runs · ${allBenchmarks.length} benchmarks)`
+                        : ""}
+                    .
                 </p>
                 <div
                     className="page-actions"
@@ -144,6 +178,50 @@ export default async function QuestionHubPage({
                 </div>
             </div>
 
+            <CollapsibleFilterCard
+                summaryLabel="Hub filters"
+                resultsSummary={
+                    <>
+                        {runs.length} runs · {benchmarks.length} benchmarks
+                    </>
+                }
+            >
+                <form method="get">
+                    <input type="hidden" name="question" value={question} />
+                    <div className="filter-grid">
+                        <ModelFilterSelect
+                            models={models}
+                            defaultValue={params.model ?? ""}
+                            listId="question-hub-model-filter"
+                        />
+                        <PresetFilterSelect
+                            presets={presets}
+                            defaultValue={params.preset ?? ""}
+                        />
+                        <select
+                            name="fast"
+                            defaultValue={params.fast ?? ""}
+                            className="input"
+                        >
+                            <option value="">Fast mode: any</option>
+                            <option value="true">Fast only</option>
+                            <option value="false">Non-fast only</option>
+                        </select>
+                    </div>
+                    <div className="filter-actions">
+                        <button type="submit" className="button">
+                            Apply filters
+                        </button>
+                        <Link
+                            href={questionHubHref(question)}
+                            className="button secondary"
+                        >
+                            Clear
+                        </Link>
+                    </div>
+                </form>
+            </CollapsibleFilterCard>
+
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>{question}</h2>
                 <div className="grid-4" style={{ marginTop: "1rem" }}>
@@ -170,56 +248,123 @@ export default async function QuestionHubPage({
                     <div>
                         <div className="small muted">Share</div>
                         <div style={{ marginTop: 6 }}>
-                            <CopyPageLink
-                                path={questionHubHref(question)}
-                                label="Copy URL"
-                            />
+                            <CopyPageLink path={sharePath} label="Copy URL" />
                         </div>
                     </div>
                 </div>
             </div>
 
-            {indexMetrics ? (
-                <div className="grid-4">
-                    <MetricCard
-                        label="Indexed runs"
-                        value={indexMetrics.indexedRunCount}
-                        helpKey="runArtifacts"
-                    />
-                    <MetricCard
-                        label="Avg critique issues"
-                        value={
-                            indexMetrics.avgIssueCount == null
-                                ? "—"
-                                : indexMetrics.avgIssueCount.toFixed(1)
-                        }
-                        helpKey="issueCount"
-                    />
-                    <MetricCard
-                        label="Avg solver confidence"
-                        value={
-                            indexMetrics.avgSolverConfidence == null
-                                ? "—"
-                                : indexMetrics.avgSolverConfidence.toFixed(2)
-                        }
-                        helpKey="solverConfidence"
-                    />
-                    <MetricCard
-                        label="Avg evidence risk"
-                        value={
-                            indexMetrics.avgEvidenceRisk == null
-                                ? "—"
-                                : indexMetrics.avgEvidenceRisk.toFixed(1)
-                        }
-                        helpKey="evidenceRiskLevel"
-                    />
+            {index ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>Insight shortcuts</h2>
+                    <p className="small muted" style={{ marginBottom: 12 }}>
+                        Open filtered insight pages scoped to this question.
+                    </p>
+                    <div
+                        className="page-actions"
+                        style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                    >
+                        <Link
+                            href={insightHref("/quality")}
+                            className="button secondary"
+                        >
+                            Quality
+                        </Link>
+                        <Link
+                            href={insightHref("/drift")}
+                            className="button secondary"
+                        >
+                            Confidence drift
+                        </Link>
+                        <Link
+                            href={insightHref("/issues")}
+                            className="button secondary"
+                        >
+                            Critique issues
+                        </Link>
+                        <Link
+                            href={insightHref("/evidence")}
+                            className="button secondary"
+                        >
+                            Evidence planning
+                        </Link>
+                        <Link
+                            href={insightHref("/counterfactual")}
+                            className="button secondary"
+                        >
+                            Counterfactual
+                        </Link>
+                        <Link
+                            href={insightHref("/outliers")}
+                            className="button secondary"
+                        >
+                            Outliers
+                        </Link>
+                    </div>
                 </div>
+            ) : null}
+
+            {indexMetrics ? (
+                <>
+                    <div className="grid-4">
+                        <MetricCard
+                            label="Indexed runs"
+                            value={indexMetrics.indexedRunCount}
+                            helpKey="runArtifacts"
+                        />
+                        <MetricCard
+                            label="Avg critique issues"
+                            value={formatMetric(indexMetrics.avgIssueCount)}
+                            helpKey="issueCount"
+                        />
+                        <MetricCard
+                            label="Avg max severity"
+                            value={formatMetric(indexMetrics.avgMaxSeverity)}
+                            helpKey="maxSeverity"
+                        />
+                        <MetricCard
+                            label="Avg solver confidence"
+                            value={formatMetric(
+                                indexMetrics.avgSolverConfidence,
+                                2,
+                            )}
+                            helpKey="solverConfidence"
+                        />
+                    </div>
+                    <div className="grid-4">
+                        <MetricCard
+                            label="Avg evidence risk"
+                            value={formatMetric(indexMetrics.avgEvidenceRisk)}
+                            helpKey="evidenceRiskLevel"
+                        />
+                        <MetricCard
+                            label="Avg solver→revision Δ"
+                            value={formatMetric(
+                                indexMetrics.avgSolverToRevisionDelta,
+                                2,
+                            )}
+                            helpKey="solverToRevisionDelta"
+                        />
+                        <MetricCard
+                            label="Avg coherence"
+                            value={formatMetric(indexMetrics.avgCoherence)}
+                            helpKey="coherence"
+                        />
+                        <MetricCard
+                            label="Avg factual risk"
+                            value={formatMetric(indexMetrics.avgFactualRisk)}
+                            helpKey="factualRisk"
+                        />
+                    </div>
+                </>
             ) : null}
 
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>Runs</h2>
                 {runs.length === 0 ? (
-                    <p className="muted">No runs for this question yet.</p>
+                    <p className="muted">
+                        No runs match the current hub filters.
+                    </p>
                 ) : (
                     <ResponsiveTable
                         columns={[
@@ -235,6 +380,64 @@ export default async function QuestionHubPage({
                             },
                             { key: "model", label: "Model" },
                             { key: "preset", label: "Preset" },
+                            {
+                                key: "fast",
+                                label: "Fast",
+                                hideOnMobile: true,
+                                render: (row) =>
+                                    (row as { fast: boolean }).fast
+                                        ? "yes"
+                                        : "no",
+                            },
+                            ...(indexLookup
+                                ? [
+                                      {
+                                          key: "issues",
+                                          label: "Issues",
+                                          hideOnMobile: true,
+                                          render: (
+                                              row: Record<string, unknown>,
+                                          ) => {
+                                              const value = (
+                                                  row as { issues?: number }
+                                              ).issues;
+                                              return value == null
+                                                  ? "—"
+                                                  : value;
+                                          },
+                                      },
+                                      {
+                                          key: "severity",
+                                          label: "Severity",
+                                          hideOnMobile: true,
+                                          render: (
+                                              row: Record<string, unknown>,
+                                          ) => {
+                                              const value = (
+                                                  row as { severity?: number }
+                                              ).severity;
+                                              return value == null
+                                                  ? "—"
+                                                  : value.toFixed(1);
+                                          },
+                                      },
+                                      {
+                                          key: "coherence",
+                                          label: "Coherence",
+                                          hideOnMobile: true,
+                                          render: (
+                                              row: Record<string, unknown>,
+                                          ) => {
+                                              const value = (
+                                                  row as { coherence?: number }
+                                              ).coherence;
+                                              return value == null
+                                                  ? "—"
+                                                  : value.toFixed(1);
+                                          },
+                                      },
+                                  ]
+                                : []),
                             {
                                 key: "preview",
                                 label: "Final answer",
@@ -261,13 +464,20 @@ export default async function QuestionHubPage({
                                 ),
                             },
                         ]}
-                        data={runs.map((run) => ({
-                            id: run.id,
-                            createdAt: run.metadata.createdAt,
-                            model: run.metadata.model,
-                            preset: run.metadata.pipelinePreset,
-                            preview: run.run.finalAnswer,
-                        }))}
+                        data={runs.map((run) => {
+                            const indexed = indexLookup?.get(run.id);
+                            return {
+                                id: run.id,
+                                createdAt: run.metadata.createdAt,
+                                model: run.metadata.model,
+                                preset: run.metadata.pipelinePreset,
+                                fast: run.metadata.fastMode,
+                                preview: run.run.finalAnswer,
+                                issues: indexed?.issueCount,
+                                severity: indexed?.maxSeverity,
+                                coherence: indexed?.qualityCoherence,
+                            };
+                        })}
                         getRowId={(row) => (row as { id: string }).id}
                         renderCardActions={(row) => (
                             <Link
@@ -285,7 +495,7 @@ export default async function QuestionHubPage({
                 <h2 style={{ marginTop: 0 }}>Benchmarks</h2>
                 {benchmarks.length === 0 ? (
                     <p className="muted">
-                        No benchmarks for this question yet.
+                        No benchmarks match the current hub filters.
                     </p>
                 ) : (
                     <ResponsiveTable
@@ -299,6 +509,16 @@ export default async function QuestionHubPage({
                                         (row as { createdAt: string })
                                             .createdAt,
                                     ).toLocaleString(),
+                            },
+                            {
+                                key: "model",
+                                label: "Model",
+                                hideOnMobile: true,
+                            },
+                            {
+                                key: "preset",
+                                label: "Preset",
+                                hideOnMobile: true,
                             },
                             { key: "runs", label: "Runs" },
                             { key: "modeCount", label: "Modes" },
@@ -325,6 +545,8 @@ export default async function QuestionHubPage({
                         data={benchmarks.map((benchmark) => ({
                             id: benchmark.id,
                             createdAt: benchmark.metadata.createdAt,
+                            model: benchmark.metadata.model,
+                            preset: benchmark.metadata.pipelinePreset,
                             runs: benchmark.payload.runs,
                             modeCount: benchmark.payload.modeCount,
                             entropy: benchmark.payload.divergenceEntropy,
