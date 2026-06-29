@@ -11,6 +11,7 @@ function makeBenchmarkArtifact(params: {
     modeCount: number;
     divergenceEntropy: number;
     stabilityPairwiseMean?: number;
+    withClaimCentroid?: boolean;
 }): BenchmarkArtifact {
     return {
         kind: "benchmark",
@@ -27,11 +28,26 @@ function makeBenchmarkArtifact(params: {
             modeCount: params.modeCount,
             modeSizes: [params.runs],
             divergenceEntropy: params.divergenceEntropy,
+            ...(params.withClaimCentroid
+                ? {
+                      modeCountClaimCentroid: 1,
+                      divergenceEntropyClaimCentroid: 0.4,
+                      stabilityClaimCentroid: {
+                          pairwiseMean: 0.85,
+                      },
+                  }
+                : {}),
             summary: {
                 stability: {
                     pairwiseMean: params.stabilityPairwiseMean,
                     pairs: [],
                 },
+                ...(params.withClaimCentroid
+                    ? {
+                          consensus: { mean: 0.7 },
+                          critiqueMaxSeverity: { mean: 2.1 },
+                      }
+                    : {}),
             },
         },
     };
@@ -45,6 +61,7 @@ describe("benchmark compare helpers", () => {
             modeCount: 2,
             divergenceEntropy: 0.6,
             stabilityPairwiseMean: 0.8,
+            withClaimCentroid: true,
         });
 
         const summary = summarizeBenchmark(benchmark);
@@ -53,6 +70,9 @@ describe("benchmark compare helpers", () => {
         expect(summary.modeCount).toBe(2);
         expect(summary.divergenceEntropy).toBe(0.6);
         expect(summary.stabilityPairwiseMean).toBe(0.8);
+        expect(summary.claimModeCount).toBe(1);
+        expect(summary.consensusMean).toBe(0.7);
+        expect(summary.modeCountDelta).toBe(1);
     });
 
     it("computes compare deltas and preserves null stability deltas", () => {
@@ -76,5 +96,7 @@ describe("benchmark compare helpers", () => {
         expect(compared.delta.modeCount).toBe(2);
         expect(compared.delta.divergenceEntropy).toBeCloseTo(0.7, 3);
         expect(compared.delta.stabilityPairwiseMean).toBeNull();
+        expect(compared.delta.claimModeCount).toBeNull();
+        expect(compared.delta.consensusMean).toBeNull();
     });
 });

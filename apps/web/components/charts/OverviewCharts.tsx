@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
     Bar,
     BarChart,
@@ -28,6 +29,7 @@ export function OverviewCharts({
     issueTypeCounts,
     critiqueVsConfidence,
 }: OverviewChartsProps) {
+    const router = useRouter();
     const [mounted, setMounted] = useState(false);
     useEffect(() => {
         setMounted(true);
@@ -103,6 +105,9 @@ export function OverviewCharts({
                     Severity vs confidence delta
                     <InfoTooltip helpKey="severityVsConfidenceDelta" />
                 </h3>
+                <p className="small muted" style={{ marginBottom: 8 }}>
+                    Click a point to open the run trace.
+                </p>
                 <ResponsiveContainer width="100%" height="100%">
                     <ScatterChart>
                         <CartesianGrid
@@ -133,10 +138,29 @@ export function OverviewCharts({
                                 border: "1px solid var(--color-border-default)",
                                 borderRadius: "var(--radius-md)",
                             }}
+                            formatter={(value, name) => [
+                                typeof value === "number"
+                                    ? value.toFixed(3)
+                                    : value,
+                                name,
+                            ]}
+                            labelFormatter={(_, payload) => {
+                                const runId = payload?.[0]?.payload?.runId;
+                                return runId
+                                    ? `Run ${String(runId).slice(-12)}`
+                                    : "Run";
+                            }}
                         />
                         <Scatter
                             data={scatterRows}
                             fill="var(--color-data-violet)"
+                            cursor="pointer"
+                            onClick={(point) => {
+                                const runId = (
+                                    point as { payload?: { runId?: string } }
+                                ).payload?.runId;
+                                if (runId) router.push(`/runs/${runId}`);
+                            }}
                         />
                     </ScatterChart>
                 </ResponsiveContainer>

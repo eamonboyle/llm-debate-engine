@@ -223,6 +223,11 @@ export default async function DataStatusPage() {
                             </a>
                         ) : null}
                         {status.hasBenchmarkPairs ? (
+                            <Link href="/pairs" className="button secondary">
+                                Explore benchmark pairs
+                            </Link>
+                        ) : null}
+                        {status.hasBenchmarkPairs ? (
                             <a
                                 href="/api/analysis/pairs?download=1"
                                 className="button secondary"

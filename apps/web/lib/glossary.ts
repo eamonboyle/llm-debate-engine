@@ -128,6 +128,8 @@ export const GLOSSARY: Record<string, string> = {
     calibration: "Confidence calibration step.",
 
     // Chart titles
+    agentStats:
+        "Aggregate step counts and error rates per debate agent across filtered runs.",
     presetUsageDistribution:
         "Relative usage of pipeline presets (standard, research_deep, fast_research).",
     benchmarkEntropyStabilityTrend:

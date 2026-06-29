@@ -146,6 +146,16 @@ const NAV_ENTRIES: NavEntry[] = [
                 hint: "Low-similarity benchmark runs",
             },
             {
+                href: "/pairs",
+                label: "Benchmark pairs",
+                hint: "Pairwise similarity explorer",
+            },
+            {
+                href: "/errors",
+                label: "Pipeline errors",
+                hint: "Failed agent steps",
+            },
+            {
                 href: "/report",
                 label: "Report",
                 hint: "Markdown analysis export",
