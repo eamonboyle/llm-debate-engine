@@ -9,6 +9,11 @@ import type { BenchmarkArtifact, RunArtifact } from "./data";
 import type { EvidenceRiskSummary, RunEvidenceRow } from "./evidenceExplorer";
 import type { IssueTypeSummary, RunIssueRow } from "./issueExplorer";
 import type { OutlierExplorerRow } from "./outlierExplorer";
+import type {
+    BenchmarkPairDetailRow,
+    BenchmarkPairSummaryRow,
+} from "./pairsExplorer";
+import type { PipelineErrorRow } from "./pipelineErrors";
 import type { QuestionGroup } from "./questionGroups";
 import type { ModelLeaderboardRow } from "./modelLeaderboard";
 import type { PresetLeaderboardRow } from "./presetLeaderboard";
@@ -403,6 +408,87 @@ export function outliersToCsv(rows: OutlierExplorerRow[]): string {
             entry.avgSimilarity,
             entry.zScore,
             entry.peerRunId ?? "",
+        ]),
+    );
+    return [header.join(","), ...csvRows].join("\n");
+}
+
+export function pairsExplorerToCsv(
+    summaries: BenchmarkPairSummaryRow[],
+    pairs: BenchmarkPairDetailRow[],
+): string {
+    const sections: string[] = [];
+    const summaryHeader = [
+        "benchmarkId",
+        "question",
+        "model",
+        "pipelinePreset",
+        "runCount",
+        "pairCount",
+        "minSimilarity",
+        "maxSimilarity",
+        "avgSimilarity",
+    ];
+    sections.push(summaryHeader.join(","));
+    for (const entry of summaries) {
+        sections.push(
+            row([
+                entry.benchmarkId,
+                entry.question,
+                entry.model,
+                entry.pipelinePreset,
+                entry.runCount,
+                entry.pairCount,
+                entry.minSimilarity ?? "",
+                entry.maxSimilarity ?? "",
+                entry.avgSimilarity ?? "",
+            ]),
+        );
+    }
+
+    if (pairs.length > 0) {
+        sections.push("");
+        sections.push("runIdA,runIdB,similarity,compareHref");
+        for (const pair of pairs) {
+            sections.push(
+                row([
+                    pair.runIdA,
+                    pair.runIdB,
+                    pair.similarity,
+                    pair.compareHref,
+                ]),
+            );
+        }
+    }
+
+    return sections.join("\n");
+}
+
+export function pipelineErrorsToCsv(rows: PipelineErrorRow[]): string {
+    const header = [
+        "runId",
+        "question",
+        "model",
+        "pipelinePreset",
+        "fastMode",
+        "agentName",
+        "stepIndex",
+        "error",
+        "createdAt",
+        "traceHref",
+    ];
+    const csvRows = rows.map((entry) =>
+        row([
+            entry.runId,
+            entry.question,
+            entry.model,
+            entry.pipelinePreset,
+            entry.fastMode,
+            entry.agentName,
+            entry.stepIndex,
+            entry.error,
+            entry.createdAt,
+            entry.traceHref,
         ]),
     );
     return [header.join(","), ...csvRows].join("\n");

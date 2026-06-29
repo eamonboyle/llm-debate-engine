@@ -77,6 +77,11 @@ export default async function AgentStatsPage({
                     <Link href="/runs" className="button secondary">
                         Browse runs
                     </Link>
+                    {totalErrors > 0 ? (
+                        <Link href="/errors" className="button secondary">
+                            View pipeline errors
+                        </Link>
+                    ) : null}
                 </div>
             </div>
 
@@ -129,7 +134,11 @@ export default async function AgentStatsPage({
                 <div className="card">
                     <div className="small muted">Step errors</div>
                     <div style={{ marginTop: 6, fontSize: "1.25rem" }}>
-                        {totalErrors}
+                        {totalErrors > 0 ? (
+                            <Link href="/errors">{totalErrors}</Link>
+                        ) : (
+                            totalErrors
+                        )}
                     </div>
                 </div>
                 <div className="card">
@@ -156,7 +165,26 @@ export default async function AgentStatsPage({
                             { key: "agentName", label: "Agent" },
                             { key: "stepCount", label: "Steps" },
                             { key: "runCount", label: "Runs" },
-                            { key: "errorCount", label: "Errors" },
+                            {
+                                key: "errorCount",
+                                label: "Errors",
+                                render: (row) => {
+                                    const count = (
+                                        row as { errorCount: number }
+                                    ).errorCount;
+                                    const agentName = (
+                                        row as { agentName: string }
+                                    ).agentName;
+                                    if (count === 0) return "0";
+                                    return (
+                                        <Link
+                                            href={`/errors?agent=${encodeURIComponent(agentName)}`}
+                                        >
+                                            {count}
+                                        </Link>
+                                    );
+                                },
+                            },
                             {
                                 key: "avgDuration",
                                 label: "Avg duration",

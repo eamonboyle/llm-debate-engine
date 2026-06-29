@@ -1,4 +1,6 @@
 import type { BenchmarkArtifact } from "./data";
+import { extractClaimCentroidDisplay } from "./claimCentroidMetrics";
+import { extractBenchmarkSummaryDisplay } from "./benchmarkSummaryMetrics";
 
 export type BenchmarkCompareSummary = {
     id: string;
@@ -11,6 +13,12 @@ export type BenchmarkCompareSummary = {
     modeCount: number;
     divergenceEntropy: number;
     stabilityPairwiseMean: number | null;
+    claimModeCount: number | null;
+    claimDivergenceEntropy: number | null;
+    claimStabilityPairwiseMean: number | null;
+    modeCountDelta: number | null;
+    consensusMean: number | null;
+    critiqueMean: number | null;
 };
 
 export type BenchmarkComparePayload = {
@@ -21,6 +29,12 @@ export type BenchmarkComparePayload = {
         modeCount: number;
         divergenceEntropy: number;
         stabilityPairwiseMean: number | null;
+        claimModeCount: number | null;
+        claimDivergenceEntropy: number | null;
+        claimStabilityPairwiseMean: number | null;
+        modeCountDelta: number | null;
+        consensusMean: number | null;
+        critiqueMean: number | null;
     };
 };
 
@@ -39,6 +53,9 @@ function subtractOrNull(
 export function summarizeBenchmark(
     benchmark: BenchmarkArtifact,
 ): BenchmarkCompareSummary {
+    const claimCentroid = extractClaimCentroidDisplay(benchmark);
+    const summary = extractBenchmarkSummaryDisplay(benchmark);
+
     return {
         id: benchmark.id,
         question: benchmark.question,
@@ -52,6 +69,12 @@ export function summarizeBenchmark(
         stabilityPairwiseMean: toNumberOrNull(
             benchmark.payload.summary?.stability?.pairwiseMean,
         ),
+        claimModeCount: claimCentroid.modeCount,
+        claimDivergenceEntropy: claimCentroid.divergenceEntropy,
+        claimStabilityPairwiseMean: claimCentroid.stabilityPairwiseMean,
+        modeCountDelta: claimCentroid.modeCountDelta,
+        consensusMean: summary.consensusMean,
+        critiqueMean: summary.critiqueMean,
     };
 }
 
@@ -73,6 +96,27 @@ export function buildBenchmarkComparePayload(
                 right.stabilityPairwiseMean,
                 left.stabilityPairwiseMean,
             ),
+            claimModeCount: subtractOrNull(
+                right.claimModeCount,
+                left.claimModeCount,
+            ),
+            claimDivergenceEntropy: subtractOrNull(
+                right.claimDivergenceEntropy,
+                left.claimDivergenceEntropy,
+            ),
+            claimStabilityPairwiseMean: subtractOrNull(
+                right.claimStabilityPairwiseMean,
+                left.claimStabilityPairwiseMean,
+            ),
+            modeCountDelta: subtractOrNull(
+                right.modeCountDelta,
+                left.modeCountDelta,
+            ),
+            consensusMean: subtractOrNull(
+                right.consensusMean,
+                left.consensusMean,
+            ),
+            critiqueMean: subtractOrNull(right.critiqueMean, left.critiqueMean),
         },
     };
 }

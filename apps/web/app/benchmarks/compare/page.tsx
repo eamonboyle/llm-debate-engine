@@ -8,6 +8,8 @@ import {
 import { CompareDeltaChart } from "../../../components/charts/CompareDeltaChart";
 import { ModeSizeBar } from "../../../components/benchmark/ModeSizeBar";
 import { buildBenchmarkComparePayload } from "../../../lib/benchmarkCompare";
+import { extractClaimCentroidDisplay } from "../../../lib/claimCentroidMetrics";
+import { extractBenchmarkSummaryDisplay } from "../../../lib/benchmarkSummaryMetrics";
 import { buildBenchmarkCompareSuggestions } from "../../../lib/benchmarkCompareSuggestions";
 import { TruncateText } from "../../../components/ResponsiveTable";
 import { CompareExportLink } from "../../../components/CompareExportLink";
@@ -23,6 +25,45 @@ type CompareSearchParams = {
     right?: string;
     question?: string;
 };
+
+function formatMetric(value: number | null | undefined, digits = 3): string {
+    if (value == null || typeof value !== "number") return "—";
+    return value.toFixed(digits);
+}
+
+function CompareMetricRow({
+    label,
+    leftValue,
+    rightValue,
+    delta,
+    digits = 3,
+}: {
+    label: string;
+    leftValue: number | null | undefined;
+    rightValue: number | null | undefined;
+    delta: number | null | undefined;
+    digits?: number;
+}) {
+    const deltaClass =
+        typeof delta === "number"
+            ? delta > 0
+                ? "compare-delta-pos"
+                : delta < 0
+                  ? "compare-delta-neg"
+                  : ""
+            : "";
+
+    return (
+        <tr>
+            <td>{label}</td>
+            <td>{formatMetric(leftValue, digits)}</td>
+            <td>{formatMetric(rightValue, digits)}</td>
+            <td className={`compare-delta-cell ${deltaClass}`}>
+                {formatDelta(delta)}
+            </td>
+        </tr>
+    );
+}
 
 function formatDelta(value: number | null | undefined): string {
     if (value == null || typeof value !== "number") return "—";
@@ -54,6 +95,17 @@ export default async function BenchmarkComparePage({
     });
     const leftLabel = left ? left.id.slice(-12) : "left";
     const rightLabel = right ? right.id.slice(-12) : "right";
+    const leftClaim = left != null ? extractClaimCentroidDisplay(left) : null;
+    const rightClaim =
+        right != null ? extractClaimCentroidDisplay(right) : null;
+    const showClaimCentroid = Boolean(
+        leftClaim?.hasClaimCentroid || rightClaim?.hasClaimCentroid,
+    );
+    const leftSummary =
+        left != null ? extractBenchmarkSummaryDisplay(left) : null;
+    const rightSummary =
+        right != null ? extractBenchmarkSummaryDisplay(right) : null;
+    const showSummary = Boolean(leftSummary?.hasAny || rightSummary?.hasAny);
 
     return (
         <section className="stack">
@@ -380,65 +432,123 @@ export default async function BenchmarkComparePage({
                                             {formatDelta(compare.delta.runs)}
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>Mode count</td>
-                                        <td>{left.payload.modeCount}</td>
-                                        <td>{right.payload.modeCount}</td>
-                                        <td
-                                            className={`compare-delta-cell ${compare.delta.modeCount > 0 ? "compare-delta-pos" : compare.delta.modeCount < 0 ? "compare-delta-neg" : ""}`}
-                                        >
-                                            {formatDelta(
-                                                compare.delta.modeCount,
-                                            )}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Divergence entropy</td>
-                                        <td>
-                                            {left.payload.divergenceEntropy.toFixed(
-                                                3,
-                                            )}
-                                        </td>
-                                        <td>
-                                            {right.payload.divergenceEntropy.toFixed(
-                                                3,
-                                            )}
-                                        </td>
-                                        <td
-                                            className={`compare-delta-cell ${compare.delta.divergenceEntropy > 0 ? "compare-delta-pos" : compare.delta.divergenceEntropy < 0 ? "compare-delta-neg" : ""}`}
-                                        >
-                                            {formatDelta(
-                                                compare.delta.divergenceEntropy,
-                                            )}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Stability mean</td>
-                                        <td>
-                                            {compare.left
-                                                .stabilityPairwiseMean != null
-                                                ? compare.left.stabilityPairwiseMean.toFixed(
-                                                      3,
-                                                  )
-                                                : "—"}
-                                        </td>
-                                        <td>
-                                            {compare.right
-                                                .stabilityPairwiseMean != null
-                                                ? compare.right.stabilityPairwiseMean.toFixed(
-                                                      3,
-                                                  )
-                                                : "—"}
-                                        </td>
-                                        <td
-                                            className={`compare-delta-cell ${typeof compare.delta.stabilityPairwiseMean === "number" ? (compare.delta.stabilityPairwiseMean > 0 ? "compare-delta-pos" : compare.delta.stabilityPairwiseMean < 0 ? "compare-delta-neg" : "") : ""}`}
-                                        >
-                                            {formatDelta(
-                                                compare.delta
-                                                    .stabilityPairwiseMean,
-                                            )}
-                                        </td>
-                                    </tr>
+                                    <CompareMetricRow
+                                        label="Answer mode count"
+                                        leftValue={compare.left.modeCount}
+                                        rightValue={compare.right.modeCount}
+                                        delta={compare.delta.modeCount}
+                                        digits={0}
+                                    />
+                                    <CompareMetricRow
+                                        label="Answer divergence entropy"
+                                        leftValue={
+                                            compare.left.divergenceEntropy
+                                        }
+                                        rightValue={
+                                            compare.right.divergenceEntropy
+                                        }
+                                        delta={compare.delta.divergenceEntropy}
+                                    />
+                                    <CompareMetricRow
+                                        label="Answer stability mean"
+                                        leftValue={
+                                            compare.left.stabilityPairwiseMean
+                                        }
+                                        rightValue={
+                                            compare.right.stabilityPairwiseMean
+                                        }
+                                        delta={
+                                            compare.delta.stabilityPairwiseMean
+                                        }
+                                    />
+                                    {showClaimCentroid ? (
+                                        <>
+                                            <CompareMetricRow
+                                                label="Claim-centroid mode count"
+                                                leftValue={
+                                                    compare.left.claimModeCount
+                                                }
+                                                rightValue={
+                                                    compare.right.claimModeCount
+                                                }
+                                                delta={
+                                                    compare.delta.claimModeCount
+                                                }
+                                                digits={0}
+                                            />
+                                            <CompareMetricRow
+                                                label="Claim-centroid entropy"
+                                                leftValue={
+                                                    compare.left
+                                                        .claimDivergenceEntropy
+                                                }
+                                                rightValue={
+                                                    compare.right
+                                                        .claimDivergenceEntropy
+                                                }
+                                                delta={
+                                                    compare.delta
+                                                        .claimDivergenceEntropy
+                                                }
+                                            />
+                                            <CompareMetricRow
+                                                label="Claim-centroid stability"
+                                                leftValue={
+                                                    compare.left
+                                                        .claimStabilityPairwiseMean
+                                                }
+                                                rightValue={
+                                                    compare.right
+                                                        .claimStabilityPairwiseMean
+                                                }
+                                                delta={
+                                                    compare.delta
+                                                        .claimStabilityPairwiseMean
+                                                }
+                                            />
+                                            <CompareMetricRow
+                                                label="Answer − claim mode delta"
+                                                leftValue={
+                                                    compare.left.modeCountDelta
+                                                }
+                                                rightValue={
+                                                    compare.right.modeCountDelta
+                                                }
+                                                delta={
+                                                    compare.delta.modeCountDelta
+                                                }
+                                                digits={0}
+                                            />
+                                        </>
+                                    ) : null}
+                                    {showSummary ? (
+                                        <>
+                                            <CompareMetricRow
+                                                label="Consensus mean"
+                                                leftValue={
+                                                    compare.left.consensusMean
+                                                }
+                                                rightValue={
+                                                    compare.right.consensusMean
+                                                }
+                                                delta={
+                                                    compare.delta.consensusMean
+                                                }
+                                            />
+                                            <CompareMetricRow
+                                                label="Critique severity mean"
+                                                leftValue={
+                                                    compare.left.critiqueMean
+                                                }
+                                                rightValue={
+                                                    compare.right.critiqueMean
+                                                }
+                                                delta={
+                                                    compare.delta.critiqueMean
+                                                }
+                                            />
+                                        </>
+                                    ) : null}
                                 </tbody>
                             </table>
                         </div>
@@ -462,6 +572,22 @@ export default async function BenchmarkComparePage({
                                 left: compare.left.stabilityPairwiseMean,
                                 right: compare.right.stabilityPairwiseMean,
                             },
+                            ...(showClaimCentroid
+                                ? [
+                                      {
+                                          metric: "claimModes",
+                                          left: compare.left.claimModeCount,
+                                          right: compare.right.claimModeCount,
+                                      },
+                                      {
+                                          metric: "claimEntropy",
+                                          left: compare.left
+                                              .claimDivergenceEntropy,
+                                          right: compare.right
+                                              .claimDivergenceEntropy,
+                                      },
+                                  ]
+                                : []),
                         ]}
                     />
                 </div>
