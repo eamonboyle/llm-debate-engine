@@ -32,6 +32,8 @@ import { GET as getOutliers } from "./outliers/route";
 import { GET as getCatalog } from "./catalog/route";
 import { POST as postAnalysisRebuild } from "./analysis/rebuild/route";
 import { GET as getQuestions } from "./questions/route";
+import { GET as getPairs } from "./pairs/route";
+import { GET as getErrors } from "./errors/route";
 
 const tempDirs: string[] = [];
 const originalRunsDir = process.env.RUNS_DIR;
@@ -536,6 +538,213 @@ describe("web api routes", () => {
         expect(csvResponse.status).toBe(200);
         expect(csvResponse.headers.get("Content-Type")).toContain("text/csv");
         expect(await csvResponse.text()).toContain("run_1");
+    });
+
+    it("returns judge narratives in quality JSON when run traces exist", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "analysis-index.json"),
+            JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                totals: { runs: 1, benchmarks: 0, skippedFiles: 0 },
+                runs: [
+                    {
+                        id: "run_judge",
+                        question: "Judge Q",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        model: "gpt-alpha",
+                        pipelinePreset: "research_deep",
+                        fastMode: false,
+                        finalAnswerPreview: "A",
+                        confidence: { solver: 0.8 },
+                        critique: { issueCount: 1 },
+                        quality: {
+                            coherence: 4,
+                            factualRisk: 2,
+                        },
+                    },
+                ],
+                benchmarks: [],
+                aggregates: {
+                    issueTypeCounts: {},
+                    confidenceDrift: {
+                        solverToRevisionMean: 0,
+                        revisionToSynthesizerMean: 0,
+                        calibratedMinusSynthMean: 0,
+                    },
+                    presets: {},
+                    critiqueVsConfidence: [],
+                },
+                skipped: [],
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "run_judge.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_judge",
+                question: "Judge Q",
+                metadata: {
+                    createdAt: "2026-01-01T00:00:00.000Z",
+                    model: "gpt-alpha",
+                    pipelinePreset: "research_deep",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run_judge",
+                    finalAnswer: "Answer",
+                    steps: [
+                        {
+                            id: "step-judge",
+                            agentName: "Judge",
+                            role: "research",
+                            output: {
+                                kind: "judgement",
+                                data: {
+                                    strengths: ["Clear structure"],
+                                    weaknesses: ["Thin evidence"],
+                                },
+                            },
+                            completedAt: "2026-01-01T00:00:01.000Z",
+                        },
+                    ],
+                    metrics: {},
+                },
+            }),
+            "utf-8",
+        );
+
+        const response = await getQuality(
+            new Request("http://localhost/api/quality"),
+        );
+        expect(response.status).toBe(200);
+        const json = (await response.json()) as {
+            narratives: {
+                strengths: Array<{ text: string }>;
+                weaknesses: Array<{ text: string }>;
+            };
+        };
+        expect(json.narratives.strengths[0]?.text).toBe("Clear structure");
+        expect(json.narratives.weaknesses[0]?.text).toBe("Thin evidence");
+    });
+
+    it("returns pipeline errors JSON and CSV from run artifacts", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_err.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_err",
+                question: "Error Q",
+                metadata: {
+                    createdAt: "2026-01-01T00:00:00.000Z",
+                    model: "gpt-test",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run_err",
+                    finalAnswer: "Answer",
+                    steps: [
+                        {
+                            id: "step-0",
+                            agentName: "Skeptic",
+                            role: "research",
+                            error: "timeout",
+                            createdAt: "2026-01-01T00:00:00.000Z",
+                            completedAt: "2026-01-01T00:00:01.000Z",
+                        },
+                    ],
+                    metrics: {},
+                },
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getErrors(
+            new Request("http://localhost/api/errors"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            errorCount: number;
+            rows: Array<{ runId: string; agentName: string }>;
+        };
+        expect(json.errorCount).toBe(1);
+        expect(json.rows[0].runId).toBe("run_err");
+        expect(json.rows[0].agentName).toBe("Skeptic");
+
+        const csvResponse = await getErrors(
+            new Request("http://localhost/api/errors?format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(csvResponse.headers.get("Content-Type")).toContain("text/csv");
+        expect(await csvResponse.text()).toContain("run_err");
+    });
+
+    it("returns benchmark pair summaries JSON and CSV", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "bench_pairs.json"),
+            JSON.stringify({
+                kind: "benchmark",
+                id: "bench_pairs",
+                question: "Pairs Q",
+                metadata: {
+                    createdAt: "2026-01-01T00:00:00.000Z",
+                    model: "gpt-test",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                payload: {
+                    runs: 2,
+                    modeCount: 1,
+                    modeSizes: [2],
+                    divergenceEntropy: 0.5,
+                    runIds: ["run_a", "run_b"],
+                    summary: {
+                        stability: {
+                            pairwiseMean: 0.75,
+                            pairs: [{ i: 0, j: 1, similarity: 0.75 }],
+                        },
+                    },
+                },
+            }),
+            "utf-8",
+        );
+
+        const jsonResponse = await getPairs(
+            new Request("http://localhost/api/pairs"),
+        );
+        expect(jsonResponse.status).toBe(200);
+        const json = (await jsonResponse.json()) as {
+            benchmarkCount: number;
+            summaries: Array<{ benchmarkId: string; pairCount: number }>;
+        };
+        expect(json.benchmarkCount).toBe(1);
+        expect(json.summaries[0].benchmarkId).toBe("bench_pairs");
+        expect(json.summaries[0].pairCount).toBe(1);
+
+        const detailResponse = await getPairs(
+            new Request("http://localhost/api/pairs?benchmark=bench_pairs"),
+        );
+        expect(detailResponse.status).toBe(200);
+        const detail = (await detailResponse.json()) as {
+            pairCount: number;
+            pairs: Array<{ similarity: number }>;
+        };
+        expect(detail.pairCount).toBe(1);
+        expect(detail.pairs[0].similarity).toBeCloseTo(0.75, 3);
+
+        const csvResponse = await getPairs(
+            new Request("http://localhost/api/pairs?format=csv"),
+        );
+        expect(csvResponse.status).toBe(200);
+        expect(csvResponse.headers.get("Content-Type")).toContain("text/csv");
+        expect(await csvResponse.text()).toContain("bench_pairs");
     });
 
     it("returns agent stats JSON and CSV from run artifacts", async () => {

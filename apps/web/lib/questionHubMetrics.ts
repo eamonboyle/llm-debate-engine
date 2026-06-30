@@ -6,6 +6,9 @@ export type QuestionHubMetrics = {
     avgSolverConfidence: number | null;
     avgEvidenceRisk: number | null;
     avgSolverToRevisionDelta: number | null;
+    runsWithQualityScores: number;
+    avgCoherence: number | null;
+    avgFactualRisk: number | null;
 };
 
 function average(values: number[]): number | null {
@@ -30,6 +33,16 @@ export function summarizeQuestionHubMetrics(
     const driftDeltas = runs
         .map((run) => run.confidence.solverToRevisionDelta)
         .filter((value): value is number => typeof value === "number");
+    const qualityRuns = runs.filter(
+        (run) =>
+            run.quality?.coherence != null || run.quality?.factualRisk != null,
+    );
+    const coherenceScores = qualityRuns
+        .map((run) => run.quality?.coherence)
+        .filter((value): value is number => typeof value === "number");
+    const factualRiskScores = qualityRuns
+        .map((run) => run.quality?.factualRisk)
+        .filter((value): value is number => typeof value === "number");
 
     return {
         indexedRunCount: runs.length,
@@ -37,5 +50,8 @@ export function summarizeQuestionHubMetrics(
         avgSolverConfidence: average(solverConfidences),
         avgEvidenceRisk: average(evidenceRisks),
         avgSolverToRevisionDelta: average(driftDeltas),
+        runsWithQualityScores: qualityRuns.length,
+        avgCoherence: average(coherenceScores),
+        avgFactualRisk: average(factualRiskScores),
     };
 }
