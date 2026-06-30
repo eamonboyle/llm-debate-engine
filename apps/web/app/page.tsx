@@ -24,6 +24,8 @@ import {
     hasActiveIndexFilters,
 } from "../lib/indexFilters";
 import { computeIndexFreshness } from "../lib/indexFreshness";
+import { groupArtifactsByQuestion } from "../lib/questionGroups";
+import { buildTopQuestions } from "../lib/topQuestions";
 
 export const metadata: Metadata = {
     title: "Overview",
@@ -49,6 +51,10 @@ export default async function OverviewPage({
     ]);
     const indexFreshness = computeIndexFreshness(status, index);
     const recentActivity = buildActivityFeed(runs, benchmarks).slice(0, 6);
+    const topQuestions = buildTopQuestions(
+        groupArtifactsByQuestion(runs, benchmarks),
+        8,
+    );
 
     if (!index) {
         const hasArtifacts = runs.length > 0 || benchmarks.length > 0;
@@ -174,6 +180,68 @@ export default async function OverviewPage({
                             data={recentActivity}
                             getRowId={(row) =>
                                 `${(row as { kind: string }).kind}-${(row as { id: string }).id}`
+                            }
+                        />
+                    </div>
+                ) : null}
+                {topQuestions.length > 0 ? (
+                    <div className="card">
+                        <div
+                            style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: 10,
+                                alignItems: "baseline",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <h2 style={{ margin: 0 }}>
+                                Top research questions
+                            </h2>
+                            <Link
+                                href="/questions"
+                                className="button secondary"
+                            >
+                                All questions
+                            </Link>
+                        </div>
+                        <p className="small muted" style={{ marginBottom: 12 }}>
+                            Questions with the most runs and benchmarks — open a
+                            hub to compare experiments on the same topic.
+                        </p>
+                        <ResponsiveTable
+                            columns={[
+                                {
+                                    key: "question",
+                                    label: "Question",
+                                    cellClass: "cell-question",
+                                    render: (row) => {
+                                        const q = (row as { question: string })
+                                            .question;
+                                        return (
+                                            <Link
+                                                href={
+                                                    (row as { hubHref: string })
+                                                        .hubHref
+                                                }
+                                            >
+                                                {q.length > 72
+                                                    ? `${q.slice(0, 72)}…`
+                                                    : q}
+                                            </Link>
+                                        );
+                                    },
+                                },
+                                { key: "runCount", label: "Runs" },
+                                { key: "benchmarkCount", label: "Benchmarks" },
+                                {
+                                    key: "totalExperiments",
+                                    label: "Total",
+                                },
+                            ]}
+                            data={topQuestions}
+                            getRowId={(row) =>
+                                (row as { question: string }).question
                             }
                         />
                     </div>
@@ -437,6 +505,64 @@ export default async function OverviewPage({
                         data={recentActivity}
                         getRowId={(row) =>
                             `${(row as { kind: string }).kind}-${(row as { id: string }).id}`
+                        }
+                    />
+                </div>
+            ) : null}
+
+            {topQuestions.length > 0 ? (
+                <div className="card">
+                    <div
+                        style={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: 10,
+                            alignItems: "baseline",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        <h2 style={{ margin: 0 }}>Top research questions</h2>
+                        <Link href="/questions" className="button secondary">
+                            All questions
+                        </Link>
+                    </div>
+                    <p className="small muted" style={{ marginBottom: 12 }}>
+                        Questions with the most runs and benchmarks — open a hub
+                        to compare experiments on the same topic.
+                    </p>
+                    <ResponsiveTable
+                        columns={[
+                            {
+                                key: "question",
+                                label: "Question",
+                                cellClass: "cell-question",
+                                render: (row) => {
+                                    const q = (row as { question: string })
+                                        .question;
+                                    return (
+                                        <Link
+                                            href={
+                                                (row as { hubHref: string })
+                                                    .hubHref
+                                            }
+                                        >
+                                            {q.length > 72
+                                                ? `${q.slice(0, 72)}…`
+                                                : q}
+                                        </Link>
+                                    );
+                                },
+                            },
+                            { key: "runCount", label: "Runs" },
+                            { key: "benchmarkCount", label: "Benchmarks" },
+                            {
+                                key: "totalExperiments",
+                                label: "Total",
+                            },
+                        ]}
+                        data={topQuestions}
+                        getRowId={(row) =>
+                            (row as { question: string }).question
                         }
                     />
                 </div>

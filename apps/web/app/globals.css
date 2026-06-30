@@ -1949,6 +1949,47 @@ pre {
     align-items: center;
 }
 
+.experiment-matrix-wrap {
+    overflow-x: auto;
+    margin-top: 0.75rem;
+}
+
+.experiment-matrix {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.experiment-matrix th,
+.experiment-matrix td {
+    border: 1px solid var(--color-border);
+    padding: 0.5rem 0.65rem;
+    text-align: left;
+    vertical-align: top;
+}
+
+.experiment-matrix thead th {
+    background: var(--color-surface-muted);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.experiment-matrix tbody th {
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.experiment-matrix-empty {
+    color: var(--color-text-muted);
+    text-align: center;
+}
+
+.experiment-matrix-cell {
+    display: inline-block;
+    font-size: 0.8125rem;
+    line-height: 1.35;
+}
+
 /* Heatmap improvements */
 .benchmark-heatmap-wrap {
     overflow-x: auto;

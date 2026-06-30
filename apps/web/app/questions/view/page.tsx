@@ -14,6 +14,10 @@ import {
 } from "../../../lib/data";
 import { questionHubHref } from "../../../lib/questionGroups";
 import { summarizeQuestionHubMetrics } from "../../../lib/questionHubMetrics";
+import {
+    buildQuestionExperimentMatrix,
+    lookupMatrixCell,
+} from "../../../lib/questionExperimentMatrix";
 
 export const metadata: Metadata = {
     title: "Question hub",
@@ -51,6 +55,7 @@ export default async function QuestionHubPage({
     const indexMetrics = index
         ? summarizeQuestionHubMetrics(index, question)
         : null;
+    const experimentMatrix = buildQuestionExperimentMatrix(runs, benchmarks);
 
     if (runs.length === 0 && benchmarks.length === 0) {
         notFound();
@@ -180,39 +185,174 @@ export default async function QuestionHubPage({
             </div>
 
             {indexMetrics ? (
-                <div className="grid-4">
-                    <MetricCard
-                        label="Indexed runs"
-                        value={indexMetrics.indexedRunCount}
-                        helpKey="runArtifacts"
-                    />
-                    <MetricCard
-                        label="Avg critique issues"
-                        value={
-                            indexMetrics.avgIssueCount == null
-                                ? "—"
-                                : indexMetrics.avgIssueCount.toFixed(1)
-                        }
-                        helpKey="issueCount"
-                    />
-                    <MetricCard
-                        label="Avg solver confidence"
-                        value={
-                            indexMetrics.avgSolverConfidence == null
-                                ? "—"
-                                : indexMetrics.avgSolverConfidence.toFixed(2)
-                        }
-                        helpKey="solverConfidence"
-                    />
-                    <MetricCard
-                        label="Avg evidence risk"
-                        value={
-                            indexMetrics.avgEvidenceRisk == null
-                                ? "—"
-                                : indexMetrics.avgEvidenceRisk.toFixed(1)
-                        }
-                        helpKey="evidenceRiskLevel"
-                    />
+                <>
+                    <div className="grid-4">
+                        <MetricCard
+                            label="Indexed runs"
+                            value={indexMetrics.indexedRunCount}
+                            helpKey="runArtifacts"
+                        />
+                        <MetricCard
+                            label="Avg critique issues"
+                            value={
+                                indexMetrics.avgIssueCount == null
+                                    ? "—"
+                                    : indexMetrics.avgIssueCount.toFixed(1)
+                            }
+                            helpKey="issueCount"
+                        />
+                        <MetricCard
+                            label="Avg solver confidence"
+                            value={
+                                indexMetrics.avgSolverConfidence == null
+                                    ? "—"
+                                    : indexMetrics.avgSolverConfidence.toFixed(
+                                          2,
+                                      )
+                            }
+                            helpKey="solverConfidence"
+                        />
+                        <MetricCard
+                            label="Avg evidence risk"
+                            value={
+                                indexMetrics.avgEvidenceRisk == null
+                                    ? "—"
+                                    : indexMetrics.avgEvidenceRisk.toFixed(1)
+                            }
+                            helpKey="evidenceRiskLevel"
+                        />
+                    </div>
+                    {indexMetrics.runsWithQualityScores > 0 ? (
+                        <div className="grid-4">
+                            <MetricCard
+                                label="Runs with judge scores"
+                                value={indexMetrics.runsWithQualityScores}
+                                helpKey="coherence"
+                            />
+                            <MetricCard
+                                label="Avg coherence"
+                                value={
+                                    indexMetrics.avgCoherence == null
+                                        ? "—"
+                                        : indexMetrics.avgCoherence.toFixed(1)
+                                }
+                                helpKey="coherence"
+                            />
+                            <MetricCard
+                                label="Avg factual risk"
+                                value={
+                                    indexMetrics.avgFactualRisk == null
+                                        ? "—"
+                                        : indexMetrics.avgFactualRisk.toFixed(1)
+                                }
+                                helpKey="factualRisk"
+                            />
+                        </div>
+                    ) : null}
+                </>
+            ) : null}
+
+            {experimentMatrix.models.length > 0 &&
+            experimentMatrix.presets.length > 0 ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>Experiment matrix</h2>
+                    <p className="small muted">
+                        Model × preset coverage for this question — cell counts
+                        show runs and benchmarks. Click a cell to open the
+                        latest trace.
+                    </p>
+                    <div className="experiment-matrix-wrap">
+                        <table className="experiment-matrix">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Model</th>
+                                    {experimentMatrix.presets.map((preset) => (
+                                        <th key={preset} scope="col">
+                                            {preset}
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {experimentMatrix.models.map((model) => (
+                                    <tr key={model}>
+                                        <th scope="row">{model}</th>
+                                        {experimentMatrix.presets.map(
+                                            (preset) => {
+                                                const cell = lookupMatrixCell(
+                                                    experimentMatrix,
+                                                    model,
+                                                    preset,
+                                                );
+                                                if (!cell) {
+                                                    return (
+                                                        <td
+                                                            key={preset}
+                                                            className="experiment-matrix-empty"
+                                                        >
+                                                            —
+                                                        </td>
+                                                    );
+                                                }
+                                                const label = [
+                                                    cell.runCount > 0
+                                                        ? `${cell.runCount} run${cell.runCount === 1 ? "" : "s"}`
+                                                        : null,
+                                                    cell.benchmarkCount > 0
+                                                        ? `${cell.benchmarkCount} bench`
+                                                        : null,
+                                                ]
+                                                    .filter(Boolean)
+                                                    .join(" · ");
+                                                const href =
+                                                    cell.latestRunId != null
+                                                        ? `/runs/${cell.latestRunId}`
+                                                        : cell.latestBenchmarkId !=
+                                                            null
+                                                          ? `/benchmarks/${cell.latestBenchmarkId}`
+                                                          : null;
+                                                return (
+                                                    <td key={preset}>
+                                                        {href ? (
+                                                            <Link
+                                                                href={href}
+                                                                className="experiment-matrix-cell"
+                                                                title={`${model} · ${preset}`}
+                                                            >
+                                                                {label}
+                                                            </Link>
+                                                        ) : (
+                                                            <span className="muted">
+                                                                {label}
+                                                            </span>
+                                                        )}
+                                                    </td>
+                                                );
+                                            },
+                                        )}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    {indexMetrics?.runsWithQualityScores ? (
+                        <div
+                            className="page-actions"
+                            style={{
+                                display: "flex",
+                                gap: 10,
+                                flexWrap: "wrap",
+                                marginTop: 12,
+                            }}
+                        >
+                            <Link
+                                href={`/quality?q=${encodeURIComponent(question)}`}
+                                className="button secondary"
+                            >
+                                Quality insights for this question
+                            </Link>
+                        </div>
+                    ) : null}
                 </div>
             ) : null}
 
