@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
+    loadAnalysisIndex,
     loadBenchmarksByQuestion,
     loadBenchmarksContainingRun,
     loadRunArtifacts,
     loadRunById,
     loadRunsByQuestion,
 } from "../../../lib/data";
+import { buildRunOutlierContext } from "../../../lib/outlierLookup";
 import { TraceStep } from "../../../components/trace/TraceStep";
 import { TraceStepNav } from "../../../components/trace/TraceStepNav";
 import { RunMetricsSummary } from "../../../components/RunMetricsSummary";
@@ -54,13 +56,15 @@ export default async function RunTracePage({
     if (!run) notFound();
 
     const steps = run.run.steps;
-    const [allRuns, previousRuns, relatedBenchmarks, memberBenchmarks] =
+    const [allRuns, previousRuns, relatedBenchmarks, memberBenchmarks, index] =
         await Promise.all([
             loadRunArtifacts(),
             loadRunsByQuestion(run.question, run.id),
             loadBenchmarksByQuestion(run.question),
             loadBenchmarksContainingRun(run.id),
+            loadAnalysisIndex(),
         ]);
+    const outlierContext = await buildRunOutlierContext(index, run.id);
     const memberBenchmarkIds = new Set(memberBenchmarks.map((b) => b.id));
     const stepTimingRows = buildRunStepTiming(run);
     const stepTimingSummary = summarizeRunStepTiming(stepTimingRows);
@@ -123,6 +127,41 @@ export default async function RunTracePage({
                     </a>
                 </div>
             </div>
+
+            {outlierContext ? (
+                <div
+                    className="card"
+                    style={{ borderColor: "var(--color-warning)" }}
+                >
+                    <h2 style={{ marginTop: 0 }}>Benchmark outlier</h2>
+                    <p className="muted" style={{ marginBottom: 12 }}>
+                        This run has the lowest average pairwise similarity
+                        within benchmark{" "}
+                        <Link href={`/benchmarks/${outlierContext.benchmarkId}`}>
+                            {outlierContext.benchmarkId}
+                        </Link>
+                        . Avg similarity{" "}
+                        {outlierContext.avgSimilarity.toFixed(3)} · z-score{" "}
+                        {outlierContext.zScore.toFixed(2)}.
+                    </p>
+                    <div
+                        className="page-actions"
+                        style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                    >
+                        <Link href="/outliers" className="button secondary">
+                            Outlier explorer
+                        </Link>
+                        {outlierContext.peerCompareHref ? (
+                            <Link
+                                href={outlierContext.peerCompareHref}
+                                className="button secondary"
+                            >
+                                Compare to closest peer
+                            </Link>
+                        ) : null}
+                    </div>
+                </div>
+            ) : null}
 
             <div className="grid-4">
                 <div className="card">

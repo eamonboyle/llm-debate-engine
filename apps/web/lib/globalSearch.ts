@@ -5,10 +5,18 @@ import {
     type ArtifactFilterParams,
 } from "./data";
 import {
+    sortArtifactsByCreatedAt,
+    sortBenchmarkArtifacts,
+    sortRunArtifacts,
+    type SearchSortOrder,
+} from "./artifactSort";
+import {
     groupArtifactsByQuestion,
     questionHubHref,
     type QuestionGroup,
 } from "./questionGroups";
+
+export type { SearchSortOrder };
 
 export type GlobalSearchResult = {
     query: string;
@@ -45,9 +53,11 @@ export function searchArtifacts(
     opts: {
         limitPerSection?: number;
         filters?: Omit<ArtifactFilterParams, "q">;
+        sort?: SearchSortOrder;
     } = {},
 ): GlobalSearchResult {
     const limit = opts.limitPerSection ?? 12;
+    const sort = opts.sort ?? "relevance";
     const trimmed = query.trim();
     const filters: ArtifactFilterParams = {
         q: trimmed || undefined,
@@ -63,6 +73,33 @@ export function searchArtifacts(
           )
         : groupArtifactsByQuestion(matchedRuns, matchedBenchmarks);
 
+    const sortedRuns =
+        sort === "relevance" || sort === "entropy_desc"
+            ? matchedRuns
+            : sortRunArtifacts(matchedRuns, sort);
+    const sortedBenchmarks =
+        sort === "relevance" || sort === "issues_desc"
+            ? matchedBenchmarks
+            : sort === "entropy_desc"
+              ? sortBenchmarkArtifacts(matchedBenchmarks, "entropy_desc")
+              : sortArtifactsByCreatedAt(
+                    matchedBenchmarks,
+                    sort === "oldest" ? "oldest" : "newest",
+                );
+    const sortedQuestions =
+        sort === "relevance"
+            ? matchedQuestions
+            : [...matchedQuestions].sort((a, b) => {
+                  const totalA = a.runCount + a.benchmarkCount;
+                  const totalB = b.runCount + b.benchmarkCount;
+                  if (totalA !== totalB) {
+                      return sort === "oldest"
+                          ? totalA - totalB
+                          : totalB - totalA;
+                  }
+                  return a.question.localeCompare(b.question);
+              });
+
     return {
         query: trimmed,
         totals: {
@@ -70,7 +107,7 @@ export function searchArtifacts(
             benchmarks: matchedBenchmarks.length,
             questions: matchedQuestions.length,
         },
-        runs: matchedRuns.slice(0, limit).map((run) => ({
+        runs: sortedRuns.slice(0, limit).map((run) => ({
             id: run.id,
             question: run.question,
             model: run.metadata.model,
@@ -78,7 +115,7 @@ export function searchArtifacts(
             createdAt: run.metadata.createdAt,
             preview: run.run.finalAnswer.slice(0, 160),
         })),
-        benchmarks: matchedBenchmarks.slice(0, limit).map((benchmark) => ({
+        benchmarks: sortedBenchmarks.slice(0, limit).map((benchmark) => ({
             id: benchmark.id,
             question: benchmark.question,
             model: benchmark.metadata.model,
@@ -88,7 +125,7 @@ export function searchArtifacts(
             modeCount: benchmark.payload.modeCount,
             entropy: benchmark.payload.divergenceEntropy,
         })),
-        questions: matchedQuestions.slice(0, limit),
+        questions: sortedQuestions.slice(0, limit),
     };
 }
 

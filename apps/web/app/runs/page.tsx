@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { CollapsibleFilterCard } from "../../components/CollapsibleFilterCard";
 import { ExportFilteredLink } from "../../components/ExportFilteredLink";
 import { ModelFilterSelect } from "../../components/ModelFilterSelect";
@@ -15,6 +16,7 @@ import {
     loadRunArtifacts,
 } from "../../lib/data";
 import { buildIndexRunLookup } from "../../lib/indexRunLookup";
+import { buildOutlierRunIdSet } from "../../lib/outlierLookup";
 import {
     resolveRunSortOrder,
     sortRunArtifacts,
@@ -48,6 +50,7 @@ export default async function RunsPage({
         loadAnalysisIndex(),
     ]);
     const indexLookup = index ? buildIndexRunLookup(index) : null;
+    const outlierRunIds = buildOutlierRunIdSet(index);
     const { models, presets } = collectArtifactFacets(runs, benchmarks);
     const params = await searchParams;
     const filtered = filterRunArtifacts(runs, {
@@ -127,6 +130,12 @@ export default async function RunsPage({
                         <option value="issues_asc">
                             Sort: fewest critique issues
                         </option>
+                        <option value="severity_desc">
+                            Sort: highest avg severity
+                        </option>
+                        <option value="severity_asc">
+                            Sort: lowest avg severity
+                        </option>
                         <option value="evidence_risk_desc">
                             Sort: highest evidence risk
                         </option>
@@ -135,6 +144,12 @@ export default async function RunsPage({
                         </option>
                         <option value="drift_desc">
                             Sort: largest confidence drift
+                        </option>
+                        <option value="coherence_desc">
+                            Sort: highest coherence
+                        </option>
+                        <option value="factual_risk_desc">
+                            Sort: highest factual risk
                         </option>
                     </select>
                     <select
@@ -250,6 +265,20 @@ export default async function RunsPage({
                         ...(indexLookup
                             ? [
                                   {
+                                      key: "outlier",
+                                      label: "Outlier",
+                                      helpKey: "outlierRuns",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const id = (row as { id: string }).id;
+                                          return outlierRunIds.has(id) ? (
+                                              <Link href="/outliers">Yes</Link>
+                                          ) : (
+                                              "—"
+                                          );
+                                      },
+                                  },
+                                  {
                                       key: "steps",
                                       label: "Steps",
                                       helpKey: "stepCount",
@@ -274,6 +303,20 @@ export default async function RunsPage({
                                       },
                                   },
                                   {
+                                      key: "avgSeverity",
+                                      label: "Avg severity",
+                                      helpKey: "avgSeverity",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const value = (
+                                              row as { avgSeverity?: number }
+                                          ).avgSeverity;
+                                          return value == null
+                                              ? "—"
+                                              : value.toFixed(2);
+                                      },
+                                  },
+                                  {
                                       key: "solverConf",
                                       label: "Solver conf.",
                                       helpKey: "solverConfidence",
@@ -282,6 +325,34 @@ export default async function RunsPage({
                                           const value = (
                                               row as { solverConf?: number }
                                           ).solverConf;
+                                          return value == null
+                                              ? "—"
+                                              : value.toFixed(2);
+                                      },
+                                  },
+                                  {
+                                      key: "coherence",
+                                      label: "Coherence",
+                                      helpKey: "coherence",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const value = (
+                                              row as { coherence?: number }
+                                          ).coherence;
+                                          return value == null
+                                              ? "—"
+                                              : value.toFixed(2);
+                                      },
+                                  },
+                                  {
+                                      key: "factualRisk",
+                                      label: "Factual risk",
+                                      helpKey: "factualRisk",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const value = (
+                                              row as { factualRisk?: number }
+                                          ).factualRisk;
                                           return value == null
                                               ? "—"
                                               : value.toFixed(2);
@@ -344,7 +415,10 @@ export default async function RunsPage({
                             finalAnswer: run.run.finalAnswer,
                             steps: indexed?.stepCount,
                             issues: indexed?.issueCount,
+                            avgSeverity: indexed?.avgSeverity,
                             solverConf: indexed?.solverConfidence,
+                            coherence: indexed?.coherence,
+                            factualRisk: indexed?.factualRisk,
                         };
                     })}
                     getRowId={(row) => (row as { id: string }).id}
