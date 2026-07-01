@@ -25,13 +25,9 @@ export function findRunOutlierEntry(
     );
 }
 
-export function buildOutlierRunIdSet(
-    index: AnalysisIndex | null,
-): Set<string> {
+export function buildOutlierRunIdSet(index: AnalysisIndex | null): Set<string> {
     if (!index) return new Set();
-    return new Set(
-        index.aggregates.outlierRuns?.map((row) => row.runId) ?? [],
-    );
+    return new Set(index.aggregates.outlierRuns?.map((row) => row.runId) ?? []);
 }
 
 export async function buildRunOutlierContext(

@@ -212,7 +212,10 @@ export default async function QuestionHubPage({
                         <button type="submit" className="button">
                             Apply filters
                         </button>
-                        <Link href={questionHubHref(question)} className="button secondary">
+                        <Link
+                            href={questionHubHref(question)}
+                            className="button secondary"
+                        >
                             Clear
                         </Link>
                     </div>
