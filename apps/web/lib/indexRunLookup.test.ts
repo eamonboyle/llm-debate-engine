@@ -20,9 +20,11 @@ function sampleIndex(): AnalysisIndex {
                 critique: {
                     issueCount: 5,
                     maxSeverity: 4,
+                    avgSeverity: 3.2,
                     byType: { factual: 2 },
                 },
                 research: { evidenceRiskLevel: 3 },
+                quality: { coherence: 4.1, factualRisk: 2.5 },
             },
         ],
         benchmarks: [],
@@ -47,8 +49,11 @@ describe("buildIndexRunLookup", () => {
             issueCount: 5,
             stepCount: 10,
             maxSeverity: 4,
+            avgSeverity: 3.2,
             solverConfidence: 0.8,
             evidenceRiskLevel: 3,
+            coherence: 4.1,
+            factualRisk: 2.5,
         });
         expect(lookup.get("missing")).toBeUndefined();
     });

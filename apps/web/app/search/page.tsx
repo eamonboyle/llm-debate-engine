@@ -9,6 +9,7 @@ import {
 import { collectArtifactFacets } from "../../lib/artifactFacets";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
 import { buildQueryString, parsePositiveInt } from "../../lib/listPagination";
+import { resolveSearchSortOrder } from "../../lib/artifactSort";
 import { searchArtifacts, questionHubHref } from "../../lib/globalSearch";
 
 const SEARCH_LIMIT_OPTIONS = [12, 24, 50] as const;
@@ -25,6 +26,7 @@ type SearchParams = {
     from?: string;
     to?: string;
     limit?: string;
+    sort?: string;
 };
 
 function hasActiveSearch(params: SearchParams): boolean {
@@ -112,8 +114,10 @@ export default async function SearchPage({
     }
 
     const limit = parsePositiveInt(params.limit, { fallback: 12, max: 50 });
+    const sort = resolveSearchSortOrder(params.sort);
     const results = searchArtifacts(runs, benchmarks, query, {
         limitPerSection: limit,
+        sort,
         filters: {
             model: params.model,
             preset: params.preset,
@@ -207,6 +211,22 @@ export default async function SearchPage({
                                 Show {option} per section
                             </option>
                         ))}
+                    </select>
+                    <select
+                        name="sort"
+                        defaultValue={sort}
+                        className="input"
+                        title="Sort order"
+                    >
+                        <option value="relevance">Sort: relevance</option>
+                        <option value="newest">Sort: newest first</option>
+                        <option value="oldest">Sort: oldest first</option>
+                        <option value="issues_desc">
+                            Sort: most critique issues
+                        </option>
+                        <option value="entropy_desc">
+                            Sort: highest benchmark entropy
+                        </option>
                     </select>
                 </div>
                 <div className="filter-actions">

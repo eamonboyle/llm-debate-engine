@@ -1,4 +1,5 @@
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../../lib/data";
+import { resolveSearchSortOrder } from "../../../lib/artifactSort";
 import { searchArtifacts } from "../../../lib/globalSearch";
 import { searchResultsToCsv } from "../../../lib/listExport";
 import { parsePositiveInt } from "../../../lib/listPagination";
@@ -21,6 +22,9 @@ export async function GET(request: Request) {
         fallback: 12,
         max: 500,
     });
+    const sort = resolveSearchSortOrder(
+        url.searchParams.get("sort") ?? undefined,
+    );
     const filters = readFilterParams(url);
 
     const [runs, benchmarks] = await Promise.all([
@@ -30,6 +34,7 @@ export async function GET(request: Request) {
 
     const result = searchArtifacts(runs, benchmarks, query, {
         limitPerSection: format === "csv" ? 500 : limit,
+        sort,
         filters,
     });
 
@@ -48,6 +53,7 @@ export async function GET(request: Request) {
     return Response.json({
         ...result,
         filters,
+        sort,
         storeTotals: {
             runs: runs.length,
             benchmarks: benchmarks.length,
