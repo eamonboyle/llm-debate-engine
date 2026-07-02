@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { AnalysisIndex } from "./data";
 import {
+    buildQuestionHubBenchmarkRows,
     buildQuestionHubRunRows,
+    summarizeQuestionHubBenchmarkMetrics,
     summarizeQuestionHubMetrics,
 } from "./questionHubMetrics";
 
@@ -43,7 +45,29 @@ function sampleIndex(): AnalysisIndex {
                 quality: { coherence: 2, factualRisk: 4 },
             },
         ],
-        benchmarks: [],
+        benchmarks: [
+            {
+                id: "bench_a",
+                question: "Topic A",
+                createdAt: "2026-01-03T00:00:00.000Z",
+                model: "gpt",
+                pipelinePreset: "standard",
+                fastMode: false,
+                runs: 5,
+                modeCount: 2,
+                modeSizes: [3, 2],
+                divergenceEntropy: 0.72,
+                stabilityPairwiseMean: 0.81,
+                modeLabels: [
+                    {
+                        modeIndex: 0,
+                        size: 3,
+                        label: "cautious outlook",
+                        exemplarPreview: "preview",
+                    },
+                ],
+            },
+        ],
         aggregates: {
             issueTypeCounts: {},
             confidenceDrift: {
@@ -88,6 +112,33 @@ describe("summarizeQuestionHubMetrics", () => {
             issueCount: 2,
             avgSeverity: 2.5,
             coherence: 4,
+        });
+        expect(rows.has("missing")).toBe(false);
+    });
+});
+
+describe("summarizeQuestionHubBenchmarkMetrics", () => {
+    it("averages indexed benchmark metrics for a question", () => {
+        const summary = summarizeQuestionHubBenchmarkMetrics(
+            sampleIndex(),
+            "Topic A",
+        );
+        expect(summary).not.toBeNull();
+        expect(summary?.indexedBenchmarkCount).toBe(1);
+        expect(summary?.avgDivergenceEntropy).toBeCloseTo(0.72, 3);
+        expect(summary?.avgStability).toBeCloseTo(0.81, 3);
+        expect(summary?.avgModeCount).toBe(2);
+        expect(summary?.avgRunsPerBenchmark).toBe(5);
+    });
+
+    it("builds indexed benchmark rows for filtered ids", () => {
+        const rows = buildQuestionHubBenchmarkRows(sampleIndex(), "Topic A", [
+            "bench_a",
+            "missing",
+        ]);
+        expect(rows.get("bench_a")).toMatchObject({
+            stability: 0.81,
+            topMode: "cautious outlook",
         });
         expect(rows.has("missing")).toBe(false);
     });

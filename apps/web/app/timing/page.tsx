@@ -15,6 +15,7 @@ import {
     formatDurationMs,
     summarizeStepTiming,
 } from "../../lib/stepTiming";
+import { AgentTimingChart } from "../../components/charts/AgentTimingChart";
 import { buildQueryString } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
@@ -139,44 +140,56 @@ export default async function PipelineTimingPage({
                             : "No step timestamps found. Timings appear when run artifacts include createdAt and completedAt on each step."}
                     </p>
                 ) : (
-                    <ResponsiveTable
-                        columns={[
-                            { key: "agentName", label: "Agent" },
-                            { key: "role", label: "Role" },
-                            { key: "sampleCount", label: "Samples" },
-                            {
-                                key: "avgDurationMs",
-                                label: "Avg duration",
-                                render: (row) =>
-                                    formatDurationMs(
-                                        (row as { avgDurationMs: number })
-                                            .avgDurationMs,
-                                    ),
-                            },
-                            {
-                                key: "medianDurationMs",
-                                label: "Median",
-                                render: (row) =>
-                                    formatDurationMs(
-                                        (row as { medianDurationMs: number })
-                                            .medianDurationMs,
-                                    ),
-                            },
-                            {
-                                key: "totalDurationMs",
-                                label: "Total",
-                                render: (row) =>
-                                    formatDurationMs(
-                                        (row as { totalDurationMs: number })
-                                            .totalDurationMs,
-                                    ),
-                            },
-                        ]}
-                        data={rows}
-                        getRowId={(row) =>
-                            `${(row as { agentName: string }).agentName}-${(row as { role: string }).role}`
-                        }
-                    />
+                    <>
+                        <AgentTimingChart
+                            rows={rows.map((row) => ({
+                                agentName: row.agentName,
+                                avgDurationMs: row.avgDurationMs,
+                                medianDurationMs: row.medianDurationMs,
+                            }))}
+                        />
+                        <ResponsiveTable
+                            columns={[
+                                { key: "agentName", label: "Agent" },
+                                { key: "role", label: "Role" },
+                                { key: "sampleCount", label: "Samples" },
+                                {
+                                    key: "avgDurationMs",
+                                    label: "Avg duration",
+                                    render: (row) =>
+                                        formatDurationMs(
+                                            (row as { avgDurationMs: number })
+                                                .avgDurationMs,
+                                        ),
+                                },
+                                {
+                                    key: "medianDurationMs",
+                                    label: "Median",
+                                    render: (row) =>
+                                        formatDurationMs(
+                                            (
+                                                row as {
+                                                    medianDurationMs: number;
+                                                }
+                                            ).medianDurationMs,
+                                        ),
+                                },
+                                {
+                                    key: "totalDurationMs",
+                                    label: "Total",
+                                    render: (row) =>
+                                        formatDurationMs(
+                                            (row as { totalDurationMs: number })
+                                                .totalDurationMs,
+                                        ),
+                                },
+                            ]}
+                            data={rows}
+                            getRowId={(row) =>
+                                `${(row as { agentName: string }).agentName}-${(row as { role: string }).role}`
+                            }
+                        />
+                    </>
                 )}
             </div>
         </section>

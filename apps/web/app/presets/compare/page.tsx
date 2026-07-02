@@ -8,6 +8,8 @@ import { PresetFilterSelect } from "../../../components/PresetFilterSelect";
 import { loadAnalysisIndex } from "../../../lib/data";
 import { collectIndexFacets } from "../../../lib/indexFilters";
 import { buildPresetComparePayload } from "../../../lib/presetCompare";
+import { buildPresetLeaderboard } from "../../../lib/presetLeaderboard";
+import { buildLeaderboardCompareSuggestions } from "../../../lib/leaderboardCompareSuggestions";
 
 export const metadata: Metadata = {
     title: "Compare presets",
@@ -68,6 +70,17 @@ export default async function PresetComparePage({
                   fastMode,
               })
             : null;
+    const suggestionExtraParams =
+        fastMode !== undefined ? { fast: String(fastMode) } : undefined;
+    const suggestions = buildLeaderboardCompareSuggestions(
+        buildPresetLeaderboard(index, { fastMode }).map((row) => ({
+            key: row.preset,
+            runCount: row.runCount,
+        })),
+        { left: leftPreset, right: rightPreset },
+        "/presets/compare",
+        suggestionExtraParams,
+    );
 
     return (
         <section className="stack">
@@ -148,6 +161,31 @@ export default async function PresetComparePage({
                     ) : null}
                 </div>
             </form>
+
+            {suggestions.length > 0 ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>Suggested comparisons</h2>
+                    <p className="small muted" style={{ marginBottom: "1rem" }}>
+                        One-click pairings for the selected{" "}
+                        {leftPreset && !rightPreset ? "left" : "right"} preset.
+                    </p>
+                    <ul className="compare-suggestions-list">
+                        {suggestions.map((suggestion) => (
+                            <li key={suggestion.key}>
+                                <a
+                                    href={suggestion.href}
+                                    className="button secondary"
+                                >
+                                    Compare with {suggestion.key}
+                                </a>
+                                <span className="small muted">
+                                    {suggestion.reason}
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ) : null}
 
             {!leftPreset || !rightPreset ? (
                 <div className="card">

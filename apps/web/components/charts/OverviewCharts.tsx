@@ -68,6 +68,9 @@ export function OverviewCharts({
                     Critique issue types
                     <InfoTooltip helpKey="critiqueIssueTypes" />
                 </h3>
+                <p className="small muted" style={{ marginBottom: 8 }}>
+                    Click a bar to explore runs with that issue type.
+                </p>
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={issueRows}>
                         <CartesianGrid
@@ -96,6 +99,17 @@ export function OverviewCharts({
                             dataKey="count"
                             fill="var(--color-data-cyan)"
                             radius={[4, 4, 0, 0]}
+                            cursor="pointer"
+                            onClick={(data) => {
+                                const issueType = (
+                                    data as { payload?: { type?: string } }
+                                ).payload?.type;
+                                if (issueType) {
+                                    router.push(
+                                        `/issues?type=${encodeURIComponent(issueType)}`,
+                                    );
+                                }
+                            }}
                         />
                     </BarChart>
                 </ResponsiveContainer>

@@ -1,4 +1,8 @@
 import type { AnalysisIndex } from "./data";
+import {
+    buildBenchmarkIndexLookup,
+    formatTopModeLabel,
+} from "./benchmarkIndexLookup";
 
 export type QuestionHubMetrics = {
     indexedRunCount: number;
@@ -12,6 +16,14 @@ export type QuestionHubMetrics = {
     avgFactualRisk: number | null;
 };
 
+export type QuestionHubBenchmarkMetrics = {
+    indexedBenchmarkCount: number;
+    avgDivergenceEntropy: number | null;
+    avgStability: number | null;
+    avgModeCount: number | null;
+    avgRunsPerBenchmark: number | null;
+};
+
 export type QuestionHubRunRow = {
     id: string;
     createdAt: string;
@@ -23,6 +35,12 @@ export type QuestionHubRunRow = {
     solverConfidence?: number;
     coherence?: number;
     factualRisk?: number;
+};
+
+export type QuestionHubBenchmarkRow = {
+    id: string;
+    stability?: number;
+    topMode?: string | null;
 };
 
 function average(values: number[]): number | null {
@@ -95,6 +113,56 @@ export function buildQuestionHubRunRows(
             solverConfidence: run.confidence.solver,
             coherence: run.quality?.coherence,
             factualRisk: run.quality?.factualRisk,
+        });
+    }
+
+    return rows;
+}
+
+export function summarizeQuestionHubBenchmarkMetrics(
+    index: AnalysisIndex,
+    question: string,
+): QuestionHubBenchmarkMetrics | null {
+    const benchmarks = index.benchmarks.filter(
+        (benchmark) => benchmark.question === question,
+    );
+    if (benchmarks.length === 0) return null;
+
+    const entropies = benchmarks.map(
+        (benchmark) => benchmark.divergenceEntropy,
+    );
+    const stabilities = benchmarks
+        .map((benchmark) => benchmark.stabilityPairwiseMean)
+        .filter((value): value is number => typeof value === "number");
+    const modeCounts = benchmarks.map((benchmark) => benchmark.modeCount);
+    const runsPerBenchmark = benchmarks.map((benchmark) => benchmark.runs);
+
+    return {
+        indexedBenchmarkCount: benchmarks.length,
+        avgDivergenceEntropy: average(entropies),
+        avgStability: average(stabilities),
+        avgModeCount: average(modeCounts),
+        avgRunsPerBenchmark: average(runsPerBenchmark),
+    };
+}
+
+export function buildQuestionHubBenchmarkRows(
+    index: AnalysisIndex,
+    question: string,
+    benchmarkIds: string[],
+): Map<string, QuestionHubBenchmarkRow> {
+    const lookup = buildBenchmarkIndexLookup(index);
+    const rows = new Map<string, QuestionHubBenchmarkRow>();
+
+    for (const benchmark of index.benchmarks) {
+        if (benchmark.question !== question) continue;
+        if (!benchmarkIds.includes(benchmark.id)) continue;
+
+        const indexed = lookup.get(benchmark.id);
+        rows.set(benchmark.id, {
+            id: benchmark.id,
+            stability: indexed?.stabilityPairwiseMean,
+            topMode: indexed ? formatTopModeLabel(indexed.modeLabels) : null,
         });
     }
 
