@@ -8,6 +8,7 @@ import { ModelFilterSelect } from "../../../components/ModelFilterSelect";
 import { loadAnalysisIndex } from "../../../lib/data";
 import { buildModelLeaderboard } from "../../../lib/modelLeaderboard";
 import { buildModelComparePayload } from "../../../lib/modelCompare";
+import { buildLeaderboardCompareSuggestions } from "../../../lib/leaderboardCompareSuggestions";
 
 export const metadata: Metadata = {
     title: "Compare models",
@@ -58,6 +59,14 @@ export default async function ModelComparePage({
         leftModel && rightModel
             ? buildModelComparePayload(index, leftModel, rightModel)
             : null;
+    const suggestions = buildLeaderboardCompareSuggestions(
+        buildModelLeaderboard(index).map((row) => ({
+            key: row.model,
+            runCount: row.runCount,
+        })),
+        { left: leftModel, right: rightModel },
+        "/leaderboard/compare",
+    );
 
     return (
         <section className="stack">
@@ -115,6 +124,31 @@ export default async function ModelComparePage({
                     ) : null}
                 </div>
             </form>
+
+            {suggestions.length > 0 ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>Suggested comparisons</h2>
+                    <p className="small muted" style={{ marginBottom: "1rem" }}>
+                        One-click pairings for the selected{" "}
+                        {leftModel && !rightModel ? "left" : "right"} model.
+                    </p>
+                    <ul className="compare-suggestions-list">
+                        {suggestions.map((suggestion) => (
+                            <li key={suggestion.key}>
+                                <a
+                                    href={suggestion.href}
+                                    className="button secondary"
+                                >
+                                    Compare with {suggestion.key}
+                                </a>
+                                <span className="small muted">
+                                    {suggestion.reason}
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ) : null}
 
             {!leftModel || !rightModel ? (
                 <div className="card">

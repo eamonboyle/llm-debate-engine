@@ -683,6 +683,19 @@ export default async function OverviewPage({
                                 key: "failureMode",
                                 label: "Failure mode",
                                 helpKey: "counterfactualFailureModeCount",
+                                render: (row) => (
+                                    <Link
+                                        href={`/counterfactual?mode=${encodeURIComponent(
+                                            (row as { failureMode: string })
+                                                .failureMode,
+                                        )}`}
+                                    >
+                                        {
+                                            (row as { failureMode: string })
+                                                .failureMode
+                                        }
+                                    </Link>
+                                ),
                             },
                             { key: "count", label: "Count" },
                         ]}

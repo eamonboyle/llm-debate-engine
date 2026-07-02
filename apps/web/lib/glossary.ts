@@ -142,6 +142,8 @@ export const GLOSSARY: Record<string, string> = {
         "Difference (right run minus left run) for each metric. Positive = right has higher value.",
     sideBySideMetricComparison:
         "Compare key metrics (mode count, entropy, stability) between two benchmarks.",
+    pipelineTiming:
+        "Average and median wall-clock duration per agent step, computed from trace timestamps.",
 };
 
 export function getGlossaryEntry(key: string): string | undefined {

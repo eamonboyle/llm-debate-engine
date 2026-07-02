@@ -20,13 +20,15 @@ import {
 import { buildQueryString } from "../../../lib/listPagination";
 import { questionHubHref } from "../../../lib/questionGroups";
 import {
-    buildQuestionHubRunRows,
-    summarizeQuestionHubMetrics,
-} from "../../../lib/questionHubMetrics";
-import {
     buildQuestionExperimentMatrix,
     lookupMatrixCell,
 } from "../../../lib/questionExperimentMatrix";
+import {
+    buildQuestionHubBenchmarkRows,
+    buildQuestionHubRunRows,
+    summarizeQuestionHubBenchmarkMetrics,
+    summarizeQuestionHubMetrics,
+} from "../../../lib/questionHubMetrics";
 
 export const metadata: Metadata = {
     title: "Question hub",
@@ -79,11 +81,21 @@ export default async function QuestionHubPage({
     const indexMetrics = index
         ? summarizeQuestionHubMetrics(index, question)
         : null;
+    const benchmarkIndexMetrics = index
+        ? summarizeQuestionHubBenchmarkMetrics(index, question)
+        : null;
     const indexedRunRows = index
         ? buildQuestionHubRunRows(
               index,
               question,
               runs.map((run) => run.id),
+          )
+        : null;
+    const indexedBenchmarkRows = index
+        ? buildQuestionHubBenchmarkRows(
+              index,
+              question,
+              benchmarks.map((benchmark) => benchmark.id),
           )
         : null;
     const experimentMatrix = buildQuestionExperimentMatrix(runs, benchmarks);
@@ -352,14 +364,53 @@ export default async function QuestionHubPage({
                         />
                     </div>
                 </>
-            ) : (
+            ) : null}
+            {benchmarkIndexMetrics ? (
+                <div className="grid-4">
+                    <MetricCard
+                        label="Indexed benchmarks"
+                        value={benchmarkIndexMetrics.indexedBenchmarkCount}
+                        helpKey="benchmarkArtifacts"
+                    />
+                    <MetricCard
+                        label="Avg divergence entropy"
+                        value={
+                            benchmarkIndexMetrics.avgDivergenceEntropy == null
+                                ? "—"
+                                : benchmarkIndexMetrics.avgDivergenceEntropy.toFixed(
+                                      3,
+                                  )
+                        }
+                        helpKey="divergenceEntropy"
+                    />
+                    <MetricCard
+                        label="Avg pairwise stability"
+                        value={
+                            benchmarkIndexMetrics.avgStability == null
+                                ? "—"
+                                : benchmarkIndexMetrics.avgStability.toFixed(3)
+                        }
+                        helpKey="stabilityPairwiseMean"
+                    />
+                    <MetricCard
+                        label="Avg mode count"
+                        value={
+                            benchmarkIndexMetrics.avgModeCount == null
+                                ? "—"
+                                : benchmarkIndexMetrics.avgModeCount.toFixed(1)
+                        }
+                        helpKey="modeCount"
+                    />
+                </div>
+            ) : null}
+            {!indexMetrics && !benchmarkIndexMetrics ? (
                 <div className="card">
                     <p className="muted">
                         Run <code>pnpm analyze</code> to see indexed quality and
                         critique rollups for this question.
                     </p>
                 </div>
-            )}
+            ) : null}
 
             {experimentMatrix.models.length > 0 &&
             experimentMatrix.presets.length > 0 ? (
@@ -622,6 +673,44 @@ export default async function QuestionHubPage({
                                         row as { entropy: number }
                                     ).entropy.toFixed(3),
                             },
+                            ...(indexedBenchmarkRows
+                                ? [
+                                      {
+                                          key: "stability",
+                                          label: "Stability",
+                                          helpKey: "stabilityPairwiseMean",
+                                          hideOnMobile: true,
+                                          render: (
+                                              row: Record<string, unknown>,
+                                          ) => {
+                                              const value = (
+                                                  row as {
+                                                      stability?: number;
+                                                  }
+                                              ).stability;
+                                              return value == null
+                                                  ? "—"
+                                                  : value.toFixed(3);
+                                          },
+                                      },
+                                      {
+                                          key: "topMode",
+                                          label: "Top mode",
+                                          helpKey: "modeExplorer",
+                                          hideOnMobile: true,
+                                          render: (
+                                              row: Record<string, unknown>,
+                                          ) => {
+                                              const value = (
+                                                  row as {
+                                                      topMode?: string | null;
+                                                  }
+                                              ).topMode;
+                                              return value ?? "—";
+                                          },
+                                      },
+                                  ]
+                                : []),
                             {
                                 key: "open",
                                 label: "Open",
@@ -634,13 +723,20 @@ export default async function QuestionHubPage({
                                 ),
                             },
                         ]}
-                        data={benchmarks.map((benchmark) => ({
-                            id: benchmark.id,
-                            createdAt: benchmark.metadata.createdAt,
-                            runs: benchmark.payload.runs,
-                            modeCount: benchmark.payload.modeCount,
-                            entropy: benchmark.payload.divergenceEntropy,
-                        }))}
+                        data={benchmarks.map((benchmark) => {
+                            const indexed = indexedBenchmarkRows?.get(
+                                benchmark.id,
+                            );
+                            return {
+                                id: benchmark.id,
+                                createdAt: benchmark.metadata.createdAt,
+                                runs: benchmark.payload.runs,
+                                modeCount: benchmark.payload.modeCount,
+                                entropy: benchmark.payload.divergenceEntropy,
+                                stability: indexed?.stability,
+                                topMode: indexed?.topMode,
+                            };
+                        })}
                         getRowId={(row) => (row as { id: string }).id}
                         renderCardActions={(row) => (
                             <Link
