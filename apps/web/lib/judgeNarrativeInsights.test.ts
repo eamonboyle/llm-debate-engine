@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { RunArtifact } from "./data";
-import { aggregateJudgeNarratives } from "./judgeNarrativeInsights";
+import {
+    aggregateJudgeNarratives,
+    listRunsForNarrativeTheme,
+} from "./judgeNarrativeInsights";
 
 function makeRunWithJudgement(
     id: string,
@@ -74,5 +77,40 @@ describe("aggregateJudgeNarratives", () => {
             runCount: 2,
         });
         expect(weaknesses[1]?.text).toBe("No scenarios");
+    });
+
+    it("lists runs that mention a narrative theme", () => {
+        const runs = [
+            makeRunWithJudgement(
+                "run_a",
+                ["Clear structure"],
+                ["Thin evidence"],
+            ),
+            makeRunWithJudgement(
+                "run_b",
+                ["Clear structure"],
+                ["Thin evidence", "No scenarios"],
+            ),
+            makeRunWithJudgement("run_c", [], ["Other issue"]),
+        ];
+
+        const matches = listRunsForNarrativeTheme(
+            runs,
+            "Thin evidence",
+            "weakness",
+        );
+        expect(matches.map((row) => row.runId).sort()).toEqual([
+            "run_a",
+            "run_b",
+        ]);
+
+        const scoped = listRunsForNarrativeTheme(
+            runs,
+            "Clear structure",
+            "strength",
+            new Set(["run_a"]),
+        );
+        expect(scoped).toHaveLength(1);
+        expect(scoped[0]?.runId).toBe("run_a");
     });
 });

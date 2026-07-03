@@ -1,4 +1,5 @@
-import type { AnalysisIndex } from "./data";
+import { buildCompareSuggestions } from "./compareSuggestions";
+import type { AnalysisIndex, RunArtifact } from "./data";
 
 export type ConfidenceDriftRow = {
     runId: string;
@@ -38,9 +39,19 @@ function driftMagnitude(
     return values.reduce((sum, v) => sum + Math.abs(v), 0);
 }
 
+export function buildDriftCompareHref(
+    runs: RunArtifact[],
+    runId: string,
+): string {
+    const [suggestion] = buildCompareSuggestions(runs, { left: runId }, 1);
+    return suggestion?.href ?? `/runs/compare?left=${runId}`;
+}
+
 export function buildConfidenceDriftRows(
     index: AnalysisIndex,
+    options?: { runs?: RunArtifact[] },
 ): ConfidenceDriftRow[] {
+    const runs = options?.runs ?? [];
     const critiqueByRunId = new Map(
         index.aggregates.critiqueVsConfidence.map((row) => [row.runId, row]),
     );
@@ -74,7 +85,10 @@ export function buildConfidenceDriftRows(
                     revisionToSynthesizer,
                 ),
                 traceHref: `/runs/${run.id}`,
-                compareHref: `/runs/compare?left=${run.id}`,
+                compareHref:
+                    runs.length > 0
+                        ? buildDriftCompareHref(runs, run.id)
+                        : `/runs/compare?left=${run.id}`,
             };
         })
         .sort((a, b) => {

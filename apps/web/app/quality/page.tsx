@@ -12,7 +12,11 @@ import {
     buildQualityRunRows,
     summarizeQuality,
 } from "../../lib/qualityInsights";
-import { aggregateJudgeNarratives } from "../../lib/judgeNarrativeInsights";
+import {
+    aggregateJudgeNarratives,
+    listRunsForNarrativeTheme,
+    type NarrativeThemeKind,
+} from "../../lib/judgeNarrativeInsights";
 import { buildQueryString } from "../../lib/listPagination";
 
 export const metadata: Metadata = {
@@ -26,7 +30,16 @@ type QualitySearchParams = {
     fast?: string;
     from?: string;
     to?: string;
+    theme?: string;
+    narrativeKind?: string;
 };
+
+function resolveNarrativeKind(
+    value: string | undefined,
+): NarrativeThemeKind | null {
+    if (value === "strength" || value === "weakness") return value;
+    return null;
+}
 
 function formatScore(value: number | null) {
     return typeof value === "number" ? value.toFixed(1) : "—";
@@ -71,10 +84,29 @@ export default async function QualityInsightsPage({
             )
             .map((row) => row.id),
     );
+    const allRuns = await loadRunArtifacts();
     const narratives =
         qualityRunIds.size > 0
-            ? aggregateJudgeNarratives(await loadRunArtifacts(), qualityRunIds)
+            ? aggregateJudgeNarratives(allRuns, qualityRunIds)
             : { strengths: [], weaknesses: [] };
+    const selectedTheme = (params.theme ?? "").trim();
+    const selectedNarrativeKind = resolveNarrativeKind(params.narrativeKind);
+    const themeRunRows =
+        selectedTheme && selectedNarrativeKind
+            ? listRunsForNarrativeTheme(
+                  allRuns,
+                  selectedTheme,
+                  selectedNarrativeKind,
+                  qualityRunIds,
+              )
+            : [];
+
+    function themeHref(text: string, kind: NarrativeThemeKind) {
+        return `/quality${buildQueryString(params, {
+            theme: text,
+            narrativeKind: kind,
+        })}`;
+    }
 
     return (
         <section className="stack">
@@ -186,13 +218,17 @@ export default async function QualityInsightsPage({
                                     </h2>
                                     <p className="small muted">
                                         Themes from judge narratives across
-                                        filtered runs with rubric scores.
+                                        filtered runs with rubric scores — click
+                                        to list all matching traces.
                                     </p>
                                     <ul className="trace-summary-list">
                                         {narratives.strengths.map((theme) => (
                                             <li key={theme.text}>
                                                 <Link
-                                                    href={`/runs/${theme.sampleRunId}`}
+                                                    href={themeHref(
+                                                        theme.text,
+                                                        "strength",
+                                                    )}
                                                 >
                                                     {theme.text}
                                                 </Link>
@@ -215,13 +251,17 @@ export default async function QualityInsightsPage({
                                     </h2>
                                     <p className="small muted">
                                         Common critique themes from judge steps
-                                        — click to open a sample trace.
+                                        — click to list all runs mentioning the
+                                        theme.
                                     </p>
                                     <ul className="trace-summary-list">
                                         {narratives.weaknesses.map((theme) => (
                                             <li key={theme.text}>
                                                 <Link
-                                                    href={`/runs/${theme.sampleRunId}`}
+                                                    href={themeHref(
+                                                        theme.text,
+                                                        "weakness",
+                                                    )}
                                                 >
                                                     {theme.text}
                                                 </Link>
@@ -237,6 +277,98 @@ export default async function QualityInsightsPage({
                                     </ul>
                                 </div>
                             ) : null}
+                        </div>
+                    ) : null}
+
+                    {selectedTheme && selectedNarrativeKind ? (
+                        <div className="card">
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    gap: 10,
+                                    alignItems: "baseline",
+                                    justifyContent: "space-between",
+                                }}
+                            >
+                                <h2 style={{ margin: 0 }}>
+                                    Runs with{" "}
+                                    {selectedNarrativeKind === "strength"
+                                        ? "strength"
+                                        : "weakness"}
+                                    : {selectedTheme}
+                                </h2>
+                                <Link
+                                    href={`/quality${buildQueryString(params, {
+                                        theme: undefined,
+                                        narrativeKind: undefined,
+                                    })}`}
+                                    className="button secondary"
+                                >
+                                    Clear theme
+                                </Link>
+                            </div>
+                            {themeRunRows.length === 0 ? (
+                                <p className="muted">
+                                    No runs in the current filter mention this
+                                    theme.
+                                </p>
+                            ) : (
+                                <ResponsiveTable
+                                    columns={[
+                                        { key: "runId", label: "Run ID" },
+                                        {
+                                            key: "question",
+                                            label: "Question",
+                                            cellClass: "cell-question",
+                                            render: (row) => (
+                                                <TruncateText
+                                                    text={
+                                                        (
+                                                            row as {
+                                                                question: string;
+                                                            }
+                                                        ).question
+                                                    }
+                                                    maxLength={72}
+                                                    className="muted"
+                                                />
+                                            ),
+                                        },
+                                        {
+                                            key: "model",
+                                            label: "Model",
+                                            helpKey: "model",
+                                        },
+                                        {
+                                            key: "preset",
+                                            label: "Preset",
+                                            helpKey: "preset",
+                                        },
+                                        {
+                                            key: "trace",
+                                            label: "Open",
+                                            render: (row) => (
+                                                <Link
+                                                    href={
+                                                        (
+                                                            row as {
+                                                                traceHref: string;
+                                                            }
+                                                        ).traceHref
+                                                    }
+                                                >
+                                                    Trace
+                                                </Link>
+                                            ),
+                                        },
+                                    ]}
+                                    data={themeRunRows}
+                                    getRowId={(row) =>
+                                        (row as { runId: string }).runId
+                                    }
+                                />
+                            )}
                         </div>
                     ) : null}
 

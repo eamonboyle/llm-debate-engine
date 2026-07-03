@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { AnalysisIndex } from "./data";
+import type { AnalysisIndex, RunArtifact } from "./data";
 import {
     buildConfidenceDriftRows,
+    buildDriftCompareHref,
     summarizeConfidenceDrift,
 } from "./confidenceDrift";
 
@@ -92,5 +93,53 @@ describe("confidenceDrift", () => {
             rows.find((row) => row.runId === "run-low")
                 ?.calibratedMinusSynthDelta,
         ).toBeCloseTo(0.1, 5);
+    });
+
+    it("builds peer-aware compare href when run artifacts are provided", () => {
+        const runs: RunArtifact[] = [
+            {
+                kind: "run",
+                id: "run-low",
+                question: "Q",
+                metadata: {
+                    createdAt: "2026-01-01T00:00:00.000Z",
+                    model: "m",
+                    pipelinePreset: "research_deep",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run-low",
+                    finalAnswer: "a",
+                    steps: [],
+                    metrics: {},
+                },
+            },
+            {
+                kind: "run",
+                id: "run-high",
+                question: "Q",
+                metadata: {
+                    createdAt: "2026-01-02T00:00:00.000Z",
+                    model: "m",
+                    pipelinePreset: "research_deep",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run-high",
+                    finalAnswer: "b",
+                    steps: [],
+                    metrics: {},
+                },
+            },
+        ];
+
+        expect(buildDriftCompareHref(runs, "run-high")).toBe(
+            "/runs/compare?left=run-high&right=run-low",
+        );
+
+        const rows = buildConfidenceDriftRows(makeIndex(), { runs });
+        expect(rows.find((row) => row.runId === "run-high")?.compareHref).toBe(
+            "/runs/compare?left=run-high&right=run-low",
+        );
     });
 });

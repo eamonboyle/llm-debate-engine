@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CritiqueConfidenceScatter } from "../../components/charts/CritiqueConfidenceScatter";
 import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { MetricCard } from "../../components/MetricCard";
 import {
     ResponsiveTable,
     TruncateText,
 } from "../../components/ResponsiveTable";
-import { loadAnalysisIndex } from "../../lib/data";
+import { loadAnalysisIndex, loadRunArtifacts } from "../../lib/data";
 import {
     buildConfidenceDriftRows,
     summarizeConfidenceDrift,
@@ -37,7 +38,10 @@ export default async function ConfidenceDriftPage({
     searchParams: Promise<DriftSearchParams>;
 }) {
     const params = await searchParams;
-    const rawIndex = await loadAnalysisIndex();
+    const [rawIndex, allRuns] = await Promise.all([
+        loadAnalysisIndex(),
+        loadRunArtifacts(),
+    ]);
 
     if (!rawIndex) {
         return (
@@ -57,7 +61,18 @@ export default async function ConfidenceDriftPage({
     const { models, presets } = collectIndexFacets(rawIndex);
     const index = applyIndexFilters(rawIndex, params);
     const summary = summarizeConfidenceDrift(index);
-    const rows = buildConfidenceDriftRows(index);
+    const rows = buildConfidenceDriftRows(index, { runs: allRuns });
+    const scatterPoints = rows
+        .filter(
+            (row) =>
+                typeof row.maxSeverity === "number" &&
+                typeof row.solverToRevisionDelta === "number",
+        )
+        .map((row) => ({
+            runId: row.runId,
+            maxSeverity: row.maxSeverity as number,
+            solverToRevisionDelta: row.solverToRevisionDelta as number,
+        }));
 
     return (
         <section className="stack">
@@ -144,6 +159,13 @@ export default async function ConfidenceDriftPage({
                     helpKey="severityVsRevisionToSynthesizerDelta"
                 />
             </div>
+
+            {scatterPoints.length > 0 ? (
+                <CritiqueConfidenceScatter
+                    points={scatterPoints}
+                    hint="Filtered runs with both severity and solver→revision delta — click a point to open the trace."
+                />
+            ) : null}
 
             {rows.length === 0 ? (
                 <div className="card">

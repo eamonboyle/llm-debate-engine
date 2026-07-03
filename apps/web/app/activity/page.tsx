@@ -14,6 +14,7 @@ import {
 import { collectArtifactFacets } from "../../lib/artifactFacets";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
 import { buildQueryString, paginateItems } from "../../lib/listPagination";
+import { questionHubHref } from "../../lib/questionGroups";
 
 export const metadata: Metadata = {
     title: "Activity",
@@ -232,13 +233,21 @@ export default async function ActivityPage({
                                 label: "Question",
                                 cellClass: "cell-question",
                                 render: (row) => (
-                                    <TruncateText
-                                        text={
+                                    <Link
+                                        href={questionHubHref(
                                             (row as { question: string })
-                                                .question
-                                        }
-                                        maxLength={90}
-                                    />
+                                                .question,
+                                        )}
+                                        title="Open question hub"
+                                    >
+                                        <TruncateText
+                                            text={
+                                                (row as { question: string })
+                                                    .question
+                                            }
+                                            maxLength={90}
+                                        />
+                                    </Link>
                                 ),
                             },
                             {
