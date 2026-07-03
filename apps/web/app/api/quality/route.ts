@@ -1,6 +1,10 @@
 import { loadAnalysisIndex, loadRunArtifacts } from "../../../lib/data";
 import { applyIndexFilters } from "../../../lib/indexFilters";
-import { aggregateJudgeNarratives } from "../../../lib/judgeNarrativeInsights";
+import {
+    aggregateJudgeNarratives,
+    listRunsForNarrativeTheme,
+    type NarrativeThemeKind,
+} from "../../../lib/judgeNarrativeInsights";
 import { qualityRunsToCsv } from "../../../lib/listExport";
 import {
     buildQualityRunRows,
@@ -15,7 +19,16 @@ function readFilterParams(url: URL) {
         fast: url.searchParams.get("fast") ?? undefined,
         from: url.searchParams.get("from") ?? undefined,
         to: url.searchParams.get("to") ?? undefined,
+        theme: url.searchParams.get("theme") ?? undefined,
+        narrativeKind: url.searchParams.get("narrativeKind") ?? undefined,
     };
+}
+
+function resolveNarrativeKind(
+    value: string | undefined,
+): NarrativeThemeKind | null {
+    if (value === "strength" || value === "weakness") return value;
+    return null;
 }
 
 export async function GET(request: Request) {
@@ -47,10 +60,22 @@ export async function GET(request: Request) {
     );
     const includeNarratives =
         url.searchParams.get("includeNarratives") !== "false";
+    const allRuns = await loadRunArtifacts();
     const narratives =
         includeNarratives && qualityRunIds.size > 0
-            ? aggregateJudgeNarratives(await loadRunArtifacts(), qualityRunIds)
+            ? aggregateJudgeNarratives(allRuns, qualityRunIds)
             : { strengths: [], weaknesses: [] };
+    const selectedTheme = (filters.theme ?? "").trim();
+    const selectedNarrativeKind = resolveNarrativeKind(filters.narrativeKind);
+    const themeRuns =
+        selectedTheme && selectedNarrativeKind
+            ? listRunsForNarrativeTheme(
+                  allRuns,
+                  selectedTheme,
+                  selectedNarrativeKind,
+                  qualityRunIds,
+              )
+            : [];
 
     if (format === "csv") {
         const csv = qualityRunsToCsv(rows);
@@ -71,5 +96,8 @@ export async function GET(request: Request) {
         summary,
         rows,
         narratives,
+        themeRuns,
+        selectedTheme: selectedTheme || undefined,
+        selectedNarrativeKind: selectedNarrativeKind ?? undefined,
     });
 }

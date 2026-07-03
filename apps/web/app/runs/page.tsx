@@ -22,6 +22,7 @@ import {
     sortRunArtifacts,
 } from "../../lib/artifactSort";
 import { buildQueryString, paginateItems } from "../../lib/listPagination";
+import { questionHubHref } from "../../lib/questionGroups";
 
 export const metadata: Metadata = {
     title: "Runs",
@@ -238,11 +239,21 @@ export default async function RunsPage({
                             label: "Question",
                             cellClass: "cell-question",
                             render: (row) => (
-                                <TruncateText
-                                    text={(row as { question: string }).question}
-                                    maxLength={80}
+                                <Link
+                                    href={questionHubHref(
+                                        (row as { question: string }).question,
+                                    )}
                                     className="muted"
-                                />
+                                    title="Open question hub"
+                                >
+                                    <TruncateText
+                                        text={
+                                            (row as { question: string })
+                                                .question
+                                        }
+                                        maxLength={80}
+                                    />
+                                </Link>
                             ),
                         },
                         {

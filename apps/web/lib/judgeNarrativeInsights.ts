@@ -1,5 +1,15 @@
 import type { RunArtifact } from "./data";
 
+export type NarrativeThemeKind = "strength" | "weakness";
+
+export type NarrativeThemeRunRow = {
+    runId: string;
+    question: string;
+    model: string;
+    preset: string;
+    traceHref: string;
+};
+
 export type NarrativeTheme = {
     text: string;
     count: number;
@@ -105,4 +115,46 @@ export function aggregateJudgeNarratives(
         strengths: aggregateThemes(strengthEntries),
         weaknesses: aggregateThemes(weaknessEntries),
     };
+}
+
+function normalizeThemeText(text: string): string {
+    return text.trim().toLowerCase();
+}
+
+export function listRunsForNarrativeTheme(
+    runs: RunArtifact[],
+    themeText: string,
+    kind: NarrativeThemeKind,
+    scopeRunIds?: Set<string>,
+): NarrativeThemeRunRow[] {
+    const needle = normalizeThemeText(themeText);
+    if (!needle) return [];
+
+    const matches = new Map<string, NarrativeThemeRunRow>();
+
+    for (const run of runs) {
+        if (scopeRunIds && !scopeRunIds.has(run.id)) continue;
+
+        for (const step of run.run.steps) {
+            if (step.output?.kind !== "judgement") continue;
+            const { strengths, weaknesses } = extractJudgementLists(
+                step.output,
+            );
+            const texts = kind === "strength" ? strengths : weaknesses;
+            const hasTheme = texts.some(
+                (text) => normalizeThemeText(text) === needle,
+            );
+            if (!hasTheme || matches.has(run.id)) continue;
+
+            matches.set(run.id, {
+                runId: run.id,
+                question: run.question,
+                model: run.metadata.model,
+                preset: run.metadata.pipelinePreset,
+                traceHref: `/runs/${run.id}`,
+            });
+        }
+    }
+
+    return [...matches.values()].sort((a, b) => b.runId.localeCompare(a.runId));
 }

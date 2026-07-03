@@ -2,7 +2,7 @@ import {
     buildConfidenceDriftRows,
     summarizeConfidenceDrift,
 } from "../../../lib/confidenceDrift";
-import { loadAnalysisIndex } from "../../../lib/data";
+import { loadAnalysisIndex, loadRunArtifacts } from "../../../lib/data";
 import { applyIndexFilters } from "../../../lib/indexFilters";
 import { confidenceDriftToCsv } from "../../../lib/listExport";
 
@@ -31,7 +31,8 @@ export async function GET(request: Request) {
     }
 
     const filteredIndex = applyIndexFilters(index, filters);
-    const rows = buildConfidenceDriftRows(filteredIndex);
+    const allRuns = await loadRunArtifacts();
+    const rows = buildConfidenceDriftRows(filteredIndex, { runs: allRuns });
     const summary = summarizeConfidenceDrift(filteredIndex);
 
     if (format === "csv") {

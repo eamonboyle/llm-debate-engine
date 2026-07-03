@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { EvidenceRiskChart } from "../../components/charts/EvidenceRiskChart";
 import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { MetricCard } from "../../components/MetricCard";
 import {
@@ -147,27 +148,17 @@ export default async function EvidenceExplorerPage({
             </div>
 
             {riskSummaries.length > 0 ? (
-                <div
-                    className="page-actions"
-                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
-                >
-                    <a
-                        href={`/api/evidence${buildQueryString(params, {})}`}
-                        className="button secondary"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        download
-                    >
-                        Export JSON
-                    </a>
-                    <a
-                        href={`/api/evidence${buildQueryString(params, {})}&format=csv`}
-                        className="button secondary"
-                        download="evidence-planning.csv"
-                    >
-                        Export CSV
-                    </a>
-                </div>
+                <EvidenceRiskChart
+                    rows={riskSummaries}
+                    exploreQuery={{
+                        q: params.q,
+                        model: params.model,
+                        preset: params.preset,
+                        fast: params.fast,
+                        from: params.from,
+                        to: params.to,
+                    }}
+                />
             ) : null}
 
             <div className="card">
