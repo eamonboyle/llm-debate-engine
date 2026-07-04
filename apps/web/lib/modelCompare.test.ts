@@ -18,6 +18,7 @@ function sampleIndex(): AnalysisIndex {
                 confidence: { solver: 0.8, solverToRevisionDelta: -0.1 },
                 critique: { issueCount: 10, maxSeverity: 4 },
                 research: { evidenceRiskLevel: 3 },
+                quality: { coherence: 4, factualRisk: 2 },
             },
             {
                 id: "run-b",
@@ -30,6 +31,7 @@ function sampleIndex(): AnalysisIndex {
                 confidence: { solver: 0.6, solverToRevisionDelta: -0.3 },
                 critique: { issueCount: 20, maxSeverity: 5 },
                 research: { evidenceRiskLevel: 4 },
+                quality: { coherence: 2, factualRisk: 4 },
             },
         ],
         benchmarks: [],
@@ -59,6 +61,8 @@ describe("modelCompare", () => {
         expect(payload!.right.model).toBe("model-b");
         expect(payload!.delta.avgIssueCount).toBe(10);
         expect(payload!.delta.avgSolverConfidence).toBeCloseTo(-0.2);
+        expect(payload!.delta.avgCoherence).toBe(-2);
+        expect(payload!.delta.avgFactualRisk).toBe(2);
     });
 
     it("returns null when a model is missing", () => {

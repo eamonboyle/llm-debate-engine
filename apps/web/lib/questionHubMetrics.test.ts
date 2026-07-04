@@ -3,6 +3,7 @@ import type { AnalysisIndex } from "./data";
 import {
     buildQuestionHubBenchmarkRows,
     buildQuestionHubRunRows,
+    buildQuestionMetricsLookup,
     summarizeQuestionHubBenchmarkMetrics,
     summarizeQuestionHubMetrics,
 } from "./questionHubMetrics";
@@ -141,5 +142,16 @@ describe("summarizeQuestionHubBenchmarkMetrics", () => {
             topMode: "cautious outlook",
         });
         expect(rows.has("missing")).toBe(false);
+    });
+
+    it("builds per-question metrics lookup from the analysis index", () => {
+        const lookup = buildQuestionMetricsLookup(sampleIndex());
+        expect(lookup.get("Topic A")).toMatchObject({
+            indexedRunCount: 2,
+            avgIssueCount: 3,
+            avgCoherence: 3,
+            avgFactualRisk: 3,
+        });
+        expect(lookup.has("Topic B")).toBe(false);
     });
 });

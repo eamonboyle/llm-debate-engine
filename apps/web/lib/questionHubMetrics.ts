@@ -43,6 +43,13 @@ export type QuestionHubBenchmarkRow = {
     topMode?: string | null;
 };
 
+export type QuestionListMetrics = {
+    indexedRunCount: number;
+    avgIssueCount: number | null;
+    avgCoherence: number | null;
+    avgFactualRisk: number | null;
+};
+
 function average(values: number[]): number | null {
     if (values.length === 0) return null;
     return values.reduce((sum, value) => sum + value, 0) / values.length;
@@ -90,6 +97,39 @@ export function summarizeQuestionHubMetrics(
         avgCoherence: average(coherenceScores),
         avgFactualRisk: average(factualRiskScores),
     };
+}
+
+export function buildQuestionMetricsLookup(
+    index: AnalysisIndex,
+): Map<string, QuestionListMetrics> {
+    const byQuestion = new Map<string, AnalysisIndex["runs"]>();
+
+    for (const run of index.runs) {
+        const bucket = byQuestion.get(run.question) ?? [];
+        bucket.push(run);
+        byQuestion.set(run.question, bucket);
+    }
+
+    const lookup = new Map<string, QuestionListMetrics>();
+
+    for (const [question, runs] of byQuestion.entries()) {
+        const issueCounts = runs.map((run) => run.critique.issueCount);
+        const coherenceScores = runs
+            .map((run) => run.quality?.coherence)
+            .filter((value): value is number => typeof value === "number");
+        const factualRiskScores = runs
+            .map((run) => run.quality?.factualRisk)
+            .filter((value): value is number => typeof value === "number");
+
+        lookup.set(question, {
+            indexedRunCount: runs.length,
+            avgIssueCount: average(issueCounts),
+            avgCoherence: average(coherenceScores),
+            avgFactualRisk: average(factualRiskScores),
+        });
+    }
+
+    return lookup;
 }
 
 export function buildQuestionHubRunRows(

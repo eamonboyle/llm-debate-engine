@@ -57,9 +57,9 @@ export default async function ModelLeaderboardPage({
             <div>
                 <h1 className="title">Model leaderboard</h1>
                 <p className="subtitle">
-                    Average critique pressure and confidence drift per model
-                    across {filteredRunCount} indexed run
-                    {filteredRunCount === 1 ? "" : "s"}
+                    Average critique pressure, confidence drift, evidence risk,
+                    and judge rubric scores per model across {filteredRunCount}{" "}
+                    indexed run{filteredRunCount === 1 ? "" : "s"}
                     {filteredRunCount !== rawIndex.totals.runs
                         ? ` (${rawIndex.totals.runs} total)`
                         : ""}
@@ -157,6 +157,18 @@ export default async function ModelLeaderboardPage({
                                 helpKey: "solverConfidence",
                             },
                             {
+                                key: "avgCoherence",
+                                label: "Avg coherence",
+                                helpKey: "coherence",
+                                hideOnMobile: true,
+                            },
+                            {
+                                key: "avgFactualRisk",
+                                label: "Avg factual risk",
+                                helpKey: "factualRisk",
+                                hideOnMobile: true,
+                            },
+                            {
                                 key: "explore",
                                 label: "Explore",
                                 render: (row) => (
@@ -184,6 +196,8 @@ export default async function ModelLeaderboardPage({
                                 row.avgSolverConfidence,
                                 3,
                             ),
+                            avgCoherence: formatMetric(row.avgCoherence),
+                            avgFactualRisk: formatMetric(row.avgFactualRisk),
                         }))}
                         getRowId={(row) => (row as { model: string }).model}
                         renderCardActions={(row) => (

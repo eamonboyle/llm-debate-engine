@@ -14,6 +14,8 @@ export type ModelComparePayload = {
         avgSolverToRevisionDelta: number | null;
         avgEvidenceRisk: number | null;
         avgSolverConfidence: number | null;
+        avgCoherence: number | null;
+        avgFactualRisk: number | null;
     };
 };
 
@@ -61,6 +63,8 @@ export function buildModelComparePayload(
                 right.avgSolverConfidence,
                 left.avgSolverConfidence,
             ),
+            avgCoherence: delta(right.avgCoherence, left.avgCoherence),
+            avgFactualRisk: delta(right.avgFactualRisk, left.avgFactualRisk),
         },
     };
 }

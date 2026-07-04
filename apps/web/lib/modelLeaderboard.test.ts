@@ -69,6 +69,7 @@ describe("buildModelLeaderboard", () => {
                 },
                 critique: { issueCount: 6, maxSeverity: 3 },
                 research: { evidenceRiskLevel: 4 },
+                quality: { coherence: 3.5, factualRisk: 2 },
             },
         ]);
 
@@ -78,6 +79,7 @@ describe("buildModelLeaderboard", () => {
         expect(rows[0]?.runCount).toBe(2);
         expect(rows[0]?.avgIssueCount).toBe(8);
         expect(rows[0]?.avgSolverToRevisionDelta).toBeCloseTo(-0.25);
+        expect(rows[0]?.avgCoherence).toBeCloseTo(3.5);
         expect(rows[0]?.runsHref).toContain("model=gpt-a");
     });
 });
