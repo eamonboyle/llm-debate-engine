@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CounterfactualModeChart } from "../../components/charts/CounterfactualModeChart";
 import { InsightFilterCard } from "../../components/InsightFilterCard";
 import {
     ResponsiveTable,
@@ -116,6 +117,20 @@ export default async function CounterfactualExplorerPage({
                         Export CSV
                     </a>
                 </div>
+            ) : null}
+
+            {summaries.length > 0 ? (
+                <CounterfactualModeChart
+                    rows={summaries}
+                    exploreQuery={{
+                        q: params.q,
+                        model: params.model,
+                        preset: params.preset,
+                        fast: params.fast,
+                        from: params.from,
+                        to: params.to,
+                    }}
+                />
             ) : null}
 
             <div className="card">

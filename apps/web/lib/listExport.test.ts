@@ -90,11 +90,14 @@ describe("listExport", () => {
                 avgSolverToRevisionDelta: -0.05,
                 avgEvidenceRisk: 2.1,
                 avgSolverConfidence: 0.82,
+                avgCoherence: 4.2,
+                avgFactualRisk: 2.5,
                 runsHref: "/runs?model=gpt-test",
             },
         ]);
         expect(csv).toContain("gpt-test");
         expect(csv).toContain("-0.05");
+        expect(csv).toContain("4.2");
     });
 
     it("exports preset leaderboard rows", () => {

@@ -8,6 +8,8 @@ export type ModelLeaderboardRow = {
     avgSolverToRevisionDelta: number | null;
     avgEvidenceRisk: number | null;
     avgSolverConfidence: number | null;
+    avgCoherence: number | null;
+    avgFactualRisk: number | null;
     runsHref: string;
 };
 
@@ -81,6 +83,12 @@ export function buildModelLeaderboard(
         const solverConfs = runs
             .map((run) => run.confidence.solver)
             .filter((value): value is number => typeof value === "number");
+        const coherenceScores = runs
+            .map((run) => run.quality?.coherence)
+            .filter((value): value is number => typeof value === "number");
+        const factualRiskScores = runs
+            .map((run) => run.quality?.factualRisk)
+            .filter((value): value is number => typeof value === "number");
 
         const avgIssueCount = mean(issueCounts) ?? 0;
 
@@ -92,6 +100,8 @@ export function buildModelLeaderboard(
             avgSolverToRevisionDelta: mean(solverDeltas),
             avgEvidenceRisk: mean(evidenceRisks),
             avgSolverConfidence: mean(solverConfs),
+            avgCoherence: mean(coherenceScores),
+            avgFactualRisk: mean(factualRiskScores),
             runsHref: runsHref(model, opts.fastMode, opts.linkFilters),
         });
     }

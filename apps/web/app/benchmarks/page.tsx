@@ -27,6 +27,7 @@ import {
 } from "../../lib/artifactSort";
 import { buildQueryString, paginateItems } from "../../lib/listPagination";
 import { extractClaimCentroidDisplay } from "../../lib/claimCentroidMetrics";
+import { questionHubHref } from "../../lib/questionGroups";
 
 export const metadata: Metadata = {
     title: "Benchmarks",
@@ -338,11 +339,16 @@ export default async function BenchmarksPage({
                             label: "Question",
                             cellClass: "cell-question",
                             render: (row) => (
-                                <TruncateText
-                                    text={row.question}
-                                    maxLength={80}
+                                <Link
+                                    href={questionHubHref(row.question)}
                                     className="muted"
-                                />
+                                    title="Open question hub"
+                                >
+                                    <TruncateText
+                                        text={row.question}
+                                        maxLength={80}
+                                    />
+                                </Link>
                             ),
                         },
                         {

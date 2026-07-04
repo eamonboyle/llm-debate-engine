@@ -123,6 +123,8 @@ export function modelLeaderboardToCsv(rows: ModelLeaderboardRow[]): string {
         "avgSolverToRevisionDelta",
         "avgEvidenceRisk",
         "avgSolverConfidence",
+        "avgCoherence",
+        "avgFactualRisk",
     ];
     const csvRows = rows.map((entry) =>
         row([
@@ -133,6 +135,8 @@ export function modelLeaderboardToCsv(rows: ModelLeaderboardRow[]): string {
             entry.avgSolverToRevisionDelta ?? "",
             entry.avgEvidenceRisk ?? "",
             entry.avgSolverConfidence ?? "",
+            entry.avgCoherence ?? "",
+            entry.avgFactualRisk ?? "",
         ]),
     );
     return [header.join(","), ...csvRows].join("\n");

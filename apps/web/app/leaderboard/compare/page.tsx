@@ -326,6 +326,42 @@ export default async function ModelComparePage({
                                         )}
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>Avg coherence</td>
+                                    <td>
+                                        {formatMetric(
+                                            compare.left.avgCoherence,
+                                        )}
+                                    </td>
+                                    <td>
+                                        {formatMetric(
+                                            compare.right.avgCoherence,
+                                        )}
+                                    </td>
+                                    <td>
+                                        {formatDelta(
+                                            compare.delta.avgCoherence,
+                                        )}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Avg factual risk</td>
+                                    <td>
+                                        {formatMetric(
+                                            compare.left.avgFactualRisk,
+                                        )}
+                                    </td>
+                                    <td>
+                                        {formatMetric(
+                                            compare.right.avgFactualRisk,
+                                        )}
+                                    </td>
+                                    <td>
+                                        {formatDelta(
+                                            compare.delta.avgFactualRisk,
+                                        )}
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -350,6 +386,16 @@ export default async function ModelComparePage({
                             label="Right evidence risk"
                             value={formatMetric(compare.right.avgEvidenceRisk)}
                             helpKey="evidenceRiskLevel"
+                        />
+                        <MetricCard
+                            label="Left coherence"
+                            value={formatMetric(compare.left.avgCoherence)}
+                            helpKey="coherence"
+                        />
+                        <MetricCard
+                            label="Right coherence"
+                            value={formatMetric(compare.right.avgCoherence)}
+                            helpKey="coherence"
                         />
                     </div>
 
@@ -381,6 +427,16 @@ export default async function ModelComparePage({
                                 metric: "solverConf",
                                 left: compare.left.avgSolverConfidence,
                                 right: compare.right.avgSolverConfidence,
+                            },
+                            {
+                                metric: "coherence",
+                                left: compare.left.avgCoherence,
+                                right: compare.right.avgCoherence,
+                            },
+                            {
+                                metric: "factualRisk",
+                                left: compare.left.avgFactualRisk,
+                                right: compare.right.avgFactualRisk,
                             },
                         ]}
                     />

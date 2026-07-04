@@ -8,7 +8,11 @@ import {
 import { ModelFilterSelect } from "../../components/ModelFilterSelect";
 import { PresetFilterSelect } from "../../components/PresetFilterSelect";
 import { collectArtifactFacets } from "../../lib/artifactFacets";
-import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
+import {
+    loadAnalysisIndex,
+    loadBenchmarkArtifacts,
+    loadRunArtifacts,
+} from "../../lib/data";
 import {
     filterArtifactsForQuestionGroups,
     groupArtifactsByQuestion,
@@ -20,6 +24,7 @@ import {
     resolveQuestionSortOrder,
     sortQuestionGroups,
 } from "../../lib/questionSort";
+import { buildQuestionMetricsLookup } from "../../lib/questionHubMetrics";
 
 export const metadata: Metadata = {
     title: "Questions",
@@ -43,10 +48,12 @@ export default async function QuestionsPage({
     searchParams: Promise<QuestionsSearchParams>;
 }) {
     const params = await searchParams;
-    const [allRuns, allBenchmarks] = await Promise.all([
+    const [allRuns, allBenchmarks, index] = await Promise.all([
         loadRunArtifacts(),
         loadBenchmarkArtifacts(),
+        loadAnalysisIndex(),
     ]);
+    const questionMetrics = index ? buildQuestionMetricsLookup(index) : null;
     const { models, presets } = collectArtifactFacets(allRuns, allBenchmarks);
     const { runs, benchmarks } = filterArtifactsForQuestionGroups(
         allRuns,
@@ -232,6 +239,42 @@ export default async function QuestionsPage({
                             },
                             { key: "runCount", label: "Runs" },
                             { key: "benchmarkCount", label: "Benchmarks" },
+                            ...(questionMetrics
+                                ? [
+                                      {
+                                          key: "avgIssues",
+                                          label: "Avg issues",
+                                          helpKey: "issueCount",
+                                          hideOnMobile: true,
+                                          render: (
+                                              row: Record<string, unknown>,
+                                          ) => {
+                                              const value = (
+                                                  row as {
+                                                      avgIssues?: string;
+                                                  }
+                                              ).avgIssues;
+                                              return value ?? "—";
+                                          },
+                                      },
+                                      {
+                                          key: "avgCoherence",
+                                          label: "Avg coherence",
+                                          helpKey: "coherence",
+                                          hideOnMobile: true,
+                                          render: (
+                                              row: Record<string, unknown>,
+                                          ) => {
+                                              const value = (
+                                                  row as {
+                                                      avgCoherence?: string;
+                                                  }
+                                              ).avgCoherence;
+                                              return value ?? "—";
+                                          },
+                                      },
+                                  ]
+                                : []),
                             {
                                 key: "latestCreatedAt",
                                 label: "Last activity",
@@ -273,11 +316,22 @@ export default async function QuestionsPage({
                         ]}
                         data={paging.paged.map((group) => {
                             const encodedQ = encodeURIComponent(group.question);
+                            const metrics = questionMetrics?.get(
+                                group.question,
+                            );
                             return {
                                 question: group.question,
                                 hubHref: questionHubHref(group.question),
                                 runCount: group.runCount,
                                 benchmarkCount: group.benchmarkCount,
+                                avgIssues:
+                                    metrics?.avgIssueCount == null
+                                        ? undefined
+                                        : metrics.avgIssueCount.toFixed(1),
+                                avgCoherence:
+                                    metrics?.avgCoherence == null
+                                        ? undefined
+                                        : metrics.avgCoherence.toFixed(1),
                                 latestCreatedAt: group.latestCreatedAt,
                                 models: group.models,
                                 runsHref: `/runs?q=${encodedQ}`,
