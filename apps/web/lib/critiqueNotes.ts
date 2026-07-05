@@ -91,9 +91,7 @@ export function extractCritiqueNotesForRuns(
     const rows: CritiqueNoteRow[] = [];
     for (const run of runs) {
         if (runIds && !runIds.has(run.id)) continue;
-        rows.push(
-            ...extractCritiqueNotesFromRun(run, normalized, agentFilter),
-        );
+        rows.push(...extractCritiqueNotesFromRun(run, normalized, agentFilter));
     }
 
     return rows.sort(

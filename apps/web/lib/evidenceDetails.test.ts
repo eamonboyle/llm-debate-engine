@@ -64,10 +64,7 @@ describe("evidenceDetails", () => {
         ];
 
         const rows = extractEvidenceDetailsForRuns(runs, { riskLevel: 4 });
-        const aggregated = aggregateEvidenceStrings(
-            rows,
-            "verificationChecks",
-        );
+        const aggregated = aggregateEvidenceStrings(rows, "verificationChecks");
         expect(aggregated[0]).toMatchObject({
             text: "Check citations",
             runCount: 2,

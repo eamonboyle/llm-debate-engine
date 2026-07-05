@@ -354,9 +354,7 @@ export default async function CounterfactualExplorerPage({
                     ) : null}
 
                     <div className="card">
-                        <h2 style={{ marginTop: 0 }}>
-                            Counterfactual details
-                        </h2>
+                        <h2 style={{ marginTop: 0 }}>Counterfactual details</h2>
                         <ResponsiveTable
                             columns={[
                                 { key: "runId", label: "Run ID" },
@@ -405,9 +403,7 @@ export default async function CounterfactualExplorerPage({
                                 },
                             ]}
                             data={counterfactualDetails}
-                            getRowId={(row) =>
-                                (row as { runId: string }).runId
-                            }
+                            getRowId={(row) => (row as { runId: string }).runId}
                         />
                     </div>
                 </>

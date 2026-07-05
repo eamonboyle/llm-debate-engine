@@ -120,9 +120,6 @@ export function aggregateCounterfactualStrings(
             text: entry.text,
             runCount: entry.runIds.size,
         }))
-        .sort(
-            (a, b) =>
-                b.runCount - a.runCount || a.text.localeCompare(b.text),
-        )
+        .sort((a, b) => b.runCount - a.runCount || a.text.localeCompare(b.text))
         .slice(0, limit);
 }

@@ -101,11 +101,7 @@ export default async function QualityInsightsPage({
                   qualityRunIds,
               )
             : [];
-    const judgeSummaries = listJudgeSummaries(
-        allRuns,
-        qualityRunIds,
-        params.q,
-    );
+    const judgeSummaries = listJudgeSummaries(allRuns, qualityRunIds, params.q);
 
     function themeHref(text: string, kind: NarrativeThemeKind) {
         return `/quality${buildQueryString(params, {
@@ -416,7 +412,9 @@ export default async function QualityInsightsPage({
                                             formatScore(
                                                 (
                                                     row as {
-                                                        coherence: number | null;
+                                                        coherence:
+                                                            | number
+                                                            | null;
                                                     }
                                                 ).coherence,
                                             ),
@@ -429,7 +427,9 @@ export default async function QualityInsightsPage({
                                             formatScore(
                                                 (
                                                     row as {
-                                                        factualRisk: number | null;
+                                                        factualRisk:
+                                                            | number
+                                                            | null;
                                                     }
                                                 ).factualRisk,
                                             ),

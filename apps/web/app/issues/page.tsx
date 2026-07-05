@@ -49,11 +49,7 @@ function agentFilterHref(
 ): string {
     const query = new URLSearchParams();
     for (const [key, value] of Object.entries(params)) {
-        if (
-            typeof value === "string" &&
-            value.length > 0 &&
-            key !== "agent"
-        ) {
+        if (typeof value === "string" && value.length > 0 && key !== "agent") {
             query.set(key, value);
         }
     }
@@ -128,13 +124,15 @@ export default async function IssuesExplorerPage({
             <div>
                 <h1 className="title">Critique issues</h1>
                 <p className="subtitle">
-                    Critique issue types from Skeptic and Red team agents
-                    across {filteredIndex.totals.runs} indexed run
+                    Critique issue types from Skeptic and Red team agents across{" "}
+                    {filteredIndex.totals.runs} indexed run
                     {filteredIndex.totals.runs === 1 ? "" : "s"}
                     {filteredIndex.totals.runs !== index.totals.runs
                         ? ` (${index.totals.runs} total)`
                         : ""}
-                    {useAgentFilter ? ` · ${critiqueAgentFilterLabel(agentFilter)}` : ""}
+                    {useAgentFilter
+                        ? ` · ${critiqueAgentFilterLabel(agentFilter)}`
+                        : ""}
                     . Select a type to see which traces contributed.
                 </p>
                 <div
@@ -171,11 +169,7 @@ export default async function IssuesExplorerPage({
                     style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
                 >
                     {(
-                        [
-                            "all",
-                            "skeptic",
-                            "redteam",
-                        ] as CritiqueAgentFilter[]
+                        ["all", "skeptic", "redteam"] as CritiqueAgentFilter[]
                     ).map((filter) => {
                         const active = agentFilter === filter;
                         return (

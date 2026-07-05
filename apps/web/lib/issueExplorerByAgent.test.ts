@@ -62,9 +62,7 @@ describe("issueExplorerByAgent", () => {
             totalCount: 1,
             runCount: 1,
         });
-        expect(
-            summaries.some((row) => row.type === "missing"),
-        ).toBe(false);
+        expect(summaries.some((row) => row.type === "missing")).toBe(false);
     });
 
     it("lists runs for an issue type from artifact traces", () => {

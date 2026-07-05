@@ -104,8 +104,7 @@ export function extractEvidenceDetailsForRuns(
     }
 
     return rows.sort(
-        (a, b) =>
-            b.riskLevel - a.riskLevel || a.runId.localeCompare(b.runId),
+        (a, b) => b.riskLevel - a.riskLevel || a.runId.localeCompare(b.runId),
     );
 }
 
@@ -133,9 +132,6 @@ export function aggregateEvidenceStrings(
             text: entry.text,
             runCount: entry.runIds.size,
         }))
-        .sort(
-            (a, b) =>
-                b.runCount - a.runCount || a.text.localeCompare(b.text),
-        )
+        .sort((a, b) => b.runCount - a.runCount || a.text.localeCompare(b.text))
         .slice(0, limit);
 }

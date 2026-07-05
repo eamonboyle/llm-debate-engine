@@ -61,7 +61,10 @@ export function buildIssueTypeSummariesFromRuns(
         }
 
         for (const [type, severities] of byType.entries()) {
-            totalCounts.set(type, (totalCounts.get(type) ?? 0) + severities.length);
+            totalCounts.set(
+                type,
+                (totalCounts.get(type) ?? 0) + severities.length,
+            );
             const runSet = runCounts.get(type) ?? new Set<string>();
             runSet.add(run.id);
             runCounts.set(type, runSet);
@@ -81,9 +84,7 @@ export function buildIssueTypeSummariesFromRuns(
                 runCount: runCounts.get(type)?.size ?? 0,
                 avgSeverity: mean(severities),
                 maxSeverity:
-                    severities.length > 0
-                        ? Math.max(...severities)
-                        : undefined,
+                    severities.length > 0 ? Math.max(...severities) : undefined,
             };
         })
         .sort((a, b) => b.totalCount - a.totalCount);
