@@ -128,7 +128,7 @@ const NAV_ENTRIES: NavEntry[] = [
             {
                 href: "/issues",
                 label: "Critique issues",
-                hint: "Skeptic issue breakdown",
+                hint: "Skeptic and red team issues",
             },
             {
                 href: "/counterfactual",

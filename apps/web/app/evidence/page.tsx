@@ -7,7 +7,11 @@ import {
     ResponsiveTable,
     TruncateText,
 } from "../../components/ResponsiveTable";
-import { loadAnalysisIndex } from "../../lib/data";
+import { loadAnalysisIndex, loadRunArtifacts } from "../../lib/data";
+import {
+    aggregateEvidenceStrings,
+    extractEvidenceDetailsForRuns,
+} from "../../lib/evidenceDetails";
 import {
     buildEvidenceRiskSummaries,
     listRunsForEvidenceRisk,
@@ -62,6 +66,25 @@ export default async function EvidenceExplorerPage({
     const selectedRuns = Number.isFinite(selectedLevel)
         ? listRunsForEvidenceRisk(index, selectedLevel)
         : [];
+    const filteredRunIds = new Set(index.runs.map((run) => run.id));
+    const evidenceDetails = Number.isFinite(selectedLevel)
+        ? extractEvidenceDetailsForRuns(await loadRunArtifacts(), {
+              riskLevel: selectedLevel,
+              runIds: filteredRunIds,
+          })
+        : [];
+    const topVerificationChecks = aggregateEvidenceStrings(
+        evidenceDetails,
+        "verificationChecks",
+    );
+    const topRequirements = aggregateEvidenceStrings(
+        evidenceDetails,
+        "evidenceRequirements",
+    );
+    const topUnknowns = aggregateEvidenceStrings(
+        evidenceDetails,
+        "majorUnknowns",
+    );
 
     return (
         <section className="stack">
@@ -265,6 +288,149 @@ export default async function EvidenceExplorerPage({
                         />
                     )}
                 </div>
+            ) : null}
+
+            {Number.isFinite(selectedLevel) && evidenceDetails.length > 0 ? (
+                <>
+                    {topVerificationChecks.length > 0 ||
+                    topRequirements.length > 0 ? (
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns:
+                                    "repeat(auto-fit, minmax(280px, 1fr))",
+                                gap: "1rem",
+                            }}
+                        >
+                            {topVerificationChecks.length > 0 ? (
+                                <div className="card">
+                                    <h2 style={{ marginTop: 0 }}>
+                                        Common verification checks
+                                    </h2>
+                                    <p className="small muted">
+                                        Recurring checks at risk level{" "}
+                                        {selectedLevel} across{" "}
+                                        {evidenceDetails.length} trace
+                                        {evidenceDetails.length === 1
+                                            ? ""
+                                            : "s"}
+                                        .
+                                    </p>
+                                    <ul className="trace-summary-list">
+                                        {topVerificationChecks.map((item) => (
+                                            <li key={item.text}>
+                                                {item.text}
+                                                <span className="small muted">
+                                                    {" "}
+                                                    · {item.runCount} run
+                                                    {item.runCount === 1
+                                                        ? ""
+                                                        : "s"}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ) : null}
+                            {topRequirements.length > 0 ? (
+                                <div className="card">
+                                    <h2 style={{ marginTop: 0 }}>
+                                        Common evidence requirements
+                                    </h2>
+                                    <ul className="trace-summary-list">
+                                        {topRequirements.map((item) => (
+                                            <li key={item.text}>
+                                                {item.text}
+                                                <span className="small muted">
+                                                    {" "}
+                                                    · {item.runCount} run
+                                                    {item.runCount === 1
+                                                        ? ""
+                                                        : "s"}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ) : null}
+                        </div>
+                    ) : null}
+
+                    {topUnknowns.length > 0 ? (
+                        <div className="card">
+                            <h2 style={{ marginTop: 0 }}>Major unknowns</h2>
+                            <ul className="trace-summary-list">
+                                {topUnknowns.map((item) => (
+                                    <li key={item.text}>
+                                        {item.text}
+                                        <span className="small muted">
+                                            {" "}
+                                            · {item.runCount} run
+                                            {item.runCount === 1 ? "" : "s"}
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ) : null}
+
+                    <div className="card">
+                        <h2 style={{ marginTop: 0 }}>
+                            Evidence plan details
+                        </h2>
+                        <ResponsiveTable
+                            columns={[
+                                { key: "runId", label: "Run ID" },
+                                {
+                                    key: "question",
+                                    label: "Question",
+                                    cellClass: "cell-question",
+                                    render: (row) => (
+                                        <TruncateText
+                                            text={
+                                                (row as { question: string })
+                                                    .question
+                                            }
+                                            maxLength={72}
+                                        />
+                                    ),
+                                },
+                                {
+                                    key: "checks",
+                                    label: "Verification checks",
+                                    hideOnMobile: true,
+                                    render: (row) => (
+                                        <TruncateText
+                                            text={(
+                                                row as {
+                                                    verificationChecks: string[];
+                                                }
+                                            ).verificationChecks.join(" · ")}
+                                            maxLength={96}
+                                        />
+                                    ),
+                                },
+                                {
+                                    key: "open",
+                                    label: "Open",
+                                    render: (row) => (
+                                        <Link
+                                            href={
+                                                (row as { href: string }).href
+                                            }
+                                        >
+                                            Trace
+                                        </Link>
+                                    ),
+                                },
+                            ]}
+                            data={evidenceDetails}
+                            getRowId={(row) =>
+                                (row as { runId: string }).runId
+                            }
+                        />
+                    </div>
+                </>
             ) : null}
         </section>
     );

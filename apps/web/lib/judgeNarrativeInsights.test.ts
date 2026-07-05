@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { RunArtifact } from "./data";
 import {
     aggregateJudgeNarratives,
+    listJudgeSummaries,
     listRunsForNarrativeTheme,
 } from "./judgeNarrativeInsights";
 
@@ -112,5 +113,83 @@ describe("aggregateJudgeNarratives", () => {
         );
         expect(scoped).toHaveLength(1);
         expect(scoped[0]?.runId).toBe("run_a");
+    });
+});
+
+describe("listJudgeSummaries", () => {
+    it("lists judge summaries for scoped runs", () => {
+        const runs = [
+            makeRunWithJudgement(
+                "run_a",
+                ["Clear structure"],
+                ["Thin evidence"],
+            ),
+            makeRunWithJudgement(
+                "run_b",
+                ["Clear structure"],
+                ["Thin evidence", "No scenarios"],
+            ),
+        ];
+
+        const summaries = listJudgeSummaries(runs, new Set(["run_a"]));
+        expect(summaries).toHaveLength(1);
+        expect(summaries[0]).toMatchObject({
+            runId: "run_a",
+            summary: "Summary",
+            coherence: 4,
+            factualRisk: 2,
+        });
+    });
+
+    it("filters summaries by search query", () => {
+        const runs = [
+            makeRunWithJudgement(
+                "run_a",
+                ["Clear structure"],
+                ["Thin evidence"],
+            ),
+            {
+                ...makeRunWithJudgement(
+                    "run_b",
+                    ["Clear structure"],
+                    ["Thin evidence"],
+                ),
+                question: "Different topic?",
+                run: {
+                    ...makeRunWithJudgement(
+                        "run_b",
+                        ["Clear structure"],
+                        ["Thin evidence"],
+                    ).run,
+                    steps: [
+                        {
+                            ...makeRunWithJudgement(
+                                "run_b",
+                                ["Clear structure"],
+                                ["Thin evidence"],
+                            ).run.steps[0]!,
+                            output: {
+                                kind: "judgement",
+                                data: {
+                                    rubricScores: {
+                                        coherence: 3,
+                                        completeness: 3,
+                                        factualRisk: 3,
+                                        uncertaintyHandling: 3,
+                                    },
+                                    strengths: [],
+                                    weaknesses: [],
+                                    summary: "Unique verdict text",
+                                },
+                            },
+                        },
+                    ],
+                },
+            },
+        ];
+
+        const summaries = listJudgeSummaries(runs, undefined, "unique");
+        expect(summaries).toHaveLength(1);
+        expect(summaries[0]?.runId).toBe("run_b");
     });
 });
