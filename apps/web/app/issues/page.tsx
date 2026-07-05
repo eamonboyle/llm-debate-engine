@@ -16,6 +16,15 @@ import {
     buildIssueTypeSummaries,
     listRunsForIssueType,
 } from "../../lib/issueExplorer";
+import {
+    buildIssueTypeSummariesFromRuns,
+    listRunsForIssueTypeFromArtifacts,
+} from "../../lib/issueExplorerByAgent";
+import {
+    critiqueAgentFilterLabel,
+    parseCritiqueAgentFilter,
+    type CritiqueAgentFilter,
+} from "../../lib/critiqueAgentFilter";
 import { extractCritiqueNotesForRuns } from "../../lib/critiqueNotes";
 import { buildQueryString } from "../../lib/listPagination";
 
@@ -25,6 +34,7 @@ export const metadata: Metadata = {
 
 type IssuesSearchParams = {
     type?: string;
+    agent?: string;
     q?: string;
     model?: string;
     preset?: string;
@@ -32,6 +42,23 @@ type IssuesSearchParams = {
     from?: string;
     to?: string;
 };
+
+function agentFilterHref(
+    params: IssuesSearchParams,
+    agent: CritiqueAgentFilter,
+): string {
+    const query = new URLSearchParams();
+    for (const [key, value] of Object.entries(params)) {
+        if (typeof value === "string" && value.length > 0 && key !== "agent") {
+            query.set(key, value);
+        }
+    }
+    if (agent !== "all") {
+        query.set("agent", agent);
+    }
+    const suffix = query.toString();
+    return suffix ? `/issues?${suffix}` : "/issues";
+}
 
 export default async function IssuesExplorerPage({
     searchParams,
@@ -58,20 +85,37 @@ export default async function IssuesExplorerPage({
 
     const { models, presets } = collectIndexFacets(index);
     const filteredIndex = applyIndexFilters(index, params);
-    const summaries = buildIssueTypeSummaries(filteredIndex, {
-        useIndexedSeverity:
-            !hasActiveIndexFilters(params) &&
-            Boolean(index.aggregates.issueSeverityByType?.length),
-    });
+    const agentFilter = parseCritiqueAgentFilter(params.agent);
+    const useAgentFilter = agentFilter !== "all";
+    const filteredRunIds = new Set(filteredIndex.runs.map((run) => run.id));
+    const runArtifacts = useAgentFilter ? await loadRunArtifacts() : [];
+    const scopedArtifacts = useAgentFilter
+        ? runArtifacts.filter((run) => filteredRunIds.has(run.id))
+        : [];
+
+    const summaries = useAgentFilter
+        ? buildIssueTypeSummariesFromRuns(scopedArtifacts, agentFilter)
+        : buildIssueTypeSummaries(filteredIndex, {
+              useIndexedSeverity:
+                  !hasActiveIndexFilters(params) &&
+                  Boolean(index.aggregates.issueSeverityByType?.length),
+          });
     const selectedType = (params.type ?? "").trim();
     const selectedRuns = selectedType
-        ? listRunsForIssueType(filteredIndex, selectedType)
+        ? useAgentFilter
+            ? listRunsForIssueTypeFromArtifacts(
+                  scopedArtifacts,
+                  selectedType,
+                  agentFilter,
+              )
+            : listRunsForIssueType(filteredIndex, selectedType)
         : [];
     const critiqueNotes = selectedType
         ? extractCritiqueNotesForRuns(
-              await loadRunArtifacts(),
+              useAgentFilter ? scopedArtifacts : await loadRunArtifacts(),
               selectedType,
               new Set(selectedRuns.map((row) => row.runId)),
+              agentFilter,
           )
         : [];
 
@@ -80,11 +124,14 @@ export default async function IssuesExplorerPage({
             <div>
                 <h1 className="title">Critique issues</h1>
                 <p className="subtitle">
-                    Skeptic issue types aggregated from{" "}
+                    Critique issue types from Skeptic and Red team agents across{" "}
                     {filteredIndex.totals.runs} indexed run
                     {filteredIndex.totals.runs === 1 ? "" : "s"}
                     {filteredIndex.totals.runs !== index.totals.runs
                         ? ` (${index.totals.runs} total)`
+                        : ""}
+                    {useAgentFilter
+                        ? ` · ${critiqueAgentFilterLabel(agentFilter)}`
                         : ""}
                     . Select a type to see which traces contributed.
                 </p>
@@ -108,8 +155,36 @@ export default async function IssuesExplorerPage({
                 params={params}
                 totalRuns={index.totals.runs}
                 filteredRuns={filteredIndex.totals.runs}
-                preserveKeys={["type"]}
+                preserveKeys={["type", "agent"]}
             />
+
+            <div className="card">
+                <h2 style={{ marginTop: 0 }}>Critique agent</h2>
+                <p className="small muted" style={{ marginTop: 0 }}>
+                    Filter issue counts by which critique agent raised them.
+                    Deep presets include both Skeptic and Red team steps.
+                </p>
+                <div
+                    className="page-actions"
+                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                >
+                    {(
+                        ["all", "skeptic", "redteam"] as CritiqueAgentFilter[]
+                    ).map((filter) => {
+                        const active = agentFilter === filter;
+                        return (
+                            <Link
+                                key={filter}
+                                href={agentFilterHref(params, filter)}
+                                className={`button ${active ? "" : "secondary"}`}
+                                aria-current={active ? "page" : undefined}
+                            >
+                                {critiqueAgentFilterLabel(filter)}
+                            </Link>
+                        );
+                    })}
+                </div>
+            </div>
 
             {summaries.length > 0 ? (
                 <div
@@ -312,11 +387,14 @@ export default async function IssuesExplorerPage({
                         Critique notes for &ldquo;{selectedType}&rdquo;
                     </h2>
                     <p className="small muted" style={{ marginTop: 0 }}>
-                        Verbatim skeptic notes from run traces —{" "}
+                        Verbatim critique notes from run traces —{" "}
                         {critiqueNotes.length} note
                         {critiqueNotes.length === 1 ? "" : "s"} across{" "}
                         {selectedRuns.length} run
                         {selectedRuns.length === 1 ? "" : "s"}.
+                        {useAgentFilter
+                            ? ` Showing ${critiqueAgentFilterLabel(agentFilter).toLowerCase()}.`
+                            : ""}
                     </p>
                     <ResponsiveTable
                         columns={[

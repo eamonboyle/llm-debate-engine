@@ -1,4 +1,6 @@
 import type { RunArtifact } from "./data";
+import type { CritiqueAgentFilter } from "./critiqueAgentFilter";
+import { matchesCritiqueAgentFilter } from "./critiqueAgentFilter";
 
 export type CritiqueNoteRow = {
     runId: string;
@@ -48,12 +50,14 @@ function extractIssues(output: unknown): CritiqueIssue[] {
 export function extractCritiqueNotesFromRun(
     run: RunArtifact,
     issueType?: string,
+    agentFilter: CritiqueAgentFilter = "all",
 ): CritiqueNoteRow[] {
     const normalizedType = issueType?.trim().toLowerCase();
     const rows: CritiqueNoteRow[] = [];
 
     for (const step of run.run.steps) {
         if (step.output?.kind !== "critique") continue;
+        if (!matchesCritiqueAgentFilter(step.role, agentFilter)) continue;
         const issues = extractIssues(step.output);
         for (const issue of issues) {
             if (normalizedType && issue.type.toLowerCase() !== normalizedType) {
@@ -79,6 +83,7 @@ export function extractCritiqueNotesForRuns(
     runs: RunArtifact[],
     issueType: string,
     runIds?: Set<string>,
+    agentFilter: CritiqueAgentFilter = "all",
 ): CritiqueNoteRow[] {
     const normalized = issueType.trim().toLowerCase();
     if (!normalized) return [];
@@ -86,7 +91,7 @@ export function extractCritiqueNotesForRuns(
     const rows: CritiqueNoteRow[] = [];
     for (const run of runs) {
         if (runIds && !runIds.has(run.id)) continue;
-        rows.push(...extractCritiqueNotesFromRun(run, normalized));
+        rows.push(...extractCritiqueNotesFromRun(run, normalized, agentFilter));
     }
 
     return rows.sort(

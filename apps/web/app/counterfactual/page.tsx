@@ -6,7 +6,11 @@ import {
     ResponsiveTable,
     TruncateText,
 } from "../../components/ResponsiveTable";
-import { loadAnalysisIndex } from "../../lib/data";
+import { loadAnalysisIndex, loadRunArtifacts } from "../../lib/data";
+import {
+    aggregateCounterfactualStrings,
+    extractCounterfactualDetailsForRuns,
+} from "../../lib/counterfactualDetails";
 import {
     buildFailureModeSummaries,
     listRunsForFailureMode,
@@ -59,6 +63,21 @@ export default async function CounterfactualExplorerPage({
     const selectedRuns = selectedMode
         ? listRunsForFailureMode(index, selectedMode)
         : [];
+    const filteredRunIds = new Set(index.runs.map((run) => run.id));
+    const counterfactualDetails = selectedMode
+        ? extractCounterfactualDetailsForRuns(await loadRunArtifacts(), {
+              failureMode: selectedMode,
+              runIds: filteredRunIds,
+          })
+        : [];
+    const topMitigations = aggregateCounterfactualStrings(
+        counterfactualDetails,
+        "mitigations",
+    );
+    const topTriggers = aggregateCounterfactualStrings(
+        counterfactualDetails,
+        "triggerConditions",
+    );
 
     return (
         <section className="stack">
@@ -273,6 +292,122 @@ export default async function CounterfactualExplorerPage({
                     </p>
                 </div>
             )}
+
+            {selectedMode && counterfactualDetails.length > 0 ? (
+                <>
+                    {topMitigations.length > 0 || topTriggers.length > 0 ? (
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns:
+                                    "repeat(auto-fit, minmax(280px, 1fr))",
+                                gap: "1rem",
+                            }}
+                        >
+                            {topMitigations.length > 0 ? (
+                                <div className="card">
+                                    <h2 style={{ marginTop: 0 }}>
+                                        Recurring mitigations
+                                    </h2>
+                                    <p className="small muted">
+                                        Mitigations proposed for runs listing
+                                        this failure mode.
+                                    </p>
+                                    <ul className="trace-summary-list">
+                                        {topMitigations.map((item) => (
+                                            <li key={item.text}>
+                                                {item.text}
+                                                <span className="small muted">
+                                                    {" "}
+                                                    · {item.runCount} run
+                                                    {item.runCount === 1
+                                                        ? ""
+                                                        : "s"}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ) : null}
+                            {topTriggers.length > 0 ? (
+                                <div className="card">
+                                    <h2 style={{ marginTop: 0 }}>
+                                        Trigger conditions
+                                    </h2>
+                                    <ul className="trace-summary-list">
+                                        {topTriggers.map((item) => (
+                                            <li key={item.text}>
+                                                {item.text}
+                                                <span className="small muted">
+                                                    {" "}
+                                                    · {item.runCount} run
+                                                    {item.runCount === 1
+                                                        ? ""
+                                                        : "s"}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ) : null}
+                        </div>
+                    ) : null}
+
+                    <div className="card">
+                        <h2 style={{ marginTop: 0 }}>Counterfactual details</h2>
+                        <ResponsiveTable
+                            columns={[
+                                { key: "runId", label: "Run ID" },
+                                {
+                                    key: "question",
+                                    label: "Question",
+                                    cellClass: "cell-question",
+                                    render: (row) => (
+                                        <TruncateText
+                                            text={
+                                                (row as { question: string })
+                                                    .question
+                                            }
+                                            maxLength={72}
+                                            className="muted"
+                                        />
+                                    ),
+                                },
+                                {
+                                    key: "mitigations",
+                                    label: "Mitigations",
+                                    hideOnMobile: true,
+                                    render: (row) => (
+                                        <TruncateText
+                                            text={(
+                                                row as {
+                                                    mitigations: string[];
+                                                }
+                                            ).mitigations.join(" · ")}
+                                            maxLength={96}
+                                        />
+                                    ),
+                                },
+                                {
+                                    key: "open",
+                                    label: "Open",
+                                    render: (row) => (
+                                        <Link
+                                            href={
+                                                (row as { href: string }).href
+                                            }
+                                        >
+                                            Trace
+                                        </Link>
+                                    ),
+                                },
+                            ]}
+                            data={counterfactualDetails}
+                            getRowId={(row) => (row as { runId: string }).runId}
+                        />
+                    </div>
+                </>
+            ) : null}
         </section>
     );
 }

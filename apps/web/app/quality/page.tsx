@@ -14,6 +14,7 @@ import {
 } from "../../lib/qualityInsights";
 import {
     aggregateJudgeNarratives,
+    listJudgeSummaries,
     listRunsForNarrativeTheme,
     type NarrativeThemeKind,
 } from "../../lib/judgeNarrativeInsights";
@@ -100,6 +101,7 @@ export default async function QualityInsightsPage({
                   qualityRunIds,
               )
             : [];
+    const judgeSummaries = listJudgeSummaries(allRuns, qualityRunIds, params.q);
 
     function themeHref(text: string, kind: NarrativeThemeKind) {
         return `/quality${buildQueryString(params, {
@@ -369,6 +371,109 @@ export default async function QualityInsightsPage({
                                     }
                                 />
                             )}
+                        </div>
+                    ) : null}
+
+                    {judgeSummaries.length > 0 ? (
+                        <div className="card">
+                            <h2 style={{ marginTop: 0 }}>Judge verdicts</h2>
+                            <p className="small muted">
+                                One-line summaries from Judge steps across
+                                filtered runs with rubric scores
+                                {params.q
+                                    ? ` matching “${params.q.trim()}”`
+                                    : ""}
+                                .
+                            </p>
+                            <ResponsiveTable
+                                columns={[
+                                    {
+                                        key: "summary",
+                                        label: "Summary",
+                                        cellClass: "cell-question",
+                                        render: (row) => (
+                                            <TruncateText
+                                                text={
+                                                    (
+                                                        row as {
+                                                            summary: string;
+                                                        }
+                                                    ).summary
+                                                }
+                                                maxLength={120}
+                                            />
+                                        ),
+                                    },
+                                    {
+                                        key: "coherence",
+                                        label: "Coherence",
+                                        helpKey: "coherence",
+                                        render: (row) =>
+                                            formatScore(
+                                                (
+                                                    row as {
+                                                        coherence:
+                                                            | number
+                                                            | null;
+                                                    }
+                                                ).coherence,
+                                            ),
+                                    },
+                                    {
+                                        key: "factualRisk",
+                                        label: "Factual risk",
+                                        helpKey: "factualRisk",
+                                        render: (row) =>
+                                            formatScore(
+                                                (
+                                                    row as {
+                                                        factualRisk:
+                                                            | number
+                                                            | null;
+                                                    }
+                                                ).factualRisk,
+                                            ),
+                                    },
+                                    {
+                                        key: "model",
+                                        label: "Model",
+                                        helpKey: "model",
+                                        hideOnMobile: true,
+                                    },
+                                    {
+                                        key: "trace",
+                                        label: "Open",
+                                        render: (row) => (
+                                            <Link
+                                                href={
+                                                    (
+                                                        row as {
+                                                            traceHref: string;
+                                                        }
+                                                    ).traceHref
+                                                }
+                                            >
+                                                Trace
+                                            </Link>
+                                        ),
+                                    },
+                                ]}
+                                data={judgeSummaries}
+                                getRowId={(row) =>
+                                    (row as { runId: string }).runId
+                                }
+                                renderCardActions={(row) => (
+                                    <Link
+                                        href={
+                                            (row as { traceHref: string })
+                                                .traceHref
+                                        }
+                                        className="button"
+                                    >
+                                        View trace
+                                    </Link>
+                                )}
+                            />
                         </div>
                     ) : null}
 

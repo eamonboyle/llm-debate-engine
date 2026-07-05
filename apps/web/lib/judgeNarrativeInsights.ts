@@ -10,12 +10,62 @@ export type NarrativeThemeRunRow = {
     traceHref: string;
 };
 
+export type JudgeSummaryRow = {
+    runId: string;
+    question: string;
+    model: string;
+    preset: string;
+    summary: string;
+    coherence: number | null;
+    factualRisk: number | null;
+    traceHref: string;
+};
+
 export type NarrativeTheme = {
     text: string;
     count: number;
     runCount: number;
     sampleRunId: string;
 };
+
+function extractJudgementSummary(output: unknown): string | null {
+    if (!output || typeof output !== "object") return null;
+    const data = (output as { data?: unknown }).data ?? output;
+    if (!data || typeof data !== "object") return null;
+    const summary = (data as { summary?: unknown }).summary;
+    if (typeof summary !== "string") return null;
+    const trimmed = summary.trim();
+    return trimmed.length > 0 ? trimmed : null;
+}
+
+function extractRubricScores(output: unknown): {
+    coherence: number | null;
+    factualRisk: number | null;
+} {
+    if (!output || typeof output !== "object") {
+        return { coherence: null, factualRisk: null };
+    }
+    const data = (output as { data?: unknown }).data ?? output;
+    if (!data || typeof data !== "object") {
+        return { coherence: null, factualRisk: null };
+    }
+    const rubric = (data as { rubricScores?: unknown }).rubricScores;
+    if (!rubric || typeof rubric !== "object") {
+        return { coherence: null, factualRisk: null };
+    }
+    const coherence = (rubric as { coherence?: unknown }).coherence;
+    const factualRisk = (rubric as { factualRisk?: unknown }).factualRisk;
+    return {
+        coherence:
+            typeof coherence === "number" && Number.isFinite(coherence)
+                ? coherence
+                : null,
+        factualRisk:
+            typeof factualRisk === "number" && Number.isFinite(factualRisk)
+                ? factualRisk
+                : null,
+    };
+}
 
 function extractJudgementLists(output: unknown): {
     strengths: string[];
@@ -157,4 +207,50 @@ export function listRunsForNarrativeTheme(
     }
 
     return [...matches.values()].sort((a, b) => b.runId.localeCompare(a.runId));
+}
+
+export function listJudgeSummaries(
+    runs: RunArtifact[],
+    scopeRunIds?: Set<string>,
+    searchQuery?: string,
+): JudgeSummaryRow[] {
+    const needle = searchQuery?.trim().toLowerCase();
+    const rows: JudgeSummaryRow[] = [];
+
+    for (const run of runs) {
+        if (scopeRunIds && !scopeRunIds.has(run.id)) continue;
+
+        for (const step of run.run.steps) {
+            if (step.output?.kind !== "judgement") continue;
+            const summary = extractJudgementSummary(step.output);
+            if (!summary) continue;
+            if (
+                needle &&
+                !summary.toLowerCase().includes(needle) &&
+                !run.question.toLowerCase().includes(needle)
+            ) {
+                continue;
+            }
+
+            const scores = extractRubricScores(step.output);
+            rows.push({
+                runId: run.id,
+                question: run.question,
+                model: run.metadata.model,
+                preset: run.metadata.pipelinePreset,
+                summary,
+                coherence: scores.coherence,
+                factualRisk: scores.factualRisk,
+                traceHref: `/runs/${run.id}`,
+            });
+            break;
+        }
+    }
+
+    return rows.sort(
+        (a, b) =>
+            (b.coherence ?? 0) - (a.coherence ?? 0) ||
+            (a.factualRisk ?? 99) - (b.factualRisk ?? 99) ||
+            b.runId.localeCompare(a.runId),
+    );
 }
