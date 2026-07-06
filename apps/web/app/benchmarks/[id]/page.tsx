@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { loadBenchmarkById, loadBenchmarkPairsById } from "../../../lib/data";
+import { loadBenchmarkById, loadBenchmarkPairsById, loadAnalysisIndex } from "../../../lib/data";
 import {
     buildBenchmarkRunRoster,
     sortBenchmarkRunRoster,
@@ -14,6 +14,11 @@ import { ResponsiveTable } from "../../../components/ResponsiveTable";
 import { TruncateText } from "../../../components/ResponsiveTable";
 import { findMostSimilarPeerRunId } from "../../../lib/benchmarkPeers";
 import { inferModeLabel } from "../../../lib/modeLabeler";
+import {
+    buildBenchmarkIndexLookup,
+    resolveIndexedModeLabel,
+} from "../../../lib/benchmarkIndexLookup";
+import { buildBenchmarkOutlierLookup } from "../../../lib/outlierLookup";
 import { questionHubHref } from "../../../lib/questionGroups";
 import {
     extractBenchmarkSummaryDisplay,
@@ -46,11 +51,20 @@ export default async function BenchmarkDetailPage({
     params: Promise<{ id: string }>;
 }) {
     const { id } = await params;
-    const benchmark = await loadBenchmarkById(id);
+    const [benchmark, index] = await Promise.all([
+        loadBenchmarkById(id),
+        loadAnalysisIndex(),
+    ]);
 
     if (!benchmark) {
         notFound();
     }
+
+    const benchmarkIndex = index
+        ? buildBenchmarkIndexLookup(index).get(benchmark.id)
+        : null;
+    const outlierLookup = buildBenchmarkOutlierLookup(index, benchmark.id);
+    const outlierCount = outlierLookup.size;
 
     const runIds = benchmark.payload.runIds ?? [];
     const pairsData = await loadBenchmarkPairsById(id);
@@ -78,6 +92,7 @@ export default async function BenchmarkDetailPage({
             peerCompareHref: peerRunId
                 ? `/runs/compare?left=${row.runId}&right=${peerRunId}`
                 : null,
+            outlier: outlierLookup.get(row.runId) ?? null,
         };
     });
     const thresholdCounts = [
@@ -140,6 +155,20 @@ export default async function BenchmarkDetailPage({
                     >
                         Compare as right
                     </Link>
+                    <Link
+                        href={`/pairs?benchmark=${benchmark.id}`}
+                        className="button secondary"
+                    >
+                        Pairwise explorer
+                    </Link>
+                    {outlierCount > 0 ? (
+                        <Link
+                            href={`/outliers?q=${encodeURIComponent(benchmark.question)}`}
+                            className="button secondary"
+                        >
+                            Outlier runs ({outlierCount})
+                        </Link>
+                    ) : null}
                 </div>
             </div>
 
@@ -351,6 +380,7 @@ export default async function BenchmarkDetailPage({
                 thresholdCounts={thresholdCounts}
                 similarityPairs={pairs}
                 runs={benchmark.payload.runs}
+                runIds={rosterRunIds}
             />
 
             <div className="card">
@@ -403,6 +433,27 @@ export default async function BenchmarkDetailPage({
                                     return value == null
                                         ? "—"
                                         : value.toFixed(3);
+                                },
+                            },
+                            {
+                                key: "outlier",
+                                label: "Outlier",
+                                helpKey: "zScore",
+                                hideOnMobile: true,
+                                render: (row) => {
+                                    const outlier = (
+                                        row as {
+                                            outlier: {
+                                                zScore: number;
+                                            } | null;
+                                        }
+                                    ).outlier;
+                                    if (!outlier) return "—";
+                                    return (
+                                        <span title={`z-score ${outlier.zScore.toFixed(2)}`}>
+                                            Yes
+                                        </span>
+                                    );
                                 },
                             },
                             {
@@ -567,7 +618,11 @@ export default async function BenchmarkDetailPage({
                         ]}
                         data={modes.map((mode, idx) => ({
                             modeIndex: idx,
-                            label: inferModeLabel(mode.exemplarPreview),
+                            label: resolveIndexedModeLabel(
+                                benchmarkIndex?.modeLabels ?? [],
+                                idx,
+                                inferModeLabel(mode.exemplarPreview),
+                            ),
                             size: mode.size,
                             exemplarPreview: mode.exemplarPreview,
                             memberRunIds: mode.members

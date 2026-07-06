@@ -3,7 +3,9 @@ import type { BenchmarkArtifact, RunArtifact } from "./data";
 import {
     filterArtifactsForQuestionGroups,
     groupArtifactsByQuestion,
+    listQuestionInsightLinks,
     questionHubHref,
+    questionInsightHref,
 } from "./questionGroups";
 
 function makeRun(id: string, question: string, createdAt: string): RunArtifact {
@@ -55,6 +57,30 @@ describe("questionHubHref", () => {
         expect(questionHubHref("Is AI safe?")).toBe(
             "/questions/view?question=Is+AI+safe%3F",
         );
+    });
+});
+
+describe("questionInsightHref", () => {
+    it("builds filtered insight explorer links", () => {
+        expect(questionInsightHref("Is AI safe?", "drift")).toBe(
+            "/drift?q=Is+AI+safe%3F",
+        );
+        expect(questionInsightHref("Is AI safe?", "outliers")).toBe(
+            "/outliers?q=Is+AI+safe%3F",
+        );
+    });
+
+    it("lists all insight shortcuts for a question", () => {
+        const links = listQuestionInsightLinks("Q?");
+        expect(links.map((link) => link.page)).toEqual([
+            "quality",
+            "drift",
+            "evidence",
+            "counterfactual",
+            "issues",
+            "outliers",
+        ]);
+        expect(links[0]?.href).toBe("/quality?q=Q%3F");
     });
 });
 

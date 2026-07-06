@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import {
     Bar,
@@ -18,7 +19,12 @@ type BenchmarkDetailChartsProps = {
     thresholdCounts: Array<{ threshold: string; modeCount: number }>;
     similarityPairs?: Array<{ i: number; j: number; similarity: number }>;
     runs: number;
+    runIds?: string[];
 };
+
+function buildPairCompareHref(runIdA: string, runIdB: string): string {
+    return `/runs/compare?left=${runIdA}&right=${runIdB}`;
+}
 
 function similarityColor(value: number) {
     if (value >= 0.95) return "rgba(34, 197, 94, 0.5)";
@@ -35,6 +41,7 @@ export function BenchmarkDetailCharts({
     thresholdCounts,
     similarityPairs = [],
     runs,
+    runIds = [],
 }: BenchmarkDetailChartsProps) {
     const [pairs, setPairs] = useState(similarityPairs);
     const [pairsSource, setPairsSource] = useState<"artifact" | "chunk">(
@@ -176,41 +183,95 @@ export function BenchmarkDetailCharts({
                     <InfoTooltip helpKey="pairwiseSimilarityHeatmap" />
                 </h3>
                 <p className="small muted">
-                    source: {pairsSource} ({pairs.length} pairwise entries)
+                    source: {pairsSource} ({pairs.length} pairwise entries).
+                    Click off-diagonal cells to compare runs.
                 </p>
                 <div className="benchmark-heatmap-wrap">
                     <table>
                         <thead>
                             <tr>
                                 <th />
-                                {Array.from({ length: runs }, (_, idx) => (
-                                    <th key={`head-${idx}`}>r{idx}</th>
-                                ))}
+                                {Array.from({ length: runs }, (_, idx) => {
+                                    const runId = runIds[idx];
+                                    const label = `r${idx}`;
+                                    return (
+                                        <th key={`head-${idx}`}>
+                                            {runId ? (
+                                                <Link
+                                                    href={`/runs/${runId}`}
+                                                    title={runId}
+                                                    className="benchmark-heatmap-run-link"
+                                                >
+                                                    {label}
+                                                </Link>
+                                            ) : (
+                                                label
+                                            )}
+                                        </th>
+                                    );
+                                })}
                             </tr>
                         </thead>
                         <tbody>
                             {matrix.map((row, i) => (
                                 <tr key={`row-${i}`}>
-                                    <th>r{i}</th>
-                                    {row.map((value, j) => (
-                                        <td
-                                            key={`cell-${i}-${j}`}
-                                            className="benchmark-heatmap-cell"
-                                            style={{
-                                                background:
-                                                    i === j
-                                                        ? "var(--color-bg-elevated)"
-                                                        : similarityColor(
-                                                              value,
-                                                          ),
-                                                color: "var(--color-text-primary)",
-                                                minWidth: 44,
-                                            }}
-                                            title={`r${i} vs r${j}: ${value.toFixed(3)}`}
-                                        >
-                                            {value.toFixed(3)}
-                                        </td>
-                                    ))}
+                                    <th>
+                                        {runIds[i] ? (
+                                            <Link
+                                                href={`/runs/${runIds[i]}`}
+                                                title={runIds[i]}
+                                                className="benchmark-heatmap-run-link"
+                                            >
+                                                r{i}
+                                            </Link>
+                                        ) : (
+                                            `r${i}`
+                                        )}
+                                    </th>
+                                    {row.map((value, j) => {
+                                        const runIdA = runIds[i];
+                                        const runIdB = runIds[j];
+                                        const compareHref =
+                                            i !== j &&
+                                            runIdA &&
+                                            runIdB
+                                                ? buildPairCompareHref(
+                                                      runIdA,
+                                                      runIdB,
+                                                  )
+                                                : null;
+                                        const cellContent = value.toFixed(3);
+                                        const cellStyle = {
+                                            background:
+                                                i === j
+                                                    ? "var(--color-bg-elevated)"
+                                                    : similarityColor(value),
+                                            color: "var(--color-text-primary)",
+                                            minWidth: 44,
+                                        };
+                                        const title = `r${i} vs r${j}: ${value.toFixed(3)}`;
+
+                                        return (
+                                            <td
+                                                key={`cell-${i}-${j}`}
+                                                className="benchmark-heatmap-cell"
+                                                style={cellStyle}
+                                                title={title}
+                                            >
+                                                {compareHref ? (
+                                                    <Link
+                                                        href={compareHref}
+                                                        className="benchmark-heatmap-cell-link"
+                                                        title={`${title} — compare runs`}
+                                                    >
+                                                        {cellContent}
+                                                    </Link>
+                                                ) : (
+                                                    cellContent
+                                                )}
+                                            </td>
+                                        );
+                                    })}
                                 </tr>
                             ))}
                         </tbody>

@@ -3,6 +3,7 @@ import type { AnalysisIndex } from "./data";
 import {
     buildBenchmarkIndexLookup,
     formatTopModeLabel,
+    resolveIndexedModeLabel,
 } from "./benchmarkIndexLookup";
 
 function sampleIndex(): AnalysisIndex {
@@ -64,5 +65,14 @@ describe("benchmarkIndexLookup", () => {
         const lookup = buildBenchmarkIndexLookup(sampleIndex());
         const labels = lookup.get("bench-1")!.modeLabels;
         expect(formatTopModeLabel(labels)).toBe("Yes with safeguards");
+    });
+
+    it("prefers indexed mode labels over fallback text", () => {
+        const lookup = buildBenchmarkIndexLookup(sampleIndex());
+        const labels = lookup.get("bench-1")!.modeLabels;
+        expect(resolveIndexedModeLabel(labels, 0, "fallback")).toBe(
+            "Yes with safeguards",
+        );
+        expect(resolveIndexedModeLabel(labels, 9, "fallback")).toBe("fallback");
     });
 });
