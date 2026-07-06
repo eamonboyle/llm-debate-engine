@@ -24,6 +24,41 @@ export function questionHubHref(question: string): string {
     return `/questions/view?${new URLSearchParams({ question }).toString()}`;
 }
 
+export type QuestionInsightPage =
+    | "quality"
+    | "drift"
+    | "evidence"
+    | "counterfactual"
+    | "issues"
+    | "outliers";
+
+const QUESTION_INSIGHT_PAGES: Array<{
+    page: QuestionInsightPage;
+    label: string;
+}> = [
+    { page: "quality", label: "Quality insights" },
+    { page: "drift", label: "Confidence drift" },
+    { page: "evidence", label: "Evidence planning" },
+    { page: "counterfactual", label: "Counterfactual modes" },
+    { page: "issues", label: "Critique issues" },
+    { page: "outliers", label: "Outlier runs" },
+];
+
+export function questionInsightHref(
+    question: string,
+    page: QuestionInsightPage,
+): string {
+    return `/${page}?${new URLSearchParams({ q: question }).toString()}`;
+}
+
+export function listQuestionInsightLinks(question: string) {
+    return QUESTION_INSIGHT_PAGES.map(({ page, label }) => ({
+        page,
+        label,
+        href: questionInsightHref(question, page),
+    }));
+}
+
 export function filterArtifactsForQuestionGroups(
     runs: RunArtifact[],
     benchmarks: BenchmarkArtifact[],

@@ -30,6 +30,39 @@ export function buildOutlierRunIdSet(index: AnalysisIndex | null): Set<string> {
     return new Set(index.aggregates.outlierRuns?.map((row) => row.runId) ?? []);
 }
 
+export type BenchmarkOutlierEntry = {
+    runId: string;
+    avgSimilarity: number;
+    zScore: number;
+};
+
+export function listOutliersForBenchmark(
+    index: AnalysisIndex | null,
+    benchmarkId: string,
+): BenchmarkOutlierEntry[] {
+    if (!index) return [];
+    return (
+        index.aggregates.outlierRuns
+            ?.filter((row) => row.benchmarkId === benchmarkId)
+            .map(({ runId, avgSimilarity, zScore }) => ({
+                runId,
+                avgSimilarity,
+                zScore,
+            })) ?? []
+    );
+}
+
+export function buildBenchmarkOutlierLookup(
+    index: AnalysisIndex | null,
+    benchmarkId: string,
+): Map<string, BenchmarkOutlierEntry> {
+    const lookup = new Map<string, BenchmarkOutlierEntry>();
+    for (const entry of listOutliersForBenchmark(index, benchmarkId)) {
+        lookup.set(entry.runId, entry);
+    }
+    return lookup;
+}
+
 export async function buildRunOutlierContext(
     index: AnalysisIndex | null,
     runId: string,

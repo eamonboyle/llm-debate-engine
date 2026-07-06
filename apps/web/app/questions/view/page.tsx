@@ -18,7 +18,10 @@ import {
     loadRunsByQuestion,
 } from "../../../lib/data";
 import { buildQueryString } from "../../../lib/listPagination";
-import { questionHubHref } from "../../../lib/questionGroups";
+import {
+    questionHubHref,
+    listQuestionInsightLinks,
+} from "../../../lib/questionGroups";
 import {
     buildQuestionExperimentMatrix,
     lookupMatrixCell,
@@ -410,7 +413,28 @@ export default async function QuestionHubPage({
                         critique rollups for this question.
                     </p>
                 </div>
-            ) : null}
+            ) : (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>Research insights</h2>
+                    <p className="small muted" style={{ marginBottom: 12 }}>
+                        Open filtered insight explorers scoped to this question.
+                    </p>
+                    <div
+                        className="page-actions"
+                        style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                    >
+                        {listQuestionInsightLinks(question).map((link) => (
+                            <Link
+                                key={link.page}
+                                href={link.href}
+                                className="button secondary"
+                            >
+                                {link.label}
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {experimentMatrix.models.length > 0 &&
             experimentMatrix.presets.length > 0 ? (
@@ -495,24 +519,6 @@ export default async function QuestionHubPage({
                             </tbody>
                         </table>
                     </div>
-                    {indexMetrics?.runsWithQualityScores ? (
-                        <div
-                            className="page-actions"
-                            style={{
-                                display: "flex",
-                                gap: 10,
-                                flexWrap: "wrap",
-                                marginTop: 12,
-                            }}
-                        >
-                            <Link
-                                href={`/quality?q=${encodeURIComponent(question)}`}
-                                className="button secondary"
-                            >
-                                Quality insights for this question
-                            </Link>
-                        </div>
-                    ) : null}
                 </div>
             ) : null}
 

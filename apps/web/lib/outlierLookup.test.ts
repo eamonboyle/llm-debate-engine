@@ -2,8 +2,10 @@ import { describe, expect, it, vi } from "vitest";
 import type { AnalysisIndex } from "./data";
 import {
     buildOutlierRunIdSet,
+    buildBenchmarkOutlierLookup,
     buildRunOutlierContext,
     findRunOutlierEntry,
+    listOutliersForBenchmark,
 } from "./outlierLookup";
 
 vi.mock("./data", async (importOriginal) => {
@@ -39,6 +41,12 @@ function sampleIndex(): AnalysisIndex {
                     runId: "run_outlier",
                     avgSimilarity: 0.42,
                     zScore: -2.1,
+                },
+                {
+                    benchmarkId: "bench_2",
+                    runId: "run_other",
+                    avgSimilarity: 0.5,
+                    zScore: -1.8,
                 },
             ],
         },
@@ -76,5 +84,22 @@ describe("outlierLookup", () => {
             peerRunId: "run_b",
             peerCompareHref: "/runs/compare?left=run_outlier&right=run_b",
         });
+    });
+
+    it("lists outliers for a benchmark", () => {
+        const rows = listOutliersForBenchmark(sampleIndex(), "bench_1");
+        expect(rows).toEqual([
+            {
+                runId: "run_outlier",
+                avgSimilarity: 0.42,
+                zScore: -2.1,
+            },
+        ]);
+    });
+
+    it("builds a benchmark outlier lookup map", () => {
+        const lookup = buildBenchmarkOutlierLookup(sampleIndex(), "bench_1");
+        expect(lookup.get("run_outlier")?.zScore).toBe(-2.1);
+        expect(lookup.has("run_other")).toBe(false);
     });
 });

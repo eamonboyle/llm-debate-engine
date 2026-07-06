@@ -20,6 +20,17 @@ export function buildBenchmarkIndexLookup(
     return lookup;
 }
 
+export function resolveIndexedModeLabel(
+    modeLabels: BenchmarkIndexSnapshot["modeLabels"],
+    modeIndex: number,
+    fallbackLabel: string,
+): string {
+    const indexed = modeLabels.find((row) => row.modeIndex === modeIndex);
+    const label = indexed?.label?.trim();
+    if (label) return label;
+    return fallbackLabel;
+}
+
 export function formatTopModeLabel(
     modeLabels: BenchmarkIndexSnapshot["modeLabels"],
     maxLength = 48,
