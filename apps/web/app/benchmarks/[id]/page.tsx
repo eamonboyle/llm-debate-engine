@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { loadBenchmarkById, loadBenchmarkPairsById, loadAnalysisIndex } from "../../../lib/data";
+import {
+    loadBenchmarkById,
+    loadBenchmarkPairsById,
+    loadAnalysisIndex,
+} from "../../../lib/data";
 import {
     buildBenchmarkRunRoster,
     sortBenchmarkRunRoster,
@@ -450,7 +454,9 @@ export default async function BenchmarkDetailPage({
                                     ).outlier;
                                     if (!outlier) return "—";
                                     return (
-                                        <span title={`z-score ${outlier.zScore.toFixed(2)}`}>
+                                        <span
+                                            title={`z-score ${outlier.zScore.toFixed(2)}`}
+                                        >
                                             Yes
                                         </span>
                                     );

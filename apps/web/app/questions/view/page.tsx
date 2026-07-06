@@ -18,7 +18,10 @@ import {
     loadRunsByQuestion,
 } from "../../../lib/data";
 import { buildQueryString } from "../../../lib/listPagination";
-import { questionHubHref, listQuestionInsightLinks } from "../../../lib/questionGroups";
+import {
+    questionHubHref,
+    listQuestionInsightLinks,
+} from "../../../lib/questionGroups";
 import {
     buildQuestionExperimentMatrix,
     lookupMatrixCell,

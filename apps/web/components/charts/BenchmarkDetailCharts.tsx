@@ -232,9 +232,7 @@ export function BenchmarkDetailCharts({
                                         const runIdA = runIds[i];
                                         const runIdB = runIds[j];
                                         const compareHref =
-                                            i !== j &&
-                                            runIdA &&
-                                            runIdB
+                                            i !== j && runIdA && runIdB
                                                 ? buildPairCompareHref(
                                                       runIdA,
                                                       runIdB,
