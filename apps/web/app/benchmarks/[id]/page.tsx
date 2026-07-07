@@ -22,7 +22,10 @@ import {
     buildBenchmarkIndexLookup,
     resolveIndexedModeLabel,
 } from "../../../lib/benchmarkIndexLookup";
-import { buildBenchmarkOutlierLookup, outliersBenchmarkHref } from "../../../lib/outlierLookup";
+import {
+    buildBenchmarkOutlierLookup,
+    outliersBenchmarkHref,
+} from "../../../lib/outlierLookup";
 import { questionHubHref } from "../../../lib/questionGroups";
 import {
     extractBenchmarkSummaryDisplay,
