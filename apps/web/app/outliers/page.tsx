@@ -19,6 +19,7 @@ type OutliersSearchParams = {
     fast?: string;
     from?: string;
     to?: string;
+    benchmark?: string;
 };
 
 export default async function OutliersPage({
@@ -47,7 +48,10 @@ export default async function OutliersPage({
 
     const { models, presets } = collectIndexFacets(rawIndex);
     const index = applyIndexFilters(rawIndex, params);
-    const rows = await buildOutlierExplorerRows(index);
+    const benchmarkId = (params.benchmark ?? "").trim();
+    const rows = await buildOutlierExplorerRows(index, {
+        benchmarkId: benchmarkId || undefined,
+    });
 
     return (
         <section className="stack">
@@ -78,7 +82,23 @@ export default async function OutliersPage({
                 params={params}
                 totalRuns={rawIndex.runs.length}
                 filteredRuns={index.runs.length}
+                preserveKeys={benchmarkId ? ["benchmark"] : []}
             />
+
+            {benchmarkId ? (
+                <div className="card">
+                    <p className="muted" style={{ margin: 0 }}>
+                        Showing outliers for benchmark{" "}
+                        <Link href={`/benchmarks/${benchmarkId}`}>
+                            <code>{benchmarkId}</code>
+                        </Link>
+                        .{" "}
+                        <Link href="/outliers" className="button secondary">
+                            Clear benchmark filter
+                        </Link>
+                    </p>
+                </div>
+            ) : null}
 
             {rows.length > 0 ? (
                 <div
@@ -86,7 +106,9 @@ export default async function OutliersPage({
                     style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
                 >
                     <a
-                        href={`/api/outliers${buildQueryString(params, {})}`}
+                        href={`/api/outliers${buildQueryString(params, {
+                            benchmark: benchmarkId || undefined,
+                        })}`}
                         className="button secondary"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -95,7 +117,9 @@ export default async function OutliersPage({
                         Export JSON
                     </a>
                     <a
-                        href={`/api/outliers${buildQueryString(params, {})}&format=csv`}
+                        href={`/api/outliers${buildQueryString(params, {
+                            benchmark: benchmarkId || undefined,
+                        })}&format=csv`}
                         className="button secondary"
                         download="outlier-runs.csv"
                     >

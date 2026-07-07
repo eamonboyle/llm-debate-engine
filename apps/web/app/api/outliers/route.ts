@@ -11,6 +11,7 @@ function readFilterParams(url: URL) {
         fast: url.searchParams.get("fast") ?? undefined,
         from: url.searchParams.get("from") ?? undefined,
         to: url.searchParams.get("to") ?? undefined,
+        benchmark: url.searchParams.get("benchmark") ?? undefined,
     };
 }
 
@@ -28,7 +29,10 @@ export async function GET(request: Request) {
     }
 
     const filteredIndex = applyIndexFilters(index, filters);
-    const rows = await buildOutlierExplorerRows(filteredIndex);
+    const benchmarkId = (filters.benchmark ?? "").trim();
+    const rows = await buildOutlierExplorerRows(filteredIndex, {
+        benchmarkId: benchmarkId || undefined,
+    });
 
     if (format === "csv") {
         const csv = outliersToCsv(rows);

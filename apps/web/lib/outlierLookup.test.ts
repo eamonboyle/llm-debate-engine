@@ -6,6 +6,7 @@ import {
     buildRunOutlierContext,
     findRunOutlierEntry,
     listOutliersForBenchmark,
+    outliersBenchmarkHref,
 } from "./outlierLookup";
 
 vi.mock("./data", async (importOriginal) => {
@@ -101,5 +102,11 @@ describe("outlierLookup", () => {
         const lookup = buildBenchmarkOutlierLookup(sampleIndex(), "bench_1");
         expect(lookup.get("run_outlier")?.zScore).toBe(-2.1);
         expect(lookup.has("run_other")).toBe(false);
+    });
+
+    it("builds benchmark-scoped outlier explorer href", () => {
+        expect(outliersBenchmarkHref("bench_1")).toBe(
+            "/outliers?benchmark=bench_1",
+        );
     });
 });

@@ -342,6 +342,34 @@ export default async function RunsPage({
                                       },
                                   },
                                   {
+                                      key: "evidenceRisk",
+                                      label: "Evidence risk",
+                                      helpKey: "evidenceRiskLevel",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const value = (
+                                              row as { evidenceRisk?: number }
+                                          ).evidenceRisk;
+                                          return value == null
+                                              ? "—"
+                                              : value.toFixed(1);
+                                      },
+                                  },
+                                  {
+                                      key: "solverDrift",
+                                      label: "Solver→rev Δ",
+                                      helpKey: "solverToRevisionDelta",
+                                      hideOnMobile: true,
+                                      render: (row: Record<string, unknown>) => {
+                                          const value = (
+                                              row as { solverDrift?: number }
+                                          ).solverDrift;
+                                          return value == null
+                                              ? "—"
+                                              : value.toFixed(2);
+                                      },
+                                  },
+                                  {
                                       key: "coherence",
                                       label: "Coherence",
                                       helpKey: "coherence",
@@ -428,6 +456,8 @@ export default async function RunsPage({
                             issues: indexed?.issueCount,
                             avgSeverity: indexed?.avgSeverity,
                             solverConf: indexed?.solverConfidence,
+                            evidenceRisk: indexed?.evidenceRiskLevel,
+                            solverDrift: indexed?.solverToRevisionDelta,
                             coherence: indexed?.coherence,
                             factualRisk: indexed?.factualRisk,
                         };

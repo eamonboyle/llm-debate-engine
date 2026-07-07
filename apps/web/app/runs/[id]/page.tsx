@@ -16,15 +16,18 @@ import { RunMetricsSummary } from "../../../components/RunMetricsSummary";
 import { ConsensusSummary } from "../../../components/ConsensusSummary";
 import { CritiqueBreakdown } from "../../../components/CritiqueBreakdown";
 import { CritiqueByAgent } from "../../../components/CritiqueByAgent";
+import { MetricCard } from "../../../components/MetricCard";
 import { extractConsensusSummary } from "../../../lib/consensusSummary";
 import { extractCritiqueByType } from "../../../lib/critiqueBreakdown";
 import { extractCritiqueByAgent } from "../../../lib/critiqueByAgent";
+import { extractCritiqueNotesFromRun } from "../../../lib/critiqueNotes";
+import { buildDriftCompareHref } from "../../../lib/confidenceDrift";
 import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
 import { CopyPageLink } from "../../../components/CopyPageLink";
 import { CopyTextButton } from "../../../components/CopyTextButton";
 import { summarizeRun } from "../../../lib/runCompare";
 import { buildCompareSuggestions } from "../../../lib/compareSuggestions";
-import { questionHubHref } from "../../../lib/questionGroups";
+import { questionHubHref, listQuestionInsightLinks } from "../../../lib/questionGroups";
 import {
     buildRunStepTiming,
     formatDurationMs,
@@ -76,6 +79,10 @@ export default async function RunTracePage({
     const consensusSummary = extractConsensusSummary(run);
     const critiqueByType = extractCritiqueByType(run);
     const critiqueByAgent = extractCritiqueByAgent(run);
+    const critiqueNotes = extractCritiqueNotesFromRun(run);
+    const indexedRun = index?.runs.find((entry) => entry.id === run.id);
+    const insightLinks = listQuestionInsightLinks(run.question);
+    const driftCompareHref = buildDriftCompareHref(allRuns, run.id);
     const { schemaVersion, pipelineVersion } = run.metadata;
 
     return (
@@ -207,6 +214,108 @@ export default async function RunTracePage({
                     this run artifact.
                 </p>
                 <RunMetricsSummary summary={metricsSummary} />
+            </div>
+
+            {indexedRun ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>Confidence drift</h2>
+                    <p className="small muted" style={{ marginBottom: "1rem" }}>
+                        Stage-to-stage confidence deltas from the analysis index
+                        — compare with peers on the same question.
+                    </p>
+                    <div className="grid-4">
+                        <MetricCard
+                            label="Solver→revision Δ"
+                            value={
+                                indexedRun.confidence.solverToRevisionDelta !=
+                                null
+                                    ? indexedRun.confidence.solverToRevisionDelta.toFixed(
+                                          3,
+                                      )
+                                    : "—"
+                            }
+                            helpKey="solverToRevisionDelta"
+                        />
+                        <MetricCard
+                            label="Revision→synth Δ"
+                            value={
+                                indexedRun.confidence
+                                    .revisionToSynthesizerDelta != null
+                                    ? indexedRun.confidence.revisionToSynthesizerDelta.toFixed(
+                                          3,
+                                      )
+                                    : "—"
+                            }
+                            helpKey="revisionToSynthesizerDelta"
+                        />
+                        <MetricCard
+                            label="Calibrated−synth Δ"
+                            value={
+                                indexedRun.confidence.calibratedAdjusted !=
+                                    null &&
+                                indexedRun.confidence.synthesizer != null
+                                    ? (
+                                          indexedRun.confidence
+                                              .calibratedAdjusted -
+                                          indexedRun.confidence.synthesizer
+                                      ).toFixed(3)
+                                    : "—"
+                            }
+                            helpKey="calibratedMinusSynthDelta"
+                        />
+                        <MetricCard
+                            label="Evidence risk"
+                            value={
+                                indexedRun.research?.evidenceRiskLevel != null
+                                    ? indexedRun.research.evidenceRiskLevel.toFixed(
+                                          1,
+                                      )
+                                    : "—"
+                            }
+                            helpKey="evidenceRiskLevel"
+                        />
+                    </div>
+                    <div
+                        className="page-actions"
+                        style={{
+                            display: "flex",
+                            gap: 10,
+                            flexWrap: "wrap",
+                            marginTop: 12,
+                        }}
+                    >
+                        <Link href="/drift" className="button secondary">
+                            Drift explorer
+                        </Link>
+                        <Link
+                            href={driftCompareHref}
+                            className="button secondary"
+                        >
+                            Compare drift peer
+                        </Link>
+                    </div>
+                </div>
+            ) : null}
+
+            <div className="card">
+                <h2 style={{ marginTop: 0 }}>Question insight shortcuts</h2>
+                <p className="small muted" style={{ marginBottom: "1rem" }}>
+                    Open filtered insight pages scoped to this research question.
+                </p>
+                <div
+                    className="page-actions"
+                    style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                >
+                    {insightLinks.map((link) => (
+                        <Link
+                            key={link.page}
+                            href={link.href}
+                            className="button secondary"
+                        >
+                            {link.label}
+                        </Link>
+                    ))}
+                </div>
             </div>
 
             {stepTimingSummary.timedStepCount > 0 ? (
@@ -367,6 +476,51 @@ export default async function RunTracePage({
                 </p>
                 <CritiqueBreakdown entries={critiqueByType} />
             </div>
+
+            {critiqueNotes.length > 0 ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>Critique notes</h2>
+                    <p className="small muted" style={{ marginBottom: "1rem" }}>
+                        Verbatim issue notes from skeptic and red team critique
+                        steps in this trace.
+                    </p>
+                    <ResponsiveTable
+                        columns={[
+                            { key: "agentName", label: "Agent" },
+                            {
+                                key: "severity",
+                                label: "Severity",
+                                helpKey: "maxSeverity",
+                            },
+                            {
+                                key: "type",
+                                label: "Type",
+                                render: (row) => (
+                                    <Link
+                                        href={`/issues?type=${encodeURIComponent(
+                                            (row as { type: string }).type,
+                                        )}&q=${encodeURIComponent(run.question)}`}
+                                    >
+                                        {(row as { type: string }).type}
+                                    </Link>
+                                ),
+                            },
+                            {
+                                key: "note",
+                                label: "Note",
+                                cellClass: "cell-question",
+                            },
+                        ]}
+                        data={critiqueNotes.map((note, idx) => ({
+                            ...note,
+                            rowKey: `${note.agentName}-${note.type}-${idx}`,
+                        }))}
+                        getRowId={(row) =>
+                            (row as { rowKey: string }).rowKey
+                        }
+                    />
+                </div>
+            ) : null}
 
             <div className="card trace-final-answer">
                 <div

@@ -79,8 +79,14 @@ describe("questionInsightHref", () => {
             "counterfactual",
             "issues",
             "outliers",
+            "timing",
+            "agents",
+            "errors",
         ]);
         expect(links[0]?.href).toBe("/quality?q=Q%3F");
+        expect(links.find((link) => link.page === "timing")?.href).toBe(
+            "/timing?q=Q%3F",
+        );
     });
 });
 
