@@ -63,6 +63,10 @@ export function buildBenchmarkOutlierLookup(
     return lookup;
 }
 
+export function outliersBenchmarkHref(benchmarkId: string): string {
+    return `/outliers?${new URLSearchParams({ benchmark: benchmarkId }).toString()}`;
+}
+
 export async function buildRunOutlierContext(
     index: AnalysisIndex | null,
     runId: string,

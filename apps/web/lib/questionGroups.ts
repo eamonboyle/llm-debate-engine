@@ -30,7 +30,10 @@ export type QuestionInsightPage =
     | "evidence"
     | "counterfactual"
     | "issues"
-    | "outliers";
+    | "outliers"
+    | "timing"
+    | "agents"
+    | "errors";
 
 const QUESTION_INSIGHT_PAGES: Array<{
     page: QuestionInsightPage;
@@ -42,6 +45,9 @@ const QUESTION_INSIGHT_PAGES: Array<{
     { page: "counterfactual", label: "Counterfactual modes" },
     { page: "issues", label: "Critique issues" },
     { page: "outliers", label: "Outlier runs" },
+    { page: "timing", label: "Pipeline timing" },
+    { page: "agents", label: "Agent stats" },
+    { page: "errors", label: "Pipeline errors" },
 ];
 
 export function questionInsightHref(

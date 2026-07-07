@@ -22,7 +22,10 @@ import {
     buildBenchmarkIndexLookup,
     resolveIndexedModeLabel,
 } from "../../../lib/benchmarkIndexLookup";
-import { buildBenchmarkOutlierLookup } from "../../../lib/outlierLookup";
+import {
+    buildBenchmarkOutlierLookup,
+    outliersBenchmarkHref,
+} from "../../../lib/outlierLookup";
 import { questionHubHref } from "../../../lib/questionGroups";
 import {
     extractBenchmarkSummaryDisplay,
@@ -167,7 +170,7 @@ export default async function BenchmarkDetailPage({
                     </Link>
                     {outlierCount > 0 ? (
                         <Link
-                            href={`/outliers?q=${encodeURIComponent(benchmark.question)}`}
+                            href={outliersBenchmarkHref(benchmark.id)}
                             className="button secondary"
                         >
                             Outlier runs ({outlierCount})

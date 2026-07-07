@@ -49,4 +49,32 @@ describe("buildOutlierExplorerRows", () => {
         expect(rows[0].peerRunId).toBeNull();
         expect(rows[0].peerCompareHref).toBeNull();
     });
+
+    it("filters outliers to a single benchmark when requested", async () => {
+        const index: AnalysisIndex = {
+            ...sampleIndex,
+            aggregates: {
+                ...sampleIndex.aggregates,
+                outlierRuns: [
+                    {
+                        benchmarkId: "bench_1",
+                        runId: "run_outlier",
+                        avgSimilarity: 0.42,
+                        zScore: -1.8,
+                    },
+                    {
+                        benchmarkId: "bench_2",
+                        runId: "run_other",
+                        avgSimilarity: 0.5,
+                        zScore: -1.2,
+                    },
+                ],
+            },
+        };
+        const rows = await buildOutlierExplorerRows(index, {
+            benchmarkId: "bench_1",
+        });
+        expect(rows).toHaveLength(1);
+        expect(rows[0]?.runId).toBe("run_outlier");
+    });
 });

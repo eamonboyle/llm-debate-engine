@@ -13,8 +13,14 @@ export type OutlierExplorerRow = {
 
 export async function buildOutlierExplorerRows(
     index: AnalysisIndex,
+    options?: { benchmarkId?: string },
 ): Promise<OutlierExplorerRow[]> {
-    const outliers = index.aggregates.outlierRuns ?? [];
+    const benchmarkId = options?.benchmarkId?.trim();
+    const outliers = benchmarkId
+        ? (index.aggregates.outlierRuns ?? []).filter(
+              (row) => row.benchmarkId === benchmarkId,
+          )
+        : (index.aggregates.outlierRuns ?? []);
     const sorted = [...outliers].sort(
         (a, b) => a.avgSimilarity - b.avgSimilarity,
     );
