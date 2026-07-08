@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CritiqueConfidenceScatter } from "../../components/charts/CritiqueConfidenceScatter";
 import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { MetricCard } from "../../components/MetricCard";
+import { StaleIndexBanner } from "../../components/StaleIndexBanner";
 import {
     ResponsiveTable,
     TruncateText,
@@ -76,6 +77,7 @@ export default async function ConfidenceDriftPage({
 
     return (
         <section className="stack">
+            <StaleIndexBanner />
             <div>
                 <h1 className="title">Confidence drift</h1>
                 <p className="subtitle">

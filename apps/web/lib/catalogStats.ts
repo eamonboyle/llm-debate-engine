@@ -1,4 +1,12 @@
-import type { BenchmarkArtifact, RunArtifact } from "./data";
+import {
+    filterBenchmarkArtifacts,
+    filterRunArtifacts,
+    type ArtifactFilterParams,
+    type BenchmarkArtifact,
+    type RunArtifact,
+} from "./data";
+
+export type CatalogFilterParams = ArtifactFilterParams;
 
 export type CatalogModelRow = {
     model: string;
@@ -51,6 +59,48 @@ function matchesCatalogQuery(
     const q = (query ?? "").trim().toLowerCase();
     if (!q) return true;
     return haystack.toLowerCase().includes(q);
+}
+
+export function hasActiveCatalogFilters(filters: CatalogFilterParams): boolean {
+    return Boolean(
+        (filters.q ?? "").trim() ||
+            (filters.model ?? "").trim() ||
+            (filters.preset ?? "").trim() ||
+            filters.fast === "true" ||
+            filters.fast === "false" ||
+            (filters.from ?? "").trim() ||
+            (filters.to ?? "").trim(),
+    );
+}
+
+export function filterCatalogArtifacts(
+    runs: RunArtifact[],
+    benchmarks: BenchmarkArtifact[],
+    filters: CatalogFilterParams,
+): { runs: RunArtifact[]; benchmarks: BenchmarkArtifact[] } {
+    const facetFilters = {
+        model: filters.model,
+        preset: filters.preset,
+        fast: filters.fast,
+        from: filters.from,
+        to: filters.to,
+    };
+
+    return {
+        runs: filterRunArtifacts(runs, facetFilters),
+        benchmarks: filterBenchmarkArtifacts(benchmarks, facetFilters),
+    };
+}
+
+export function buildFilteredCatalogStats(
+    runs: RunArtifact[],
+    benchmarks: BenchmarkArtifact[],
+    filters: CatalogFilterParams,
+): CatalogStats {
+    const { runs: facetRuns, benchmarks: facetBenchmarks } =
+        filterCatalogArtifacts(runs, benchmarks, filters);
+    const stats = buildCatalogStats(facetRuns, facetBenchmarks);
+    return filterCatalogStats(stats, filters.q);
 }
 
 export function filterCatalogStats(

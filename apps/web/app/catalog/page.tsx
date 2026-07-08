@@ -2,8 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CollapsibleFilterCard } from "../../components/CollapsibleFilterCard";
 import { MetricCard } from "../../components/MetricCard";
+import { ModelFilterSelect } from "../../components/ModelFilterSelect";
+import { PresetFilterSelect } from "../../components/PresetFilterSelect";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
-import { buildCatalogStats, filterCatalogStats } from "../../lib/catalogStats";
+import { collectArtifactFacets } from "../../lib/artifactFacets";
+import {
+    buildCatalogStats,
+    buildFilteredCatalogStats,
+    hasActiveCatalogFilters,
+} from "../../lib/catalogStats";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
 import { buildQueryString } from "../../lib/listPagination";
 
@@ -13,6 +20,11 @@ export const metadata: Metadata = {
 
 type CatalogSearchParams = {
     q?: string;
+    model?: string;
+    preset?: string;
+    fast?: string;
+    from?: string;
+    to?: string;
 };
 
 function filterHref(
@@ -33,9 +45,11 @@ export default async function CatalogPage({
         loadRunArtifacts(),
         loadBenchmarkArtifacts(),
     ]);
+    const { models, presets } = collectArtifactFacets(runs, benchmarks);
     const rawStats = buildCatalogStats(runs, benchmarks);
-    const stats = filterCatalogStats(rawStats, params.q);
+    const stats = buildFilteredCatalogStats(runs, benchmarks, params);
     const query = (params.q ?? "").trim();
+    const filtersActive = hasActiveCatalogFilters(params);
     const empty = runs.length === 0 && benchmarks.length === 0;
     const filteredCount =
         stats.models.length + stats.presets.length + stats.combos.length;
@@ -72,10 +86,15 @@ export default async function CatalogPage({
 
             <CollapsibleFilterCard
                 resultsSummary={
-                    query ? (
+                    filtersActive ? (
                         <>
                             {filteredCount} of {totalCount} catalog rows match
-                            &ldquo;{query}&rdquo;
+                            {query ? (
+                                <>
+                                    {" "}
+                                    &ldquo;{query}&rdquo;
+                                </>
+                            ) : null}
                         </>
                     ) : (
                         <>
@@ -92,6 +111,38 @@ export default async function CatalogPage({
                             placeholder="Search models, presets, or combinations"
                             defaultValue={params.q ?? ""}
                             className="input"
+                        />
+                        <ModelFilterSelect
+                            models={models}
+                            defaultValue={params.model ?? ""}
+                            listId="catalog-model-filter-options"
+                        />
+                        <PresetFilterSelect
+                            presets={presets}
+                            defaultValue={params.preset ?? ""}
+                        />
+                        <select
+                            name="fast"
+                            defaultValue={params.fast ?? ""}
+                            className="input"
+                        >
+                            <option value="">Fast mode: any</option>
+                            <option value="true">Fast only</option>
+                            <option value="false">Non-fast only</option>
+                        </select>
+                        <input
+                            type="datetime-local"
+                            name="from"
+                            defaultValue={params.from ?? ""}
+                            className="input"
+                            title="Created at or after"
+                        />
+                        <input
+                            type="datetime-local"
+                            name="to"
+                            defaultValue={params.to ?? ""}
+                            className="input"
+                            title="Created at or before"
                         />
                     </div>
                     <div className="filter-actions">
@@ -110,7 +161,7 @@ export default async function CatalogPage({
                 style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
             >
                 <a
-                    href={`/api/catalog${buildQueryString({ q: params.q }, {})}`}
+                    href={`/api/catalog${buildQueryString(params, {})}`}
                     className="button secondary"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -119,7 +170,7 @@ export default async function CatalogPage({
                     Export JSON
                 </a>
                 <a
-                    href={`/api/catalog${buildQueryString({ q: params.q }, {})}&format=csv`}
+                    href={`/api/catalog${buildQueryString({ ...params, format: "csv" }, {})}`}
                     className="button secondary"
                     download="experiment-catalog.csv"
                 >
