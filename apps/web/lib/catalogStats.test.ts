@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { buildCatalogStats, filterCatalogStats } from "./catalogStats";
+import {
+    buildCatalogStats,
+    buildFilteredCatalogStats,
+    filterCatalogStats,
+} from "./catalogStats";
 import type { BenchmarkArtifact, RunArtifact } from "./data";
 
 function makeRun(model: string, preset: string): RunArtifact {
@@ -96,5 +100,39 @@ describe("buildCatalogStats", () => {
             "research_deep",
         ]);
         expect(presetFiltered.combos).toHaveLength(1);
+    });
+
+    it("filters catalog stats by model, preset, and fast mode facets", () => {
+        const runs = [
+            makeRun("gpt-a", "standard"),
+            {
+                ...makeRun("gpt-a", "standard"),
+                metadata: {
+                    ...makeRun("gpt-a", "standard").metadata,
+                    fastMode: true,
+                },
+            },
+            makeRun("gpt-b", "research_deep"),
+        ];
+        const benchmarks = [makeBenchmark("gpt-a", "standard")];
+
+        const modelFiltered = buildFilteredCatalogStats(runs, benchmarks, {
+            model: "gpt-a",
+        });
+        expect(modelFiltered.models.map((row) => row.model)).toEqual(["gpt-a"]);
+        expect(modelFiltered.totals.runs).toBe(2);
+
+        const fastFiltered = buildFilteredCatalogStats(runs, benchmarks, {
+            fast: "true",
+        });
+        expect(fastFiltered.totals.runs).toBe(1);
+
+        const presetFiltered = buildFilteredCatalogStats(runs, benchmarks, {
+            preset: "research_deep",
+        });
+        expect(presetFiltered.presets.map((row) => row.preset)).toEqual([
+            "research_deep",
+        ]);
+        expect(presetFiltered.totals.runs).toBe(1);
     });
 });

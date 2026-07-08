@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { MetricCard } from "../../components/MetricCard";
+import { StaleIndexBanner } from "../../components/StaleIndexBanner";
 import {
     ResponsiveTable,
     TruncateText,
@@ -112,6 +113,7 @@ export default async function QualityInsightsPage({
 
     return (
         <section className="stack">
+            <StaleIndexBanner />
             <div>
                 <h1 className="title">Quality insights</h1>
                 <p className="subtitle">

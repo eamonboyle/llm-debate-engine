@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
+import { StaleIndexBanner } from "../../components/StaleIndexBanner";
 import { loadAnalysisIndex } from "../../lib/data";
 import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
 import { buildModelLeaderboard } from "../../lib/modelLeaderboard";
@@ -54,6 +55,7 @@ export default async function ModelLeaderboardPage({
 
     return (
         <section className="stack">
+            <StaleIndexBanner />
             <div>
                 <h1 className="title">Model leaderboard</h1>
                 <p className="subtitle">

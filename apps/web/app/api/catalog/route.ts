@@ -1,21 +1,31 @@
 import {
-    buildCatalogStats,
-    filterCatalogStats,
+    buildFilteredCatalogStats,
+    type CatalogFilterParams,
 } from "../../../lib/catalogStats";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../../lib/data";
 import { catalogStatsToCsv } from "../../../lib/listExport";
 
+function readCatalogFilters(url: URL): CatalogFilterParams {
+    return {
+        q: url.searchParams.get("q") ?? undefined,
+        model: url.searchParams.get("model") ?? undefined,
+        preset: url.searchParams.get("preset") ?? undefined,
+        fast: url.searchParams.get("fast") ?? undefined,
+        from: url.searchParams.get("from") ?? undefined,
+        to: url.searchParams.get("to") ?? undefined,
+    };
+}
+
 export async function GET(request: Request) {
     const url = new URL(request.url);
     const format = url.searchParams.get("format") ?? "json";
-    const q = url.searchParams.get("q") ?? undefined;
+    const filters = readCatalogFilters(url);
 
     const [runs, benchmarks] = await Promise.all([
         loadRunArtifacts(),
         loadBenchmarkArtifacts(),
     ]);
-    const rawStats = buildCatalogStats(runs, benchmarks);
-    const stats = filterCatalogStats(rawStats, q);
+    const stats = buildFilteredCatalogStats(runs, benchmarks, filters);
 
     if (format === "csv") {
         const csv = catalogStatsToCsv(stats);
@@ -30,9 +40,8 @@ export async function GET(request: Request) {
     }
 
     return Response.json({
-        query: q ?? null,
+        filters,
         totals: stats.totals,
-        rawTotals: rawStats.totals,
         models: stats.models,
         presets: stats.presets,
         combos: stats.combos,
