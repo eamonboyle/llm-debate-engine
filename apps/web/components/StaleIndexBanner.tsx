@@ -14,10 +14,7 @@ export async function StaleIndexBanner() {
     }
 
     return (
-        <div
-            className="card"
-            style={{ borderColor: "var(--color-warning)" }}
-        >
+        <div className="card" style={{ borderColor: "var(--color-warning)" }}>
             <h2 style={{ marginTop: 0 }}>Analysis index may be stale</h2>
             <p className="muted" style={{ marginBottom: 12 }}>
                 {freshness.missingIndex

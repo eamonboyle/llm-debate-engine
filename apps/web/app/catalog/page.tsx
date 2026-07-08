@@ -89,12 +89,7 @@ export default async function CatalogPage({
                     filtersActive ? (
                         <>
                             {filteredCount} of {totalCount} catalog rows match
-                            {query ? (
-                                <>
-                                    {" "}
-                                    &ldquo;{query}&rdquo;
-                                </>
-                            ) : null}
+                            {query ? <> &ldquo;{query}&rdquo;</> : null}
                         </>
                     ) : (
                         <>

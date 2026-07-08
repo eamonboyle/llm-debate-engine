@@ -105,7 +105,13 @@ describe("buildCatalogStats", () => {
     it("filters catalog stats by model, preset, and fast mode facets", () => {
         const runs = [
             makeRun("gpt-a", "standard"),
-            { ...makeRun("gpt-a", "standard"), metadata: { ...makeRun("gpt-a", "standard").metadata, fastMode: true } },
+            {
+                ...makeRun("gpt-a", "standard"),
+                metadata: {
+                    ...makeRun("gpt-a", "standard").metadata,
+                    fastMode: true,
+                },
+            },
             makeRun("gpt-b", "research_deep"),
         ];
         const benchmarks = [makeBenchmark("gpt-a", "standard")];

@@ -64,12 +64,12 @@ function matchesCatalogQuery(
 export function hasActiveCatalogFilters(filters: CatalogFilterParams): boolean {
     return Boolean(
         (filters.q ?? "").trim() ||
-            (filters.model ?? "").trim() ||
-            (filters.preset ?? "").trim() ||
-            filters.fast === "true" ||
-            filters.fast === "false" ||
-            (filters.from ?? "").trim() ||
-            (filters.to ?? "").trim(),
+        (filters.model ?? "").trim() ||
+        (filters.preset ?? "").trim() ||
+        filters.fast === "true" ||
+        filters.fast === "false" ||
+        (filters.from ?? "").trim() ||
+        (filters.to ?? "").trim(),
     );
 }
 
