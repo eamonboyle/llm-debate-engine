@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
     loadBenchmarkById,
+    loadBenchmarkArtifacts,
     loadBenchmarkPairsById,
     loadAnalysisIndex,
 } from "../../../lib/data";
@@ -38,6 +39,7 @@ import {
 import { DownloadArtifactLink } from "../../../components/DownloadArtifactLink";
 import { CopyPageLink } from "../../../components/CopyPageLink";
 import { RecentViewsTracker } from "../../../components/RecentViewsTracker";
+import { buildBenchmarkCompareSuggestions } from "../../../lib/benchmarkCompareSuggestions";
 
 export async function generateMetadata({
     params,
@@ -58,8 +60,9 @@ export default async function BenchmarkDetailPage({
     params: Promise<{ id: string }>;
 }) {
     const { id } = await params;
-    const [benchmark, index] = await Promise.all([
+    const [benchmark, allBenchmarks, index] = await Promise.all([
         loadBenchmarkById(id),
+        loadBenchmarkArtifacts(),
         loadAnalysisIndex(),
     ]);
 
@@ -114,6 +117,9 @@ export default async function BenchmarkDetailPage({
     const summaryDisplay = extractBenchmarkSummaryDisplay(benchmark);
     const claimCentroidDisplay = extractClaimCentroidDisplay(benchmark);
     const benchmarkTitle = `${benchmark.question.slice(0, 80)}${benchmark.question.length > 80 ? "…" : ""}`;
+    const compareSuggestions = buildBenchmarkCompareSuggestions(allBenchmarks, {
+        left: benchmark.id,
+    });
 
     return (
         <section className="stack">
@@ -212,6 +218,35 @@ export default async function BenchmarkDetailPage({
                     />
                 ) : null}
             </div>
+
+            {compareSuggestions.length > 0 ? (
+                <div className="card">
+                    <h2 style={{ marginTop: 0 }}>Suggested comparisons</h2>
+                    <p className="small muted" style={{ marginBottom: "1rem" }}>
+                        Pair this benchmark with others on the same question or
+                        model — one click to open the compare view.
+                    </p>
+                    <ul className="compare-suggestions-list">
+                        {compareSuggestions.map((suggestion) => (
+                            <li key={suggestion.id}>
+                                <Link
+                                    href={suggestion.href}
+                                    className="button secondary"
+                                >
+                                    Compare with {suggestion.id.slice(-16)}
+                                </Link>
+                                <span className="small muted">
+                                    {suggestion.reason} · {suggestion.model} ·{" "}
+                                    {suggestion.pipelinePreset} ·{" "}
+                                    {new Date(
+                                        suggestion.createdAt,
+                                    ).toLocaleString()}
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ) : null}
 
             {summaryDisplay.hasAny ? (
                 <div className="card">

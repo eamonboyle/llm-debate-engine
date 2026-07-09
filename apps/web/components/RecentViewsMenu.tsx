@@ -63,12 +63,12 @@ export function RecentViewsMenu() {
                     id={menuId}
                     className="nav-recent-menu"
                     role="menu"
-                    aria-label="Recently viewed artifacts"
+                    aria-label="Recently viewed pages"
                 >
                     {entries.length === 0 ? (
                         <p className="nav-recent-empty">
-                            Open a run or benchmark trace to build your recent
-                            list.
+                            Open a run, benchmark, or question hub to build your
+                            recent list.
                         </p>
                     ) : (
                         <ul className="nav-recent-list">

@@ -70,6 +70,20 @@ describe("recentViews", () => {
         expect(entries[1].id).toBe("run_b");
     });
 
+    it("records question hub views", () => {
+        recordRecentView({
+            id: "Is AI an existential threat?",
+            kind: "question",
+            href: "/questions/view?question=Is+AI+an+existential+threat%3F",
+            title: "Is AI an existential threat?",
+        });
+
+        const entries = readRecentViews();
+        expect(entries).toHaveLength(1);
+        expect(entries[0].kind).toBe("question");
+        expect(entries[0].title).toBe("Is AI an existential threat?");
+    });
+
     it("clears stored recent views", () => {
         recordRecentView({
             id: "benchmark_1",

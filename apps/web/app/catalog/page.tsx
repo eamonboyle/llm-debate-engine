@@ -377,14 +377,28 @@ export default async function CatalogPage({
                                         preset: string;
                                     };
                                     return (
-                                        <Link
-                                            href={filterHref("/runs", {
-                                                model: r.model,
-                                                preset: r.preset,
-                                            })}
-                                        >
-                                            Filter runs
-                                        </Link>
+                                        <span className="cell-compare-links">
+                                            <Link
+                                                href={filterHref("/runs", {
+                                                    model: r.model,
+                                                    preset: r.preset,
+                                                })}
+                                            >
+                                                Runs
+                                            </Link>
+                                            {" · "}
+                                            <Link
+                                                href={filterHref(
+                                                    "/benchmarks",
+                                                    {
+                                                        model: r.model,
+                                                        preset: r.preset,
+                                                    },
+                                                )}
+                                            >
+                                                Benchmarks
+                                            </Link>
+                                        </span>
                                     );
                                 },
                             },
@@ -403,15 +417,26 @@ export default async function CatalogPage({
                                 preset: string;
                             };
                             return (
-                                <Link
-                                    href={filterHref("/runs", {
-                                        model: r.model,
-                                        preset: r.preset,
-                                    })}
-                                    className="button"
-                                >
-                                    View runs
-                                </Link>
+                                <>
+                                    <Link
+                                        href={filterHref("/runs", {
+                                            model: r.model,
+                                            preset: r.preset,
+                                        })}
+                                        className="button"
+                                    >
+                                        View runs
+                                    </Link>
+                                    <Link
+                                        href={filterHref("/benchmarks", {
+                                            model: r.model,
+                                            preset: r.preset,
+                                        })}
+                                        className="button secondary"
+                                    >
+                                        Benchmarks
+                                    </Link>
+                                </>
                             );
                         }}
                     />
