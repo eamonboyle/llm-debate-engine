@@ -1,4 +1,4 @@
-export type RecentViewKind = "run" | "benchmark";
+export type RecentViewKind = "run" | "benchmark" | "question";
 
 export type RecentViewEntry = {
     id: string;
@@ -24,7 +24,9 @@ export function readRecentViews(): RecentViewEntry[] {
                 typeof entry.id === "string" &&
                 typeof entry.href === "string" &&
                 typeof entry.title === "string" &&
-                (entry.kind === "run" || entry.kind === "benchmark"),
+                (entry.kind === "run" ||
+                    entry.kind === "benchmark" ||
+                    entry.kind === "question"),
         );
     } catch {
         return [];

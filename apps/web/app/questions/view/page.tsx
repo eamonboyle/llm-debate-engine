@@ -32,6 +32,7 @@ import {
     summarizeQuestionHubBenchmarkMetrics,
     summarizeQuestionHubMetrics,
 } from "../../../lib/questionHubMetrics";
+import { RecentViewsTracker } from "../../../components/RecentViewsTracker";
 
 export const metadata: Metadata = {
     title: "Question hub",
@@ -42,6 +43,8 @@ type QuestionViewSearchParams = {
     model?: string;
     preset?: string;
     fast?: string;
+    from?: string;
+    to?: string;
 };
 
 export default async function QuestionHubPage({
@@ -78,6 +81,8 @@ export default async function QuestionHubPage({
         model: params.model,
         preset: params.preset,
         fast: params.fast,
+        from: params.from,
+        to: params.to,
     };
     const runs = filterRunArtifacts(allRuns, filterParams);
     const benchmarks = filterBenchmarkArtifacts(allBenchmarks, filterParams);
@@ -129,8 +134,16 @@ export default async function QuestionHubPage({
     const benchmarkCompareRight = benchmarks[1]?.id;
     const questionQuery: QuestionViewSearchParams = { question };
 
+    const questionTitle = `${question.slice(0, 80)}${question.length > 80 ? "…" : ""}`;
+
     return (
         <section className="stack">
+            <RecentViewsTracker
+                id={question}
+                kind="question"
+                href={questionHubHref(question)}
+                title={questionTitle}
+            />
             <div>
                 <h1 className="title">Question hub</h1>
                 <p className="subtitle">
@@ -222,6 +235,20 @@ export default async function QuestionHubPage({
                             <option value="true">Fast only</option>
                             <option value="false">Non-fast only</option>
                         </select>
+                        <input
+                            type="datetime-local"
+                            name="from"
+                            defaultValue={params.from ?? ""}
+                            className="input"
+                            title="Created at or after"
+                        />
+                        <input
+                            type="datetime-local"
+                            name="to"
+                            defaultValue={params.to ?? ""}
+                            className="input"
+                            title="Created at or before"
+                        />
                     </div>
                     <div className="filter-actions">
                         <button type="submit" className="button">
@@ -270,6 +297,8 @@ export default async function QuestionHubPage({
                                         model: params.model,
                                         preset: params.preset,
                                         fast: params.fast,
+                                        from: params.from,
+                                        to: params.to,
                                     },
                                 )}`}
                                 label="Copy URL"
