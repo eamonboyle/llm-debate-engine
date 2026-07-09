@@ -117,10 +117,9 @@ export default async function BenchmarkDetailPage({
     const summaryDisplay = extractBenchmarkSummaryDisplay(benchmark);
     const claimCentroidDisplay = extractClaimCentroidDisplay(benchmark);
     const benchmarkTitle = `${benchmark.question.slice(0, 80)}${benchmark.question.length > 80 ? "…" : ""}`;
-    const compareSuggestions = buildBenchmarkCompareSuggestions(
-        allBenchmarks,
-        { left: benchmark.id },
-    );
+    const compareSuggestions = buildBenchmarkCompareSuggestions(allBenchmarks, {
+        left: benchmark.id,
+    });
 
     return (
         <section className="stack">

@@ -388,10 +388,13 @@ export default async function CatalogPage({
                                             </Link>
                                             {" · "}
                                             <Link
-                                                href={filterHref("/benchmarks", {
-                                                    model: r.model,
-                                                    preset: r.preset,
-                                                })}
+                                                href={filterHref(
+                                                    "/benchmarks",
+                                                    {
+                                                        model: r.model,
+                                                        preset: r.preset,
+                                                    },
+                                                )}
                                             >
                                                 Benchmarks
                                             </Link>
