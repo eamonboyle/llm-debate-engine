@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ActiveIndexFiltersNotice } from "../../../components/ActiveIndexFiltersNotice";
 import { CompareDeltaChart } from "../../../components/charts/CompareDeltaChart";
 import { CompareExportLink } from "../../../components/CompareExportLink";
+import { CompareFormFilterFields } from "../../../components/CompareFormFilterFields";
 import { CompareSwapLink } from "../../../components/CompareSwapLink";
 import { MetricCard } from "../../../components/MetricCard";
 import { PresetFilterSelect } from "../../../components/PresetFilterSelect";
 import { loadAnalysisIndex } from "../../../lib/data";
-import { collectIndexFacets } from "../../../lib/indexFilters";
+import {
+    indexFilterExtraParams,
+    pickIndexFilterParams,
+} from "../../../lib/compareFilterParams";
+import {
+    applyIndexFilters,
+    collectIndexFacets,
+} from "../../../lib/indexFilters";
 import { buildPresetComparePayload } from "../../../lib/presetCompare";
 import { buildPresetLeaderboard } from "../../../lib/presetLeaderboard";
 import { buildLeaderboardCompareSuggestions } from "../../../lib/leaderboardCompareSuggestions";
@@ -18,14 +27,13 @@ export const metadata: Metadata = {
 type PresetCompareSearchParams = {
     left?: string;
     right?: string;
+    q?: string;
+    model?: string;
+    preset?: string;
     fast?: string;
+    from?: string;
+    to?: string;
 };
-
-function resolveFastMode(value: string | undefined): boolean | undefined {
-    if (value === "true") return true;
-    if (value === "false") return false;
-    return undefined;
-}
 
 function formatMetric(value: number | null, digits = 2) {
     return typeof value === "number" ? value.toFixed(digits) : "—";
@@ -43,10 +51,9 @@ export default async function PresetComparePage({
     searchParams: Promise<PresetCompareSearchParams>;
 }) {
     const params = await searchParams;
-    const fastMode = resolveFastMode(params.fast);
-    const index = await loadAnalysisIndex();
+    const rawIndex = await loadAnalysisIndex();
 
-    if (!index) {
+    if (!rawIndex) {
         return (
             <section className="stack">
                 <h1 className="title">Compare presets</h1>
@@ -61,25 +68,28 @@ export default async function PresetComparePage({
         );
     }
 
-    const { presets } = collectIndexFacets(index);
+    const filterParams = pickIndexFilterParams(params);
+    const filterExtraParams = indexFilterExtraParams(filterParams);
+    const index = applyIndexFilters(rawIndex, filterParams);
+    const { presets } = collectIndexFacets(rawIndex);
     const leftPreset = (params.left ?? "").trim();
     const rightPreset = (params.right ?? "").trim();
     const compare =
         leftPreset && rightPreset
             ? buildPresetComparePayload(index, leftPreset, rightPreset, {
-                  fastMode,
+                  linkFilters: filterParams,
               })
             : null;
-    const suggestionExtraParams =
-        fastMode !== undefined ? { fast: String(fastMode) } : undefined;
     const suggestions = buildLeaderboardCompareSuggestions(
-        buildPresetLeaderboard(index, { fastMode }).map((row) => ({
-            key: row.preset,
-            runCount: row.runCount,
-        })),
+        buildPresetLeaderboard(index, { linkFilters: filterParams }).map(
+            (row) => ({
+                key: row.preset,
+                runCount: row.runCount,
+            }),
+        ),
         { left: leftPreset, right: rightPreset },
         "/presets/compare",
-        suggestionExtraParams,
+        filterExtraParams,
     );
 
     return (
@@ -109,7 +119,23 @@ export default async function PresetComparePage({
                 </div>
             </div>
 
+            <ActiveIndexFiltersNotice
+                filters={filterParams}
+                filteredRunCount={index.totals.runs}
+                totalRunCount={rawIndex.totals.runs}
+                clearHref="/presets/compare"
+            />
+
             <form className="card" method="get">
+                <CompareFormFilterFields
+                    filters={{
+                        q: filterParams.q,
+                        model: filterParams.model,
+                        preset: filterParams.preset,
+                        from: filterParams.from,
+                        to: filterParams.to,
+                    }}
+                />
                 <div className="filter-grid">
                     <PresetFilterSelect
                         name="left"
@@ -140,11 +166,7 @@ export default async function PresetComparePage({
                             basePath="/presets/compare"
                             left={leftPreset}
                             right={rightPreset}
-                            extraParams={
-                                fastMode !== undefined
-                                    ? { fast: String(fastMode) }
-                                    : undefined
-                            }
+                            extraParams={filterExtraParams}
                         />
                     ) : null}
                     {compare ? (
@@ -152,11 +174,7 @@ export default async function PresetComparePage({
                             apiPath="/api/presets/compare"
                             left={leftPreset}
                             right={rightPreset}
-                            extraParams={
-                                fastMode !== undefined
-                                    ? { fast: String(fastMode) }
-                                    : undefined
-                            }
+                            extraParams={filterExtraParams}
                         />
                     ) : null}
                 </div>

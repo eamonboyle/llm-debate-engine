@@ -6,6 +6,7 @@ export type ExperimentMatrixCell = {
     runCount: number;
     benchmarkCount: number;
     latestRunId: string | null;
+    secondLatestRunId: string | null;
     latestBenchmarkId: string | null;
 };
 
@@ -19,21 +20,35 @@ function cellKey(model: string, preset: string): string {
     return `${model}\0${preset}`;
 }
 
+type MatrixCellAccumulator = {
+    runCount: number;
+    benchmarkCount: number;
+    latestRunId: string | null;
+    latestRunAt: string;
+    secondLatestRunId: string | null;
+    secondLatestRunAt: string;
+    latestBenchmarkId: string | null;
+    latestBenchmarkAt: string;
+};
+
+function emptyCellAccumulator(): MatrixCellAccumulator {
+    return {
+        runCount: 0,
+        benchmarkCount: 0,
+        latestRunId: null,
+        latestRunAt: "",
+        secondLatestRunId: null,
+        secondLatestRunAt: "",
+        latestBenchmarkId: null,
+        latestBenchmarkAt: "",
+    };
+}
+
 export function buildQuestionExperimentMatrix(
     runs: RunArtifact[],
     benchmarks: BenchmarkArtifact[],
 ): QuestionExperimentMatrix {
-    const cellMap = new Map<
-        string,
-        {
-            runCount: number;
-            benchmarkCount: number;
-            latestRunId: string | null;
-            latestRunAt: string;
-            latestBenchmarkId: string | null;
-            latestBenchmarkAt: string;
-        }
-    >();
+    const cellMap = new Map<string, MatrixCellAccumulator>();
 
     const models = new Set<string>();
     const presets = new Set<string>();
@@ -44,18 +59,18 @@ export function buildQuestionExperimentMatrix(
         models.add(model);
         presets.add(preset);
         const key = cellKey(model, preset);
-        const existing = cellMap.get(key) ?? {
-            runCount: 0,
-            benchmarkCount: 0,
-            latestRunId: null,
-            latestRunAt: "",
-            latestBenchmarkId: null,
-            latestBenchmarkAt: "",
-        };
+        const existing = cellMap.get(key) ?? emptyCellAccumulator();
         existing.runCount += 1;
         if (run.metadata.createdAt >= existing.latestRunAt) {
+            if (existing.latestRunId) {
+                existing.secondLatestRunId = existing.latestRunId;
+                existing.secondLatestRunAt = existing.latestRunAt;
+            }
             existing.latestRunAt = run.metadata.createdAt;
             existing.latestRunId = run.id;
+        } else if (run.metadata.createdAt >= existing.secondLatestRunAt) {
+            existing.secondLatestRunId = run.id;
+            existing.secondLatestRunAt = run.metadata.createdAt;
         }
         cellMap.set(key, existing);
     }
@@ -66,14 +81,7 @@ export function buildQuestionExperimentMatrix(
         models.add(model);
         presets.add(preset);
         const key = cellKey(model, preset);
-        const existing = cellMap.get(key) ?? {
-            runCount: 0,
-            benchmarkCount: 0,
-            latestRunId: null,
-            latestRunAt: "",
-            latestBenchmarkId: null,
-            latestBenchmarkAt: "",
-        };
+        const existing = cellMap.get(key) ?? emptyCellAccumulator();
         existing.benchmarkCount += 1;
         if (benchmark.metadata.createdAt >= existing.latestBenchmarkAt) {
             existing.latestBenchmarkAt = benchmark.metadata.createdAt;
@@ -96,6 +104,7 @@ export function buildQuestionExperimentMatrix(
                 runCount: entry.runCount,
                 benchmarkCount: entry.benchmarkCount,
                 latestRunId: entry.latestRunId,
+                secondLatestRunId: entry.secondLatestRunId,
                 latestBenchmarkId: entry.latestBenchmarkId,
             });
         }
@@ -118,4 +127,20 @@ export function lookupMatrixCell(
             (cell) => cell.model === model && cell.preset === preset,
         ) ?? null
     );
+}
+
+export function buildMatrixCellRunCompareHref(
+    cell: ExperimentMatrixCell,
+    question: string,
+): string | null {
+    if (!cell.latestRunId || !cell.secondLatestRunId) {
+        return null;
+    }
+
+    const params = new URLSearchParams({
+        left: cell.secondLatestRunId,
+        right: cell.latestRunId,
+        question,
+    });
+    return `/runs/compare?${params.toString()}`;
 }

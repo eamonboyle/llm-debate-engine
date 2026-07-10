@@ -1,6 +1,7 @@
 import type { AnalysisIndex } from "./data";
 import {
     buildModelLeaderboard,
+    type LeaderboardFilterOptions,
     type ModelLeaderboardRow,
 } from "./modelLeaderboard";
 
@@ -27,10 +28,11 @@ function delta(right: number | null, left: number | null): number | null {
 export function findModelLeaderboardRow(
     index: AnalysisIndex,
     model: string,
+    opts: LeaderboardFilterOptions = {},
 ): ModelLeaderboardRow | null {
     const normalized = model.trim();
     if (!normalized) return null;
-    const rows = buildModelLeaderboard(index);
+    const rows = buildModelLeaderboard(index, opts);
     return (
         rows.find(
             (row) => row.model.toLowerCase() === normalized.toLowerCase(),
@@ -42,9 +44,10 @@ export function buildModelComparePayload(
     index: AnalysisIndex,
     leftModel: string,
     rightModel: string,
+    opts: LeaderboardFilterOptions = {},
 ): ModelComparePayload | null {
-    const left = findModelLeaderboardRow(index, leftModel);
-    const right = findModelLeaderboardRow(index, rightModel);
+    const left = findModelLeaderboardRow(index, leftModel, opts);
+    const right = findModelLeaderboardRow(index, rightModel, opts);
     if (!left || !right) return null;
 
     return {

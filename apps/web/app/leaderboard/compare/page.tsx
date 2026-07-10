@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ActiveIndexFiltersNotice } from "../../../components/ActiveIndexFiltersNotice";
 import { CompareDeltaChart } from "../../../components/charts/CompareDeltaChart";
 import { CompareExportLink } from "../../../components/CompareExportLink";
+import { CompareFormFilterFields } from "../../../components/CompareFormFilterFields";
 import { CompareSwapLink } from "../../../components/CompareSwapLink";
 import { MetricCard } from "../../../components/MetricCard";
 import { ModelFilterSelect } from "../../../components/ModelFilterSelect";
 import { loadAnalysisIndex } from "../../../lib/data";
+import {
+    indexFilterExtraParams,
+    pickIndexFilterParams,
+} from "../../../lib/compareFilterParams";
+import { applyIndexFilters } from "../../../lib/indexFilters";
 import { buildModelLeaderboard } from "../../../lib/modelLeaderboard";
 import { buildModelComparePayload } from "../../../lib/modelCompare";
 import { buildLeaderboardCompareSuggestions } from "../../../lib/leaderboardCompareSuggestions";
@@ -17,6 +24,12 @@ export const metadata: Metadata = {
 type ModelCompareSearchParams = {
     left?: string;
     right?: string;
+    q?: string;
+    model?: string;
+    preset?: string;
+    fast?: string;
+    from?: string;
+    to?: string;
 };
 
 function formatMetric(value: number | null, digits = 2) {
@@ -35,9 +48,9 @@ export default async function ModelComparePage({
     searchParams: Promise<ModelCompareSearchParams>;
 }) {
     const params = await searchParams;
-    const index = await loadAnalysisIndex();
+    const rawIndex = await loadAnalysisIndex();
 
-    if (!index) {
+    if (!rawIndex) {
         return (
             <section className="stack">
                 <h1 className="title">Compare models</h1>
@@ -52,20 +65,30 @@ export default async function ModelComparePage({
         );
     }
 
-    const models = buildModelLeaderboard(index).map((row) => row.model);
+    const filterParams = pickIndexFilterParams(params);
+    const filterExtraParams = indexFilterExtraParams(filterParams);
+    const index = applyIndexFilters(rawIndex, filterParams);
+    const models = buildModelLeaderboard(index, {
+        linkFilters: filterParams,
+    }).map((row) => row.model);
     const leftModel = (params.left ?? "").trim();
     const rightModel = (params.right ?? "").trim();
     const compare =
         leftModel && rightModel
-            ? buildModelComparePayload(index, leftModel, rightModel)
+            ? buildModelComparePayload(index, leftModel, rightModel, {
+                  linkFilters: filterParams,
+              })
             : null;
     const suggestions = buildLeaderboardCompareSuggestions(
-        buildModelLeaderboard(index).map((row) => ({
-            key: row.model,
-            runCount: row.runCount,
-        })),
+        buildModelLeaderboard(index, { linkFilters: filterParams }).map(
+            (row) => ({
+                key: row.model,
+                runCount: row.runCount,
+            }),
+        ),
         { left: leftModel, right: rightModel },
         "/leaderboard/compare",
+        filterExtraParams,
     );
 
     return (
@@ -89,7 +112,15 @@ export default async function ModelComparePage({
                 </div>
             </div>
 
+            <ActiveIndexFiltersNotice
+                filters={filterParams}
+                filteredRunCount={index.totals.runs}
+                totalRunCount={rawIndex.totals.runs}
+                clearHref="/leaderboard/compare"
+            />
+
             <form className="card" method="get">
+                <CompareFormFilterFields filters={filterParams} />
                 <div className="filter-grid">
                     <ModelFilterSelect
                         name="left"
@@ -113,6 +144,7 @@ export default async function ModelComparePage({
                             basePath="/leaderboard/compare"
                             left={leftModel}
                             right={rightModel}
+                            extraParams={filterExtraParams}
                         />
                     ) : null}
                     {compare ? (
@@ -120,6 +152,7 @@ export default async function ModelComparePage({
                             apiPath="/api/leaderboard/compare"
                             left={leftModel}
                             right={rightModel}
+                            extraParams={filterExtraParams}
                         />
                     ) : null}
                 </div>

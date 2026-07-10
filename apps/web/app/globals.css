@@ -1990,6 +1990,22 @@ pre {
     line-height: 1.35;
 }
 
+.experiment-matrix-cell-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.experiment-matrix-compare {
+    color: var(--color-accent);
+    font-size: 0.75rem;
+    text-decoration: none;
+}
+
+.experiment-matrix-compare:hover {
+    text-decoration: underline;
+}
+
 /* Heatmap improvements */
 .benchmark-heatmap-wrap {
     overflow-x: auto;

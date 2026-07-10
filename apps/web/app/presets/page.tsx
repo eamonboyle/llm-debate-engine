@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
+import { StaleIndexBanner } from "../../components/StaleIndexBanner";
 import { loadAnalysisIndex } from "../../lib/data";
 import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
 import { buildPresetLeaderboard } from "../../lib/presetLeaderboard";
 import { buildQueryString } from "../../lib/listPagination";
+import { buildLeaderboardSideCompareHref } from "../../lib/compareFilterParams";
 
 export const metadata: Metadata = {
     title: "Preset leaderboard",
@@ -54,6 +56,7 @@ export default async function PresetLeaderboardPage({
 
     return (
         <section className="stack">
+            <StaleIndexBanner />
             <div>
                 <h1 className="title">Preset leaderboard</h1>
                 <p className="subtitle">
@@ -78,7 +81,10 @@ export default async function PresetLeaderboardPage({
                     <Link href="/catalog" className="button secondary">
                         Experiment catalog
                     </Link>
-                    <Link href="/presets/compare" className="button secondary">
+                    <Link
+                        href={`/presets/compare${buildQueryString(params, {})}`}
+                        className="button secondary"
+                    >
                         Compare presets
                     </Link>
                 </div>
@@ -170,6 +176,40 @@ export default async function PresetLeaderboardPage({
                                     </Link>
                                 ),
                             },
+                            {
+                                key: "compare",
+                                label: "Compare",
+                                cellClass: "cell-actions",
+                                hideOnMobile: true,
+                                render: (row) => {
+                                    const preset = (row as { preset: string })
+                                        .preset;
+                                    return (
+                                        <span className="cell-compare-links">
+                                            <a
+                                                href={buildLeaderboardSideCompareHref(
+                                                    "/presets/compare",
+                                                    "left",
+                                                    preset,
+                                                    params,
+                                                )}
+                                            >
+                                                L
+                                            </a>
+                                            <a
+                                                href={buildLeaderboardSideCompareHref(
+                                                    "/presets/compare",
+                                                    "right",
+                                                    preset,
+                                                    params,
+                                                )}
+                                            >
+                                                R
+                                            </a>
+                                        </span>
+                                    );
+                                },
+                            },
                         ]}
                         data={rows.map((row) => ({
                             preset: row.preset,
@@ -186,12 +226,38 @@ export default async function PresetLeaderboardPage({
                         }))}
                         getRowId={(row) => (row as { preset: string }).preset}
                         renderCardActions={(row) => (
-                            <Link
-                                href={(row as { runsHref: string }).runsHref}
-                                className="button"
-                            >
-                                View runs
-                            </Link>
+                            <>
+                                <Link
+                                    href={
+                                        (row as { runsHref: string }).runsHref
+                                    }
+                                    className="button"
+                                >
+                                    View runs
+                                </Link>
+                                <a
+                                    href={buildLeaderboardSideCompareHref(
+                                        "/presets/compare",
+                                        "left",
+                                        (row as { preset: string }).preset,
+                                        params,
+                                    )}
+                                    className="button secondary"
+                                >
+                                    Set left
+                                </a>
+                                <a
+                                    href={buildLeaderboardSideCompareHref(
+                                        "/presets/compare",
+                                        "right",
+                                        (row as { preset: string }).preset,
+                                        params,
+                                    )}
+                                    className="button secondary"
+                                >
+                                    Set right
+                                </a>
+                            </>
                         )}
                     />
                 )}
