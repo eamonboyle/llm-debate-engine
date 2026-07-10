@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { BenchmarkArtifact, RunArtifact } from "./data";
 import {
+    buildMatrixCellRunCompareHref,
     buildQuestionExperimentMatrix,
     lookupMatrixCell,
 } from "./questionExperimentMatrix";
@@ -91,6 +92,45 @@ describe("buildQuestionExperimentMatrix", () => {
         const deepGptA = lookupMatrixCell(matrix, "gpt-a", "research_deep");
         expect(deepGptA?.runCount).toBe(1);
         expect(deepGptA?.latestRunId).toBe("run_b");
+    });
+
+    it("tracks second latest run for compare links", () => {
+        const matrix = buildQuestionExperimentMatrix(
+            [
+                makeRun(
+                    "run_old",
+                    "gpt-a",
+                    "standard",
+                    "2026-01-01T00:00:00.000Z",
+                ),
+                makeRun(
+                    "run_new",
+                    "gpt-a",
+                    "standard",
+                    "2026-01-03T00:00:00.000Z",
+                ),
+            ],
+            [],
+        );
+
+        const cell = lookupMatrixCell(matrix, "gpt-a", "standard");
+        expect(cell).toMatchObject({
+            runCount: 2,
+            latestRunId: "run_new",
+            secondLatestRunId: "run_old",
+        });
+        expect(buildMatrixCellRunCompareHref(cell!, "Shared?")).toBe(
+            "/runs/compare?left=run_old&right=run_new&question=Shared%3F",
+        );
+    });
+
+    it("returns null compare href when fewer than two runs", () => {
+        const matrix = buildQuestionExperimentMatrix(
+            [makeRun("run_a", "gpt-a", "standard", "2026-01-01T00:00:00.000Z")],
+            [],
+        );
+        const cell = lookupMatrixCell(matrix, "gpt-a", "standard");
+        expect(buildMatrixCellRunCompareHref(cell!, "Q?")).toBeNull();
     });
 
     it("returns empty axes when no artifacts", () => {

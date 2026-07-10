@@ -24,6 +24,7 @@ import {
 } from "../../../lib/questionGroups";
 import {
     buildQuestionExperimentMatrix,
+    buildMatrixCellRunCompareHref,
     lookupMatrixCell,
 } from "../../../lib/questionExperimentMatrix";
 import {
@@ -472,7 +473,8 @@ export default async function QuestionHubPage({
                     <p className="small muted">
                         Model × preset coverage for this question — cell counts
                         show runs and benchmarks. Click a cell to open the
-                        latest trace.
+                        latest trace, or compare when two or more runs exist in
+                        a cell.
                     </p>
                     <div className="experiment-matrix-wrap">
                         <table className="experiment-matrix">
@@ -517,6 +519,11 @@ export default async function QuestionHubPage({
                                                 ]
                                                     .filter(Boolean)
                                                     .join(" · ");
+                                                const compareHref =
+                                                    buildMatrixCellRunCompareHref(
+                                                        cell,
+                                                        question,
+                                                    );
                                                 const href =
                                                     cell.latestRunId != null
                                                         ? `/runs/${cell.latestRunId}`
@@ -527,13 +534,26 @@ export default async function QuestionHubPage({
                                                 return (
                                                     <td key={preset}>
                                                         {href ? (
-                                                            <Link
-                                                                href={href}
-                                                                className="experiment-matrix-cell"
-                                                                title={`${model} · ${preset}`}
-                                                            >
-                                                                {label}
-                                                            </Link>
+                                                            <div className="experiment-matrix-cell-wrap">
+                                                                <Link
+                                                                    href={href}
+                                                                    className="experiment-matrix-cell"
+                                                                    title={`${model} · ${preset}`}
+                                                                >
+                                                                    {label}
+                                                                </Link>
+                                                                {compareHref ? (
+                                                                    <Link
+                                                                        href={
+                                                                            compareHref
+                                                                        }
+                                                                        className="experiment-matrix-compare small"
+                                                                        title="Compare latest two runs in this cell"
+                                                                    >
+                                                                        Compare
+                                                                    </Link>
+                                                                ) : null}
+                                                            </div>
                                                         ) : (
                                                             <span className="muted">
                                                                 {label}

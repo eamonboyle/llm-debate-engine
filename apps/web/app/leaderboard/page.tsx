@@ -7,6 +7,7 @@ import { loadAnalysisIndex } from "../../lib/data";
 import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
 import { buildModelLeaderboard } from "../../lib/modelLeaderboard";
 import { buildQueryString } from "../../lib/listPagination";
+import { buildLeaderboardSideCompareHref } from "../../lib/compareFilterParams";
 
 export const metadata: Metadata = {
     title: "Model leaderboard",
@@ -84,7 +85,7 @@ export default async function ModelLeaderboardPage({
                         Critique issues
                     </Link>
                     <Link
-                        href="/leaderboard/compare"
+                        href={`/leaderboard/compare${buildQueryString(params, {})}`}
                         className="button secondary"
                     >
                         Compare models
@@ -184,6 +185,40 @@ export default async function ModelLeaderboardPage({
                                     </Link>
                                 ),
                             },
+                            {
+                                key: "compare",
+                                label: "Compare",
+                                cellClass: "cell-actions",
+                                hideOnMobile: true,
+                                render: (row) => {
+                                    const model = (row as { model: string })
+                                        .model;
+                                    return (
+                                        <span className="cell-compare-links">
+                                            <a
+                                                href={buildLeaderboardSideCompareHref(
+                                                    "/leaderboard/compare",
+                                                    "left",
+                                                    model,
+                                                    params,
+                                                )}
+                                            >
+                                                L
+                                            </a>
+                                            <a
+                                                href={buildLeaderboardSideCompareHref(
+                                                    "/leaderboard/compare",
+                                                    "right",
+                                                    model,
+                                                    params,
+                                                )}
+                                            >
+                                                R
+                                            </a>
+                                        </span>
+                                    );
+                                },
+                            },
                         ]}
                         data={rows.map((row) => ({
                             ...row,
@@ -203,12 +238,38 @@ export default async function ModelLeaderboardPage({
                         }))}
                         getRowId={(row) => (row as { model: string }).model}
                         renderCardActions={(row) => (
-                            <Link
-                                href={(row as { runsHref: string }).runsHref}
-                                className="button"
-                            >
-                                View runs
-                            </Link>
+                            <>
+                                <Link
+                                    href={
+                                        (row as { runsHref: string }).runsHref
+                                    }
+                                    className="button"
+                                >
+                                    View runs
+                                </Link>
+                                <a
+                                    href={buildLeaderboardSideCompareHref(
+                                        "/leaderboard/compare",
+                                        "left",
+                                        (row as { model: string }).model,
+                                        params,
+                                    )}
+                                    className="button secondary"
+                                >
+                                    Set left
+                                </a>
+                                <a
+                                    href={buildLeaderboardSideCompareHref(
+                                        "/leaderboard/compare",
+                                        "right",
+                                        (row as { model: string }).model,
+                                        params,
+                                    )}
+                                    className="button secondary"
+                                >
+                                    Set right
+                                </a>
+                            </>
                         )}
                     />
                 )}

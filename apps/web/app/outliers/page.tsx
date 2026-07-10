@@ -3,6 +3,7 @@ import Link from "next/link";
 import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { MetricCard } from "../../components/MetricCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
+import { StaleIndexBanner } from "../../components/StaleIndexBanner";
 import { loadAnalysisIndex } from "../../lib/data";
 import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
 import { buildQueryString } from "../../lib/listPagination";
@@ -49,12 +50,16 @@ export default async function OutliersPage({
     const { models, presets } = collectIndexFacets(rawIndex);
     const index = applyIndexFilters(rawIndex, params);
     const benchmarkId = (params.benchmark ?? "").trim();
+    const benchmarkOptions = [...index.benchmarks].sort((a, b) =>
+        b.createdAt.localeCompare(a.createdAt),
+    );
     const rows = await buildOutlierExplorerRows(index, {
         benchmarkId: benchmarkId || undefined,
     });
 
     return (
         <section className="stack">
+            <StaleIndexBanner />
             <div>
                 <h1 className="title">Outlier runs</h1>
                 <p className="subtitle">
@@ -75,6 +80,75 @@ export default async function OutliersPage({
                 </div>
             </div>
 
+            <form className="card" method="get">
+                <h2 style={{ marginTop: 0 }}>Benchmark scope</h2>
+                <p className="small muted" style={{ marginBottom: "1rem" }}>
+                    Narrow outliers to a single parent benchmark, or browse all
+                    benchmarks with outlier data.
+                </p>
+                <div className="filter-grid">
+                    <label className="filter-field">
+                        <span className="small muted">Benchmark</span>
+                        <select
+                            name="benchmark"
+                            defaultValue={benchmarkId}
+                            className="input"
+                        >
+                            <option value="">All benchmarks</option>
+                            {benchmarkOptions.map((benchmark) => (
+                                <option key={benchmark.id} value={benchmark.id}>
+                                    {benchmark.id.slice(-12)} —{" "}
+                                    {benchmark.question.length > 48
+                                        ? `${benchmark.question.slice(0, 48)}…`
+                                        : benchmark.question}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                </div>
+                {params.q ? (
+                    <input type="hidden" name="q" value={params.q} />
+                ) : null}
+                {params.model ? (
+                    <input type="hidden" name="model" value={params.model} />
+                ) : null}
+                {params.preset ? (
+                    <input type="hidden" name="preset" value={params.preset} />
+                ) : null}
+                {params.fast ? (
+                    <input type="hidden" name="fast" value={params.fast} />
+                ) : null}
+                {params.from ? (
+                    <input type="hidden" name="from" value={params.from} />
+                ) : null}
+                {params.to ? (
+                    <input type="hidden" name="to" value={params.to} />
+                ) : null}
+                <div className="filter-actions">
+                    <button type="submit" className="button">
+                        Apply benchmark
+                    </button>
+                    {benchmarkId ? (
+                        <Link
+                            href={`/outliers${buildQueryString(
+                                {
+                                    q: params.q,
+                                    model: params.model,
+                                    preset: params.preset,
+                                    fast: params.fast,
+                                    from: params.from,
+                                    to: params.to,
+                                },
+                                {},
+                            )}`}
+                            className="button secondary"
+                        >
+                            Clear benchmark
+                        </Link>
+                    ) : null}
+                </div>
+            </form>
+
             <InsightFilterCard
                 action="/outliers"
                 models={models}
@@ -93,7 +167,20 @@ export default async function OutliersPage({
                             <code>{benchmarkId}</code>
                         </Link>
                         .{" "}
-                        <Link href="/outliers" className="button secondary">
+                        <Link
+                            href={`/outliers${buildQueryString(
+                                {
+                                    q: params.q,
+                                    model: params.model,
+                                    preset: params.preset,
+                                    fast: params.fast,
+                                    from: params.from,
+                                    to: params.to,
+                                },
+                                {},
+                            )}`}
+                            className="button secondary"
+                        >
                             Clear benchmark filter
                         </Link>
                     </p>

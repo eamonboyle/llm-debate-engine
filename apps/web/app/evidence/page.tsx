@@ -7,6 +7,7 @@ import {
     ResponsiveTable,
     TruncateText,
 } from "../../components/ResponsiveTable";
+import { StaleIndexBanner } from "../../components/StaleIndexBanner";
 import { loadAnalysisIndex, loadRunArtifacts } from "../../lib/data";
 import {
     aggregateEvidenceStrings,
@@ -88,6 +89,7 @@ export default async function EvidenceExplorerPage({
 
     return (
         <section className="stack">
+            <StaleIndexBanner />
             <div>
                 <h1 className="title">Evidence planning</h1>
                 <p className="subtitle">

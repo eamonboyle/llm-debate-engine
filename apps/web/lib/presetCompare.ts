@@ -1,6 +1,7 @@
 import type { AnalysisIndex } from "./data";
 import {
     buildPresetLeaderboard,
+    type PresetLeaderboardFilterOptions,
     type PresetLeaderboardRow,
 } from "./presetLeaderboard";
 
@@ -25,7 +26,7 @@ function delta(right: number | null, left: number | null): number | null {
 export function findPresetLeaderboardRow(
     index: AnalysisIndex,
     preset: string,
-    opts: { fastMode?: boolean } = {},
+    opts: PresetLeaderboardFilterOptions = {},
 ): PresetLeaderboardRow | null {
     const normalized = preset.trim();
     if (!normalized) return null;
@@ -41,7 +42,7 @@ export function buildPresetComparePayload(
     index: AnalysisIndex,
     leftPreset: string,
     rightPreset: string,
-    opts: { fastMode?: boolean } = {},
+    opts: PresetLeaderboardFilterOptions = {},
 ): PresetComparePayload | null {
     const left = findPresetLeaderboardRow(index, leftPreset, opts);
     const right = findPresetLeaderboardRow(index, rightPreset, opts);
