@@ -144,6 +144,10 @@ export const GLOSSARY: Record<string, string> = {
         "Compare key metrics (mode count, entropy, stability) between two benchmarks.",
     pipelineTiming:
         "Average and median wall-clock duration per agent step, computed from trace timestamps.",
+    pipelineErrors:
+        "Failed agent steps over time — spikes often indicate model outages, parse failures, or timeouts.",
+    qualityTrend:
+        "Judge rubric scores (1–5) across filtered runs in chronological order.",
 };
 
 export function getGlossaryEntry(key: string): string | undefined {

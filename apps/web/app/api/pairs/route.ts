@@ -1,16 +1,33 @@
 import { loadBenchmarkArtifacts } from "../../../lib/data";
+import type { ArtifactFilterParams } from "../../../lib/data";
 import { pairsExplorerToCsv } from "../../../lib/listExport";
 import {
     buildBenchmarkPairDetails,
     buildBenchmarkPairSummaries,
+    filterPairSummaries,
 } from "../../../lib/pairsExplorer";
+
+function readPairFilters(url: URL): ArtifactFilterParams {
+    return {
+        q: url.searchParams.get("q") ?? undefined,
+        model: url.searchParams.get("model") ?? undefined,
+        preset: url.searchParams.get("preset") ?? undefined,
+        fast: url.searchParams.get("fast") ?? undefined,
+        from: url.searchParams.get("from") ?? undefined,
+        to: url.searchParams.get("to") ?? undefined,
+    };
+}
 
 export async function GET(request: Request) {
     const url = new URL(request.url);
     const format = url.searchParams.get("format") ?? "json";
     const benchmark = url.searchParams.get("benchmark") ?? undefined;
+    const filters = readPairFilters(url);
     const benchmarks = await loadBenchmarkArtifacts();
-    const summaries = await buildBenchmarkPairSummaries(benchmarks);
+    const summaries = filterPairSummaries(
+        await buildBenchmarkPairSummaries(benchmarks),
+        filters,
+    );
 
     if (benchmark) {
         const details = await buildBenchmarkPairDetails(benchmark, benchmarks);

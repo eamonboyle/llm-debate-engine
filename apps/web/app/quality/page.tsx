@@ -13,6 +13,8 @@ import {
     buildQualityRunRows,
     summarizeQuality,
 } from "../../lib/qualityInsights";
+import { buildQualityTrendSeries } from "../../lib/qualityTrends";
+import { QualityTrendCharts } from "../../components/charts/QualityTrendCharts";
 import {
     aggregateJudgeNarratives,
     listJudgeSummaries,
@@ -75,6 +77,7 @@ export default async function QualityInsightsPage({
     const index = applyIndexFilters(rawIndex, params);
     const summary = summarizeQuality(index);
     const rows = buildQualityRunRows(index);
+    const qualityTrendSeries = buildQualityTrendSeries(rows);
     const qualityRunIds = new Set(
         rows
             .filter(
@@ -191,6 +194,8 @@ export default async function QualityInsightsPage({
                     helpKey="factualRisk"
                 />
             </div>
+
+            <QualityTrendCharts series={qualityTrendSeries} />
 
             {summary.withQualityScores === 0 ? (
                 <div className="card">
