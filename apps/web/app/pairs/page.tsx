@@ -1,22 +1,28 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { MetricCard } from "../../components/MetricCard";
 import {
     ResponsiveTable,
     TruncateText,
 } from "../../components/ResponsiveTable";
-import { loadBenchmarkArtifacts } from "../../lib/data";
+import { collectArtifactFacets } from "../../lib/artifactFacets";
+import {
+    loadBenchmarkArtifacts,
+    type ArtifactFilterParams,
+} from "../../lib/data";
 import { buildQueryString } from "../../lib/listPagination";
 import {
     buildBenchmarkPairDetails,
     buildBenchmarkPairSummaries,
+    filterPairSummaries,
 } from "../../lib/pairsExplorer";
 
 export const metadata: Metadata = {
     title: "Benchmark pairs",
 };
 
-type PairsSearchParams = {
+type PairsSearchParams = ArtifactFilterParams & {
     benchmark?: string;
 };
 
@@ -26,11 +32,13 @@ export default async function PairsExplorerPage({
     searchParams: Promise<PairsSearchParams>;
 }) {
     const params = await searchParams;
-    const benchmarks = await loadBenchmarkArtifacts();
-    const summaries = await buildBenchmarkPairSummaries(benchmarks);
+    const allBenchmarks = await loadBenchmarkArtifacts();
+    const { models, presets } = collectArtifactFacets([], allBenchmarks);
+    const allSummaries = await buildBenchmarkPairSummaries(allBenchmarks);
+    const summaries = filterPairSummaries(allSummaries, params);
     const selectedBenchmark = (params.benchmark ?? "").trim();
     const details = selectedBenchmark
-        ? await buildBenchmarkPairDetails(selectedBenchmark, benchmarks)
+        ? await buildBenchmarkPairDetails(selectedBenchmark, allBenchmarks)
         : { summary: null, pairs: [] };
 
     return (
@@ -56,6 +64,17 @@ export default async function PairsExplorerPage({
                     </Link>
                 </div>
             </div>
+
+            <InsightFilterCard
+                action="/pairs"
+                models={models}
+                presets={presets}
+                params={params}
+                totalRuns={allSummaries.length}
+                filteredRuns={summaries.length}
+                preserveKeys={["benchmark"]}
+                entityLabel="benchmarks with pairs"
+            />
 
             {summaries.length > 0 ? (
                 <div

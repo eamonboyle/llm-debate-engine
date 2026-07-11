@@ -18,6 +18,11 @@ import {
     buildPipelineErrorRows,
     collectPipelineErrorAgents,
 } from "../../lib/pipelineErrors";
+import {
+    buildPipelineErrorByAgent,
+    buildPipelineErrorTrendSeries,
+} from "../../lib/pipelineErrorTrends";
+import { PipelineErrorTrendCharts } from "../../components/charts/PipelineErrorTrendCharts";
 
 export const metadata: Metadata = {
     title: "Pipeline errors",
@@ -43,6 +48,8 @@ export default async function PipelineErrorsPage({
         agent: params.agent,
     });
     const errorAgents = collectPipelineErrorAgents(filteredRuns);
+    const errorTrendSeries = buildPipelineErrorTrendSeries(rows);
+    const errorAgentSeries = buildPipelineErrorByAgent(rows);
     const uniqueRuns = new Set(rows.map((row) => row.runId)).size;
 
     if (allRuns.length === 0) {
@@ -191,6 +198,11 @@ export default async function PipelineErrorsPage({
                     helpKey="runArtifacts"
                 />
             </div>
+
+            <PipelineErrorTrendCharts
+                trendSeries={errorTrendSeries}
+                agentSeries={errorAgentSeries}
+            />
 
             <div className="card">
                 <h2 style={{ marginTop: 0 }}>Failed steps</h2>

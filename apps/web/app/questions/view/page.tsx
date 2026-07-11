@@ -14,14 +14,18 @@ import {
     filterBenchmarkArtifacts,
     filterRunArtifacts,
     loadAnalysisIndex,
+    loadBenchmarkArtifacts,
     loadBenchmarksByQuestion,
+    loadRunArtifacts,
     loadRunsByQuestion,
 } from "../../../lib/data";
 import { buildQueryString } from "../../../lib/listPagination";
 import {
+    groupArtifactsByQuestion,
     questionHubHref,
     listQuestionInsightLinks,
 } from "../../../lib/questionGroups";
+import { buildTopQuestions } from "../../../lib/topQuestions";
 import {
     buildQuestionExperimentMatrix,
     buildMatrixCellRunCompareHref,
@@ -56,14 +60,115 @@ export default async function QuestionHubPage({
     const params = await searchParams;
     const question = (params.question ?? "").trim();
     if (!question) {
+        const [runs, benchmarks] = await Promise.all([
+            loadRunArtifacts(),
+            loadBenchmarkArtifacts(),
+        ]);
+        const topQuestions = buildTopQuestions(
+            groupArtifactsByQuestion(runs, benchmarks),
+            12,
+        );
+
         return (
             <section className="stack">
-                <h1 className="title">Question hub</h1>
-                <p className="subtitle">
-                    Pick a question from the{" "}
-                    <Link href="/questions">questions explorer</Link> to see all
-                    runs and benchmarks for that topic.
-                </p>
+                <div>
+                    <h1 className="title">Question hub</h1>
+                    <p className="subtitle">
+                        Open a research question to compare every run and
+                        benchmark on that topic — or browse the full{" "}
+                        <Link href="/questions">questions explorer</Link>.
+                    </p>
+                    <div
+                        className="page-actions"
+                        style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                    >
+                        <Link href="/questions" className="button secondary">
+                            All questions
+                        </Link>
+                        <Link href="/search" className="button secondary">
+                            Search artifacts
+                        </Link>
+                    </div>
+                </div>
+
+                {topQuestions.length === 0 ? (
+                    <div className="card">
+                        <p className="muted" style={{ margin: 0 }}>
+                            No questions yet. Run debate experiments locally,
+                            then open the questions explorer once artifacts are
+                            available.
+                        </p>
+                    </div>
+                ) : (
+                    <div className="card">
+                        <h2 style={{ marginTop: 0 }}>
+                            Popular research topics
+                        </h2>
+                        <p className="small muted" style={{ marginBottom: 12 }}>
+                            Questions with the most runs and benchmarks in the
+                            artifact store.
+                        </p>
+                        <ResponsiveTable
+                            columns={[
+                                {
+                                    key: "question",
+                                    label: "Question",
+                                    cellClass: "cell-question",
+                                    render: (row) => (
+                                        <Link
+                                            href={
+                                                (row as { hubHref: string })
+                                                    .hubHref
+                                            }
+                                        >
+                                            <TruncateText
+                                                text={
+                                                    (
+                                                        row as {
+                                                            question: string;
+                                                        }
+                                                    ).question
+                                                }
+                                                maxLength={96}
+                                            />
+                                        </Link>
+                                    ),
+                                },
+                                { key: "runCount", label: "Runs" },
+                                { key: "benchmarkCount", label: "Benchmarks" },
+                                {
+                                    key: "totalExperiments",
+                                    label: "Total",
+                                },
+                                {
+                                    key: "latestCreatedAt",
+                                    label: "Latest",
+                                    hideOnMobile: true,
+                                    render: (row) =>
+                                        new Date(
+                                            (
+                                                row as {
+                                                    latestCreatedAt: string;
+                                                }
+                                            ).latestCreatedAt,
+                                        ).toLocaleString(),
+                                },
+                            ]}
+                            data={topQuestions}
+                            getRowId={(row) =>
+                                (row as { question: string }).question
+                            }
+                            renderCardActions={(row) => (
+                                <Link
+                                    href={(row as { hubHref: string }).hubHref}
+                                    className="button"
+                                >
+                                    Open hub
+                                </Link>
+                            )}
+                        />
+                    </div>
+                )}
             </section>
         );
     }

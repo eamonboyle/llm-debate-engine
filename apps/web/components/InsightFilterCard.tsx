@@ -11,6 +11,7 @@ type InsightFilterCardProps = {
     totalRuns: number;
     filteredRuns: number;
     preserveKeys?: string[];
+    entityLabel?: string;
 };
 
 export function InsightFilterCard({
@@ -21,6 +22,7 @@ export function InsightFilterCard({
     totalRuns,
     filteredRuns,
     preserveKeys = [],
+    entityLabel = "runs",
 }: InsightFilterCardProps) {
     const clearHref = (() => {
         const query = new URLSearchParams();
@@ -38,7 +40,7 @@ export function InsightFilterCard({
         <CollapsibleFilterCard
             resultsSummary={
                 <>
-                    {filteredRuns} of {totalRuns} runs
+                    {filteredRuns} of {totalRuns} {entityLabel}
                 </>
             }
         >

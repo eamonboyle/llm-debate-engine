@@ -1,4 +1,4 @@
-import type { BenchmarkArtifact } from "./data";
+import type { ArtifactFilterParams, BenchmarkArtifact } from "./data";
 import { loadBenchmarkPairsExport } from "./data";
 
 export type BenchmarkPairSummaryRow = {
@@ -6,12 +6,77 @@ export type BenchmarkPairSummaryRow = {
     question: string;
     model: string;
     pipelinePreset: string;
+    fastMode: boolean;
+    createdAt: string;
     runCount: number;
     pairCount: number;
     minSimilarity: number | null;
     maxSimilarity: number | null;
     avgSimilarity: number | null;
 };
+
+function normalize(value: string | undefined): string {
+    return (value ?? "").trim().toLowerCase();
+}
+
+function parseDateInput(value: string | undefined): Date | undefined {
+    if (!value) return undefined;
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return undefined;
+    return date;
+}
+
+function parseFastFilter(value: string | undefined): boolean | undefined {
+    const normalized = normalize(value);
+    if (normalized === "true") return true;
+    if (normalized === "false") return false;
+    return undefined;
+}
+
+export function filterPairSummaries(
+    rows: BenchmarkPairSummaryRow[],
+    filters: ArtifactFilterParams,
+): BenchmarkPairSummaryRow[] {
+    const q = normalize(filters.q);
+    const model = normalize(filters.model);
+    const preset = normalize(filters.preset);
+    const fast = parseFastFilter(filters.fast);
+    const fromDate = parseDateInput(filters.from);
+    const toDate = parseDateInput(filters.to);
+
+    return rows.filter((row) => {
+        if (q) {
+            const haystack =
+                `${row.benchmarkId} ${row.question} ${row.model} ${row.pipelinePreset}`.toLowerCase();
+            if (!haystack.includes(q)) return false;
+        }
+        if (model && !row.model.toLowerCase().includes(model)) {
+            return false;
+        }
+        if (preset && row.pipelinePreset.toLowerCase() !== preset) {
+            return false;
+        }
+        if (typeof fast === "boolean" && row.fastMode !== fast) {
+            return false;
+        }
+        const createdAt = new Date(row.createdAt);
+        if (
+            fromDate &&
+            !Number.isNaN(createdAt.getTime()) &&
+            createdAt < fromDate
+        ) {
+            return false;
+        }
+        if (
+            toDate &&
+            !Number.isNaN(createdAt.getTime()) &&
+            createdAt > toDate
+        ) {
+            return false;
+        }
+        return true;
+    });
+}
 
 export type BenchmarkPairDetailRow = {
     runIdA: string;
@@ -67,6 +132,9 @@ export async function buildBenchmarkPairSummaries(
                 question: benchmark?.question ?? "(unknown question)",
                 model: benchmark?.metadata.model ?? "—",
                 pipelinePreset: benchmark?.metadata.pipelinePreset ?? "—",
+                fastMode: benchmark?.metadata.fastMode ?? false,
+                createdAt:
+                    benchmark?.metadata.createdAt ?? "1970-01-01T00:00:00.000Z",
                 runCount: entry.runIds?.length ?? benchmark?.payload.runs ?? 0,
                 ...stats,
             });
@@ -84,6 +152,8 @@ export async function buildBenchmarkPairSummaries(
                 question: benchmark.question,
                 model: benchmark.metadata.model,
                 pipelinePreset: benchmark.metadata.pipelinePreset,
+                fastMode: benchmark.metadata.fastMode,
+                createdAt: benchmark.metadata.createdAt,
                 runCount: runIds.length || benchmark.payload.runs,
                 ...stats,
             });
@@ -121,6 +191,8 @@ export async function buildBenchmarkPairDetails(
               question: benchmark.question,
               model: benchmark.metadata.model,
               pipelinePreset: benchmark.metadata.pipelinePreset,
+              fastMode: benchmark.metadata.fastMode,
+              createdAt: benchmark.metadata.createdAt,
               runCount: runIds.length || benchmark.payload.runs,
               ...summarizePairs(rawPairs, runIds),
           }
@@ -130,6 +202,8 @@ export async function buildBenchmarkPairDetails(
                 question: "(unknown question)",
                 model: "—",
                 pipelinePreset: "—",
+                fastMode: false,
+                createdAt: "1970-01-01T00:00:00.000Z",
                 runCount: runIds.length,
                 ...summarizePairs(rawPairs, runIds),
             }
