@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AnalysisFilterContextCard } from "../../components/AnalysisFilterContextCard";
 import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { MetricCard } from "../../components/MetricCard";
 import { StaleIndexBanner } from "../../components/StaleIndexBanner";
@@ -117,6 +118,7 @@ export default async function QualityInsightsPage({
     return (
         <section className="stack">
             <StaleIndexBanner />
+            <AnalysisFilterContextCard filterContext={rawIndex.filterContext} />
             <div>
                 <h1 className="title">Quality insights</h1>
                 <p className="subtitle">

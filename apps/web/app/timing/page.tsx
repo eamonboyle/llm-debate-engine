@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { MetricCard } from "../../components/MetricCard";
-import { ResponsiveTable } from "../../components/ResponsiveTable";
+import {
+    ResponsiveTable,
+    TruncateText,
+} from "../../components/ResponsiveTable";
 import { collectArtifactFacets } from "../../lib/artifactFacets";
 import {
     filterRunArtifacts,
@@ -12,6 +15,7 @@ import {
 } from "../../lib/data";
 import {
     buildAgentTimingStats,
+    buildSlowestRunRows,
     formatDurationMs,
     summarizeStepTiming,
 } from "../../lib/stepTiming";
@@ -38,6 +42,7 @@ export default async function PipelineTimingPage({
     const runs = filterRunArtifacts(allRuns, params);
     const summary = summarizeStepTiming(runs);
     const rows = buildAgentTimingStats(runs);
+    const slowestRuns = buildSlowestRunRows(runs);
     const filtersActive = runs.length !== allRuns.length;
 
     if (allRuns.length === 0) {
@@ -109,7 +114,14 @@ export default async function PipelineTimingPage({
                         className="button secondary"
                         download="pipeline-timing.csv"
                     >
-                        Export CSV
+                        Export agent CSV
+                    </a>
+                    <a
+                        href={`/api/timing${buildQueryString(params, {})}&format=csv&scope=runs`}
+                        className="button secondary"
+                        download="pipeline-timing-slowest-runs.csv"
+                    >
+                        Export slowest runs CSV
                     </a>
                 </div>
             ) : null}
@@ -190,6 +202,98 @@ export default async function PipelineTimingPage({
                             }
                         />
                     </>
+                )}
+            </div>
+
+            <div className="card">
+                <h2 style={{ marginTop: 0 }}>Slowest runs</h2>
+                {slowestRuns.length === 0 ? (
+                    <p className="muted">
+                        {runs.length === 0
+                            ? "No runs match the current filters."
+                            : "No step timestamps found. Timings appear when run artifacts include createdAt and completedAt on each step."}
+                    </p>
+                ) : (
+                    <ResponsiveTable
+                        columns={[
+                            { key: "runId", label: "Run ID" },
+                            {
+                                key: "question",
+                                label: "Question",
+                                cellClass: "cell-question",
+                                render: (row) => (
+                                    <TruncateText
+                                        text={
+                                            (row as { question: string })
+                                                .question
+                                        }
+                                        maxLength={72}
+                                        className="muted"
+                                    />
+                                ),
+                            },
+                            {
+                                key: "model",
+                                label: "Model",
+                                hideOnMobile: true,
+                            },
+                            {
+                                key: "pipelinePreset",
+                                label: "Preset",
+                                hideOnMobile: true,
+                                helpKey: "preset",
+                            },
+                            {
+                                key: "timedStepCount",
+                                label: "Timed steps",
+                                hideOnMobile: true,
+                            },
+                            {
+                                key: "totalDurationMs",
+                                label: "Total duration",
+                                render: (row) =>
+                                    formatDurationMs(
+                                        (row as { totalDurationMs: number })
+                                            .totalDurationMs,
+                                    ),
+                            },
+                            {
+                                key: "avgStepDurationMs",
+                                label: "Avg step",
+                                hideOnMobile: true,
+                                render: (row) =>
+                                    formatDurationMs(
+                                        (row as { avgStepDurationMs: number })
+                                            .avgStepDurationMs,
+                                    ),
+                            },
+                            {
+                                key: "trace",
+                                label: "Open",
+                                cellClass: "cell-actions",
+                                render: (row) => (
+                                    <Link
+                                        href={
+                                            (row as { traceHref: string })
+                                                .traceHref
+                                        }
+                                    >
+                                        Trace
+                                    </Link>
+                                ),
+                            },
+                        ]}
+                        data={slowestRuns}
+                        getRowId={(row) => (row as { runId: string }).runId}
+                        renderCardActions={(row) => (
+                            <Link
+                                href={(row as { traceHref: string }).traceHref}
+                                className="button"
+                            >
+                                View trace
+                            </Link>
+                        )}
+                    />
                 )}
             </div>
         </section>

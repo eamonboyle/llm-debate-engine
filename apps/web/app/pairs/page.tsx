@@ -9,6 +9,7 @@ import {
 import { collectArtifactFacets } from "../../lib/artifactFacets";
 import {
     loadBenchmarkArtifacts,
+    loadDataStatus,
     type ArtifactFilterParams,
 } from "../../lib/data";
 import { buildQueryString } from "../../lib/listPagination";
@@ -32,17 +33,43 @@ export default async function PairsExplorerPage({
     searchParams: Promise<PairsSearchParams>;
 }) {
     const params = await searchParams;
-    const allBenchmarks = await loadBenchmarkArtifacts();
+    const [allBenchmarks, status] = await Promise.all([
+        loadBenchmarkArtifacts(),
+        loadDataStatus(),
+    ]);
     const { models, presets } = collectArtifactFacets([], allBenchmarks);
     const allSummaries = await buildBenchmarkPairSummaries(allBenchmarks);
     const summaries = filterPairSummaries(allSummaries, params);
     const selectedBenchmark = (params.benchmark ?? "").trim();
+    const benchmarkOptions = [...allBenchmarks].sort((a, b) =>
+        b.metadata.createdAt.localeCompare(a.metadata.createdAt),
+    );
     const details = selectedBenchmark
         ? await buildBenchmarkPairDetails(selectedBenchmark, allBenchmarks)
         : { summary: null, pairs: [] };
 
     return (
         <section className="stack">
+            {status.artifactCounts.benchmarks > 0 &&
+            !status.hasBenchmarkPairs ? (
+                <div
+                    className="card"
+                    style={{ borderColor: "var(--color-warning)" }}
+                >
+                    <h2 style={{ marginTop: 0 }}>
+                        Dedicated pairs export not found
+                    </h2>
+                    <p className="muted" style={{ marginBottom: 12 }}>
+                        Benchmark artifacts exist but{" "}
+                        <code>analysis-benchmark-pairs.json</code> is missing.
+                        The explorer can fall back to in-artifact pairs, but the
+                        dedicated export enables richer pairwise data.
+                    </p>
+                    <Link href="/status" className="button secondary">
+                        Check data status
+                    </Link>
+                </div>
+            ) : null}
             <div>
                 <h1 className="title">Benchmark pairwise similarity</h1>
                 <p className="subtitle">
@@ -64,6 +91,75 @@ export default async function PairsExplorerPage({
                     </Link>
                 </div>
             </div>
+
+            <form className="card" method="get">
+                <h2 style={{ marginTop: 0 }}>Benchmark scope</h2>
+                <p className="small muted" style={{ marginBottom: "1rem" }}>
+                    Jump directly to pairwise details for one benchmark while
+                    keeping list filters applied.
+                </p>
+                <div className="filter-grid">
+                    <label className="filter-field">
+                        <span className="small muted">Benchmark</span>
+                        <select
+                            name="benchmark"
+                            defaultValue={selectedBenchmark}
+                            className="input"
+                        >
+                            <option value="">All benchmarks (summary)</option>
+                            {benchmarkOptions.map((benchmark) => (
+                                <option key={benchmark.id} value={benchmark.id}>
+                                    {benchmark.id.slice(-12)} —{" "}
+                                    {benchmark.question.length > 48
+                                        ? `${benchmark.question.slice(0, 48)}…`
+                                        : benchmark.question}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                </div>
+                {params.q ? (
+                    <input type="hidden" name="q" value={params.q} />
+                ) : null}
+                {params.model ? (
+                    <input type="hidden" name="model" value={params.model} />
+                ) : null}
+                {params.preset ? (
+                    <input type="hidden" name="preset" value={params.preset} />
+                ) : null}
+                {params.fast ? (
+                    <input type="hidden" name="fast" value={params.fast} />
+                ) : null}
+                {params.from ? (
+                    <input type="hidden" name="from" value={params.from} />
+                ) : null}
+                {params.to ? (
+                    <input type="hidden" name="to" value={params.to} />
+                ) : null}
+                <div className="filter-actions">
+                    <button type="submit" className="button">
+                        Apply benchmark
+                    </button>
+                    {selectedBenchmark ? (
+                        <Link
+                            href={`/pairs${buildQueryString(
+                                {
+                                    q: params.q,
+                                    model: params.model,
+                                    preset: params.preset,
+                                    fast: params.fast,
+                                    from: params.from,
+                                    to: params.to,
+                                },
+                                {},
+                            )}`}
+                            className="button secondary"
+                        >
+                            Clear benchmark
+                        </Link>
+                    ) : null}
+                </div>
+            </form>
 
             <InsightFilterCard
                 action="/pairs"

@@ -6,6 +6,7 @@ import {
     ResponsiveTable,
     TruncateText,
 } from "../../components/ResponsiveTable";
+import { AnalysisFilterContextCard } from "../../components/AnalysisFilterContextCard";
 import { StaleIndexBanner } from "../../components/StaleIndexBanner";
 import { loadAnalysisIndex, loadRunArtifacts } from "../../lib/data";
 import {
@@ -83,6 +84,7 @@ export default async function CounterfactualExplorerPage({
     return (
         <section className="stack">
             <StaleIndexBanner />
+            <AnalysisFilterContextCard filterContext={rawIndex.filterContext} />
             <div>
                 <h1 className="title">Counterfactual failure modes</h1>
                 <p className="subtitle">

@@ -1,7 +1,11 @@
 import { filterRunArtifacts, loadRunArtifacts } from "../../../lib/data";
-import { agentTimingToCsv } from "../../../lib/listExport";
+import {
+    agentTimingToCsv,
+    slowestRunTimingToCsv,
+} from "../../../lib/listExport";
 import {
     buildAgentTimingStats,
+    buildSlowestRunRows,
     summarizeStepTiming,
 } from "../../../lib/stepTiming";
 
@@ -24,14 +28,22 @@ export async function GET(request: Request) {
     const runs = filterRunArtifacts(allRuns, filters);
     const summary = summarizeStepTiming(runs);
     const rows = buildAgentTimingStats(runs);
+    const slowestRuns = buildSlowestRunRows(runs);
 
     if (format === "csv") {
-        const csv = agentTimingToCsv(rows);
+        const scope = url.searchParams.get("scope") ?? "agents";
+        const csv =
+            scope === "runs"
+                ? slowestRunTimingToCsv(slowestRuns)
+                : agentTimingToCsv(rows);
+        const filename =
+            scope === "runs"
+                ? "pipeline-timing-slowest-runs.csv"
+                : "pipeline-timing.csv";
         return new Response(csv, {
             headers: {
                 "Content-Type": "text/csv; charset=utf-8",
-                "Content-Disposition":
-                    'attachment; filename="pipeline-timing.csv"',
+                "Content-Disposition": `attachment; filename="${filename}"`,
                 "Cache-Control": "public, max-age=60",
             },
         });
@@ -43,5 +55,6 @@ export async function GET(request: Request) {
         filters,
         summary,
         rows,
+        slowestRuns,
     });
 }

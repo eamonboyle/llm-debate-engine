@@ -3,6 +3,7 @@ import Link from "next/link";
 import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { MetricCard } from "../../components/MetricCard";
 import { ResponsiveTable } from "../../components/ResponsiveTable";
+import { AnalysisFilterContextCard } from "../../components/AnalysisFilterContextCard";
 import { StaleIndexBanner } from "../../components/StaleIndexBanner";
 import { loadAnalysisIndex } from "../../lib/data";
 import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
@@ -60,6 +61,7 @@ export default async function OutliersPage({
     return (
         <section className="stack">
             <StaleIndexBanner />
+            <AnalysisFilterContextCard filterContext={rawIndex.filterContext} />
             <div>
                 <h1 className="title">Outlier runs</h1>
                 <p className="subtitle">

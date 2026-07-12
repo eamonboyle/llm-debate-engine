@@ -7,6 +7,7 @@ import {
     ResponsiveTable,
     TruncateText,
 } from "../../components/ResponsiveTable";
+import { AnalysisFilterContextCard } from "../../components/AnalysisFilterContextCard";
 import { StaleIndexBanner } from "../../components/StaleIndexBanner";
 import { loadAnalysisIndex, loadRunArtifacts } from "../../lib/data";
 import {
@@ -90,6 +91,7 @@ export default async function EvidenceExplorerPage({
     return (
         <section className="stack">
             <StaleIndexBanner />
+            <AnalysisFilterContextCard filterContext={rawIndex.filterContext} />
             <div>
                 <h1 className="title">Evidence planning</h1>
                 <p className="subtitle">
