@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CollapsibleFilterCard } from "../components/CollapsibleFilterCard";
+import { AnalysisFilterContextCard } from "../components/AnalysisFilterContextCard";
 import { MetricCard } from "../components/MetricCard";
 import { ModelFilterSelect } from "../components/ModelFilterSelect";
 import { PresetFilterSelect } from "../components/PresetFilterSelect";
@@ -285,6 +286,7 @@ export default async function OverviewPage({
     const filterEntries = Object.entries(index.filterContext ?? {}).filter(
         ([, value]) => value !== undefined && value !== null && value !== "",
     );
+    const hasFilterContext = filterEntries.length > 0;
     const { models, presets } = collectIndexFacets(index);
     const trendFilters = {
         preset: params.preset,
@@ -590,25 +592,10 @@ export default async function OverviewPage({
                 />
             </div>
 
-            {filterEntries.length > 0 ? (
-                <div className="card">
-                    <h2 style={{ marginTop: 0 }}>Analysis filter context</h2>
-                    <p className="small muted">
-                        This index was generated from a filtered artifact
-                        subset.
-                    </p>
-                    <ResponsiveTable
-                        columns={[
-                            { key: "key", label: "Filter" },
-                            { key: "value", label: "Value" },
-                        ]}
-                        data={filterEntries.map(([key, value]) => ({
-                            key,
-                            value: String(value),
-                        }))}
-                        getRowId={(row) => row.key as string}
-                    />
-                </div>
+            {hasFilterContext ? (
+                <AnalysisFilterContextCard
+                    filterContext={index.filterContext}
+                />
             ) : null}
 
             <div className="card">

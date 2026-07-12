@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AnalysisFilterContextCard } from "../../components/AnalysisFilterContextCard";
 import { CritiqueConfidenceScatter } from "../../components/charts/CritiqueConfidenceScatter";
+import { DriftTrendCharts } from "../../components/charts/DriftTrendCharts";
 import { InsightFilterCard } from "../../components/InsightFilterCard";
 import { MetricCard } from "../../components/MetricCard";
 import { StaleIndexBanner } from "../../components/StaleIndexBanner";
@@ -13,6 +15,7 @@ import {
     buildConfidenceDriftRows,
     summarizeConfidenceDrift,
 } from "../../lib/confidenceDrift";
+import { buildDriftTrendSeries } from "../../lib/driftTrends";
 import { applyIndexFilters, collectIndexFacets } from "../../lib/indexFilters";
 import { buildQueryString } from "../../lib/listPagination";
 
@@ -63,7 +66,8 @@ export default async function ConfidenceDriftPage({
     const index = applyIndexFilters(rawIndex, params);
     const summary = summarizeConfidenceDrift(index);
     const rows = buildConfidenceDriftRows(index, { runs: allRuns });
-    const scatterPoints = rows
+    const driftTrendSeries = buildDriftTrendSeries(rows);
+    const solverScatterPoints = rows
         .filter(
             (row) =>
                 typeof row.maxSeverity === "number" &&
@@ -72,12 +76,24 @@ export default async function ConfidenceDriftPage({
         .map((row) => ({
             runId: row.runId,
             maxSeverity: row.maxSeverity as number,
-            solverToRevisionDelta: row.solverToRevisionDelta as number,
+            delta: row.solverToRevisionDelta as number,
+        }));
+    const revisionScatterPoints = rows
+        .filter(
+            (row) =>
+                typeof row.maxSeverity === "number" &&
+                typeof row.revisionToSynthesizerDelta === "number",
+        )
+        .map((row) => ({
+            runId: row.runId,
+            maxSeverity: row.maxSeverity as number,
+            delta: row.revisionToSynthesizerDelta as number,
         }));
 
     return (
         <section className="stack">
             <StaleIndexBanner />
+            <AnalysisFilterContextCard filterContext={rawIndex.filterContext} />
             <div>
                 <h1 className="title">Confidence drift</h1>
                 <p className="subtitle">
@@ -162,11 +178,30 @@ export default async function ConfidenceDriftPage({
                 />
             </div>
 
-            {scatterPoints.length > 0 ? (
-                <CritiqueConfidenceScatter
-                    points={scatterPoints}
-                    hint="Filtered runs with both severity and solver→revision delta — click a point to open the trace."
-                />
+            <DriftTrendCharts series={driftTrendSeries} />
+
+            {solverScatterPoints.length > 0 ||
+            revisionScatterPoints.length > 0 ? (
+                <div className="two-col">
+                    {solverScatterPoints.length > 0 ? (
+                        <CritiqueConfidenceScatter
+                            points={solverScatterPoints}
+                            title="Severity vs solver→revision Δ"
+                            helpKey="severityVsSolverToRevisionDelta"
+                            hint="Filtered runs with both severity and solver→revision delta — click a point to open the trace."
+                            yAxisName="solverToRevisionDelta"
+                        />
+                    ) : null}
+                    {revisionScatterPoints.length > 0 ? (
+                        <CritiqueConfidenceScatter
+                            points={revisionScatterPoints}
+                            title="Severity vs revision→synth Δ"
+                            helpKey="severityVsRevisionToSynthesizerDelta"
+                            hint="Filtered runs with both severity and revision→synthesizer delta — click a point to open the trace."
+                            yAxisName="revisionToSynthesizerDelta"
+                        />
+                    ) : null}
+                </div>
             ) : null}
 
             {rows.length === 0 ? (

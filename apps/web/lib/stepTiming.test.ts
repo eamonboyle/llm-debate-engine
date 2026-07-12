@@ -3,6 +3,7 @@ import type { RunArtifact } from "./data";
 import {
     buildAgentTimingStats,
     buildRunStepTiming,
+    buildSlowestRunRows,
     formatDurationMs,
     summarizeRunStepTiming,
 } from "./stepTiming";
@@ -68,5 +69,31 @@ describe("stepTiming", () => {
         expect(summary.timedStepCount).toBe(2);
         expect(summary.totalDurationMs).toBe(5000);
         expect(summary.avgStepDurationMs).toBe(2500);
+    });
+
+    it("ranks slowest runs by total step duration", () => {
+        const slowRun = sampleRun();
+        const fastRun: RunArtifact = {
+            ...sampleRun(),
+            id: "run-fast",
+            run: {
+                ...sampleRun().run,
+                id: "run-fast",
+                steps: [
+                    {
+                        id: "s1",
+                        agentName: "SolverAgent",
+                        role: "Solver",
+                        createdAt: "2026-01-01T00:00:00.000Z",
+                        completedAt: "2026-01-01T00:00:01.000Z",
+                    },
+                ],
+            },
+        };
+
+        const rows = buildSlowestRunRows([fastRun, slowRun]);
+        expect(rows[0]?.runId).toBe("run-1");
+        expect(rows[0]?.totalDurationMs).toBe(5000);
+        expect(rows[1]?.runId).toBe("run-fast");
     });
 });

@@ -3,6 +3,7 @@ import type { AnalysisIndex, RunArtifact } from "./data";
 
 export type ConfidenceDriftRow = {
     runId: string;
+    createdAt: string;
     question: string;
     model: string;
     pipelinePreset: string;
@@ -73,6 +74,7 @@ export function buildConfidenceDriftRows(
 
             return {
                 runId: run.id,
+                createdAt: run.createdAt,
                 question: run.question,
                 model: run.model,
                 pipelinePreset: run.pipelinePreset,

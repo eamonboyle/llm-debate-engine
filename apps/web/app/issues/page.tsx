@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { InsightFilterCard } from "../../components/InsightFilterCard";
+import { AnalysisFilterContextCard } from "../../components/AnalysisFilterContextCard";
 import { StaleIndexBanner } from "../../components/StaleIndexBanner";
 import {
     ResponsiveTable,
@@ -123,6 +124,7 @@ export default async function IssuesExplorerPage({
     return (
         <section className="stack">
             <StaleIndexBanner />
+            <AnalysisFilterContextCard filterContext={index.filterContext} />
             <div>
                 <h1 className="title">Critique issues</h1>
                 <p className="subtitle">

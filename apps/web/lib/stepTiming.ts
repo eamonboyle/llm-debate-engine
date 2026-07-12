@@ -138,6 +138,51 @@ export function summarizeStepTiming(runs: RunArtifact[]) {
     };
 }
 
+export type SlowestRunRow = {
+    runId: string;
+    question: string;
+    model: string;
+    pipelinePreset: string;
+    timedStepCount: number;
+    totalDurationMs: number;
+    avgStepDurationMs: number;
+    traceHref: string;
+};
+
+export function buildSlowestRunRows(
+    runs: RunArtifact[],
+    limit = 15,
+): SlowestRunRow[] {
+    const rows: SlowestRunRow[] = [];
+
+    for (const run of runs) {
+        const stepRows = buildRunStepTiming(run);
+        const summary = summarizeRunStepTiming(stepRows);
+        if (summary.totalDurationMs == null || summary.timedStepCount === 0) {
+            continue;
+        }
+
+        rows.push({
+            runId: run.id,
+            question: run.question,
+            model: run.metadata.model,
+            pipelinePreset: run.metadata.pipelinePreset,
+            timedStepCount: summary.timedStepCount,
+            totalDurationMs: summary.totalDurationMs,
+            avgStepDurationMs: summary.avgStepDurationMs ?? 0,
+            traceHref: `/runs/${run.id}`,
+        });
+    }
+
+    return rows
+        .sort(
+            (a, b) =>
+                b.totalDurationMs - a.totalDurationMs ||
+                a.runId.localeCompare(b.runId),
+        )
+        .slice(0, limit);
+}
+
 export function formatDurationMs(ms: number): string {
     if (ms < 1000) return `${Math.round(ms)}ms`;
     const seconds = ms / 1000;

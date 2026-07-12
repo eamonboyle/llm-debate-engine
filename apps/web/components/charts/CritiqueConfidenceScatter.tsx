@@ -16,7 +16,7 @@ import { InfoTooltip } from "../InfoTooltip";
 export type CritiqueConfidencePoint = {
     runId: string;
     maxSeverity: number;
-    solverToRevisionDelta: number;
+    delta: number;
 };
 
 type CritiqueConfidenceScatterProps = {
@@ -25,6 +25,7 @@ type CritiqueConfidenceScatterProps = {
     helpKey?: string;
     hint?: string;
     height?: number;
+    yAxisName?: string;
 };
 
 export function CritiqueConfidenceScatter({
@@ -33,6 +34,7 @@ export function CritiqueConfidenceScatter({
     helpKey = "severityVsConfidenceDelta",
     hint = "Click a point to open the run trace.",
     height = 360,
+    yAxisName = "solverToRevisionDelta",
 }: CritiqueConfidenceScatterProps) {
     const router = useRouter();
     const [mounted, setMounted] = useState(false);
@@ -43,7 +45,7 @@ export function CritiqueConfidenceScatter({
 
     const scatterRows = points.map((row) => ({
         severity: row.maxSeverity,
-        delta: row.solverToRevisionDelta,
+        delta: row.delta,
         runId: row.runId,
     }));
 
@@ -91,7 +93,7 @@ export function CritiqueConfidenceScatter({
                     <YAxis
                         type="number"
                         dataKey="delta"
-                        name="solverToRevisionDelta"
+                        name={yAxisName}
                         stroke="var(--color-text-muted)"
                         tick={{ fill: "var(--color-text-secondary)" }}
                     />

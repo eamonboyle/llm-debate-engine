@@ -148,6 +148,8 @@ export const GLOSSARY: Record<string, string> = {
         "Failed agent steps over time — spikes often indicate model outages, parse failures, or timeouts.",
     qualityTrend:
         "Judge rubric scores (1–5) across filtered runs in chronological order.",
+    driftTrend:
+        "Stage-to-stage confidence deltas across filtered runs in chronological order.",
 };
 
 export function getGlossaryEntry(key: string): string | undefined {

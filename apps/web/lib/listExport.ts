@@ -19,7 +19,7 @@ import type { ModelLeaderboardRow } from "./modelLeaderboard";
 import type { PresetLeaderboardRow } from "./presetLeaderboard";
 import type { QualityRunRow } from "./qualityInsights";
 import type { GlobalSearchResult } from "./globalSearch";
-import type { AgentTimingRow } from "./stepTiming";
+import type { AgentTimingRow, SlowestRunRow } from "./stepTiming";
 
 function escapeCsv(value: string): string {
     if (/[",\n\r]/.test(value)) {
@@ -290,6 +290,30 @@ export function agentTimingToCsv(rows: AgentTimingRow[]): string {
             entry.avgDurationMs,
             entry.medianDurationMs,
             entry.totalDurationMs,
+        ]),
+    );
+    return [header.join(","), ...csvRows].join("\n");
+}
+
+export function slowestRunTimingToCsv(rows: SlowestRunRow[]): string {
+    const header = [
+        "runId",
+        "question",
+        "model",
+        "pipelinePreset",
+        "timedStepCount",
+        "totalDurationMs",
+        "avgStepDurationMs",
+    ];
+    const csvRows = rows.map((entry) =>
+        row([
+            entry.runId,
+            entry.question,
+            entry.model,
+            entry.pipelinePreset,
+            entry.timedStepCount,
+            entry.totalDurationMs,
+            entry.avgStepDurationMs,
         ]),
     );
     return [header.join(","), ...csvRows].join("\n");

@@ -48,7 +48,7 @@ export function OverviewCharts({
         .map((row) => ({
             runId: row.runId,
             maxSeverity: row.maxSeverity as number,
-            solverToRevisionDelta: row.solverToRevisionDelta as number,
+            delta: row.solverToRevisionDelta as number,
         }));
 
     if (!mounted) {
