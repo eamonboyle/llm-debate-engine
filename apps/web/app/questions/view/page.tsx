@@ -309,6 +309,23 @@ export default async function QuestionHubPage({
                             Compare benchmarks (picker)
                         </Link>
                     ) : null}
+                    <a
+                        href={`/api/questions/hub${buildQueryString(
+                            {
+                                question,
+                                model: params.model,
+                                preset: params.preset,
+                                fast: params.fast,
+                                from: params.from,
+                                to: params.to,
+                            },
+                            {},
+                        )}&format=csv`}
+                        className="button secondary"
+                        download="question-hub.csv"
+                    >
+                        Export hub CSV
+                    </a>
                 </div>
             </div>
 

@@ -32,6 +32,7 @@ import { GET as getOutliers } from "./outliers/route";
 import { GET as getCatalog } from "./catalog/route";
 import { POST as postAnalysisRebuild } from "./analysis/rebuild/route";
 import { GET as getQuestions } from "./questions/route";
+import { GET as getQuestionsHub } from "./questions/hub/route";
 import { GET as getPairs } from "./pairs/route";
 import { GET as getErrors } from "./errors/route";
 
@@ -2312,6 +2313,165 @@ describe("web api routes", () => {
         expect(csvResponse.status).toBe(200);
         expect(csvResponse.headers.get("Content-Type")).toContain("text/csv");
         expect(await csvResponse.text()).toContain("Shared topic");
+    });
+
+    it("exports question hub artifacts as CSV", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_a.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_a",
+                question: "Hub topic",
+                metadata: {
+                    createdAt: "2026-01-02T00:00:00.000Z",
+                    model: "gpt-a",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: { id: "run_a", finalAnswer: "A", steps: [], metrics: {} },
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "benchmark_a.json"),
+            JSON.stringify({
+                kind: "benchmark",
+                id: "benchmark_a",
+                question: "Hub topic",
+                metadata: {
+                    createdAt: "2026-01-01T00:00:00.000Z",
+                    model: "gpt-a",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                payload: {
+                    runs: 2,
+                    modeCount: 1,
+                    modeSizes: [2],
+                    divergenceEntropy: 0.2,
+                    summary: { stability: { pairwiseMean: 0.9, pairs: [] } },
+                },
+            }),
+            "utf-8",
+        );
+
+        const response = await getQuestionsHub(
+            new Request(
+                "http://localhost/api/questions/hub?question=Hub%20topic&format=csv",
+            ),
+        );
+        expect(response.status).toBe(200);
+        const csv = await response.text();
+        expect(csv).toContain("Hub topic");
+        expect(csv).toContain("run_a");
+        expect(csv).toContain("benchmark_a");
+    });
+
+    it("filters runs API by pipeline errors", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "run_ok.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_ok",
+                question: "Alpha",
+                metadata: {
+                    createdAt: "2026-01-01T00:00:00.000Z",
+                    model: "gpt-a",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: { id: "run_ok", finalAnswer: "A", steps: [], metrics: {} },
+            }),
+            "utf-8",
+        );
+        await writeFile(
+            join(dir, "run_fail.json"),
+            JSON.stringify({
+                kind: "run",
+                id: "run_fail",
+                question: "Beta",
+                metadata: {
+                    createdAt: "2026-01-02T00:00:00.000Z",
+                    model: "gpt-a",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                run: {
+                    id: "run_fail",
+                    finalAnswer: "B",
+                    steps: [
+                        {
+                            agentName: "Solver",
+                            role: "solver",
+                            createdAt: "2026-01-02T00:00:00.000Z",
+                            error: "timeout",
+                        },
+                    ],
+                    metrics: {},
+                },
+            }),
+            "utf-8",
+        );
+
+        const response = await getRuns(
+            new Request("http://localhost/api/runs?errors=true"),
+        );
+        expect(response.status).toBe(200);
+        const json = (await response.json()) as {
+            filtered: number;
+            items: Array<{ id: string }>;
+        };
+        expect(json.filtered).toBe(1);
+        expect(json.items[0].id).toBe("run_fail");
+    });
+
+    it("exports benchmark roster CSV", async () => {
+        const dir = await makeTempDir();
+        process.env.RUNS_DIR = dir;
+        await writeFile(
+            join(dir, "benchmark_roster.json"),
+            JSON.stringify({
+                kind: "benchmark",
+                id: "benchmark_roster",
+                question: "Roster topic",
+                metadata: {
+                    createdAt: "2026-01-01T00:00:00.000Z",
+                    model: "gpt-a",
+                    pipelinePreset: "standard",
+                    fastMode: false,
+                },
+                payload: {
+                    runs: 2,
+                    modeCount: 1,
+                    modeSizes: [2],
+                    divergenceEntropy: 0.2,
+                    runIds: ["run_a", "run_b"],
+                    modes: [{ members: [0, 1] }],
+                    summary: {
+                        stability: {
+                            pairwiseMean: 0.5,
+                            pairs: [{ i: 0, j: 1, similarity: 0.5 }],
+                        },
+                    },
+                },
+            }),
+            "utf-8",
+        );
+
+        const response = await getBenchmarkById(
+            new Request(
+                "http://localhost/api/benchmarks/benchmark_roster?format=roster-csv",
+            ),
+            { params: Promise.resolve({ id: "benchmark_roster" }) },
+        );
+        expect(response.status).toBe(200);
+        const csv = await response.text();
+        expect(csv).toContain("run_a");
+        expect(csv).toContain("avgSimilarity");
     });
 
     it("returns filtered activity feed as JSON and CSV", async () => {

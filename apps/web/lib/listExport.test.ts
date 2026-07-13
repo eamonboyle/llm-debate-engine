@@ -4,6 +4,7 @@ import {
     agentStatsToCsv,
     agentTimingToCsv,
     benchmarkArtifactsToCsv,
+    benchmarkRunRosterToCsv,
     confidenceDriftToCsv,
     counterfactualExplorerToCsv,
     evidenceExplorerToCsv,
@@ -13,6 +14,7 @@ import {
     presetLeaderboardToCsv,
     qualityRunsToCsv,
     questionGroupsToCsv,
+    questionHubArtifactsToCsv,
     runArtifactsToCsv,
     searchResultsToCsv,
 } from "./listExport";
@@ -285,5 +287,33 @@ describe("listExport", () => {
         );
         expect(csv).toContain("missing evidence");
         expect(csv).toContain("run_1");
+    });
+
+    it("exports benchmark roster rows", () => {
+        const csv = benchmarkRunRosterToCsv([
+            {
+                runIndex: 0,
+                runId: "run_a",
+                avgSimilarity: 0.42,
+                modeIndex: 1,
+                peerRunId: "run_b",
+                peerCompareHref: "/runs/compare?left=run_a&right=run_b",
+                isOutlier: true,
+            },
+        ]);
+        expect(csv).toContain("run_a");
+        expect(csv).toContain("isOutlier");
+        expect(csv).toContain("true");
+    });
+
+    it("exports question hub artifacts", () => {
+        const csv = questionHubArtifactsToCsv(
+            "Shared topic?",
+            [sampleRun],
+            [sampleBenchmark],
+        );
+        expect(csv).toContain("Shared topic?");
+        expect(csv).toContain("run_1");
+        expect(csv).toContain("bench_1");
     });
 });
