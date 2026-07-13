@@ -4,6 +4,7 @@ import {
     type ActivityFeedFilters,
 } from "../../../lib/activityFeed";
 import { activityEntriesToCsv } from "../../../lib/activityExport";
+import { attachActivityCompareLinks } from "../../../lib/activityCompare";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../../lib/data";
 import { parseListPagination } from "../_shared/pagination";
 
@@ -33,7 +34,11 @@ export async function GET(request: Request) {
         ),
     };
 
-    const feed = buildActivityFeed(runs, benchmarks, filters);
+    const feed = attachActivityCompareLinks(
+        buildActivityFeed(runs, benchmarks, filters),
+        runs,
+        benchmarks,
+    );
     const { offset, limit } = parseListPagination(url.searchParams);
     const items = feed.slice(offset, offset + limit);
 

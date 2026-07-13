@@ -89,6 +89,9 @@ export default async function PipelineErrorsPage({
                     <Link href="/timing" className="button secondary">
                         Pipeline timing
                     </Link>
+                    <Link href="/runs?errors=true" className="button secondary">
+                        Runs with errors
+                    </Link>
                 </div>
             </div>
 

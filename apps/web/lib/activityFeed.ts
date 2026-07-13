@@ -14,6 +14,7 @@ export type ActivityEntry = {
     fastMode: boolean;
     href: string;
     detail: string;
+    compareHref?: string;
 };
 
 export type ActivityFeedFilters = {

@@ -1,3 +1,4 @@
+import type { BenchmarkRunRosterRow } from "./benchmarkRunRoster";
 import type { AgentStatRow } from "./agentStats";
 import type { CatalogStats } from "./catalogStats";
 import type { ConfidenceDriftRow } from "./confidenceDrift";
@@ -548,6 +549,87 @@ export function evidenceExplorerToCsv(
                 ]),
             );
         }
+    }
+
+    return sections.join("\n");
+}
+
+export function benchmarkRunRosterToCsv(
+    rows: Array<
+        BenchmarkRunRosterRow & {
+            peerRunId?: string | null;
+            peerCompareHref?: string | null;
+            isOutlier?: boolean;
+        }
+    >,
+): string {
+    const header = [
+        "runIndex",
+        "runId",
+        "modeIndex",
+        "avgSimilarity",
+        "peerRunId",
+        "peerCompareHref",
+        "isOutlier",
+    ];
+    const csvRows = rows.map((entry) =>
+        row([
+            entry.runIndex,
+            entry.runId,
+            entry.modeIndex ?? "",
+            entry.avgSimilarity ?? "",
+            entry.peerRunId ?? "",
+            entry.peerCompareHref ?? "",
+            entry.isOutlier ? "true" : "false",
+        ]),
+    );
+    return [header.join(","), ...csvRows].join("\n");
+}
+
+export function questionHubArtifactsToCsv(
+    question: string,
+    runs: RunArtifact[],
+    benchmarks: BenchmarkArtifact[],
+): string {
+    const sections: string[] = [];
+    sections.push(`question,${escapeCsv(question)}`);
+    sections.push("");
+    sections.push(
+        "section,id,createdAt,model,preset,fastMode,runs,modeCount,entropy,finalAnswerPreview",
+    );
+
+    for (const run of runs) {
+        sections.push(
+            row([
+                "run",
+                run.id,
+                run.metadata.createdAt,
+                run.metadata.model,
+                run.metadata.pipelinePreset,
+                run.metadata.fastMode,
+                "",
+                "",
+                "",
+                run.run.finalAnswer.slice(0, 200),
+            ]),
+        );
+    }
+
+    for (const benchmark of benchmarks) {
+        sections.push(
+            row([
+                "benchmark",
+                benchmark.id,
+                benchmark.metadata.createdAt,
+                benchmark.metadata.model,
+                benchmark.metadata.pipelinePreset,
+                benchmark.metadata.fastMode,
+                benchmark.payload.runs,
+                benchmark.payload.modeCount,
+                benchmark.payload.divergenceEntropy,
+                "",
+            ]),
+        );
     }
 
     return sections.join("\n");

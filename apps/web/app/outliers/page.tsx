@@ -79,6 +79,12 @@ export default async function OutliersPage({
                     <Link href="/benchmarks" className="button secondary">
                         All benchmarks
                     </Link>
+                    <Link
+                        href="/runs?outlier=true"
+                        className="button secondary"
+                    >
+                        Outlier runs list
+                    </Link>
                 </div>
             </div>
 

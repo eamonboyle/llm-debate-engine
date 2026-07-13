@@ -143,6 +143,13 @@ export default async function BenchmarkDetailPage({
                         href={`/api/benchmarks/${benchmark.id}?download=1`}
                         filename={`${benchmark.id}.json`}
                     />
+                    <a
+                        href={`/api/benchmarks/${benchmark.id}?format=roster-csv`}
+                        className="button secondary"
+                        download={`${benchmark.id}-roster.csv`}
+                    >
+                        Export roster CSV
+                    </a>
                     <CopyPageLink />
                     <Link
                         href={questionHubHref(benchmark.question)}

@@ -18,6 +18,7 @@ export function activityEntriesToCsv(entries: ActivityEntry[]): string {
         "fastMode",
         "detail",
         "href",
+        "compareHref",
     ];
     const rows = entries.map((entry) =>
         [
@@ -30,6 +31,7 @@ export function activityEntriesToCsv(entries: ActivityEntry[]): string {
             entry.fastMode ? "true" : "false",
             entry.detail,
             entry.href,
+            entry.compareHref ?? "",
         ]
             .map((value) => escapeCsv(String(value)))
             .join(","),

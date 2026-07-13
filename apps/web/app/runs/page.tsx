@@ -18,6 +18,12 @@ import {
 import { buildIndexRunLookup } from "../../lib/indexRunLookup";
 import { buildOutlierRunIdSet } from "../../lib/outlierLookup";
 import {
+    applyRunListExtraFilters,
+    buildPipelineErrorRunIdSet,
+    hasActiveRunListExtraFilters,
+    parseRunListExtraFilters,
+} from "../../lib/runListFilters";
+import {
     resolveRunSortOrder,
     sortRunArtifacts,
 } from "../../lib/artifactSort";
@@ -35,6 +41,8 @@ type RunsSearchParams = {
     fast?: string;
     from?: string;
     to?: string;
+    outlier?: string;
+    errors?: string;
     sort?: string;
     page?: string;
     pageSize?: string;
@@ -50,18 +58,24 @@ export default async function RunsPage({
         loadBenchmarkArtifacts(),
         loadAnalysisIndex(),
     ]);
+    const params = await searchParams;
     const indexLookup = index ? buildIndexRunLookup(index) : null;
     const outlierRunIds = buildOutlierRunIdSet(index);
+    const errorRunIds = buildPipelineErrorRunIdSet(runs);
+    const extraFilters = parseRunListExtraFilters(params);
     const { models, presets } = collectArtifactFacets(runs, benchmarks);
-    const params = await searchParams;
-    const filtered = filterRunArtifacts(runs, {
-        q: params.q,
-        model: params.model,
-        preset: params.preset,
-        fast: params.fast,
-        from: params.from,
-        to: params.to,
-    });
+    const filtered = applyRunListExtraFilters(
+        filterRunArtifacts(runs, {
+            q: params.q,
+            model: params.model,
+            preset: params.preset,
+            fast: params.fast,
+            from: params.from,
+            to: params.to,
+        }),
+        extraFilters,
+        { outlierRunIds, errorRunIds },
+    );
     const sort = resolveRunSortOrder(params.sort);
     const sorted = sortRunArtifacts(filtered, sort);
     const paging = paginateItems(sorted, params, {
@@ -120,6 +134,24 @@ export default async function RunsPage({
                         className="input"
                         title="Created at or before"
                     />
+                    <select
+                        name="outlier"
+                        defaultValue={params.outlier ?? ""}
+                        className="input"
+                        title="Filter to benchmark outlier runs"
+                    >
+                        <option value="">Outliers: any</option>
+                        <option value="true">Outliers only</option>
+                    </select>
+                    <select
+                        name="errors"
+                        defaultValue={params.errors ?? ""}
+                        className="input"
+                        title="Filter to runs with failed agent steps"
+                    >
+                        <option value="">Pipeline errors: any</option>
+                        <option value="true">With errors only</option>
+                    </select>
                 </div>
                 <div className="filter-sort-row">
                     <select name="sort" defaultValue={sort} className="input">
@@ -180,6 +212,8 @@ export default async function RunsPage({
                             fast: params.fast,
                             from: params.from,
                             to: params.to,
+                            outlier: extraFilters.outlierOnly ? "true" : undefined,
+                            errors: extraFilters.errorsOnly ? "true" : undefined,
                             sort,
                         }}
                     />
@@ -191,6 +225,8 @@ export default async function RunsPage({
                             fast: params.fast,
                             from: params.from,
                             to: params.to,
+                            outlier: extraFilters.outlierOnly ? "true" : undefined,
+                            errors: extraFilters.errorsOnly ? "true" : undefined,
                             sort,
                             pageSize: "500",
                             page: "1",
@@ -204,6 +240,9 @@ export default async function RunsPage({
                         Showing {paging.startDisplay}-{paging.endDisplay} of{" "}
                         {filtered.length} filtered
                         runs ({runs.length} total)
+                        {hasActiveRunListExtraFilters(extraFilters)
+                            ? " · outlier/error filters active"
+                            : ""}
                     </span>
                 </div>
             </form>

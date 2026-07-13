@@ -11,6 +11,7 @@ import {
     buildActivityFeed,
     resolveActivitySortOrder,
 } from "../../lib/activityFeed";
+import { attachActivityCompareLinks } from "../../lib/activityCompare";
 import { collectArtifactFacets } from "../../lib/artifactFacets";
 import { loadBenchmarkArtifacts, loadRunArtifacts } from "../../lib/data";
 import { buildQueryString, paginateItems } from "../../lib/listPagination";
@@ -51,16 +52,20 @@ export default async function ActivityPage({
         loadBenchmarkArtifacts(),
     ]);
     const { models, presets } = collectArtifactFacets(runs, benchmarks);
-    const feed = buildActivityFeed(runs, benchmarks, {
-        kind,
-        q: params.q,
-        model: params.model,
-        preset: params.preset,
-        fast: params.fast,
-        from: params.from,
-        to: params.to,
-        sort,
-    });
+    const feed = attachActivityCompareLinks(
+        buildActivityFeed(runs, benchmarks, {
+            kind,
+            q: params.q,
+            model: params.model,
+            preset: params.preset,
+            fast: params.fast,
+            from: params.from,
+            to: params.to,
+            sort,
+        }),
+        runs,
+        benchmarks,
+    );
     const paging = paginateItems(feed, params, {
         defaultPageSize: 25,
         maxPageSize: 100,
@@ -280,6 +285,21 @@ export default async function ActivityPage({
                                     </Link>
                                 ),
                             },
+                            {
+                                key: "compare",
+                                label: "Compare",
+                                hideOnMobile: true,
+                                render: (row) => {
+                                    const href = (
+                                        row as { compareHref?: string }
+                                    ).compareHref;
+                                    return href ? (
+                                        <Link href={href}>Compare</Link>
+                                    ) : (
+                                        <span className="muted">—</span>
+                                    );
+                                },
+                            },
                         ]}
                         data={paging.paged.map((entry) => ({
                             ...entry,
@@ -289,15 +309,29 @@ export default async function ActivityPage({
                             `${(row as { kind: string }).kind}-${(row as { id: string }).id}`
                         }
                         renderCardActions={(row) => (
-                            <Link
-                                href={(row as { href: string }).href}
-                                className="button"
-                            >
-                                Open{" "}
-                                {(row as { kind: string }).kind === "run"
-                                    ? "trace"
-                                    : "benchmark"}
-                            </Link>
+                            <>
+                                <Link
+                                    href={(row as { href: string }).href}
+                                    className="button"
+                                >
+                                    Open{" "}
+                                    {(row as { kind: string }).kind === "run"
+                                        ? "trace"
+                                        : "benchmark"}
+                                </Link>
+                                {(row as { compareHref?: string })
+                                    .compareHref ? (
+                                    <Link
+                                        href={
+                                            (row as { compareHref: string })
+                                                .compareHref
+                                        }
+                                        className="button secondary"
+                                    >
+                                        Compare
+                                    </Link>
+                                ) : null}
+                            </>
                         )}
                     />
                 )}
